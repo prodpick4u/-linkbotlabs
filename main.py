@@ -1,13 +1,12 @@
-from utils.amazon_scraper import get_top_products
-from utils.blog_writer import generate_blog_post
-from utils.tts_generator import generate_voiceover
-from utils.youtube_uploader import upload_to_youtube
+
+from utils.blog_generator import generate_blog_post
+from utils.video_generator import create_video
+from utils.youtube_upload import upload_video
 
 def main():
-    products = get_top_products("electric toothbrush")
-    blog = generate_blog_post(products)
-    voice_path = generate_voiceover(blog)
-    upload_to_youtube(blog, voice_path, products)
+    blog, products = generate_blog_post("electric toothbrushes")
+    video_path = create_video(products, voice="female")
+    upload_video(video_path, blog["title"], blog["description"])
 
 if __name__ == "__main__":
     main()
