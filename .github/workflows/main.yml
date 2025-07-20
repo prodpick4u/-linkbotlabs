@@ -1,1 +1,37 @@
 
+import os
+import requests
+from datetime import datetime
+
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+CHANNEL_ID = "UCy-zO_2DYOrWUlI0sYJR2ZQ"
+AMAZON_TAG = os.getenv("AMAZON_TAG", "mychanneld-20")
+
+def get_youtube_videos():
+    url = f"https://www.googleapis.com/youtube/v3/search?key={YOUTUBE_API_KEY}&channelId={CHANNEL_ID}&part=snippet,id&order=date&maxResults=5"
+    response = requests.get(url)
+    return response.json().get("items", [])
+
+def create_blog_html(videos):
+    html = "<html><head><title>Top Products Reviewed</title></head><body>"
+    html += "<h1>Top Products Reviewed on YouTube</h1><ul>"
+    for video in videos:
+        title = video["snippet"]["title"]
+        video_id = video["id"].get("videoId")
+        if not video_id:
+            continue
+        video_url = f"https://www.youtube.com/watch?v={video_id}"
+        search_term = "+".join(title.split())
+        amazon_url = f"https://www.amazon.com/s?k={search_term}&tag={AMAZON_TAG}"
+        html += f"<li><a href='{video_url}' target='_blank'>{title}</a> - <a href='{amazon_url}' target='_blank'>Buy on Amazon</a></li>"
+    html += "</ul></body></html>"
+    return html
+
+def save_html(content):
+    with open("top-products-review.html", "w", encoding="utf-8") as f:
+        f.write(content)
+
+if __name__ == "__main__":
+    videos = get_youtube_videos()
+    html_content = create_blog_html(videos)
+    save_html(html_content)
