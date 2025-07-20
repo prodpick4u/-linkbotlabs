@@ -1,12 +1,8 @@
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'utils'))
 
-from utils.blog_generator import generate_blog_post
-from utils.video_generator import create_video
-from utils.youtube_upload import upload_video
-
-def main():
-    blog, products = generate_blog_post("electric toothbrushes")
-    video_path = create_video(products, voice="female")
-    upload_video(video_path, blog["title"], blog["description"])
+from blog_generator import generate_blog_post
 
 if __name__ == "__main__":
-    main()
+    generate_blog_post()
