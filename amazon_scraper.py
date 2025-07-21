@@ -4,27 +4,38 @@ import time
 import random
 
 def get_top_3_products(category_url):
+    session = requests.Session()
+
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/114.0.0.0 Safari/537.36"
         ),
-        "Accept-Language": "en-US,en;q=0.9"
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive",
+        "DNT": "1",
+        "Upgrade-Insecure-Requests": "1",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+        "Cache-Control": "max-age=0",
     }
 
     for attempt in range(3):
         try:
             print(f"Attempt {attempt + 1}: Fetching {category_url}")
-            response = requests.get(category_url, headers=headers)
+            response = session.get(category_url, headers=headers, timeout=10)
 
             if response.status_code == 200:
+                html = response.text
                 print("Response HTML preview:")
-                print(response.text[:2000])  # debug print first 2000 chars
+                print(html[:2000])  # debug print
 
-                soup = BeautifulSoup(response.content, 'html.parser')
-                
-                # Broader selector
+                soup = BeautifulSoup(html, 'html.parser')
+
                 items = soup.select('li.zg-item-immersion')[:3]
                 if not items:
                     print("No 'li.zg-item-immersion' found, trying div.zg-item-immersion")
@@ -68,6 +79,7 @@ def get_top_3_products(category_url):
             else:
                 print(f"Attempt {attempt + 1}: Status {response.status_code}")
                 time.sleep(random.uniform(2, 4))  # Wait and retry
+
         except Exception as e:
             print(f"Attempt {attempt + 1} failed: {e}")
             time.sleep(random.uniform(2, 4))
