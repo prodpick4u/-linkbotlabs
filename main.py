@@ -39,3 +39,6 @@ for product in top3:
     print(product["link"])
     print(product["image"])
     print("-----")
+    with open("log.txt", "w", encoding="utf-8") as f:
+    f.write("\n".join(log_lines))
+log("✅ log.txt written")
