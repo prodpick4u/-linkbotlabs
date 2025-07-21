@@ -1,44 +1,32 @@
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname(__file__), 'utils'))
+from utils.blog_generator import generate_blog_post
+from utils.blog_writer import write_to_blog
+from utils.amazon_scraper import get_top3_products
+from utils.tts_generator import generate_voiceover
+from utils.youtube_uploader import upload_to_youtube
 
-from blog_generator import generate_blog_post
+def main():
+    print("🚀 Starting blog automation...")
+
+    # 1. Scrape Amazon top 3 products
+    products = get_top3_products(category="kitchen")
+    if not products:
+        print("❌ No products found.")
+        return
+
+    # 2. Generate blog post
+    blog_post, log_lines = generate_blog_post(products)
+    write_to_blog(blog_post)
+
+    # 3. Save log
+    with open("log.txt", "w", encoding="utf-8") as f:
+        f.write("\n".join(log_lines))
+    print("✅ log.txt written")
+
+    # 4. Generate voiceover and video (optional)
+    video_path = generate_voiceover(blog_post)
+    upload_to_youtube(video_path)
+
+    print("🎉 Automation complete.")
 
 if __name__ == "__main__":
-    generate_blog_post()
-    from utils.amazon_scraper import get_top_3_products
-    log("Top 3 Amazon Products Scraped:")
-for i, p in enumerate(top_products):
-    log(f"{i+1}. {p['title']}")
-    log(f"Link: {p['link']}")
-    category_url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
-top3 = get_top_3_products(category_url)
-# 1. Choose a category URL
-category_url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
-
-# 2. Get top 3 products
-top_products = get_top_3_products(category_url)
-import datetime
-
-log_lines = []
-def log(message):
-    print(message)  # visible in Actions log
-    log_lines.append(f"{datetime.datetime.now()}: {message}")
-# 3. Format blog content
-blog_content = "\n\n".join([
-    f"### {i+1}. {p['title']}\n[Buy Here]({p['link']})\n![Image]({p['image']})"
-    for i, p in enumerate(top_products)
-])
-
-# 4. Save blog to markdown
-with open("top3_blog.md", "w", encoding="utf-8") as f:
-    f.write("# Today's Top 3 Amazon Products\n\n" + blog_content)
-
-for product in top3:
-    print(product["title"])
-    print(product["link"])
-    print(product["image"])
-    print("-----")
-    with open("log.txt", "w", encoding="utf-8") as f:
-    f.write("\n".join(log_lines))
-log("✅ log.txt written")
+    main()
