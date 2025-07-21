@@ -19,15 +19,23 @@ def get_top_3_products(category_url):
 
             if response.status_code == 200:
                 soup = BeautifulSoup(response.content, 'html.parser')
-                items = soup.select('div.p13n-sc-uncoverable-faceout')[:3]
+                
+                # Updated selector for best seller items
+                items = soup.select('div.zg-item-immersion')[:3]
 
                 top_products = []
                 for item in items:
                     try:
-                        title = item.select_one('._cDEzb_p13n-sc-css-line-clamp-3_g3dy1').text.strip()
-                        link = "https://www.amazon.com" + item.select_one('a.a-link-normal')['href']
-                        image = item.select_one('img')['src']
-                        price_tag = item.select_one('span.a-price > span.a-offscreen')
+                        title_tag = item.select_one('div.p13n-sc-truncate-desktop-type2, div.p13n-sc-truncated')
+                        title = title_tag.text.strip() if title_tag else "No title"
+
+                        link_tag = item.select_one('a.a-link-normal')
+                        link = "https://www.amazon.com" + link_tag['href'] if link_tag else "#"
+
+                        img_tag = item.select_one('img')
+                        image = img_tag['src'] if img_tag else ""
+
+                        price_tag = item.select_one('span.p13n-sc-price')
                         price = price_tag.text.strip() if price_tag else "Price not available"
 
                         top_products.append({
@@ -40,6 +48,10 @@ def get_top_3_products(category_url):
                         })
                     except Exception as e:
                         print(f"Skipping item due to parsing error: {e}")
+
+                if len(top_products) == 0:
+                    print("No products found with updated selectors.")
+                    return []
 
                 return top_products
 
