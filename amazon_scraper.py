@@ -1,45 +1,38 @@
 from playwright.sync_api import sync_playwright
 
-def get_top_3_products(category_url):
+def get_top_3_products(url):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
-        page.goto(category_url, timeout=60000)
+        page.goto(url, timeout=60000)
 
-        # Wait for product containers
-        page.wait_for_selector('div.p13n-sc-uncoverable-faceout')
+        # Wait for product cards
+        page.wait_for_selector("div.p13n-sc-uncoverable-faceout")
 
-        product_elements = page.query_selector_all('div.p13n-sc-uncoverable-faceout')[:3]
+        items = page.query_selector_all("div.p13n-sc-uncoverable-faceout")[:3]
 
-        top_products = []
-        for element in product_elements:
+        products = []
+        for item in items:
             try:
-                title = element.query_selector('._cDEzb_p13n-sc-css-line-clamp-3_g3dy1')
-                title_text = title.inner_text().strip() if title else "No title"
+                title = item.query_selector("._cDEzb_p13n-sc-css-line-clamp-3_g3dy1")
+                link = item.query_selector("a.a-link-normal")
+                img = item.query_selector("img")
+                price = item.query_selector("span.a-price span.a-offscreen")
 
-                link_elem = element.query_selector('a.a-link-normal')
-                link_href = "https://www.amazon.com" + link_elem.get_attribute('href') if link_elem else ""
-
-                img_elem = element.query_selector('img')
-                img_src = img_elem.get_attribute('src') if img_elem else ""
-
-                price_elem = element.query_selector('span.a-price span.a-offscreen')
-                price = price_elem.inner_text().strip() if price_elem else "Price not available"
-
-                top_products.append({
-                    "title": title_text,
-                    "link": link_href,
-                    "image": img_src,
-                    "price": price,
-                    "pros": "Popular and high-quality.",
-                    "cons": "Might sell out quickly."
+                products.append({
+                    "title": title.inner_text().strip() if title else "No title",
+                    "link": "https://www.amazon.com" + link.get_attribute("href") if link else "",
+                    "image": img.get_attribute("src") if img else "",
+                    "price": price.inner_text().strip() if price else "Price not available",
+                    "pros": "Popular choice",
+                    "cons": "May be out of stock"
                 })
             except Exception as e:
-                print(f"Error parsing product: {e}")
+                print(f"Error: {e}")
 
         browser.close()
 
-        if not top_products:
-            raise Exception("No products found.")
+        if not products:
+            raise Exception("No products found")
 
-        return top_products
+        return products
