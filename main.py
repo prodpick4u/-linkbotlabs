@@ -17,7 +17,7 @@ def main():
 
     # Step 1: Scrape top 3 Amazon products
     category = "kitchen"  # Change to "beauty", "outdoors", etc.
-    products = products = get_top_3_products("kitchen")
+    products = get_top_3_products("kitchen")
 
     if not products:
         print("❌ No products found.")
