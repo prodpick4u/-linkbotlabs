@@ -7,6 +7,10 @@ from blog_generator import generate_blog_post
 if __name__ == "__main__":
     generate_blog_post()
     from utils.amazon_scraper import get_top_3_products
+    log("Top 3 Amazon Products Scraped:")
+for i, p in enumerate(top_products):
+    log(f"{i+1}. {p['title']}")
+    log(f"Link: {p['link']}")
     category_url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
 top3 = get_top_3_products(category_url)
 # 1. Choose a category URL
