@@ -22,9 +22,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install playwright  # ✅ Add this line
 
     - name: Install Playwright Browsers
-      run: playwright install
+      run: python -m playwright install  # ✅ Corrected to include `python -m`
 
     - name: Run main script
       run: python main.py
