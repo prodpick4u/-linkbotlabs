@@ -1,15 +1,11 @@
-import requests
-from bs4 import BeautifulSoup
-import time
-import random
-
 def get_top_3_products(category_url):
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/114.0.0.0 Safari/537.36"
-        )
+        ),
+        "Accept-Language": "en-US,en;q=0.9"
     }
 
     for attempt in range(3):
@@ -18,10 +14,19 @@ def get_top_3_products(category_url):
             response = requests.get(category_url, headers=headers)
 
             if response.status_code == 200:
+                print("Response HTML preview:")
+                print(response.text[:2000])  # debug print first 2000 chars
+
                 soup = BeautifulSoup(response.content, 'html.parser')
                 
-                # Updated selector for best seller items
-                items = soup.select('div.zg-item-immersion')[:3]
+                # Broader selector
+                items = soup.select('li.zg-item-immersion')[:3]
+                if not items:
+                    print("No 'li.zg-item-immersion' found, trying div.zg-item-immersion")
+                    items = soup.select('div.zg-item-immersion')[:3]
+                if not items:
+                    print("No product items found with current selectors.")
+                    return []
 
                 top_products = []
                 for item in items:
