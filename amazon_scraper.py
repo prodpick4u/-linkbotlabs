@@ -1,19 +1,31 @@
 import requests
 from bs4 import BeautifulSoup
+import time
 
-def get_top_3_products(category_keyword):
+def get_top_3_products(category_keyword, retries=3, delay=2):
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
             "Chrome/114.0.0.0 Safari/537.36"
-        )
+        ),
+        "Accept-Language": "en-US,en;q=0.9",
+        "Referer": "https://www.amazon.com/"
     }
 
     search_url = f"https://www.amazon.com/s?k={category_keyword}"
-    response = requests.get(search_url, headers=headers)
-    if response.status_code != 200:
-        raise Exception(f"Failed to fetch page: {response.status_code}")
+
+    for attempt in range(retries):
+        time.sleep(delay)  # delay before request
+        response = requests.get(search_url, headers=headers)
+
+        if response.status_code == 200:
+            break  # success, exit retry loop
+        else:
+            print(f"Attempt {attempt+1} failed with status {response.status_code}. Retrying...")
+
+    else:
+        raise Exception(f"Failed to fetch page after {retries} retries: Status {response.status_code}")
 
     soup = BeautifulSoup(response.content, 'html.parser')
     items = soup.select('div.p13n-sc-uncoverable-faceout')[:3]
