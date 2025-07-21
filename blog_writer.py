@@ -5,3 +5,7 @@ def generate_blog_post(products):
     with open("docs/index.md", "w") as f:
         f.write(blog)
     return blog
+    def write_to_blog(content):
+    with open("index.md", "w", encoding="utf-8") as f:
+        f.write(content)
+    print("✅ Blog post written to index.md")
