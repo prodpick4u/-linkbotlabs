@@ -1,7 +1,7 @@
 from amazon_scraper import get_top_3_products
 from blog_generator import generate_blog_post
 from youtube_script_generator import generate_script
-from tts_generator import generate_voiceover
+from tts_generator import generate_tts
 from youtube_uploader import upload_to_youtube
 
 # ✅ Use full Amazon Best Seller category URL
@@ -18,7 +18,7 @@ try:
     script_text = generate_script(products)
 
     print("🔊 Generating voiceover...")
-    audio_path = generate_voiceover(script_text)
+    audio_path = generate_tts(script)
 
     print("📤 Uploading to YouTube...")
     upload_to_youtube("Top 3 Kitchen Picks (Best Sellers)", audio_path, products)
