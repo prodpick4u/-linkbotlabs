@@ -1,3 +1,7 @@
 # Daily Product Picks
 
-_Automated blog powered by AI._
+Automated blog powered by AI.
+
+---
+
+This site is open source. [Improve it here](https://github.com/prodpick4u/Prodpick4u)
