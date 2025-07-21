@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12'
+        python-version: '3.12'  # ✅ properly indented
 
     - name: Install dependencies
       run: |
@@ -24,7 +24,7 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run main script
-      run: python main.py     # ✅ This was in the wrong place
+      run: python main.py
 
     - name: Commit log.txt
       run: |
