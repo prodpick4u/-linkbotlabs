@@ -24,11 +24,12 @@ jobs:
         pip install -r requirements.txt
 
     - name: Run main script
+      run: python main.py     # ✅ This was in the wrong place
+
     - name: Commit log.txt
-  run: |
-    git config --global user.name "GitHub Action"
-    git config --global user.email "action@github.com"
-    git add log.txt
-    git commit -m "📝 Daily log update"
-    git push
-      run: python main.py
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git add log.txt
+        git commit -m "📝 Daily log update"
+        git push
