@@ -7,10 +7,11 @@ from youtube_uploader import upload_to_youtube
 def main():
     print("🚀 Starting blog automation...")
 
-    # Step 1: Scrape top 3 Amazon products
-    products = get_top3_products("kitchen")  # You can change category
-    if not products:
-        print("❌ No products found.")
+    # Step 1: from amazon_scraper import get_top_3_products  # <-- match the exact function name
+
+# ...
+
+products = get_top_3_products("kitchen")  # match here too
         return
 
     # Step 2: Generate blog content
