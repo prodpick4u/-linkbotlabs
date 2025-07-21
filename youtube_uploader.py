@@ -1,12 +1,11 @@
-def upload_to_youtube(title, audio_path, products):
-    print("Uploading video with title:", title[:60])
-
-    from youtube_uploader import upload_video  # Make sure this function exists
-
-    video_url = upload_video(
-        video_path="video.mp4",
-        title=title,
-        description="Top 3 Amazon Picks based on trends and reviews."
-    )
-
-    print(f"✅ YouTube video uploaded: {video_url}")
+def upload_video(video_path, description):
+    """
+    Simulates uploading a video to YouTube.
+    Replace this function with actual YouTube Data API code if needed.
+    """
+    print(f"Simulated upload: {video_path}")
+    print("Video description (first 100 chars):")
+    print(description[:100])
+    
+    # Simulated video URL
+    return "https://youtube.com/watch?v=dummy_video_id"
