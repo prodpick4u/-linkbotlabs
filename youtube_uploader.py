@@ -1,50 +1,37 @@
+import os
+import json
+import google.auth
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-import os
-import pickle
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
-def upload_video(video_path, description):
-    creds = None
-
-    # Load token if exists
-    if os.path.exists("token.pickle"):
-        with open("token.pickle", "rb") as token:
-            creds = pickle.load(token)
-
-    # If no valid token, log in
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open("token.pickle", "wb") as token:
-            pickle.dump(creds, token)
+def upload_video(video_path, description, title="Top Amazon Picks", category_id="22", privacy="public"):
+    creds_path = "client_secret.json"
+    
+    flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
+    creds = flow.run_console()
 
     youtube = build("youtube", "v3", credentials=creds)
 
-    body = {
+    request_body = {
         "snippet": {
-            "title": "Top 3 Amazon Picks",
+            "title": title,
             "description": description,
-            "tags": ["Amazon", "top picks", "AI", "products"],
-            "categoryId": "22",  # People & Blogs
+            "categoryId": category_id
         },
         "status": {
-            "privacyStatus": "public",
-        },
+            "privacyStatus": privacy
+        }
     }
 
-    media = MediaFileUpload(video_path, chunksize=-1, resumable=True, mimetype="video/mp4")
+    media = MediaFileUpload(video_path)
 
-    request = youtube.videos().insert(
+    upload_request = youtube.videos().insert(
         part="snippet,status",
-        body=body,
+        body=request_body,
         media_body=media
     )
-    response = request.execute()
-    return f"https://www.youtube.com/watch?v={response['id']}"
+    response = upload_request.execute()
+    return f"https://youtube.com/watch?v={response['id']}"
