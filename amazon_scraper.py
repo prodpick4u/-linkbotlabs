@@ -1,59 +1,45 @@
 from playwright.sync_api import sync_playwright
-from bs4 import BeautifulSoup
 
-def fetch_page_html(url):
+def get_top_3_products(category_url):
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)  # headless=True means no GUI
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
-        page.goto(url, timeout=60000)  # 60 seconds timeout
-        page.wait_for_timeout(5000)  # wait 5 seconds to allow JS to load
-        content = page.content()
+        page.goto(category_url, timeout=60000)
+
+        # Wait for product containers
+        page.wait_for_selector('div.p13n-sc-uncoverable-faceout')
+
+        product_elements = page.query_selector_all('div.p13n-sc-uncoverable-faceout')[:3]
+
+        top_products = []
+        for element in product_elements:
+            try:
+                title = element.query_selector('._cDEzb_p13n-sc-css-line-clamp-3_g3dy1')
+                title_text = title.inner_text().strip() if title else "No title"
+
+                link_elem = element.query_selector('a.a-link-normal')
+                link_href = "https://www.amazon.com" + link_elem.get_attribute('href') if link_elem else ""
+
+                img_elem = element.query_selector('img')
+                img_src = img_elem.get_attribute('src') if img_elem else ""
+
+                price_elem = element.query_selector('span.a-price span.a-offscreen')
+                price = price_elem.inner_text().strip() if price_elem else "Price not available"
+
+                top_products.append({
+                    "title": title_text,
+                    "link": link_href,
+                    "image": img_src,
+                    "price": price,
+                    "pros": "Popular and high-quality.",
+                    "cons": "Might sell out quickly."
+                })
+            except Exception as e:
+                print(f"Error parsing product: {e}")
+
         browser.close()
-        return content
 
-def get_top_3_products_amazon(url):
-    html = fetch_page_html(url)
-    soup = BeautifulSoup(html, 'html.parser')
+        if not top_products:
+            raise Exception("No products found.")
 
-    # Try selectors for best seller items
-    items = soup.select('li.zg-item-immersion')[:3]
-    if not items:
-        items = soup.select('div.zg-item-immersion')[:3]
-
-    top_products = []
-    for item in items:
-        try:
-            title_tag = item.select_one('div.p13n-sc-truncate-desktop-type2, div.p13n-sc-truncated')
-            title = title_tag.text.strip() if title_tag else "No title"
-
-            link_tag = item.select_one('a.a-link-normal')
-            link = "https://www.amazon.com" + link_tag['href'] if link_tag else "#"
-
-            img_tag = item.select_one('img')
-            image = img_tag['src'] if img_tag else ""
-
-            price_tag = item.select_one('span.p13n-sc-price')
-            price = price_tag.text.strip() if price_tag else "Price not available"
-
-            top_products.append({
-                "title": title,
-                "link": link,
-                "image": image,
-                "price": price,
-                "pros": "Great performance and value.",
-                "cons": "May not suit all needs."
-            })
-        except Exception as e:
-            print(f"Skipping item due to parsing error: {e}")
-
-    return top_products
-
-if __name__ == "__main__":
-    url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
-    products = get_top_3_products_amazon(url)
-    for i, p in enumerate(products, 1):
-        print(f"{i}. {p['title']}")
-        print(f"   Price: {p['price']}")
-        print(f"   Link: {p['link']}")
-        print(f"   Image: {p['image']}")
-        print()
+        return top_products
