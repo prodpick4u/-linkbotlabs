@@ -1,42 +1,50 @@
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 import os
+import pickle
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
 def upload_video(video_path, description):
     creds = None
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-    else:
-        flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
-        creds = flow.run_local_server(port=0)
-        with open("token.json", "w") as token:
-            token.write(creds.to_json())
+
+    # Load token if exists
+    if os.path.exists("token.pickle"):
+        with open("token.pickle", "rb") as token:
+            creds = pickle.load(token)
+
+    # If no valid token, log in
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file("client_secret.json", SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open("token.pickle", "wb") as token:
+            pickle.dump(creds, token)
 
     youtube = build("youtube", "v3", credentials=creds)
 
-    request_body = {
+    body = {
         "snippet": {
             "title": "Top 3 Amazon Picks",
             "description": description,
-            "tags": ["Amazon", "top picks", "reviews", "2025"],
-            "categoryId": "27"  # Education
+            "tags": ["Amazon", "top picks", "AI", "products"],
+            "categoryId": "22",  # People & Blogs
         },
         "status": {
-            "privacyStatus": "public"
-        }
+            "privacyStatus": "public",
+        },
     }
 
-    media_file = MediaFileUpload(video_path, chunksize=-1, resumable=True)
+    media = MediaFileUpload(video_path, chunksize=-1, resumable=True, mimetype="video/mp4")
 
     request = youtube.videos().insert(
         part="snippet,status",
-        body=request_body,
-        media_body=media_file
+        body=body,
+        media_body=media
     )
-
     response = request.execute()
-    return f"https://youtube.com/watch?v={response['id']}"
+    return f"https://www.youtube.com/watch?v={response['id']}"
