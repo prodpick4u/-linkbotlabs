@@ -1,28 +1,29 @@
 name: Upload Video to YouTube
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # You can trigger manually; change to schedule if needed
 
 jobs:
   upload:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install -r requirements.txt
           pip install google-api-python-client google-auth google-auth-oauthlib google-auth-httplib2
 
       - name: Create client_secret.json from secret
         run: echo "${{ secrets.YOUTUBE_CLIENT_SECRET }}" > client_secret.json
 
-      - name: Run uploader
+      - name: Run main script to upload video
         run: python main.py
