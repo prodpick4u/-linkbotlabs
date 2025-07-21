@@ -1,29 +1,29 @@
-import random
 from amazon_scraper import get_top_3_products
 from blog_generator import generate_blog_post
 from youtube_script_generator import generate_script
-from tts_generator import generate_tts
+from tts_generator import generate_voiceover
 from youtube_uploader import upload_to_youtube
 
-def log(message):
-    print(message)
+# ✅ Use full Amazon Best Seller category URL
+category_url = "https://www.amazon.com/Best-Sellers-Kitchen-Dining/zgbs/kitchen/"
 
-category_urls = {
-    "kitchen": "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen",
-    "outdoors": "https://www.amazon.com/Best-Sellers/zgbs/sporting-goods",
-    "beauty": "https://www.amazon.com/Best-Sellers-Beauty/zgbs/beauty"
-}
+try:
+    print("🔍 Fetching top 3 products...")
+    products = get_top_3_products(category_url)
 
-category = random.choice(list(category_urls.keys()))
-url = category_urls[category]
-log(f"Selected category: {category}")
+    print("📝 Generating blog post...")
+    blog_content = generate_blog_post(products)
 
-products = get_top_3_products(url)
-log(f"✅ Retrieved {len(products)} products")
+    print("🎬 Creating YouTube script...")
+    script_text = generate_script(products)
 
-blog_content = generate_blog_post(products)
-script = generate_script(products)
-audio_path = generate_tts(script)
-upload_to_youtube(f"Top 3 Amazon Picks - {category.title()}", audio_path, products)
+    print("🔊 Generating voiceover...")
+    audio_path = generate_voiceover(script_text)
 
-log("✅ All tasks completed successfully")
+    print("📤 Uploading to YouTube...")
+    upload_to_youtube("Top 3 Kitchen Picks (Best Sellers)", audio_path, products)
+
+    print("✅ All done!")
+
+except Exception as e:
+    print(f"❌ Error: {e}")
