@@ -22,12 +22,11 @@ At Prodpick4u, we specialize in reviewing the top 3 niche products daily to help
 - Tips and buying guides  
 
 ---
+ ## Latest Reviews
 
-## Latest Reviews
-
-- [Top Kitchen Gadgets for 2025](post-kitchen.md)  
-- [Best Outdoor Gear This Season](post-outdoors.md)  
-- [Beauty Products Trending Now](post-beauty.md)  
+- [Top Kitchen Gadgets for 2025](posts/post-kitchen.md)  
+- [Best Outdoor Gear This Season](posts/post-outdoors.md)  
+- [Beauty Products Trending Now](posts/post-beauty.md)  
 
 ---
 
