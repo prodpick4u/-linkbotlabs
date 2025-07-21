@@ -1,40 +1,29 @@
+import random
 from amazon_scraper import get_top_3_products
 from blog_generator import generate_blog_post
-from blog_writer import write_to_blog
-from tts_generator import generate_voiceover
+from youtube_script_generator import generate_script
+from tts_generator import generate_tts
 from youtube_uploader import upload_to_youtube
-import datetime
 
-def log_to_file(log_lines):
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    header = f"📝 Log generated on {timestamp}\n"
-    with open("log.txt", "w", encoding="utf-8") as f:
-        f.write(header + "\n".join(log_lines))
-    print("✅ log.txt written")
+def log(message):
+    print(message)
 
-def main():
-    print("🚀 Starting daily content automation...")
+category_urls = {
+    "kitchen": "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen",
+    "outdoors": "https://www.amazon.com/Best-Sellers/zgbs/sporting-goods",
+    "beauty": "https://www.amazon.com/Best-Sellers-Beauty/zgbs/beauty"
+}
 
-    # Step 1: Scrape top 3 Amazon products
-    category = "kitchen"  # Change to "beauty", "outdoors", etc.
-    products = get_top_3_products("kitchen")
+category = random.choice(list(category_urls.keys()))
+url = category_urls[category]
+log(f"Selected category: {category}")
 
-    if not products:
-        print("❌ No products found.")
-        return
+products = get_top_3_products(url)
+log(f"✅ Retrieved {len(products)} products")
 
-    # Step 2: Generate blog content
-    blog_post, log_lines = generate_blog_post(products)
-    write_to_blog(blog_post)
+blog_content = generate_blog_post(products)
+script = generate_script(products)
+audio_path = generate_tts(script)
+upload_to_youtube(f"Top 3 Amazon Picks - {category.title()}", audio_path, products)
 
-    # Step 3: Save log
-    log_to_file(log_lines)
-
-    # Step 4: Create video from blog and upload
-    video_path = generate_voiceover(blog_post)
-    upload_to_youtube(video_path)
-
-    print("🎉 All tasks completed successfully!")
-
-if __name__ == "__main__":
-    main()
+log("✅ All tasks completed successfully")
