@@ -14,7 +14,12 @@ category_url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
 
 # 2. Get top 3 products
 top_products = get_top_3_products(category_url)
+import datetime
 
+log_lines = []
+def log(message):
+    print(message)  # visible in Actions log
+    log_lines.append(f"{datetime.datetime.now()}: {message}")
 # 3. Format blog content
 blog_content = "\n\n".join([
     f"### {i+1}. {p['title']}\n[Buy Here]({p['link']})\n![Image]({p['image']})"
