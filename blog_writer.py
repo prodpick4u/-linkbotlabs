@@ -9,3 +9,4 @@ def generate_blog_post(products):
     with open("index.md", "w", encoding="utf-8") as f:
         f.write(content)
     print("✅ Blog post written to index.md")
+    
