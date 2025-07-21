@@ -2,28 +2,30 @@ from amazon_scraper import get_top_3_products
 from blog_generator import generate_blog_post
 from youtube_script_generator import generate_script
 from tts_generator import generate_tts
-from youtube_uploader import upload_to_youtube
+from youtube_uploader import upload_video
 
-# ✅ Use full Amazon Best Seller category URL
-category_url = "https://www.amazon.com/Best-Sellers-Kitchen-Dining/zgbs/kitchen/"
-
-try:
+def main():
     print("🔍 Fetching top 3 products...")
-    products = get_top_3_products(category_url)
+
+    try:
+        products = get_top_3_products("https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen")
+    except Exception as e:
+        print(f"❌ Failed to fetch products: {e}")
+        products = []
 
     print("📝 Generating blog post...")
-    blog_content = generate_blog_post(products)
+    content = generate_blog_post(products)
 
-    print("🎬 Creating YouTube script...")
-    script_text = generate_script(products)
+    print("🎬 Generating video script...")
+    script = generate_script(products)
 
-    print("🔊 Generating voiceover...")
+    print("🎤 Generating voiceover...")
     audio_path = generate_tts(script)
 
     print("📤 Uploading to YouTube...")
-    upload_to_youtube("Top 3 Kitchen Picks (Best Sellers)", audio_path, products)
+    video_url = upload_video("video.mp4", script)  # Or pass `audio_path` if needed
 
-    print("✅ All done!")
+    print("✅ All done! Video uploaded to:", video_url)
 
-except Exception as e:
-    print(f"❌ Error: {e}")
+if __name__ == "__main__":
+    main()
