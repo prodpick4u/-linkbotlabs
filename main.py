@@ -3,7 +3,7 @@ from blog_generator import generate_blog_post
 from youtube_script_generator import generate_script
 from tts_generator import generate_tts
 from youtube_uploader import upload_video
-
+from video_creator import create_video_with_audio
 def main():
     print("🔍 Fetching top 3 products...")
     try:
@@ -29,9 +29,9 @@ def main():
     print("🎤 Generating voiceover...")
     audio_path = generate_tts(script)
 
-    print("📤 Uploading to YouTube...")
-    video_url = upload_video("video.mp4", script)  # Or replace `script` with `audio_path` if needed
-
+    print("🎞️ Creating video...")
+    create_video_with_audio("background.jpg", audio_p  # Or replace `script` with `audio_path` if needed
+create_video_with_audio("background.jpg", audio_p
     print("✅ All done! Video uploaded to:", video_url)
 
 if __name__ == "__main__":
