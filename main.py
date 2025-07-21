@@ -1,31 +1,17 @@
-name: Daily Blog and Video Automation
+from amazon_scraper import get_top_3_products
 
-on:
-  schedule:
-    - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
-  workflow_dispatch:     # Allows manual triggering
+def main():
+    url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
+    print("🔍 Fetching top 3 products...\n")
+    try:
+        products = get_top_3_products(url)
+        for i, product in enumerate(products, start=1):
+            print(f"{i}. {product['title']}")
+            print(f"   Price: {product['price']}")
+            print(f"   Link: {product['link']}")
+            print()
+    except Exception as e:
+        print(f"❌ Failed to fetch products: {e}")
 
-jobs:
-  run-automation:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install playwright  # ✅ Add this line
-
-    - name: Install Playwright Browsers
-      run: python -m playwright install  # ✅ Corrected to include `python -m`
-
-    - name: Run main script
-      run: python main.py
+if __name__ == "__main__":
+    main()
