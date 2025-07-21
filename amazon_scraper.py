@@ -1,87 +1,59 @@
-import requests
+from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
-import time
-import random
 
-def get_top_3_products(category_url):
-    session = requests.Session()
+def fetch_page_html(url):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)  # headless=True means no GUI
+        page = browser.new_page()
+        page.goto(url, timeout=60000)  # 60 seconds timeout
+        page.wait_for_timeout(5000)  # wait 5 seconds to allow JS to load
+        content = page.content()
+        browser.close()
+        return content
 
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/114.0.0.0 Safari/537.36"
-        ),
-        "Accept-Language": "en-US,en;q=0.9",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Connection": "keep-alive",
-        "DNT": "1",
-        "Upgrade-Insecure-Requests": "1",
-        "Sec-Fetch-Dest": "document",
-        "Sec-Fetch-Mode": "navigate",
-        "Sec-Fetch-Site": "none",
-        "Sec-Fetch-User": "?1",
-        "Cache-Control": "max-age=0",
-    }
+def get_top_3_products_amazon(url):
+    html = fetch_page_html(url)
+    soup = BeautifulSoup(html, 'html.parser')
 
-    for attempt in range(3):
+    # Try selectors for best seller items
+    items = soup.select('li.zg-item-immersion')[:3]
+    if not items:
+        items = soup.select('div.zg-item-immersion')[:3]
+
+    top_products = []
+    for item in items:
         try:
-            print(f"Attempt {attempt + 1}: Fetching {category_url}")
-            response = session.get(category_url, headers=headers, timeout=10)
+            title_tag = item.select_one('div.p13n-sc-truncate-desktop-type2, div.p13n-sc-truncated')
+            title = title_tag.text.strip() if title_tag else "No title"
 
-            if response.status_code == 200:
-                html = response.text
-                print("Response HTML preview:")
-                print(html[:2000])  # debug print
+            link_tag = item.select_one('a.a-link-normal')
+            link = "https://www.amazon.com" + link_tag['href'] if link_tag else "#"
 
-                soup = BeautifulSoup(html, 'html.parser')
+            img_tag = item.select_one('img')
+            image = img_tag['src'] if img_tag else ""
 
-                items = soup.select('li.zg-item-immersion')[:3]
-                if not items:
-                    print("No 'li.zg-item-immersion' found, trying div.zg-item-immersion")
-                    items = soup.select('div.zg-item-immersion')[:3]
-                if not items:
-                    print("No product items found with current selectors.")
-                    return []
+            price_tag = item.select_one('span.p13n-sc-price')
+            price = price_tag.text.strip() if price_tag else "Price not available"
 
-                top_products = []
-                for item in items:
-                    try:
-                        title_tag = item.select_one('div.p13n-sc-truncate-desktop-type2, div.p13n-sc-truncated')
-                        title = title_tag.text.strip() if title_tag else "No title"
-
-                        link_tag = item.select_one('a.a-link-normal')
-                        link = "https://www.amazon.com" + link_tag['href'] if link_tag else "#"
-
-                        img_tag = item.select_one('img')
-                        image = img_tag['src'] if img_tag else ""
-
-                        price_tag = item.select_one('span.p13n-sc-price')
-                        price = price_tag.text.strip() if price_tag else "Price not available"
-
-                        top_products.append({
-                            "title": title,
-                            "link": link,
-                            "image": image,
-                            "price": price,
-                            "pros": "Great performance and value.",
-                            "cons": "May not suit all needs."
-                        })
-                    except Exception as e:
-                        print(f"Skipping item due to parsing error: {e}")
-
-                if len(top_products) == 0:
-                    print("No products found with updated selectors.")
-                    return []
-
-                return top_products
-
-            else:
-                print(f"Attempt {attempt + 1}: Status {response.status_code}")
-                time.sleep(random.uniform(2, 4))  # Wait and retry
-
+            top_products.append({
+                "title": title,
+                "link": link,
+                "image": image,
+                "price": price,
+                "pros": "Great performance and value.",
+                "cons": "May not suit all needs."
+            })
         except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            time.sleep(random.uniform(2, 4))
+            print(f"Skipping item due to parsing error: {e}")
 
-    raise Exception("Failed to fetch page after 3 attempts")
+    return top_products
+
+if __name__ == "__main__":
+    url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
+    products = get_top_3_products_amazon(url)
+    for i, p in enumerate(products, 1):
+        print(f"{i}. {p['title']}")
+        print(f"   Price: {p['price']}")
+        print(f"   Link: {p['link']}")
+        print(f"   Image: {p['image']}")
+        print()
