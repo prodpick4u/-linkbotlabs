@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def get_top_3_products(category_url):
+def get_top_3_products(category_keyword):
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -10,7 +10,8 @@ def get_top_3_products(category_url):
         )
     }
 
-    response = requests.get(category_url, headers=headers)
+    search_url = f"https://www.amazon.com/s?k={category_keyword}"
+    response = requests.get(search_url, headers=headers)
     if response.status_code != 200:
         raise Exception(f"Failed to fetch page: {response.status_code}")
 
