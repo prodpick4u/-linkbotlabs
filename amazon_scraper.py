@@ -1,3 +1,8 @@
+import requests
+from bs4 import BeautifulSoup
+import time
+import random
+
 def get_top_3_products(category_url):
     headers = {
         "User-Agent": (
