@@ -2,6 +2,8 @@ name: Run Auto Blog Generator
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
 
 jobs:
   generate-blog:
@@ -23,7 +25,8 @@ jobs:
           pip install playwright
 
       - name: Install Playwright Browsers
-        run: python -m playwright install
+        run: |
+          python -m playwright install chromium
 
       - name: Run Blog Generator Script
         env:
