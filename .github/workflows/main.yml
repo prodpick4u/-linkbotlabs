@@ -37,8 +37,7 @@ jobs:
             libsecret-1-0 \
             libhyphen0 \
             libmanette-0.2-0 \
-            libgles2 \
-            libx264-160
+            libgles2
 
       - name: Install Python dependencies
         run: |
