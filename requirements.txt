@@ -10,3 +10,13 @@ google-api-python-client
 google-auth-httplib2
 playwright
 moviepy
+moviepy
+imageio
+imageio-ffmpeg
+decorator
+tqdm
+numpy
+requests
+pillow
+gTTS
+opencv-python
