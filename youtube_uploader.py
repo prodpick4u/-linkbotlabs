@@ -34,10 +34,9 @@ def upload_video(video_path, description, title="Top Amazon Picks", category_id=
     response = upload_request.execute()
     return f"https://youtube.com/watch?v={response['id']}"
 
-# ✅ Only one main block needed
 if __name__ == "__main__":
     video_url = upload_video(
-        video_path="your_video.mp4",  # ⬅️ Replace with your actual file name (e.g., "demo.mp4")
+        video_path="your_video.mp4",  # ⬅️ Replace with your actual video file
         title="Automated Test Upload",
         description="Uploaded using YouTube API and Python"
     )
