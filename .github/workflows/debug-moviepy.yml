@@ -1,4 +1,4 @@
-name: Debug MoviePy Installation
+name: Debug MoviePy Installation - Deep
 
 on:
   workflow_dispatch:
@@ -11,18 +11,27 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.12
+      - name: Show Python info
+        run: |
+          python --version
+          which python
+          python -m site
 
-      - name: Install only moviepy
+      - name: Show pip info
+        run: |
+          pip --version
+          pip show pip
+
+      - name: Install moviepy
         run: |
           python -m pip install --upgrade pip
           pip install moviepy
 
-      - name: Show installed packages
-        run: pip list
+      - name: Show moviepy info
+        run: pip show moviepy
+
+      - name: List installed packages with location
+        run: pip list -v
 
       - name: Test moviepy import
         run: |
