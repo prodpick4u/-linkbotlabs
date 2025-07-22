@@ -1,23 +1,22 @@
-# Dockerfile
-
+# Use a lightweight Python base image
 FROM python:3.12-slim
 
-# Install OS dependencies
+# Install system dependencies needed by moviepy
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     imagemagick \
     libx11-dev \
- && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
-# Set work directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy project files into container
+# Copy all project files into the container
 COPY . /app
 
-# Install Python dependencies
+# Upgrade pip and install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip \
- && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt
 
-# Default command (can be overridden in workflow)
+# Optional: default command (can be overridden in GitHub Actions)
 CMD ["python", "video_creator_save_only.py"]
