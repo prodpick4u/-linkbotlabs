@@ -2,8 +2,7 @@ requests
 beautifulsoup4
 lxml
 moviepy
-imageio
-imageio-ffmpeg
+imageio[ffmpeg]
 gTTS
 python-dotenv
 openai
