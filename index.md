@@ -1,47 +1,16 @@
-# Daily Product Picks
-
-Automated blog powered by AI.
-
+---
+layout: default
+title: Prodpick4U – Daily Top Picks
 ---
 
-This site is open source. [Improve it here](https://github.com/prodpick4u/Prodpick4u)
+# 🛍️ Welcome to Prodpick4U!
 
----
+Discover our daily top 3 Amazon picks across trending categories:
 
-## About Prodpick4u
+- 🥘 [Top Kitchen Gadgets for 2025](./post-kitchen.md)
+- 🏕️ [Best Outdoor Gear This Season](./post-outdoor.md)
+- 💄 [Beauty Products Trending Now](./post-beauty.md)
 
-At Prodpick4u, we specialize in reviewing the top 3 niche products daily to help you make smart buying decisions.
+We automatically find the best-reviewed and most popular items, so you don’t have to!
 
----
-
-## What You’ll Find Here
-
-- Expertly curated product picks every day  
-- Honest and detailed reviews  
-- Affiliate links to trusted retailers  
-- Tips and buying guides
-
----
-
-## Latest Reviews
----
-title: Home
----
-
-# 📰 Latest Reviews
-
-- [Top Kitchen Gadgets for 2025](posts/post-kitchen.md)
-- [Best Outdoor Gear This Season](posts/post-outdoor.md)
-- [Beauty Products Trending Now](posts/post-beauty.md)
-
-
----
-
-## Get Involved
-
-Want to contribute or suggest a product?  
-Feel free to open an issue or pull request on our [GitHub repo](https://github.com/prodpick4u/Prodpick4u).
-
----
-
-Thank you for visiting! Stay tuned for daily updates.
+> Bookmark this site for fresh updates every day.
