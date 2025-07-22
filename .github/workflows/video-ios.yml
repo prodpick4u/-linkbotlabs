@@ -26,6 +26,10 @@ jobs:
           sudo apt update
           sudo apt install -y ffmpeg libx11-dev imagemagick
 
+      - name: Configure ImageMagick (trust policy)
+        run: |
+          sudo sed -i 's/rights="none"/rights="read|write"/g' /etc/ImageMagick-6/policy.xml || true
+
       - name: Run video creator (save only)
         run: python video_creator_save_only.py
 
