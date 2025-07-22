@@ -6,18 +6,18 @@ def get_top_3_products(url):
         page = browser.new_page()
         page.goto(url, timeout=60000)
 
-        # Wait for product cards
-        page.wait_for_selector("div.p13n-sc-uncoverable-faceout")
+        # Wait for product cards with new selector
+        page.wait_for_selector('div[data-component-type="s-search-result"]')
 
-        items = page.query_selector_all("div.p13n-sc-uncoverable-faceout")[:3]
+        items = page.query_selector_all('div[data-component-type="s-search-result"]')[:3]
 
         products = []
         for item in items:
             try:
-                title = item.query_selector("._cDEzb_p13n-sc-css-line-clamp-3_g3dy1")
-                link = item.query_selector("a.a-link-normal")
-                img = item.query_selector("img")
-                price = item.query_selector("span.a-price span.a-offscreen")
+                title = item.query_selector("h2 a span")
+                link = item.query_selector("h2 a")
+                img = item.query_selector("img.s-image")
+                price = item.query_selector("span.a-price > span.a-offscreen")
 
                 products.append({
                     "title": title.inner_text().strip() if title else "No title",
