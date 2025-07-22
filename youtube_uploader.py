@@ -33,3 +33,11 @@ def upload_video(video_path, title, description):
     request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
     response = request.execute()
     print("Uploaded to YouTube:", response.get("id"))
+
+
+if __name__ == "__main__":
+    upload_video(
+        video_path="your_video.mp4",  # 🔁 Change to your actual file
+        title="My Automated Video",
+        description="Uploaded via Python and YouTube API"
+    )
