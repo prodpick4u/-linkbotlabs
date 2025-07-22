@@ -12,12 +12,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Docker image
-        run: docker build -t video-generator .
+        run: docker build -t moviepy-generator .
 
-      - name: Run video generator inside Docker
-        run: docker run -v ${{ github.workspace }}/output:/app/output video-generator
-
-      - name: Upload video
+      - name: Run video generation in Docker
+        run: |
+          docker run --rm -v ${{ github.workspace }}/output:/app/output moviepy-generator
+          
+      - name: Upload generated video
         uses: actions/upload-artifact@v4
         with:
           name: ios-video
