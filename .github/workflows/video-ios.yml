@@ -16,11 +16,10 @@ jobs:
         with:
           python-version: 3.12
 
-      - name: Install moviepy and dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install moviepy imageio imageio-ffmpeg
-          pip show moviepy
+          pip install -r requirements.txt
 
       - name: Run video creator (save only)
         run: python video_creator_save_only.py
