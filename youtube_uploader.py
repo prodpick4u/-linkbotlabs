@@ -39,9 +39,8 @@ def upload_video(video_path, description, title="Top Amazon Picks", category_id=
 # ✅ THIS MUST BE OUTSIDE THE FUNCTION
 if __name__ == "__main__":
     video_url = upload_video(
-        video_path="your_video.mp4",  # Change to your actual file
+        video_path="your_video.mp4",  # Change this to your actual video file
         title="Automated Test Upload",
         description="Uploaded using YouTube API and Python"
     )
     print("✅ Uploaded! Video URL:", video_url)
-
