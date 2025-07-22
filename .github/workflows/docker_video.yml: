@@ -1,0 +1,24 @@
+name: Generate Video with Docker
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t video-generator .
+
+      - name: Run video generator inside Docker
+        run: docker run -v ${{ github.workspace }}/output:/app/output video-generator
+
+      - name: Upload video
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-video
+          path: output/*.mp4
