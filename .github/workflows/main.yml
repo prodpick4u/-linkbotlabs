@@ -26,7 +26,7 @@ jobs:
 
       - name: Install Playwright Browsers
         run: |
-          python -m playwright install chromium
+          python -m playwright install  # ✅ installs all needed browsers
 
       - name: Run Blog Generator Script
         env:
