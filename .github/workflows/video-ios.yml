@@ -16,10 +16,11 @@ jobs:
         with:
           python-version: 3.12
 
-      - name: Install moviepy manually
+      - name: Install moviepy and dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install moviepy imageio imageio-ffmpeg decorator tqdm numpy requests pillow gTTS opencv-python
+          pip install moviepy imageio imageio-ffmpeg
+          pip show moviepy
 
       - name: Run video creator (save only)
         run: python video_creator_save_only.py
