@@ -11,29 +11,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Show Python info (debug)
-        run: |
-          python --version
-          which python
-          python -m pip --version
-          pip list
-
-      - name: Install Python dependencies (explicit)
-        run: |
-          python -m pip install --upgrade pip
-          pip install moviepy imageio imageio-ffmpeg decorator
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
 
       - name: Install system dependencies for moviepy
         run: |
           sudo apt update
           sudo apt install -y ffmpeg libx11-dev imagemagick
 
-      - name: Configure ImageMagick (trust policy)
+      - name: Install Python dependencies
         run: |
-          sudo sed -i 's/rights="none"/rights="read|write"/g' /etc/ImageMagick-6/policy.xml || true
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Test MoviePy import
+        run: |
+          python -c "from moviepy.editor import ImageClip; print('✅ MoviePy import success')"
 
       - name: Run video creator (save only)
-        run: python3 video_creator_save_only.py
+        run: python video_creator_save_only.py
 
       - name: Upload video for iOS download
         uses: actions/upload-artifact@v4
