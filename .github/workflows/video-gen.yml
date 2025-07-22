@@ -25,7 +25,7 @@ jobs:
         run: python video_creator_save_only.py
 
       - name: Upload generated video artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: generated-video
           path: output/*.mp4
