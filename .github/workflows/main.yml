@@ -1,43 +1,29 @@
-name: Run Auto Blog Generator
+name: Auto Blog & Video Generator
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
+    - cron: '0 3 * * *'  # Daily at 03:00 UTC
 
 jobs:
-  generate-blog:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.12
+      - name: Set up Python 3.x
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: '3.x'
 
-      - name: Install system dependencies for Playwright
+      - name: Install system deps for Playwright
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            libgtk-4-1 \
-            libgraphene-1.0-0 \
-            libwoff1 \
-            libvpx9 \
-            libevent-2.1-7 \
-            libopus0 \
-            libgstreamer-plugins-base1.0-0 \
-            libgstreamer-plugins-good1.0-0 \
-            libgstreamer-gl1.0-0 \
-            libflite1 \
-            libavif16 \
-            libharfbuzz-icu0 \
-            libsecret-1-0 \
-            libhyphen0 \
-            libmanette-0.2-0 \
-            libgles2
+          sudo apt-get install -y libgtk-4-1 libwoff1 libvpx9 libevent-2.1-7 libopus0 \
+            libgstreamer-plugins-base1.0-0 libgstreamer-plugins-good1.0-0 libgstreamer-gl1.0-0 \
+            libflite1 libavif16 libhyphen0 libsecret-1-0 libmanette-0.2-0 libgles2
 
       - name: Install Python dependencies
         run: |
@@ -45,17 +31,16 @@ jobs:
           pip install -r requirements.txt
           pip install playwright
 
-      - name: Install Playwright Browsers
-        run: |
-          python -m playwright install chromium
+      - name: Install Playwright browsers
+        run: python -m playwright install chromium
 
-      - name: Run Blog Generator Script
+      - name: Run automation
         env:
-          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          RAPIDAPI_HOST: real-time-amazon-data.p.rapidapi.com
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
-        run: |
-          python main.py
+          AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
+        run: python main.py
