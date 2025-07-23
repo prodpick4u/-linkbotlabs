@@ -10,7 +10,7 @@ def get_products_by_asins(asins):
     """
     Fetch product info for a list of ASINs via RapidAPI Amazon API.
     """
-    url = "https://amazon-product-search-api.p.rapidapi.com/product-details"
+    url = "https://amazon-product-search-api.p.rapidapi.com/products"
     headers = {
         "x-rapidapi-key": RAPIDAPI_KEY,
         "x-rapidapi-host": RAPIDAPI_HOST
