@@ -7,9 +7,6 @@ gTTS
 python-dotenv
 openai
 pytz
-moviepy
-imageio
-imageio-ffmpeg
 Pillow
 google-auth
 google-auth-oauthlib
