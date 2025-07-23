@@ -15,19 +15,19 @@ def generate_youtube_script(products):
     return script
 
 def main():
-    url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
-    fallback_asins = ["B08ZJTX8WZ", "B07YXL5GLM", "B07PZ4PK4R"]
+    amazon_search_url = "https://www.amazon.com/s?k=kitchen"
+    category = "kitchen"
 
     print("🔍 Fetching top 3 products...")
-    products = fetch_amazon_top3_with_fallback(url, fallback_asins)
+    products = fetch_amazon_top3_with_fallback(amazon_search_url, category)
 
     if not products:
         print("❌ No products fetched, aborting.")
         return
 
     print("📝 Generating blog post...")
-    blog_post = generate_blog_post(products, category="Kitchen")
-    write_to_blog("Kitchen", blog_post)
+    blog_post = generate_blog_post(products, category=category)
+    write_to_blog(category, blog_post)
 
     print("🎬 Generating YouTube script...")
     script = generate_youtube_script(products)
@@ -40,7 +40,7 @@ def main():
         print(f"❌ TTS generation failed: {e}")
         audio_path = None
 
-    video_path = "video.mp4"  # Placeholder if you're generating video separately
+    video_path = "video.mp4"  # Replace with your video generation logic if you have one
 
     try:
         video_url = upload_video(video_path, script)
