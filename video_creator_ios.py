@@ -1,30 +1,58 @@
-import os
-from moviepy.editor import *
-from datetime import datetime
+from moviepy.editor import ImageClip, AudioFileClip, CompositeVideoClip, TextClip
 
-# ========== CONFIG ==========
-OS_TYPE = 'mac'  # or 'windows'
-UPLOAD_AUTOMATICALLY = False  # Leave off for now
+def create_video_with_audio(
+    image_path,
+    audio_path,
+    output_path="video.mp4",
+    resolution=(1280, 720),
+    watermark_text=None,
+    watermark_pos=("right", "bottom"),
+    watermark_margin=10,
+):
+    # Load audio and get duration
+    audio = AudioFileClip(audio_path)
+    duration = audio.duration
 
-VIDEO_TITLE = "Top 3 Tents of 2025"
-FILENAME = f"camping_{datetime.now().strftime('%Y%m%d_%H%M%S')}.mp4"
+    # Create an image clip with the audio duration
+    image_clip = ImageClip(image_path).set_duration(duration).set_audio(audio)
 
-# Save to iCloud Drive (so you can see it in Files app on iPhone)
-SAVE_TO_ICLOUD = True
+    # Resize image to fit into resolution, keep aspect ratio and add black bars
+    image_clip = image_clip.resize(height=resolution[1])  # Resize height first
+    if image_clip.w > resolution[0]:
+        image_clip = image_clip.resize(width=resolution[0])  # Resize width if still too wide
 
-if OS_TYPE == 'mac':
-    if SAVE_TO_ICLOUD:
-        OUTPUT_PATH = os.path.expanduser(f"~/Library/Mobile Documents/com~apple~CloudDocs/{FILENAME}")
-    else:
-        OUTPUT_PATH = os.path.expanduser(f"~/Desktop/{FILENAME}")
-else:
-    OUTPUT_PATH = os.path.join(os.environ["USERPROFILE"], "Desktop", FILENAME)
+    # Create a black background clip with desired resolution
+    background = ImageClip(color=(0, 0, 0), size=resolution).set_duration(duration)
 
-# ========== STEP 1: GENERATE VIDEO ==========
-clip = TextClip(VIDEO_TITLE, fontsize=60, color='white', size=(1280, 720)).set_duration(5)
+    # Composite the image clip over black background centered
+    video = CompositeVideoClip([background, image_clip.set_position("center")])
 
-clip.write_videofile(OUTPUT_PATH, fps=24)
-print(f"✅ Video saved to: {OUTPUT_PATH}")
+    # Add watermark text if specified
+    if watermark_text:
+        watermark = TextClip(
+            watermark_text,
+            fontsize=24,
+            color="white",
+            font="Arial-Bold",
+            stroke_color="black",
+            stroke_width=2,
+            method="caption"
+        ).set_duration(duration)
 
-# ========== STEP 2: Manual upload ==========
-print("📱 You can now open the Files app on your iPhone and upload from iCloud or AirDrop the file from Desktop.")
+        # Position watermark with margin
+        pos_x = watermark_pos[0]
+        pos_y = watermark_pos[1]
+        video = CompositeVideoClip([video, watermark.set_pos((pos_x, pos_y), relative=True).margin(right=watermark_margin, bottom=watermark_margin)])
+
+    # Write video file
+    video.write_videofile(
+        output_path,
+        codec="libx264",
+        audio_codec="aac",
+        fps=24,
+        threads=4,
+        verbose=True,
+        logger=None,
+    )
+
+    return output_path
