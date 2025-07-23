@@ -31,6 +31,12 @@ jobs:
           pip install -r requirements.txt
           pip install playwright
 
+      - name: Install moviepy explicitly (debug)
+        run: pip install moviepy imageio[ffmpeg]
+
+      - name: List installed packages (debug)
+        run: pip list
+
       - name: Install Playwright browsers
         run: python -m playwright install chromium
 
