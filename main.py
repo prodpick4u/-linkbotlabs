@@ -1,10 +1,10 @@
 import os
 from datetime import datetime
-from utils.blog_generator import generate_blog_post
-from utils.video_creator import create_video_script, render_video, upload_video
+from blog_generator import generate_blog_post
+from video_creator import create_video_script, render_video, upload_video
 import requests
 
-CATEGORY = "Beauty Products"  # Change to 'Kitchen', 'Outdoors', etc.
+CATEGORY = "Beauty Products"  # Change as needed
 
 def fetch_top_amazon_products(query, num=3):
     url = "https://real-time-web-search.p.rapidapi.com/search-advanced"
