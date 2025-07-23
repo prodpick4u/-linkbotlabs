@@ -1,110 +1,74 @@
-from blog_generator import generate_blog_post, write_to_blog
-from tts_module import generate_tts
-from youtube_uploader import upload_video
+import os
+from datetime import datetime
+from utils.blog_generator import generate_blog_post
+from utils.video_creator import create_video_script, render_video, upload_video
 import requests
-import urllib.parse
 
-RAPIDAPI_KEY = "1cd005eae7msh84dc8a952496e8ap11a8c8jsn1d76048c3e91"
-AFFILIATE_TAG = "mychanneld-20"
+CATEGORY = "Beauty Products"  # Change to 'Kitchen', 'Outdoors', etc.
 
-def fetch_amazon_top3_with_fallback(query="best kitchen products site:amazon.com"):
+def fetch_top_amazon_products(query, num=3):
     url = "https://real-time-web-search.p.rapidapi.com/search-advanced"
+    headers = {
+        "x-rapidapi-host": "real-time-web-search.p.rapidapi.com",
+        "x-rapidapi-key": os.getenv("RAPIDAPI_KEY")
+    }
+
     params = {
-        "q": query,
-        "num": 10,
+        "q": f"{query} site:amazon.com",
+        "num": num,
         "start": 0,
         "gl": "us",
         "hl": "en",
         "device": "desktop",
-        "nfpr": 0
-    }
-    headers = {
-        "x-rapidapi-host": "real-time-web-search.p.rapidapi.com",
-        "x-rapidapi-key": RAPIDAPI_KEY
+        "nfpr": "0"
     }
 
-    try:
-        response = requests.get(url, headers=headers, params=params)
-        response.raise_for_status()
-        results = response.json().get("organic", [])
-    except Exception as e:
-        print(f"❌ Failed to fetch search results: {e}")
+    response = requests.get(url, headers=headers, params=params)
+    if response.status_code != 200:
+        print(f"API error {response.status_code}: {response.text}")
         return []
 
+    data = response.json()
     products = []
-    for item in results:
-        url = item.get("url", "")
-        title = item.get("title", "")
-        if "amazon.com" in url:
-            tagged_url = append_affiliate_tag(url)
+
+    for result in data.get("organic", []):
+        link = result.get("link")
+        if "amazon.com" in link:
+            affiliate_link = link.split("?")[0] + f"?tag={os.getenv('AMAZON_TAG')}"
             products.append({
-                "title": title,
-                "price": "N/A",       # You may later add price scraping if needed
-                "url": tagged_url,
-                "pros": "",
-                "cons": ""
+                "title": result.get("title"),
+                "link": affiliate_link,
+                "description": result.get("snippet") or ""
             })
-        if len(products) >= 3:
+        if len(products) == num:
             break
 
     return products
 
-def append_affiliate_tag(url):
-    parsed = urllib.parse.urlparse(url)
-    query = urllib.parse.parse_qs(parsed.query)
-    query["tag"] = AFFILIATE_TAG
-    new_query = urllib.parse.urlencode(query, doseq=True)
-    return urllib.parse.urlunparse(parsed._replace(query=new_query))
-
-def generate_youtube_script(products):
-    script = "🎬 Here are today’s top 3 Amazon picks!\n\n"
-    for i, p in enumerate(products, 1):
-        script += f"{i}. {p['title']} - priced at {p['price']}.\n"
-        if p.get("pros"):
-            script += f"Pros: {p['pros']}\n"
-        if p.get("cons"):
-            script += f"Cons: {p['cons']}\n"
-        script += f"Buy now: {p['url']}\n\n"
-    return script
-
 def main():
-    category = "kitchen"
-    query = f"best {category} products site:amazon.com"
-
-    print("🔍 Fetching top 3 products...")
-    products = fetch_amazon_top3_with_fallback(query)
+    print(f"🔍 Fetching top 3 products for category: {CATEGORY}")
+    products = fetch_top_amazon_products(CATEGORY)
 
     if not products:
         print("❌ No products fetched, aborting.")
         return
 
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    post_filename = f"post-{CATEGORY.lower().replace(' ', '-')}.html"
+
     print("📝 Generating blog post...")
-    blog_post = generate_blog_post(products, category=category)
-    write_to_blog(category, blog_post)
+    generate_blog_post(products, CATEGORY, post_filename)
 
-    print("🎬 Generating YouTube script...")
-    script = generate_youtube_script(products)
-    with open("youtube_script.txt", "w", encoding="utf-8") as f:
-        f.write(script)
+    print("🎬 Creating video script...")
+    video_script = create_video_script(products, CATEGORY)
 
-    try:
-        audio_path = generate_tts(script)
-    except Exception as e:
-        print(f"❌ TTS generation failed: {e}")
-        audio_path = None
+    print("📹 Rendering video...")
+    video_path = render_video(video_script, CATEGORY)
 
-    video_path = "video.mp4"  # Replace with real video path if using generation
+    print("📤 Uploading to YouTube...")
+    upload_video(video_path, CATEGORY, today)
 
-    try:
-        video_url = upload_video(video_path, script)
-    except Exception as e:
-        print(f"❌ Video upload failed: {e}")
-        video_url = None
-
-    print("✅ Automation complete!")
-    print("📝 Blog post saved.")
-    if video_url:
-        print(f"📺 YouTube video uploaded: {video_url}")
+    print("✅ Done!")
 
 if __name__ == "__main__":
     main()
