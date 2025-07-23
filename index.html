@@ -1,28 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Kitchen Gadgets for 2025 - Prodpick4U</title>
-  <link rel="stylesheet" href="../styles.css" />
-</head>
-<body>
-  <h1>Top Kitchen Gadgets for 2025</h1>
-  <p>Updated daily with the latest top picks.</p>
-
-  <div class="products">
-    <!-- Repeat this block for each product -->
+def generate_product_block(product):
+    return f'''
     <div class="product">
-      <h2>Product Title Here</h2>
-      <img src="IMAGE_URL_HERE" alt="Product Title Here" />
-      <p><strong>Price:</strong> $XX.XX</p>
-      <p><strong>Pros:</strong> List of pros here</p>
-      <p><strong>Cons:</strong> List of cons here</p>
-      <a href="AMAZON_LINK_HERE" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+      <h2>{product["title"]}</h2>
+      <img src="{product.get("image", "")}" alt="{product["title"]}" />
+      <p><strong>Price:</strong> {product["price"]}</p>
+      <p><strong>Pros:</strong> {product.get("pros", "N/A")}</p>
+      <p><strong>Cons:</strong> {product.get("cons", "N/A")}</p>
+      <a href="{product.get("link", "#")}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
     </div>
-    <!-- End product block -->
-  </div>
+    '''
 
-  <a href="../index.html">← Back to Daily Top Picks</a>
-</body>
-</html>
+def generate_post_html(products, template_path, output_path):
+    with open(template_path, 'r', encoding='utf-8') as f:
+        template = f.read()
+
+    product_blocks = ''.join(generate_product_block(p) for p in products)
+
+    html_content = template.replace('{{PRODUCT_BLOCKS}}', product_blocks)
+
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+
+    print(f"✅ Generated {output_path}")
+
+# Example usage:
+if __name__ == "__main__":
+    # Sample product data — replace with your fetched product list
+    sample_products = [
+        {
+            "title": "Super Blender 3000",
+            "image": "https://example.com/blender.jpg",
+            "price": "$99.99",
+            "pros": "Powerful, Durable",
+            "cons": "Noisy",
+            "link": "https://www.amazon.com/dp/B12345"
+        },
+        {
+            "title": "Non-stick Frying Pan",
+            "image": "https://example.com/pan.jpg",
+            "price": "$29.99",
+            "pros": "Easy to clean, Affordable",
+            "cons": "Handle gets hot",
+            "link": "https://www.amazon.com/dp/B67890"
+        },
+        {
+            "title": "Digital Kitchen Scale",
+            "image": "https://example.com/scale.jpg",
+            "price": "$15.49",
+            "pros": "Accurate, Compact",
+            "cons": "Small display",
+            "link": "https://www.amazon.com/dp/B11223"
+        }
+    ]
+
+    generate_post_html(
+        products=sample_products,
+        template_path="templates/post-kitchen-template.html",  # your template file
+        output_path="docs/posts/post-kitchen.html"             # output folder/file
+    )
