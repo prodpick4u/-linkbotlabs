@@ -25,7 +25,7 @@ jobs:
             libgstreamer-plugins-base1.0-0 libgstreamer-plugins-good1.0-0 libgstreamer-gl1.0-0 \
             libflite1 libavif16 libhyphen0 libsecret-1-0 libmanette-0.2-0 libgles2
 
-      -       - name: Install Python dependencies (incl. moviepy & ffmpeg)
+      - name: Install Python dependencies (incl. moviepy & ffmpeg)
         run: |
           sudo apt-get install -y ffmpeg
           python -m pip install --upgrade pip
