@@ -1,41 +1,14 @@
-from amazon_scraper import get_top_3_products
-
-def generate_blog_post(products):
-    lines = ["# Daily Product Picks\n", "Here are today's top 3 picks:\n"]
-    for i, p in enumerate(products, 1):
-        lines.append(f"## {i}. {p['title']}\n")
-        lines.append(f"- Price: {p['price']}\n")
-        lines.append(f"- Link: {p['link']}\n")
-        lines.append(f"- Pros: {p['pros']}\n")
-        lines.append(f"- Cons: {p['cons']}\n")
-        lines.append("\n")
-    return "\n".join(lines)
-
-def generate_youtube_script(products):
-    script_lines = ["Welcome to Daily Product Picks! Today we have 3 top products for you:\n"]
-    for i, p in enumerate(products, 1):
-        script_lines.append(f"Product {i}: {p['title']}. It costs {p['price']}. Check it out here: {p['link']}\n")
-    script_lines.append("Thanks for watching! Don't forget to like and subscribe.")
-    return "\n".join(script_lines)
-
-def generate_tts(script_text):
-    # TODO: Replace with your TTS code
-    print("🎤 [Simulated] Generating voiceover...")
-    audio_file = "voiceover.mp3"
-    return audio_file
-
-def upload_video(video_path, description):
-    # TODO: Replace with your YouTube upload code
-    print(f"📤 [Simulated] Uploading {video_path} with description:\n{description[:100]}...")
-    return "https://youtube.com/watch?v=dummy_video_id"
+from amazon_scraper import fetch_amazon_top3_with_fallback
 
 def main():
     url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
-    print("🔍 Fetching top 3 products...\n")
-    try:
-        products = get_top_3_products(url)
-    except Exception as e:
-        print(f"❌ Failed to fetch products: {e}")
+    fallback_asins = ["B08ZJTX8WZ", "B07YXL5GLM", "B07PZ4PK4R"]
+
+    print("🔍 Fetching top 3 products...")
+    products = fetch_amazon_top3_with_fallback(url, fallback_asins)
+
+    if not products:
+        print("❌ No products fetched, aborting.")
         return
 
     print("📝 Generating blog post...")
@@ -48,14 +21,26 @@ def main():
     with open("youtube_script.txt", "w", encoding="utf-8") as f:
         f.write(script)
 
-    audio_path = generate_tts(script)
+    try:
+        audio_path = generate_tts(script)
+    except Exception as e:
+        print(f"❌ TTS generation failed: {e}")
+        audio_path = None
 
-    video_path = "video.mp4"  # Replace with actual video generation logic
-    video_url = upload_video(video_path, script)
+    video_path = "video.mp4"  # Replace with your video gen logic
+
+    try:
+        video_url = upload_video(video_path, script)
+    except Exception as e:
+        print(f"❌ Video upload failed: {e}")
+        video_url = None
 
     print("✅ Automation complete!")
     print(f"Blog post saved to blog_post.md")
-    print(f"YouTube video URL: {video_url}")
+    if video_url:
+        print(f"YouTube video URL: {video_url}")
+    else:
+        print("Video upload did not complete.")
 
 if __name__ == "__main__":
     main()
