@@ -40,7 +40,7 @@ def main():
         print(f"❌ TTS generation failed: {e}")
         audio_path = None
 
-    video_path = "video.mp4"  # Replace with generated video if available
+    video_path = "video.mp4"  # Replace this if using an actual video generator
 
     try:
         video_url = upload_video(video_path, script)
