@@ -1,4 +1,8 @@
-def generate_blog_post(products):
+def write_to_blog(category, content):
+    filename = f"blog_{category.lower()}.md"
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"✅ Blog post written to {filename}")
     if not products:
         print("⚠️ No products found. Using default products.")
         products = [
