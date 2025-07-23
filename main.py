@@ -1,4 +1,7 @@
 from amazon_scraper import fetch_amazon_top3_with_fallback
+from blog_generator import generate_blog_post, generate_youtube_script, write_to_blog
+from tts_module import generate_tts
+from youtube_uploader import upload_video
 
 def main():
     url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
@@ -13,8 +16,7 @@ def main():
 
     print("📝 Generating blog post...")
     blog_post = generate_blog_post(products)
-    with open("blog_post.md", "w", encoding="utf-8") as f:
-        f.write(blog_post)
+    write_to_blog(blog_post)
 
     print("🎬 Generating YouTube script...")
     script = generate_youtube_script(products)
@@ -27,7 +29,7 @@ def main():
         print(f"❌ TTS generation failed: {e}")
         audio_path = None
 
-    video_path = "video.mp4"  # Replace with your video gen logic
+    video_path = "video.mp4"  # TODO: Replace with actual video generation
 
     try:
         video_url = upload_video(video_path, script)
@@ -36,7 +38,7 @@ def main():
         video_url = None
 
     print("✅ Automation complete!")
-    print(f"Blog post saved to blog_post.md")
+    print(f"Blog post saved.")
     if video_url:
         print(f"YouTube video URL: {video_url}")
     else:
