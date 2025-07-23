@@ -1,22 +1,40 @@
-def generate_script(products):
-    script = "Welcome to our channel! Today, we’re comparing the top 3 Amazon picks. Let's dive in:\n\n"
+from amazon_scraper import fetch_amazon_top3_with_fallback
+from blog_generator import generate_blog_post, write_to_blog
+from your_tts_module import generate_tts
+from your_youtube_uploader import upload_video
 
-    for i, p in enumerate(products, 1):
-        title = p.get("title", "Product")
-        price = p.get("price", "Price not available")
-        link = p.get("link", "")
-        # You can add pros and cons in your product dictionary if available
-        pros = p.get("pros", "Great value and performance.")
-        cons = p.get("cons", "Limited color options.")
+# <-- Add this import -->
+from your_script_module import generate_script  # <-- This is where generate_script lives
 
-        script += (
-            f"{i}. {title}\n"
-            f"Price: {price}\n"
-            f"Use: This product is ideal for your daily needs and offers excellent performance.\n"
-            f"Pros: {pros}\n"
-            f"Cons: {cons}\n"
-            f"Check it out here: {link}\n\n"
-        )
+def main():
+    # 1. Fetch products (Playwright first, fallback to API)
+    url = "https://www.amazon.com/Best-Sellers-Kitchen/zgbs/kitchen"
+    fallback_asins = ["B08ZJTX8WZ", "B07YXL5GLM", "B07PZ4PK4R"]
 
-    script += "Thanks for watching! Don’t forget to like, comment, and subscribe for more reviews.\n"
-    return script
+    products = fetch_amazon_top3_with_fallback(url, fallback_asins)
+
+    if not products:
+        print("No products fetched, aborting.")
+        return
+
+    # 2. Generate blog post
+    blog_post = generate_blog_post(products)
+    write_to_blog(blog_post)
+
+    # 3. Generate YouTube video script (VOICEOVER TEXT)
+    script_text = generate_script(products)
+
+    # 4. Generate audio voiceover from script
+    audio_path = generate_tts(script_text)
+
+    # 5. Create or assemble video with audio (your existing video creation code)
+    video_path = "video.mp4"  # your video file generation logic
+
+    # 6. Upload video to YouTube
+    video_url = upload_video(video_path, script_text)
+
+    print("Automation complete!")
+    print(f"Video URL: {video_url}")
+
+if __name__ == "__main__":
+    main()
