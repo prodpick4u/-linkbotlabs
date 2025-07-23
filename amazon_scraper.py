@@ -15,11 +15,17 @@ def fetch_amazon_top3_with_fallback(search_url, category):
 
             top3 = []
             for result in results[:3]:
-                title = result.query_selector('h2 span')?.inner_text() or "No Title"
-                url = result.query_selector('h2 a')?.get_attribute("href")
+                title_elem = result.query_selector('h2 span')
+                title = title_elem.inner_text() if title_elem else "No Title"
+
+                link_elem = result.query_selector('h2 a')
+                url = link_elem.get_attribute("href") if link_elem else None
+
                 price_whole = result.query_selector('.a-price-whole')
                 price_fraction = result.query_selector('.a-price-fraction')
-                image = result.query_selector('img')?.get_attribute("src")
+
+                image_elem = result.query_selector('img')
+                image = image_elem.get_attribute("src") if image_elem else None
 
                 price = "N/A"
                 if price_whole and price_fraction:
