@@ -11,3 +11,6 @@ moviepy
 imageio
 imageio-ffmpeg
 Pillow
+google-auth
+google-auth-oauthlib
+google-api-python-client
