@@ -2,7 +2,7 @@ import os
 import requests
 from playwright.sync_api import sync_playwright
 
-# Load RapidAPI key from env var
+# Load RapidAPI credentials
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
 RAPIDAPI_HOST = "amazon-product-search-api.p.rapidapi.com"
 
@@ -15,6 +15,7 @@ def get_products_by_asins(asins):
         "x-rapidapi-key": RAPIDAPI_KEY,
         "x-rapidapi-host": RAPIDAPI_HOST
     }
+
     products = []
     for asin in asins:
         params = {"asin": asin}
@@ -22,7 +23,6 @@ def get_products_by_asins(asins):
             resp = requests.get(url, headers=headers, params=params, timeout=10)
             resp.raise_for_status()
             data = resp.json()
-            # Assuming response structure with product info in data['product'] or similar
             product = data.get('product', {})
             products.append({
                 "title": product.get("title", "No title"),
@@ -34,19 +34,18 @@ def get_products_by_asins(asins):
                 "cons": "Limited info"
             })
         except Exception as e:
-            print(f"API fetch error for ASIN {asin}: {e}")
+            print(f"❌ API fetch error for ASIN {asin}: {e}")
     return products
+
 
 def get_top_3_products(url):
     """
-    Scrape Amazon search page with Playwright, get top 3 products.
+    Scrape Amazon search page using Playwright, return top 3 products.
     """
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         page.goto(url, timeout=60000)
-
-        # Wait for product cards with new selector
         page.wait_for_selector('div[data-component-type="s-search-result"]')
 
         items = page.query_selector_all('div[data-component-type="s-search-result"]')[:3]
@@ -64,33 +63,50 @@ def get_top_3_products(url):
                     "link": "https://www.amazon.com" + link.get_attribute("href") if link else "",
                     "image": img.get_attribute("src") if img else "",
                     "price": price.inner_text().strip() if price else "Price not available",
+                    "rating": "N/A",
                     "pros": "Popular choice",
                     "cons": "May be out of stock"
                 })
             except Exception as e:
-                print(f"Error scraping product: {e}")
+                print(f"⚠️ Error parsing product block: {e}")
 
         browser.close()
 
         if not products:
-            raise Exception("No products found")
+            raise Exception("No products found with Playwright")
 
         return products
 
-# Example usage:
-if __name__ == "__main__":
-    # Use Playwright scraper
-    url = "https://www.amazon.com/s?k=outdoor+tents"
+
+def fetch_amazon_top3_with_fallback(url, fallback_asins):
+    """
+    Try Playwright scraping first. If it fails, use RapidAPI with known ASINs.
+    """
     try:
+        print("🔍 Trying Playwright scraping...")
         products = get_top_3_products(url)
-        print("Playwright scraped products:")
-        for p in products:
-            print(p)
+        print("✅ Playwright succeeded.")
+        return products
     except Exception as e:
-        print(f"Playwright scraping failed: {e}")
-        # Fallback to API fetch with known ASINs if scraping fails
-        example_asins = ["B08ZJTX8WZ", "B07YXL5GLM", "B07PZ4PK4R"]
-        products = get_products_by_asins(example_asins)
-        print("API fetched products:")
-        for p in products:
-            print(p)
+        print(f"⚠️ Playwright failed: {e}")
+        print("📦 Falling back to RapidAPI...")
+        products = get_products_by_asins(fallback_asins)
+        if not products:
+            print("❌ RapidAPI also failed.")
+        else:
+            print("✅ RapidAPI succeeded.")
+        return products
+
+
+# For testing or running as a script
+if __name__ == "__main__":
+    search_url = "https://www.amazon.com/s?k=outdoor+tents"
+    known_asins = ["B08ZJTX8WZ", "B07YXL5GLM", "B07PZ4PK4R"]
+
+    final_products = fetch_amazon_top3_with_fallback(search_url, known_asins)
+
+    print("\n🛒 Final Product List:")
+    for idx, product in enumerate(final_products, 1):
+        print(f"{idx}. {product['title']}")
+        print(f"   Price: {product['price']}")
+        print(f"   Link: {product['link']}\n")
