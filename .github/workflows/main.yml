@@ -26,11 +26,12 @@ jobs:
             libgstreamer-plugins-base1.0-0 libgstreamer-plugins-good1.0-0 libgstreamer-gl1.0-0 \
             libflite1 libavif16 libhyphen0 libsecret-1-0 libmanette-0.2-0 libgles2
 
-      - name: Install Python dependencies
+      -      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install playwright moviepy imageio[ffmpeg]
+          pip install playwright moviepy imageio imageio-ffmpeg
+      
 
       - name: Verify installations
         run: |
