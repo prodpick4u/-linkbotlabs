@@ -11,4 +11,4 @@ Pillow
 google-auth
 google-auth-oauthlib
 google-api-python-client
-pip install google-api-python-client google-auth-oauthlib google-auth google-auth-httplib2
+google-auth-httplib2
