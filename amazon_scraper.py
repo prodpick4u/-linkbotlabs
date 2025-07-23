@@ -10,7 +10,7 @@ def get_products_by_asins(asins):
     """
     Fetch product info for a list of ASINs via RapidAPI Amazon API.
     """
-    url = "https://amazon-product-search-api.p.rapidapi.com/products"
+    url = "https://amazon-product-search-api.p.rapidapi.com/product-details"
     headers = {
         "x-rapidapi-key": RAPIDAPI_KEY,
         "x-rapidapi-host": RAPIDAPI_HOST
@@ -20,6 +20,7 @@ def get_products_by_asins(asins):
     for asin in asins:
         params = {"asin": asin}
         try:
+            print(f"🔗 Fetching ASIN {asin} using: {url}")
             resp = requests.get(url, headers=headers, params=params, timeout=10)
             resp.raise_for_status()
             data = resp.json()
@@ -36,7 +37,6 @@ def get_products_by_asins(asins):
         except Exception as e:
             print(f"❌ API fetch error for ASIN {asin}: {e}")
     return products
-
 
 def get_top_3_products(url):
     """
@@ -77,7 +77,6 @@ def get_top_3_products(url):
 
         return products
 
-
 def fetch_amazon_top3_with_fallback(url, fallback_asins):
     """
     Try Playwright scraping first. If it fails, use RapidAPI with known ASINs.
@@ -96,7 +95,6 @@ def fetch_amazon_top3_with_fallback(url, fallback_asins):
         else:
             print("✅ RapidAPI succeeded.")
         return products
-
 
 # For testing or running as a script
 if __name__ == "__main__":
