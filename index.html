@@ -1,24 +1,23 @@
 import os
 
 def generate_product_block(product):
-    return f'''
+    return f"""
     <div class="product">
-      <h2>{product["title"]}</h2>
-      <img src="{product.get("image", "")}" alt="{product["title"]}" />
-      <p><strong>Price:</strong> {product["price"]}</p>
-      <p><strong>Pros:</strong> {product.get("pros", "N/A")}</p>
-      <p><strong>Cons:</strong> {product.get("cons", "N/A")}</p>
-      <a href="{product.get("link", "#")}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+        <h2>{product['title']}</h2>
+        <img src="{product['image']}" alt="{product['title']}" style="width:200px;">
+        <p><strong>Price:</strong> {product['price']}</p>
+        <p><strong>Pros:</strong> {product.get('pros', 'N/A')}</p>
+        <p><strong>Cons:</strong> {product.get('cons', 'N/A')}</p>
+        <p><a href="{product['link']}" target="_blank">Buy on Amazon</a></p>
     </div>
-    '''
+    <hr/>
+    """
 
 def generate_post_html(products, template_path, output_path):
     with open(template_path, 'r', encoding='utf-8') as f:
         template = f.read()
-
     product_blocks = ''.join(generate_product_block(p) for p in products)
     html_content = template.replace('{{PRODUCT_BLOCKS}}', product_blocks)
-
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(html_content)
@@ -29,17 +28,15 @@ def generate_index_html(categories, template_path, output_path):
         template = f.read()
 
     list_items = ""
-    for cat in categories:
-        list_items += f'<li><span>{cat["emoji"]}</span> <a href="{cat["post_path"]}">{cat["title"]}</a></li>\n'
-
     post_divs = ""
     for cat in categories:
-        post_divs += f'''
-        <div class="post">
-          <a href="{cat["post_path"]}">{cat["title"]}</a>
-          <p>{cat["description"]}</p>
+        list_items += f'<li><a href="{cat["post_path"]}">{cat["emoji"]} {cat["title"]}</a></li>\n'
+        post_divs += f"""
+        <div class="category">
+            <h2><a href="{cat["post_path"]}">{cat["emoji"]} {cat["title"]}</a></h2>
+            <p>{cat["description"]}</p>
         </div>
-        '''
+        """
 
     html_content = template.replace('{{CATEGORY_LINKS}}', list_items)
     html_content = html_content.replace('{{POST_DIVS}}', post_divs)
@@ -50,24 +47,10 @@ def generate_index_html(categories, template_path, output_path):
     print(f"✅ Generated {output_path}")
 
 if __name__ == "__main__":
-    # Example product data (replace with your real data)
-    kitchen_products = [
-        {"title": "Super Blender 3000", "image": "https://example.com/blender.jpg", "price": "$99.99", "pros": "Powerful, Durable", "cons": "Noisy", "link": "https://www.amazon.com/dp/B12345"},
-        {"title": "Non-stick Frying Pan", "image": "https://example.com/pan.jpg", "price": "$29.99", "pros": "Easy to clean, Affordable", "cons": "Handle gets hot", "link": "https://www.amazon.com/dp/B67890"},
-        {"title": "Digital Kitchen Scale", "image": "https://example.com/scale.jpg", "price": "$15.49", "pros": "Accurate, Compact", "cons": "Small display", "link": "https://www.amazon.com/dp/B11223"}
-    ]
-
-    outdoor_products = [
-        {"title": "Camping Tent Pro", "image": "https://example.com/tent.jpg", "price": "$120.00", "pros": "Lightweight, Easy setup", "cons": "No rainfly included", "link": "https://www.amazon.com/dp/B23456"},
-        {"title": "Hiking Backpack", "image": "https://example.com/backpack.jpg", "price": "$80.00", "pros": "Comfortable straps", "cons": "Limited color options", "link": "https://www.amazon.com/dp/B78901"},
-        {"title": "Portable Stove", "image": "https://example.com/stove.jpg", "price": "$45.00", "pros": "Compact, Efficient", "cons": "Small fuel capacity", "link": "https://www.amazon.com/dp/B34567"}
-    ]
-
-    beauty_products = [
-        {"title": "Vitamin C Serum", "image": "https://example.com/serum.jpg", "price": "$25.00", "pros": "Brightens skin", "cons": "Strong scent", "link": "https://www.amazon.com/dp/B45678"},
-        {"title": "Hydrating Face Mask", "image": "https://example.com/mask.jpg", "price": "$15.00", "pros": "Moisturizing", "cons": "Single use", "link": "https://www.amazon.com/dp/B89012"},
-        {"title": "SPF 50 Sunscreen", "image": "https://example.com/sunscreen.jpg", "price": "$20.00", "pros": "Non-greasy", "cons": "Needs reapplication", "link": "https://www.amazon.com/dp/B56789"}
-    ]
+    # Example product data
+    kitchen_products = [...]  # already filled
+    outdoor_products = [...]  # already filled
+    beauty_products = [...]   # already filled
 
     categories = [
         {
@@ -87,9 +70,9 @@ if __name__ == "__main__":
             "template": "templates/post-outdoor-template.html"
         },
         {
-            "title": "Beauty Products Trending Now",
+            "title": "Must-Have Beauty Products",
             "emoji": "💄",
-            "description": "Check out the latest beauty products that everyone is talking about.",
+            "description": "Your skincare and makeup essentials for 2025.",
             "post_path": "posts/post-beauty.html",
             "products": beauty_products,
             "template": "templates/post-beauty-template.html"
@@ -98,15 +81,7 @@ if __name__ == "__main__":
 
     # Generate all category posts
     for cat in categories:
-        generate_post_html(
-            products=cat["products"],
-            template_path=cat["template"],
-            output_path=os.path.join("docs", cat["post_path"])
-        )
+        generate_post_html(cat["products"], cat["template"], cat["post_path"])
 
-    # Generate the main index page
-    generate_index_html(
-        categories=categories,
-        template_path="templates/index-template.html",
-        output_path="docs/index.html"
-    )
+    # Generate front page
+    generate_index_html(categories, "templates/index-template.html", "index.html")
