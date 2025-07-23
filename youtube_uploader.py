@@ -1,43 +1,35 @@
-
 import os
-import json
-import google.auth
-from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
-
 def upload_video(video_path, title, description):
-    creds_path = "client_secret.json"
-    with open(creds_path, "w") as f:
-        f.write(os.environ["YT_CLIENT_SECRET_JSON"])
-
-    flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
-    creds = flow.run_console()
+    creds = Credentials(
+        token=None,
+        refresh_token=os.getenv("YT_REFRESH_TOKEN"),
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=os.getenv("YT_CLIENT_ID"),
+        client_secret=os.getenv("YT_CLIENT_SECRET")
+    )
+    creds.refresh(Request())
 
     youtube = build("youtube", "v3", credentials=creds)
-    body = {
+
+    request_body = {
         "snippet": {
             "title": title,
             "description": description,
-            "tags": ["affiliate", "review"],
+            "tags": ["affiliate", "automation"],
             "categoryId": "28"
         },
         "status": {
-            "privacyStatus": "public"
+            "privacyStatus": "private"  # safe for testing
         }
     }
 
     media = MediaFileUpload(video_path, chunksize=-1, resumable=True, mimetype="video/*")
-    request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
+    request = youtube.videos().insert(part="snippet,status", body=request_body, media_body=media)
     response = request.execute()
-    print("Uploaded to YouTube:", response.get("id"))
-
-
-if __name__ == "__main__":
-    upload_video(
-        video_path="your_video.mp4",  # 🔁 Change to your actual file
-        title="My Automated Video",
-        description="Uploaded via Python and YouTube API"
-    )
+    print("✅ Uploaded to YouTube (private):", response.get("id"))
+    return response.get("id")
