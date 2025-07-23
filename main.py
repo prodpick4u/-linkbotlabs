@@ -11,7 +11,7 @@ def generate_youtube_script(products):
             script += f"Pros: {p['pros']}\n"
         if p.get("cons"):
             script += f"Cons: {p['cons']}\n"
-        script += f"Buy now: {p['link']}\n\n"
+        script += f"Buy now: {p['url']}\n\n"
     return script
 
 def main():
@@ -40,7 +40,7 @@ def main():
         print(f"❌ TTS generation failed: {e}")
         audio_path = None
 
-    video_path = "video.mp4"  # Replace with your video generation logic if you have one
+    video_path = "video.mp4"  # Replace with generated video path if automated
 
     try:
         video_url = upload_video(video_path, script)
