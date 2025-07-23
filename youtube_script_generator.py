@@ -1,7 +1,7 @@
 from amazon_scraper import fetch_amazon_top3_with_fallback
 from blog_generator import generate_blog_post, write_to_blog
-from your_tts_module import generate_tts
-from your_youtube_uploader import upload_video
+from tts_generator import generate_tts
+from youtube_uploader import upload_video
 
 # <-- Add this import -->
 from your_script_module import generate_script  # <-- This is where generate_script lives
