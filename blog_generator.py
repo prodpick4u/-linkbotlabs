@@ -1,8 +1,4 @@
-def write_to_blog(category, content):
-    filename = f"blog_{category.lower()}.md"
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(content)
-    print(f"✅ Blog post written to {filename}")
+def generate_blog_post(products, category):
     if not products:
         print("⚠️ No products found. Using default products.")
         products = [
@@ -23,11 +19,11 @@ def write_to_blog(category, content):
             }
         ]
 
-    blog = "# 🛍️ Top 3 Recommended Products\n\n"
+    blog = f"# 🛍️ Top 3 {category.title()} Picks\n\n"
     for i, p in enumerate(products, 1):
         blog += f"### {i}. {p['title']}\n"
         blog += f"**Price**: {p['price']}\n\n"
-        
+
         if p.get("rating"):
             blog += f"**Rating**: {p['rating']}\n\n"
 
@@ -42,8 +38,15 @@ def write_to_blog(category, content):
         blog += f"[👉 Buy Now on Amazon]({p['link']})\n\n"
         blog += "---\n\n"
 
-    with open("docs/index.md", "w", encoding="utf-8") as f:
-        f.write(blog)
-
-    print("✅ Blog post written to `docs/index.md`")
     return blog
+
+
+def write_to_blog(category, content):
+    filename = f"blog_{category.lower()}.md"
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"✅ Blog post written to {filename}")
+
+    with open("docs/index.md", "w", encoding="utf-8") as f:
+        f.write(content)
+    print("✅ Blog post also saved to docs/index.md")
