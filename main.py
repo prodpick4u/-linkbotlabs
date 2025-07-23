@@ -1,5 +1,5 @@
 from amazon_scraper import fetch_amazon_top3_with_fallback
-from blog_generator import generate_blog_post, generate_youtube_script, write_to_blog
+from blog_generator import generate_blog_post, write_to_blog
 from tts_module import generate_tts
 from youtube_uploader import upload_video
 
