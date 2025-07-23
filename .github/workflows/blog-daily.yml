@@ -23,7 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install playwright
-          playwright install
+          python -m playwright install  # Ensure Playwright browsers are installed
 
       - name: Run main script
         run: python main.py
