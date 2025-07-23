@@ -1,3 +1,5 @@
+import os
+
 def generate_product_block(product):
     return f'''
     <div class="product">
@@ -15,46 +17,96 @@ def generate_post_html(products, template_path, output_path):
         template = f.read()
 
     product_blocks = ''.join(generate_product_block(p) for p in products)
-
     html_content = template.replace('{{PRODUCT_BLOCKS}}', product_blocks)
 
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(html_content)
-
     print(f"✅ Generated {output_path}")
 
-# Example usage:
+def generate_index_html(categories, template_path, output_path):
+    with open(template_path, 'r', encoding='utf-8') as f:
+        template = f.read()
+
+    list_items = ""
+    for cat in categories:
+        list_items += f'<li><span>{cat["emoji"]}</span> <a href="{cat["post_path"]}">{cat["title"]}</a></li>\n'
+
+    post_divs = ""
+    for cat in categories:
+        post_divs += f'''
+        <div class="post">
+          <a href="{cat["post_path"]}">{cat["title"]}</a>
+          <p>{cat["description"]}</p>
+        </div>
+        '''
+
+    html_content = template.replace('{{CATEGORY_LINKS}}', list_items)
+    html_content = html_content.replace('{{POST_DIVS}}', post_divs)
+
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    print(f"✅ Generated {output_path}")
+
 if __name__ == "__main__":
-    # Sample product data — replace with your fetched product list
-    sample_products = [
+    # Example product data (replace with your real data)
+    kitchen_products = [
+        {"title": "Super Blender 3000", "image": "https://example.com/blender.jpg", "price": "$99.99", "pros": "Powerful, Durable", "cons": "Noisy", "link": "https://www.amazon.com/dp/B12345"},
+        {"title": "Non-stick Frying Pan", "image": "https://example.com/pan.jpg", "price": "$29.99", "pros": "Easy to clean, Affordable", "cons": "Handle gets hot", "link": "https://www.amazon.com/dp/B67890"},
+        {"title": "Digital Kitchen Scale", "image": "https://example.com/scale.jpg", "price": "$15.49", "pros": "Accurate, Compact", "cons": "Small display", "link": "https://www.amazon.com/dp/B11223"}
+    ]
+
+    outdoor_products = [
+        {"title": "Camping Tent Pro", "image": "https://example.com/tent.jpg", "price": "$120.00", "pros": "Lightweight, Easy setup", "cons": "No rainfly included", "link": "https://www.amazon.com/dp/B23456"},
+        {"title": "Hiking Backpack", "image": "https://example.com/backpack.jpg", "price": "$80.00", "pros": "Comfortable straps", "cons": "Limited color options", "link": "https://www.amazon.com/dp/B78901"},
+        {"title": "Portable Stove", "image": "https://example.com/stove.jpg", "price": "$45.00", "pros": "Compact, Efficient", "cons": "Small fuel capacity", "link": "https://www.amazon.com/dp/B34567"}
+    ]
+
+    beauty_products = [
+        {"title": "Vitamin C Serum", "image": "https://example.com/serum.jpg", "price": "$25.00", "pros": "Brightens skin", "cons": "Strong scent", "link": "https://www.amazon.com/dp/B45678"},
+        {"title": "Hydrating Face Mask", "image": "https://example.com/mask.jpg", "price": "$15.00", "pros": "Moisturizing", "cons": "Single use", "link": "https://www.amazon.com/dp/B89012"},
+        {"title": "SPF 50 Sunscreen", "image": "https://example.com/sunscreen.jpg", "price": "$20.00", "pros": "Non-greasy", "cons": "Needs reapplication", "link": "https://www.amazon.com/dp/B56789"}
+    ]
+
+    categories = [
         {
-            "title": "Super Blender 3000",
-            "image": "https://example.com/blender.jpg",
-            "price": "$99.99",
-            "pros": "Powerful, Durable",
-            "cons": "Noisy",
-            "link": "https://www.amazon.com/dp/B12345"
+            "title": "Top Kitchen Gadgets for 2025",
+            "emoji": "🥘",
+            "description": "Discover the latest and greatest kitchen gadgets that will make your cooking easier and more fun.",
+            "post_path": "posts/post-kitchen.html",
+            "products": kitchen_products,
+            "template": "templates/post-kitchen-template.html"
         },
         {
-            "title": "Non-stick Frying Pan",
-            "image": "https://example.com/pan.jpg",
-            "price": "$29.99",
-            "pros": "Easy to clean, Affordable",
-            "cons": "Handle gets hot",
-            "link": "https://www.amazon.com/dp/B67890"
+            "title": "Best Outdoor Gear This Season",
+            "emoji": "🏕️",
+            "description": "Explore the best outdoor gear to keep you prepared for your next adventure.",
+            "post_path": "posts/post-outdoor.html",
+            "products": outdoor_products,
+            "template": "templates/post-outdoor-template.html"
         },
         {
-            "title": "Digital Kitchen Scale",
-            "image": "https://example.com/scale.jpg",
-            "price": "$15.49",
-            "pros": "Accurate, Compact",
-            "cons": "Small display",
-            "link": "https://www.amazon.com/dp/B11223"
+            "title": "Beauty Products Trending Now",
+            "emoji": "💄",
+            "description": "Check out the latest beauty products that everyone is talking about.",
+            "post_path": "posts/post-beauty.html",
+            "products": beauty_products,
+            "template": "templates/post-beauty-template.html"
         }
     ]
 
-    generate_post_html(
-        products=sample_products,
-        template_path="templates/post-kitchen-template.html",  # your template file
-        output_path="docs/posts/post-kitchen.html"             # output folder/file
+    # Generate all category posts
+    for cat in categories:
+        generate_post_html(
+            products=cat["products"],
+            template_path=cat["template"],
+            output_path=os.path.join("docs", cat["post_path"])
+        )
+
+    # Generate the main index page
+    generate_index_html(
+        categories=categories,
+        template_path="templates/index-template.html",
+        output_path="docs/index.html"
     )
