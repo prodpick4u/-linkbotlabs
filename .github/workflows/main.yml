@@ -1,9 +1,9 @@
-name: Auto Blog & Video Generator Plus
+name: Auto Blog & Video Generator
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
+    - cron: '0 3 * * *'  # Daily at 03:00 UTC
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install system dependencies
+      - name: Install system deps (Playwright, ffmpeg, imagemagick)
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg imagemagick
@@ -29,15 +29,14 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt || true  # In case moviepy not in requirements.txt
-          pip install playwright moviepy imageio imageio-ffmpeg
+          pip uninstall -y moviepy MoviePy || true
+          pip install moviepy==1.0.3
+          pip install -r requirements.txt
+          pip install playwright imageio imageio-ffmpeg
 
-      - name: Debug Python environment
+      - name: Verify moviepy installation
         run: |
-          pip list
-          python -c "import moviepy; print('✅ moviepy imported')"
           python -c "import moviepy.editor; print('✅ moviepy.editor is working')"
-          python -c "import imageio_ffmpeg; print('✅ imageio-ffmpeg is installed')"
 
       - name: Install Playwright browsers
         run: python -m playwright install chromium
