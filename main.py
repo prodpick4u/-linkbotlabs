@@ -1,5 +1,5 @@
 from fetch_best_sellers import fetch_best_sellers
-from blog_generator import generate_html, save_blog_files
+from blog_generator import generate_html, save_blog_files, generate_index_html
 
 # Step 1: Fetch top 3 products from Amazon via RapidAPI
 kitchen_products = fetch_best_sellers(category="kitchen")
@@ -46,4 +46,5 @@ for cat in categories:
     else:
         print(f"⚠️ No products found for {cat['title']} — skipping post generation.")
 
-# (Optional) You can add index.html generation here if needed
+# Step 4: Generate homepage linking all category posts
+generate_index_html(categories, "templates/index-template.html", "index.html")
