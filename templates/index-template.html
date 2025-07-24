@@ -1,102 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick4U – Daily Top Picks</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      background-color: #f4f8fb;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      color: #2a7ae2;
-    }
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-    }
-    ul {
-      list-style: none;
-      padding-left: 0;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    ul li {
-      background-color: white;
-      border: 1px solid #ddd;
-      padding: 1rem;
-      border-radius: 8px;
-      text-align: center;
-      width: 250px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-    ul li:hover {
-      transform: translateY(-5px);
-    }
-    ul li img {
-      max-width: 100%;
-      height: 150px;
-      object-fit: contain;
-      margin-bottom: 0.5rem;
-    }
-    ul li a {
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1.1rem;
-      color: #2a7ae2;
-      display: block;
-      margin-top: 0.5rem;
-    }
-    .category {
-      margin-top: 2rem;
-      background-color: white;
-      border-radius: 8px;
-      padding: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .category h2 a {
-      color: #333;
-      text-decoration: none;
-    }
-    .category h2 a:hover {
-      color: #2a7ae2;
-    }
-  </style>
-</head>
-<body>
+def generate_index_html(categories, template_path, output_path):
+    with open(template_path, 'r', encoding='utf-8') as f:
+        template = f.read()
 
-  <h1>🛍️ Prodpick4U – Daily Top Picks</h1>
+    # Generate category thumbnail cards (with image + link)
+    list_items = ""
+    for cat in categories:
+        list_items += f'''
+        <li>
+            <img src="{cat.get("image_url", "#")}" alt="{cat["title"]}">
+            <a href="{cat["post_path"]}">{cat["emoji"]} {cat["title"]}</a>
+        </li>
+        '''
 
-  <p>Welcome to Prodpick4U! Discover our curated daily top 3 Amazon picks across trending categories:</p>
+    # Generate SEO preview blocks below thumbnails
+    post_divs = ""
+    for cat in categories:
+        post_divs += f"""
+        <div class="post-preview">
+            <h2><a href="{cat['post_path']}">{cat['emoji']} {cat['title']}</a></h2>
+            <p>{cat['description']}</p>
+        </div>
+        """
 
-  <ul>
-    <li>
-      <img src="https://images.unsplash.com/photo-1607274968450-ccd2f8f60fbe?fit=crop&w=600&q=60" alt="Kitchen">
-      <a href="posts/post-kitchen.html">🥘 Kitchen Gadgets</a>
-    </li>
-    <li>
-      <img src="https://images.unsplash.com/photo-1606788075761-63f4f3934d5a?fit=crop&w=600&q=60" alt="Outdoor Gear">
-      <a href="posts/post-outdoor.html">🏕️ Outdoor Gear</a>
-    </li>
-    <li>
-      <img src="https://images.unsplash.com/photo-1588776814546-f63f4455e0cf?fit=crop&w=600&q=60" alt="Beauty Products">
-      <a href="posts/post-beauty.html">💄 Beauty Products</a>
-    </li>
-  </ul>
+    # Replace placeholders in the HTML template
+    html_content = template.replace('{{CATEGORY_LINKS}}', list_items)
+    html_content = html_content.replace('{{POST_DIVS}}', post_divs)
 
-  <p>We automatically find the best-reviewed and most popular items, so you don’t have to!</p>
-  <p>📌 Bookmark this site for fresh product picks every day!</p>
+    # Ensure output directory exists
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-  {{POST_DIVS}}
+    # Write final HTML
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(html_content)
 
-</body>
-</html>
+    print(f"✅ Generated {output_path}")
