@@ -72,24 +72,6 @@ def save_blog_files(category, markdown, html, html_output_path):
     with open("docs/index.md", "w", encoding="utf-8") as f:
         f.write(markdown)
     print("✅ Also updated docs/index.md (for GitHub Pages)")
-def generate_index_html(categories):
-    html = """<html>
-<head><title>Top Amazon Picks</title></head>
-<body>
-    <h1>Top Categories</h1>
-    <ul>
-"""
-    for category in categories:
-        html += f'        <li><a href="{category["folder"]}/index.html">{category["title"]}</a></li>\n'
-
-    html += """    </ul>
-</body>
-</html>"""
-    return html
-def save_blog_files(category, markdown, html, html_output_path):
-    # your existing save logic here...
-    pass  # <-- keep your original function, just scroll below it
-
 
 def generate_index_html(categories, template_path=None, output_path=None):
     if template_path and os.path.exists(template_path):
@@ -119,5 +101,11 @@ def generate_index_html(categories, template_path=None, output_path=None):
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(html)
         print(f"✅ index.html written to {output_path}")
+
+        # Optional: Also write to docs/index.html for GitHub Pages
+        if output_path != "docs/index.html":
+            with open("docs/index.html", "w", encoding="utf-8") as f:
+                f.write(html)
+            print("✅ Copied index.html to docs/index.html for GitHub Pages")
 
     return html
