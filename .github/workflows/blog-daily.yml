@@ -1,4 +1,4 @@
-name: Blog Daily
+name: Blog Daily Generator
 
 on:
   workflow_dispatch:
@@ -23,7 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run script
+      - name: Run main script
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
@@ -36,7 +36,7 @@ jobs:
           git config --global user.name "Auto Bot"
           git config --global user.email "autobot@example.com"
           git add .
-          git commit -m "🤖 Auto-update blog" || echo "No changes"
-          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/prodpick4u/Prodpick4u.git
+          git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
+          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}
           git pull origin main --rebase || echo "No pull needed"
-          git push origin main
+          git push origin main || echo "Nothing to push"
