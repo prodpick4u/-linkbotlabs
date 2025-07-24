@@ -1,8 +1,8 @@
-import os
 from datetime import datetime
 from blog_generator import generate_blog_post
 from video_creator import create_video_script, render_video, upload_video
 import requests
+from secrets import RAPIDAPI_KEY, AMAZON_TAG  # Import your secrets here
 
 CATEGORY = "Beauty Products"  # Change as needed
 
@@ -10,7 +10,7 @@ def fetch_top_amazon_products(query, num=3):
     url = "https://real-time-web-search.p.rapidapi.com/search-advanced"
     headers = {
         "x-rapidapi-host": "real-time-web-search.p.rapidapi.com",
-        "x-rapidapi-key": os.getenv("RAPIDAPI_KEY")
+        "x-rapidapi-key": RAPIDAPI_KEY  # Use the imported key here
     }
 
     params = {
@@ -34,7 +34,7 @@ def fetch_top_amazon_products(query, num=3):
     for result in data.get("organic", []):
         link = result.get("link")
         if "amazon.com" in link:
-            affiliate_link = link.split("?")[0] + f"?tag={os.getenv('AMAZON_TAG')}"
+            affiliate_link = link.split("?")[0] + f"?tag={AMAZON_TAG}"  # Use imported affiliate tag here
             products.append({
                 "title": result.get("title"),
                 "link": affiliate_link,
