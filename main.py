@@ -2,7 +2,7 @@ from datetime import datetime
 from blog_generator import generate_blog_post
 from video_creator import create_video_script, render_video, upload_video
 import requests
-from secrets import RAPIDAPI_KEY, AMAZON_TAG  # Import your secrets here
+from secrets import RAPIDAPI_KEY, AMAZON_TAG  # Import your keys here
 
 CATEGORY = "Beauty Products"  # Change as needed
 
@@ -10,7 +10,7 @@ def fetch_top_amazon_products(query, num=3):
     url = "https://real-time-web-search.p.rapidapi.com/search-advanced"
     headers = {
         "x-rapidapi-host": "real-time-web-search.p.rapidapi.com",
-        "x-rapidapi-key": RAPIDAPI_KEY  # Use the imported key here
+        "x-rapidapi-key": RAPIDAPI_KEY  # Use imported key here
     }
 
     params = {
