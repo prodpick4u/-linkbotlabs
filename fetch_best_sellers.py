@@ -1,8 +1,8 @@
 import requests
+import os
 
-# Your keys here
-RAPIDAPI_KEY = "1cd005eae7msh84dc8a952496e8ap11a8c8jsn1d76048c3e91"
-AMAZON_TAG = "mychanneld-20"
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY", "1cd005eae7msh84dc8a952496e8ap11a8c8jsn1d76048c3e91")
+AMAZON_TAG = os.getenv("AMAZON_TAG", "mychanneld-20")
 
 def fetch_best_sellers(category="beauty", country="us", page=1, limit=3):
     url = "https://realtime-amazon-data.p.rapidapi.com/best-sellers"
@@ -16,20 +16,18 @@ def fetch_best_sellers(category="beauty", country="us", page=1, limit=3):
         "page": page
     }
 
-    response = requests.get(url, headers=headers, params=params)
-    if response.status_code != 200:
-        print(f"❌ API error {response.status_code}: {response.text}")
+    try:
+        response = requests.get(url, headers=headers, params=params)
+        response.raise_for_status()
+        data = response.json()
+        products = data.get("products", [])
+        for product in products:
+            if product.get("link"):
+                product["link"] += f"?tag={AMAZON_TAG}"
+        return products[:limit]
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Request failed: {e}")
         return []
-
-    data = response.json()
-    products = data.get("products", [])
-
-    # Add affiliate tag to each product link
-    for product in products:
-        if product.get("link"):
-            product["link"] += f"?tag={AMAZON_TAG}"
-
-    return products[:limit]
 
 if __name__ == "__main__":
     print("🔍 Fetching top 3 best sellers in Beauty...\n")
