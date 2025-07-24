@@ -1,0 +1,1 @@
+python fetch_best_sellers.py
