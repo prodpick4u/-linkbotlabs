@@ -28,10 +28,12 @@ jobs:
       - name: Run main script
         run: python main.py
 
-      - name: Commit blog updates
-        run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
-          git add posts/ docs/ index.html log.txt || echo "Nothing to add"
-          git commit -m "📝 Auto-generated blog update" || echo "Nothing to commit"
-          git push || echo "Nothing to push"
+       - name: Commit blog updates
+  env:
+    PAT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  run: |
+    git config --global user.name "GitHub Action"
+    git config --global user.email "action@github.com"
+    git add posts/ docs/ index.html log.txt || echo "Nothing to add"
+    git commit -m "📝 Auto-generated blog update" || echo "Nothing to commit"
+    git push https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}.git
