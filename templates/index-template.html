@@ -1,45 +1,11 @@
-import os
+<body>
+    <h1>YouTube + Amazon Blog Generator</h1>
+    <p>Automatically generates product review blogs with embedded YouTube videos and affiliate links.</p>
 
-def generate_index_html(categories, template_path, output_path):
-    if not os.path.exists(template_path):
-        print(f"❌ Template file not found: {template_path}")
-        return ""
+    <h2>Latest Product Categories</h2>
+    {{POST_LINKS}}
 
-    with open(template_path, "r", encoding="utf-8") as f:
-        template = f.read()
-
-    # Generate the category links with images and titles
-    category_links = ""
-    for category in categories:
-        # Adjust this if you store images elsewhere or with different names
-        image_src = f"images/{category['folder']}.jpg"  
-        link_href = f"posts/post-{category['folder']}.html"
-        category_links += f'''
-        <li>
-          <a href="{link_href}">
-            <img src="{image_src}" alt="{category['title']}" />
-            {category['title']}
-          </a>
-        </li>
-        '''
-
-    # Generate simple post preview sections
-    post_divs = ""
-    for category in categories:
-        post_divs += f'''
-        <div class="post-preview">
-          <h2>{category["title"]}</h2>
-          <p>Check out the top picks in {category["title"]}.</p>
-          <a href="posts/post-{category['folder']}.html">Read More →</a>
-        </div>
-        '''
-
-    # Replace placeholders in the HTML template
-    filled_html = template.replace("{{CATEGORY_LINKS}}", category_links).replace("{{POST_DIVS}}", post_divs)
-
-    # Save the filled HTML to output path
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(filled_html)
-
-    print(f"✅ Index page generated at {output_path}")
-    return filled_html
+    <footer>
+        <p>Made by Prodpick4u</p>
+    </footer>
+</body>
