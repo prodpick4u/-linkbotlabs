@@ -1,6 +1,6 @@
 import requests
 
-# ✅ Hardcoded API Key and Amazon Affiliate Tag
+# ✅ Your keys
 RAPIDAPI_KEY = "1cd005eae7msh84dc8a952496e8ap11a8c8jsn1d76048c3e91"
 AMAZON_TAG = "mychanneld-20"
 
@@ -24,13 +24,12 @@ def fetch_best_sellers(category="beauty", country="us", page=1, limit=3):
     data = response.json()
     products = data.get("products", [])
 
-    # Add affiliate tag to links
+    # Add affiliate tag
     for product in products:
         if product.get("link"):
             product["link"] += f"?tag={AMAZON_TAG}"
 
     return products[:limit]
-
 
 if __name__ == "__main__":
     print("🔍 Fetching top 3 best sellers in Beauty...\n")
