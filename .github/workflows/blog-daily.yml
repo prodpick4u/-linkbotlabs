@@ -1,20 +1,20 @@
-name: Daily Blog Generator
+name: Auto Blog & Video Generator
 
 on:
-  schedule:
-    - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
   workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'  # Daily at 03:00 UTC
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.12'
 
@@ -22,23 +22,21 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install playwright
-          python -m playwright install  # Ensure Playwright browsers are installed
 
-      - name: Run main script
+      - name: Run script
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
         run: python main.py
 
-      - name: Debug PAT Token
-        run: echo "PAT Token length is ${#PAT_TOKEN}"
-        env:
-          PAT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-
-      - name: Commit blog updates
+      - name: Commit and push changes
         env:
           PAT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
-          git add -A
-          git commit -m "📝 Auto-generated blog update" || echo "Nothing to commit"
-          git push https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}.git
+          git config --global user.name "Auto Bot"
+          git config --global user.email "autobot@example.com"
+          git add .
+          git commit -m "🤖 Auto-update blog" || echo "No changes"
+          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/prodpick4u/Prodpick4u.git
+          git pull origin main --rebase || echo "No pull needed"
+          git push origin main
