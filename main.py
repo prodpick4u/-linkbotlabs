@@ -1,5 +1,5 @@
 from fetch_best_sellers import fetch_best_sellers
-from blog_generator import generate_post_html, generate_index_htmlfrom generator import generate_post_html, generate_index_html  # adjust if these are in other files
+from blog_generator import generate_post_html, generate_index_html
 
 # Step 1: Fetch top 3 products from Amazon via RapidAPI
 kitchen_products = fetch_best_sellers(category="kitchen")
