@@ -1,50 +1,55 @@
-from fetch_best_sellers import fetch_best_sellers
-from blog_generator import generate_html, save_blog_files, generate_index_html
+import os
+from blog_generator import generate_markdown, generate_html, save_blog_files, generate_index_html
 
-# Step 1: Fetch top 3 products from Amazon via RapidAPI
-kitchen_products = fetch_best_sellers(category="kitchen")
-outdoor_products = fetch_best_sellers(category="outdoors")
-beauty_products = fetch_best_sellers(category="beauty")
-
-# Step 2: Build category metadata
+# Define your categories and folders
 categories = [
-    {
-        "title": "Top Kitchen Gadgets for 2025",
-        "emoji": "🥘",
-        "description": "Discover the latest and greatest kitchen gadgets that will make your cooking easier and more fun.",
-        "post_path": "posts/post-kitchen.html",
-        "products": kitchen_products,
-        "template": "templates/post-kitchen-template.html",
-        "image_url": "https://images.unsplash.com/photo-1607274968450-ccd2f8f60fbe?fit=crop&w=600&q=60"
-    },
-    {
-        "title": "Best Outdoor Gear This Season",
-        "emoji": "🏕️",
-        "description": "Explore the best outdoor gear to keep you prepared for your next adventure.",
-        "post_path": "posts/post-outdoor.html",
-        "products": outdoor_products,
-        "template": "templates/post-outdoor-template.html",
-        "image_url": "https://images.unsplash.com/photo-1606788075761-63f4f3934d5a?fit=crop&w=600&q=60"
-    },
-    {
-        "title": "Must-Have Beauty Products",
-        "emoji": "💄",
-        "description": "Your skincare and makeup essentials for 2025.",
-        "post_path": "posts/post-beauty.html",
-        "products": beauty_products,
-        "template": "templates/post-beauty-template.html",
-        "image_url": "https://images.unsplash.com/photo-1588776814546-f63f4455e0cf?fit=crop&w=600&q=60"
-    }
+    {"title": "Kitchen", "folder": "kitchen"},
+    {"title": "Outdoors", "folder": "outdoors"},
+    {"title": "Beauty", "folder": "beauty"},
 ]
 
-# Step 3: Generate blog posts per category
-for cat in categories:
-    if cat["products"]:
-        html = generate_html(cat["products"], cat["title"], cat["template"])
-        if html:
-            save_blog_files(cat["title"], "", html, cat["post_path"])
-    else:
-        print(f"⚠️ No products found for {cat['title']} — skipping post generation.")
+# Sample product data — replace with your real fetch logic
+kitchen_products = [
+    {"title": "Knife Set", "price": "$59.99", "link": "https://amazon.com/dp/knife"},
+    {"title": "Blender", "price": "$89.99", "link": "https://amazon.com/dp/blender"},
+    {"title": "Cutting Board", "price": "$19.99", "link": "https://amazon.com/dp/cuttingboard"},
+]
 
-# Step 4: Generate homepage linking all category posts
+outdoor_products = [
+    {"title": "Camping Tent", "price": "$129.99", "link": "https://amazon.com/dp/tent"},
+    {"title": "Hiking Backpack", "price": "$99.99", "link": "https://amazon.com/dp/backpack"},
+    {"title": "Sleeping Bag", "price": "$79.99", "link": "https://amazon.com/dp/sleepingbag"},
+]
+
+beauty_products = [
+    {"title": "Moisturizer", "price": "$25.99", "link": "https://amazon.com/dp/moisturizer"},
+    {"title": "Lipstick", "price": "$15.99", "link": "https://amazon.com/dp/lipstick"},
+    {"title": "Eyeliner", "price": "$12.99", "link": "https://amazon.com/dp/eyeliner"},
+]
+
+products_map = {
+    "kitchen": kitchen_products,
+    "outdoors": outdoor_products,
+    "beauty": beauty_products,
+}
+
+# Step 1: Ensure all category folders exist
+for category in categories:
+    folder = category["folder"]
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+        print(f"📁 Created folder: {folder}")
+
+# Step 2: Generate and save markdown + HTML for each category
+for category in categories:
+    cat_key = category["folder"]
+
+    md = generate_markdown(products_map[cat_key], category["title"])
+    template_file = f"templates/post-{cat_key}-template.html"
+    html = generate_html(products_map[cat_key], category["title"], template_file)
+
+    output_html_path = f"{cat_key}/index.html"
+    save_blog_files(category["title"], md, html, output_html_path)
+
+# Step 3: Generate main index.html page linking all categories
 generate_index_html(categories, "templates/index-template.html", "index.html")
