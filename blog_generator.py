@@ -1,5 +1,11 @@
 import os
-
+def generate_markdown(products, category_title):
+    markdown = f"# Top 3 {category_title} Products\n\n"
+    for product in products:
+        markdown += f"## {product['title']}\n"
+        markdown += f"- **Price**: {product['price']}\n"
+        markdown += f"- [View on Amazon]({product['link']})\n\n"
+    return markdown
 def save_blog_files(category, markdown, html, html_output_path):
     # Ensure 'posts' folder exists
     if not os.path.exists("posts"):
