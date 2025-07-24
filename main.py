@@ -1,78 +1,48 @@
-import os
-from datetime import datetime
-from blog_generator import generate_blog_post, write_to_blog
-from tts_generator import generate_tts
-from video_creator import create_video_script, render_video
-from youtube_uploader import upload_video
-from your_script_module import generate_script  # your video script generator function
+from fetch_best_sellers import fetch_best_sellers
+from generator import generate_post_html, generate_index_html  # adjust if these are in other files
 
-import requests
+# Step 1: Fetch top 3 products from Amazon via RapidAPI
+kitchen_products = fetch_best_sellers(category="kitchen")
+outdoor_products = fetch_best_sellers(category="outdoors")
+beauty_products = fetch_best_sellers(category="beauty")
 
-# Your keys here - replace with environment variables if you prefer
-RAPIDAPI_KEY = "1cd005eae7msh84dc8a952496e8ap11a8c8jsn1d76048c3e91"
-AMAZON_TAG = "mychanneld-20"
-
-def fetch_best_sellers(category="beauty", country="us", page=1, limit=3):
-    url = "https://realtime-amazon-data.p.rapidapi.com/best-sellers"
-    headers = {
-        "x-rapidapi-host": "realtime-amazon-data.p.rapidapi.com",
-        "x-rapidapi-key": RAPIDAPI_KEY
+# Step 2: Build category metadata (title, emoji, post template, image, etc.)
+categories = [
+    {
+        "title": "Top Kitchen Gadgets for 2025",
+        "emoji": "🥘",
+        "description": "Discover the latest and greatest kitchen gadgets that will make your cooking easier and more fun.",
+        "post_path": "posts/post-kitchen.html",
+        "products": kitchen_products,
+        "template": "templates/post-kitchen-template.html",
+        "image_url": "https://images.unsplash.com/photo-1607274968450-ccd2f8f60fbe?fit=crop&w=600&q=60"
+    },
+    {
+        "title": "Best Outdoor Gear This Season",
+        "emoji": "🏕️",
+        "description": "Explore the best outdoor gear to keep you prepared for your next adventure.",
+        "post_path": "posts/post-outdoor.html",
+        "products": outdoor_products,
+        "template": "templates/post-outdoor-template.html",
+        "image_url": "https://images.unsplash.com/photo-1606788075761-63f4f3934d5a?fit=crop&w=600&q=60"
+    },
+    {
+        "title": "Must-Have Beauty Products",
+        "emoji": "💄",
+        "description": "Your skincare and makeup essentials for 2025.",
+        "post_path": "posts/post-beauty.html",
+        "products": beauty_products,
+        "template": "templates/post-beauty-template.html",
+        "image_url": "https://images.unsplash.com/photo-1588776814546-f63f4455e0cf?fit=crop&w=600&q=60"
     }
-    params = {
-        "category": category,
-        "country": country,
-        "page": page
-    }
+]
 
-    response = requests.get(url, headers=headers, params=params)
-    if response.status_code != 200:
-        print(f"❌ API error {response.status_code}: {response.text}")
-        return []
+# Step 3: Generate blog posts per category
+for cat in categories:
+    if cat["products"]:
+        generate_post_html(cat["products"], cat["template"], cat["post_path"])
+    else:
+        print(f"⚠️ No products found for {cat['title']} — skipping post generation.")
 
-    data = response.json()
-    products = data.get("products", [])
-
-    # Add affiliate tag to links
-    for product in products:
-        if product.get("link"):
-            product["link"] += f"?tag={AMAZON_TAG}"
-
-    return products[:limit]
-
-def main():
-    print("🔍 Fetching top 3 best sellers in Beauty...\n")
-    products = fetch_best_sellers()
-
-    if not products:
-        print("❌ No products fetched, aborting.")
-        return
-
-    # Generate blog post HTML content
-    blog_post = generate_blog_post(products)
-
-    # Save blog post to file
-    post_filename = "post-beauty.html"
-    write_to_blog(blog_post, post_filename)
-    print(f"📝 Blog post saved to {post_filename}")
-
-    # Generate video script text (voiceover)
-    script_text = generate_script(products)
-
-    # Generate TTS audio from script text
-    audio_path = generate_tts(script_text)
-    print(f"🎤 Audio generated at {audio_path}")
-
-    # Create video (e.g., using static images and audio)
-    video_script = create_video_script(products, audio_path)
-    video_path = render_video(video_script)
-    print(f"🎬 Video rendered at {video_path}")
-
-    # Upload video to YouTube
-    today = datetime.utcnow().strftime("%Y-%m-%d")
-    video_url = upload_video(video_path, f"Top Beauty Products {today}", script_text)
-    print(f"📤 Video uploaded! Watch here: {video_url}")
-
-    print("✅ Automation complete!")
-
-if __name__ == "__main__":
-    main()
+# Step 4: Generate front page with all category previews
+generate_index_html(categories, "templates/index-template.html", "index.html")
