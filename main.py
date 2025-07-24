@@ -1,12 +1,12 @@
 from fetch_best_sellers import fetch_best_sellers
-from blog_generator import generate_post_html, generate_index_html
+from blog_generator import generate_html, save_blog_files
 
 # Step 1: Fetch top 3 products from Amazon via RapidAPI
 kitchen_products = fetch_best_sellers(category="kitchen")
 outdoor_products = fetch_best_sellers(category="outdoors")
 beauty_products = fetch_best_sellers(category="beauty")
 
-# Step 2: Build category metadata (title, emoji, post template, image, etc.)
+# Step 2: Build category metadata
 categories = [
     {
         "title": "Top Kitchen Gadgets for 2025",
@@ -40,9 +40,10 @@ categories = [
 # Step 3: Generate blog posts per category
 for cat in categories:
     if cat["products"]:
-        generate_post_html(cat["products"], cat["template"], cat["post_path"])
+        html = generate_html(cat["products"], cat["title"], cat["template"])
+        if html:
+            save_blog_files(cat["title"], "", html, cat["post_path"])
     else:
         print(f"⚠️ No products found for {cat['title']} — skipping post generation.")
 
-# Step 4: Generate front page with all category previews
-generate_index_html(categories, "templates/index-template.html", "index.html")
+# (Optional) You can add index.html generation here if needed
