@@ -86,3 +86,38 @@ def generate_index_html(categories):
 </body>
 </html>"""
     return html
+def save_blog_files(category, markdown, html, html_output_path):
+    # your existing save logic here...
+    pass  # <-- keep your original function, just scroll below it
+
+
+def generate_index_html(categories, template_path=None, output_path=None):
+    if template_path and os.path.exists(template_path):
+        with open(template_path, "r", encoding="utf-8") as f:
+            template = f.read()
+    else:
+        # fallback HTML if no template found
+        template = """
+        <html>
+        <head><title>Top Amazon Picks</title></head>
+        <body>
+            <h1>Top Categories</h1>
+            <ul>
+            {{links}}
+            </ul>
+        </body>
+        </html>
+        """
+
+    links = ""
+    for category in categories:
+        links += f'<li><a href="{category["folder"]}/index.html">{category["title"]}</a></li>\n'
+
+    html = template.replace("{{links}}", links)
+
+    if output_path:
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(html)
+        print(f"✅ index.html written to {output_path}")
+
+    return html
