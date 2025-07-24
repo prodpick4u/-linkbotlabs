@@ -1,36 +1,63 @@
-def generate_index_html(categories, template_path, output_path):
-    with open(template_path, 'r', encoding='utf-8') as f:
-        template = f.read()
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Top Product Picks 2025</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 0 15px;
+      background: #f9f9f9;
+    }
+    ul.category-thumbnails {
+      display: flex;
+      gap: 15px;
+      list-style: none;
+      padding: 0;
+      margin-bottom: 30px;
+    }
+    ul.category-thumbnails li {
+      flex: 1;
+      text-align: center;
+    }
+    ul.category-thumbnails img {
+      width: 100%;
+      max-width: 200px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    a {
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: bold;
+      display: block;
+      margin-top: 8px;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .post-preview {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>🛍️ Top Product Picks 2025</h1>
+  <p>Explore our curated selections of the best products in Kitchen, Outdoors, and Beauty.</p>
 
-    # Generate category thumbnail cards (with image + link)
-    list_items = ""
-    for cat in categories:
-        list_items += f'''
-        <li>
-            <img src="{cat.get("image_url", "#")}" alt="{cat["title"]}">
-            <a href="{cat["post_path"]}">{cat["emoji"]} {cat["title"]}</a>
-        </li>
-        '''
+  <ul class="category-thumbnails">
+    {{CATEGORY_LINKS}}
+  </ul>
 
-    # Generate SEO preview blocks below thumbnails
-    post_divs = ""
-    for cat in categories:
-        post_divs += f"""
-        <div class="post-preview">
-            <h2><a href="{cat['post_path']}">{cat['emoji']} {cat['title']}</a></h2>
-            <p>{cat['description']}</p>
-        </div>
-        """
-
-    # Replace placeholders in the HTML template
-    html_content = template.replace('{{CATEGORY_LINKS}}', list_items)
-    html_content = html_content.replace('{{POST_DIVS}}', post_divs)
-
-    # Ensure output directory exists
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
-    # Write final HTML
-    with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(html_content)
-
-    print(f"✅ Generated {output_path}")
+  <section>
+    {{POST_DIVS}}
+  </section>
+</body>
+</html>
