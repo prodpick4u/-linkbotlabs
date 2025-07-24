@@ -1,33 +1,45 @@
-import os
 import requests
 
-def fetch_best_sellers():
+# ✅ Hardcoded API Key and Amazon Affiliate Tag
+RAPIDAPI_KEY = "1cd005eae7msh84dc8a952496e8ap11a8c8jsn1d76048c3e91"
+AMAZON_TAG = "mychanneld-20"
+
+def fetch_best_sellers(category="mobile-apps", country="us", page=1, limit=3):
     url = "https://realtime-amazon-data.p.rapidapi.com/best-sellers"
     headers = {
         "x-rapidapi-host": "realtime-amazon-data.p.rapidapi.com",
-        "x-rapidapi-key": os.getenv("RAPIDAPI_KEY")
+        "x-rapidapi-key": RAPIDAPI_KEY
     }
     params = {
-        "category": "mobile-apps",
-        "country": "us",
-        "page": 1
+        "category": category,
+        "country": country,
+        "page": page
     }
 
     response = requests.get(url, headers=headers, params=params)
     if response.status_code != 200:
-        print(f"API error {response.status_code}: {response.text}")
+        print(f"❌ API error {response.status_code}: {response.text}")
         return []
 
     data = response.json()
     products = data.get("products", [])
-    return products
+
+    # Add affiliate tag to links
+    for product in products:
+        if product.get("link"):
+            product["link"] += f"?tag={AMAZON_TAG}"
+
+    return products[:limit]
+
 
 if __name__ == "__main__":
+    print("🔍 Fetching top 3 best sellers in Mobile Apps...\n")
     products = fetch_best_sellers()
+
     if not products:
-        print("No products fetched.")
+        print("❌ No products fetched.")
     else:
-        for i, product in enumerate(products[:3], 1):
+        for i, product in enumerate(products, 1):
             print(f"{i}. {product.get('title')}")
             print(f"   Link: {product.get('link')}")
-            print(f"   Description: {product.get('description', 'No description')}\n")
+            print(f"   Description: {product.get('description', 'No description available.')}\n")
