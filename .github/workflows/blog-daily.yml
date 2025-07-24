@@ -28,10 +28,10 @@ jobs:
       - name: Run main script
         run: python main.py
 
-      - name: Commit log.txt
+      - name: Commit blog updates
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git add log.txt || echo "Nothing to add"
-          git commit -m "📝 Daily log update" || echo "Nothing to commit"
+          git add posts/ docs/ index.html log.txt || echo "Nothing to add"
+          git commit -m "📝 Auto-generated blog update" || echo "Nothing to commit"
           git push || echo "Nothing to push"
