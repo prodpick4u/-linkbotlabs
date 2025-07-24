@@ -1,63 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Product Picks 2025</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 0 15px;
-      background: #f9f9f9;
-    }
-    ul.category-thumbnails {
-      display: flex;
-      gap: 15px;
-      list-style: none;
-      padding: 0;
-      margin-bottom: 30px;
-    }
-    ul.category-thumbnails li {
-      flex: 1;
-      text-align: center;
-    }
-    ul.category-thumbnails img {
-      width: 100%;
-      max-width: 200px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    a {
-      color: #0077cc;
-      text-decoration: none;
-      font-weight: bold;
-      display: block;
-      margin-top: 8px;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .post-preview {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-  </style>
-</head>
-<body>
-  <h1>🛍️ Top Product Picks 2025</h1>
-  <p>Explore our curated selections of the best products in Kitchen, Outdoors, and Beauty.</p>
+import os
 
-  <ul class="category-thumbnails">
-    {{CATEGORY_LINKS}}
-  </ul>
+def generate_index_html(categories, template_path, output_path):
+    if not os.path.exists(template_path):
+        print(f"❌ Template file not found: {template_path}")
+        return ""
 
-  <section>
-    {{POST_DIVS}}
-  </section>
-</body>
-</html>
+    with open(template_path, "r", encoding="utf-8") as f:
+        template = f.read()
+
+    # Generate the category links with images and titles
+    category_links = ""
+    for category in categories:
+        # Adjust this if you store images elsewhere or with different names
+        image_src = f"images/{category['folder']}.jpg"  
+        link_href = f"posts/post-{category['folder']}.html"
+        category_links += f'''
+        <li>
+          <a href="{link_href}">
+            <img src="{image_src}" alt="{category['title']}" />
+            {category['title']}
+          </a>
+        </li>
+        '''
+
+    # Generate simple post preview sections
+    post_divs = ""
+    for category in categories:
+        post_divs += f'''
+        <div class="post-preview">
+          <h2>{category["title"]}</h2>
+          <p>Check out the top picks in {category["title"]}.</p>
+          <a href="posts/post-{category['folder']}.html">Read More →</a>
+        </div>
+        '''
+
+    # Replace placeholders in the HTML template
+    filled_html = template.replace("{{CATEGORY_LINKS}}", category_links).replace("{{POST_DIVS}}", post_divs)
+
+    # Save the filled HTML to output path
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(filled_html)
+
+    print(f"✅ Index page generated at {output_path}")
+    return filled_html
