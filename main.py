@@ -4,7 +4,7 @@ import requests
 RAPIDAPI_KEY = "1cd005eae7msh84dc8a952496e8ap11a8c8jsn1d76048c3e91"
 AMAZON_TAG = "mychanneld-20"
 
-def fetch_best_sellers(category="mobile-apps", country="us", page=1, limit=3):
+def fetch_best_sellers(category="beauty", country="us", page=1, limit=3):
     url = "https://realtime-amazon-data.p.rapidapi.com/best-sellers"
     headers = {
         "x-rapidapi-host": "realtime-amazon-data.p.rapidapi.com",
@@ -33,8 +33,8 @@ def fetch_best_sellers(category="mobile-apps", country="us", page=1, limit=3):
 
 
 if __name__ == "__main__":
-    print("🔍 Fetching top 3 best sellers in Mobile Apps...\n")
-    products = fetch_best_sellers()
+    print("🔍 Fetching top 3 best sellers in Beauty...\n")
+    products = fetch_best_sellers("beauty")
 
     if not products:
         print("❌ No products fetched.")
