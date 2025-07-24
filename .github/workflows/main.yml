@@ -51,3 +51,16 @@ jobs:
           GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
           AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
         run: python main.py
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "Auto Commit Bot"
+          git config --global user.email "bot@example.com"
+
+      - name: Commit and push changes
+        env:
+          PAT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          git add .
+          git commit -m "🤖 Auto-update blog and videos" || echo "No changes to commit"
+          git push https://x-access-token:${PAT_TOKEN}@github.com/prodpick4u/Prodpick4u.git
