@@ -1,16 +1,16 @@
 import os
 import requests
 
-def fetch_best_sellers(category="mobile-apps", country="us", page=1):
+def fetch_best_sellers():
     url = "https://realtime-amazon-data.p.rapidapi.com/best-sellers"
     headers = {
         "x-rapidapi-host": "realtime-amazon-data.p.rapidapi.com",
-        "x-rapidapi-key": "1cd005eae7msh84dc8a952496e8ap11a8c8jsn1d76048c3e91"
+        "x-rapidapi-key": os.getenv("RAPIDAPI_KEY")
     }
     params = {
-        "category": category,
-        "country": country,
-        "page": page
+        "category": "mobile-apps",
+        "country": "us",
+        "page": 1
     }
 
     response = requests.get(url, headers=headers, params=params)
@@ -19,8 +19,15 @@ def fetch_best_sellers(category="mobile-apps", country="us", page=1):
         return []
 
     data = response.json()
-    return data  # or parse it however you need
+    products = data.get("products", [])
+    return products
 
 if __name__ == "__main__":
     products = fetch_best_sellers()
-    print(products)
+    if not products:
+        print("No products fetched.")
+    else:
+        for i, product in enumerate(products[:3], 1):
+            print(f"{i}. {product.get('title')}")
+            print(f"   Link: {product.get('link')}")
+            print(f"   Description: {product.get('description', 'No description')}\n")
