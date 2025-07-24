@@ -1,3 +1,5 @@
+from secrets import RAPIDAPI_KEY
+print("RAPIDAPI_KEY =", RAPIDAPI_KEY)
 from datetime import datetime
 from blog_generator import generate_blog_post
 from video_creator import create_video_script, render_video, upload_video
