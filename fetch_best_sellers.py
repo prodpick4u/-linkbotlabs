@@ -1,4 +1,3 @@
-python fetch_best_sellers.py
 import requests
 
 # Your keys here
@@ -32,4 +31,14 @@ def fetch_best_sellers(category="beauty", country="us", page=1, limit=3):
 
     return products[:limit]
 
+if __name__ == "__main__":
+    print("🔍 Fetching top 3 best sellers in Beauty...\n")
+    products = fetch_best_sellers()
 
+    if not products:
+        print("❌ No products fetched.")
+    else:
+        for i, product in enumerate(products, 1):
+            print(f"{i}. {product.get('title')}")
+            print(f"   Link: {product.get('link')}")
+            print(f"   Description: {product.get('description', 'No description available.')}\n")
