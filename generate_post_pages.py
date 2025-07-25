@@ -4,6 +4,7 @@ import os
 categories = {
     "kitchen": {
         "title": "Top Kitchen Gadgets for 2025",
+        "description": "Top-rated kitchen picks to enhance your cooking.",
         "filename": "post-kitchen.html",
         "products": [
             {
@@ -36,7 +37,7 @@ categories = {
 }
 
 # Load the post template
-with open("templates/post-template.html", "r", encoding="utf-8") as f:
+with open("posts/post-template.html", "r", encoding="utf-8") as f:
     post_template = f.read()
 
 # Generate category post pages
@@ -54,11 +55,13 @@ for cat_key, cat_data in categories.items():
         </div>
         """
 
-    final_html = post_template.replace("{{PAGE_TITLE}}", cat_data["title"])
-    final_html = final_html.replace("{{PRODUCT_CARDS}}", product_cards)
+    final_html = post_template
+    final_html = final_html.replace("{{ category_title }}", cat_data["title"])
+    final_html = final_html.replace("{{ category_description }}", cat_data["description"])
+    final_html = final_html.replace("{{ product_list }}", product_cards)
 
-    os.makedirs("docs/posts", exist_ok=True)
-    filepath = os.path.join("docs/posts", cat_data["filename"])
+    os.makedirs("posts", exist_ok=True)
+    filepath = os.path.join("posts", cat_data["filename"])
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(final_html)
 
