@@ -4,17 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ category_title }} - Prodpick4U</title>
+  <meta name="description" content="{{ category_description }}" />
   <link rel="stylesheet" href="../styles.css" />
 </head>
 <body>
-  <h1>{{ category_title }}</h1>
-  <p>Discover the top trending kitchen gadgets and appliances in 2025. From smart tools to time-saving helpers, upgrade your cooking game today.</p>
-  <p><em>Updated daily with new recommendations.</em></p>
+  <header>
+    <h1>{{ category_title }}</h1>
+    <p>{{ category_description }}</p>
+    <p><em>Updated daily with new recommendations.</em></p>
+  </header>
 
-  <div class="products">
-    {{ product_list }}
-  </div>
+  <main>
+    <div class="products">
+      {{ product_list }}
+    </div>
+  </main>
 
-  <a href="../index.html">← Back to Daily Top Picks</a>
+  <footer>
+    <a href="../index.html">← Back to Daily Top Picks</a>
+  </footer>
 </body>
 </html>
