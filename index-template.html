@@ -4,45 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Prodpick4U - Homepage</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-      background: #fff;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: #1a73e8;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-    a {
-      color: #1a73e8;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <h1>Welcome to Prodpick4U</h1>
-  <p>Explore our latest blog posts on top products for 2025:</p>
-  <ul>
+  <p class="description">Explore top product picks in 2025. Updated daily from Amazon’s bestsellers.</p>
+
+  <div class="product-list">
     {% for cat in categories %}
-      <li><a href="posts/post-{{ cat.slug }}.html">👉 {{ cat.title }}</a></li>
+      <div class="product">
+        {% if cat.image %}
+          <img src="{{ cat.image }}" alt="{{ cat.title }}" />
+        {% endif %}
+        <div class="product-title">{{ cat.title }}</div>
+        <div class="product-desc">{{ cat.description }}</div>
+        <a class="buy-btn" href="posts/post-{{ cat.slug }}.html">View Top Picks</a>
+      </div>
     {% endfor %}
-  </ul>
+  </div>
 </body>
 </html>
