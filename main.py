@@ -2,7 +2,7 @@ import os
 from fetch_best_sellers import fetch_best_sellers
 from blog_generator import generate_markdown, save_blog_files, generate_html
 from index_generator import generate_index_html
-from jinja2 import Environment, FileSystemLoader
+
 
 # === Categories metadata ===
 categories = [
