@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prodpick4U - AI Blog Generator</title>
+  <meta name="description" content="Automatically generates product review blogs with YouTube embeds and Amazon affiliate links." />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    h2 {
+      margin-top: 2rem;
+      color: #1a73e8;
+    }
+
+    .post-links {
+      margin-top: 1rem;
+    }
+
+    .post-links a {
+      display: block;
+      padding: 0.75rem;
+      background: white;
+      margin-bottom: 10px;
+      border-left: 4px solid #1a73e8;
+      text-decoration: none;
+      color: #1a73e8;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .post-links a:hover {
+      background: #e3f2fd;
+    }
+
+    footer {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #777;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Prodpick4U: YouTube + Amazon Blog Generator</h1>
+  <p>Automatically generates product review blogs with embedded YouTube videos and Amazon affiliate links.</p>
+
+  <h2>Latest Product Categories</h2>
+  <div class="post-links">
+    {{POST_LINKS}}
+  </div>
+
+  <footer>
+    <p>Made by Prodpick4U · Updated Daily</p>
+  </footer>
+</body>
+</html>
