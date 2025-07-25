@@ -53,40 +53,19 @@
     a.buy-link:hover {
       text-decoration: underline;
     }
-    footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      text-align: center;
-      color: #888;
-    }
-    .back-link {
-      display: block;
-      text-align: center;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
   <h1>{{ category_title }}</h1>
   <p class="description">{{ category_description }}</p>
 
-  {% if products %}
-    {% for product in products %}
-      <div class="product">
-        <div class="product-title">{{ product.title }}</div>
-        <div class="product-price">{{ product.price }}</div>
-        <div class="product-desc">{{ product.description }}</div>
-        <a class="buy-link" href="{{ product.link }}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
-      </div>
-    {% endfor %}
-  {% else %}
-    <p style="text-align:center;">⚠️ No products available for this category at the moment.</p>
-  {% endif %}
-
-  <footer>
-    <p>As an Amazon Associate, we earn from qualifying purchases.</p>
-    <a href="../index.html" class="back-link">← Back to Home</a>
-  </footer>
+  {% for product in products %}
+  <div class="product">
+    <div class="product-title">{{ product.title }}</div>
+    <div class="product-price">{{ product.price }}</div>
+    <div class="product-desc">{{ product.description }}</div>
+    <a class="buy-link" href="{{ product.link }}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+  </div>
+  {% endfor %}
 </body>
 </html>
