@@ -1,8 +1,9 @@
-# Assuming you have 'env' already set up like this somewhere globally:
-# env = Environment(loader=FileSystemLoader("templates"))
+import os
+from jinja2 import Environment, FileSystemLoader
 
 def generate_index_html(categories, template_name="index-template.html", output_path="docs/index.html"):
-    # Render the template using the existing Jinja2 environment
+    # Define local Jinja2 environment
+    env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template(template_name)
     rendered = template.render(categories=categories)
 
