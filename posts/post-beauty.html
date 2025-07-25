@@ -3,98 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Beauty Products 2025</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fefefe;
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem 2rem;
-      color: #2c3e50;
-    }
-    h1 {
-      color: #34495e;
-      text-align: center;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-    p.description {
-      font-style: italic;
-      text-align: center;
-      color: #7f8c8d;
-      margin-bottom: 2rem;
-    }
-    .product-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-    }
-    .product {
-      background: #f5f9ff;
-      border-radius: 12px;
-      padding: 1rem;
-      box-shadow: 0 4px 8px rgba(52, 73, 94, 0.1);
-      transition: box-shadow 0.3s ease;
-    }
-    .product:hover {
-      box-shadow: 0 8px 16px rgba(52, 73, 94, 0.2);
-    }
-    .product img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-bottom: 0.75rem;
-    }
-    .product-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin: 0.5rem 0;
-      color: #2c3e50;
-    }
-    .product-price {
-      color: #e67e22;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    .product-desc {
-      font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 1rem;
-    }
-    .buy-btn {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background: #3498db;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-    }
-    .buy-btn:hover {
-      background: #2980b9;
-    }
-    .video-container {
-      margin-top: 1rem;
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 */
-      height: 0;
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .video-container iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-  </style>
+  <title>Top Beauty Picks 2025</title>
+  <link rel="stylesheet" href="../styles.css" />
 </head>
 <body>
-  <h1>Top Beauty Products 2025</h1>
-  <p class="description">Uncover the most loved beauty products in 2025. From skincare to cosmetics — enhance your self-care routine with trending picks.</p>
+  <h1>Top Beauty Picks 2025</h1>
+  <p class="description">Explore the most popular beauty products of 2025—skincare, makeup, and grooming tools that everyone’s talking about.</p>
 
   <div class="product-list">
     {% for product in products %}
