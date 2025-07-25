@@ -31,8 +31,9 @@ for category in categories:
     products = fetch_best_sellers(category=slug, limit=3)
     products_map[slug] = products
 
-# === Ensure output directory exists ===
+# === Ensure output directories exist ===
 os.makedirs("docs", exist_ok=True)
+os.makedirs("docs/posts", exist_ok=True)
 os.makedirs("posts", exist_ok=True)
 
 # === Generate blog posts with specific templates ===
@@ -79,7 +80,7 @@ if beauty_products:
 # === Generate homepage ===
 generate_index_html(
     categories,
-    template_name="templates/index-template.html",
+    template_name="index-template.html",  # only the filename, not the full path
     output_path="docs/index.html"
 )
 
