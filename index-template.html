@@ -7,54 +7,77 @@
   <meta name="description" content="Automatically generates product review blogs with YouTube embeds and Amazon affiliate links." />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f6f8;
-      color: #333;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f0f4ff, #d9e4ff);
+      color: #1a237e;
       padding: 2rem;
-      max-width: 800px;
+      max-width: 900px;
       margin: auto;
+      box-shadow: 0 4px 20px rgba(26, 35, 126, 0.1);
+      border-radius: 12px;
     }
 
     h1 {
-      color: #2c3e50;
+      color: #283593;
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      letter-spacing: 1.2px;
+    }
+
+    p.description {
+      color: #5c6bc0;
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      font-style: italic;
     }
 
     h2 {
-      margin-top: 2rem;
-      color: #1a73e8;
+      color: #3949ab;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid #5c6bc0;
+      padding-bottom: 0.3rem;
     }
 
     .post-links {
-      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
     .post-links a {
       display: block;
-      padding: 0.75rem;
+      padding: 1rem 1.5rem;
       background: white;
-      margin-bottom: 10px;
-      border-left: 4px solid #1a73e8;
+      border-left: 8px solid #3949ab;
       text-decoration: none;
-      color: #1a73e8;
-      border-radius: 4px;
-      transition: all 0.2s ease;
+      color: #303f9f;
+      font-weight: 600;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(57, 73, 171, 0.15);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     .post-links a:hover {
-      background: #e3f2fd;
+      background-color: #e8eaf6;
+      border-color: #1a237e;
+      color: #1a237e;
     }
 
     footer {
       margin-top: 3rem;
       font-size: 0.9rem;
-      color: #777;
+      color: #7986cb;
       text-align: center;
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
   <h1>Prodpick4U: YouTube + Amazon Blog Generator</h1>
-  <p>Automatically generates product review blogs with embedded YouTube videos and Amazon affiliate links.</p>
+  <p class="description">Automatically generates product review blogs with embedded YouTube videos and Amazon affiliate links.</p>
 
   <h2>Latest Product Categories</h2>
   <div class="post-links">
