@@ -1,13 +1,27 @@
 import os
-from blog_generator import generate_markdown, generate_html, save_blog_files, generate_index_html
+from blog_generator import generate_markdown, generate_html, save_blog_files
+from index_generator import generate_index_html
 
+# === Categories metadata ===
 categories = [
-    {"title": "Kitchen", "folder": "kitchen"},
-    {"title": "Outdoors", "folder": "outdoors"},
-    {"title": "Beauty", "folder": "beauty"},
+    {
+        "title": "Top Kitchen Gadgets 2025",
+        "slug": "kitchen",
+        "description": "Discover the top trending kitchen gadgets and appliances in 2025. From smart tools to time-saving helpers, upgrade your cooking game today."
+    },
+    {
+        "title": "Top Outdoor Essentials 2025",
+        "slug": "outdoors",
+        "description": "Explore must-have outdoor gear for 2025. Whether you’re camping, hiking, or just enjoying nature — these picks have you covered."
+    },
+    {
+        "title": "Top Beauty Products 2025",
+        "slug": "beauty",
+        "description": "Uncover the most loved beauty products in 2025. From skincare to cosmetics — enhance your self-care routine with trending picks."
+    }
 ]
 
-# Example product lists - replace with your real data fetching
+# === Example product data ===
 products_map = {
     "kitchen": [
         {"title": "Knife Set", "price": "$59.99", "link": "https://amazon.com/dp/knife"},
@@ -26,23 +40,25 @@ products_map = {
     ],
 }
 
-# Ensure category folders exist
+# === Generate blog posts ===
 for category in categories:
-    folder = category["folder"]
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-        print(f"📁 Created folder: {folder}")
+    slug = category["slug"]
+    title = category["title"]
+    description = category["description"]
+    products = products_map[slug]
 
-# Generate markdown and HTML posts per category
-for category in categories:
-    cat_key = category["folder"]
-    md = generate_markdown(products_map[cat_key], category["title"])
-    template_file = f"templates/post-{cat_key}-template.html"
-    html = generate_html(products_map[cat_key], category["title"], template_file)
+    markdown = generate_markdown(products, title)
+    html = generate_html(
+        products,
+        category_title=title,
+        category_description=description,
+        template_path="templates/post-template.html"
+    )
 
-    output_html_path = f"posts/post-{cat_key}.html"  # Save inside posts/
-    save_blog_files(category["title"], md, html, output_html_path)
+    output_path = f"posts/post-{slug}.html"
+    save_blog_files(title, markdown, html, output_path)
+    print(f"✅ Generated blog for: {title}")
 
-# Generate the index.html page
-generate_index_html(categories, "templates/index-template.html", "index.html")
-print("🎉 All done!")
+# === Generate homepage ===
+generate_index_html(categories)
+print("🎉 All done! Homepage + blogs generated.")
