@@ -5,16 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ category_title }} - Prodpick4U</title>
   <link rel="stylesheet" href="../styles.css" />
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    .products { margin-top: 2rem; }
+    .product {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    iframe {
+      width: 100%;
+      max-width: 560px;
+      height: 315px;
+      display: block;
+      margin-top: 1rem;
+    }
+    a { color: #0077cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
 </head>
 <body>
-  <h1>{{ category_title }}</h1>
-  <p>Explore the top beauty products that are gaining popularity in 2025. From skincare essentials to makeup must-haves, we’ve got you covered.</p>
-  <p><em>Updated daily with new recommendations.</em></p>
+  <main>
+    <h1>{{ category_title }}</h1>
+    <p>{{ category_description }}</p>
+    <p><em>Updated daily with new recommendations.</em></p>
 
-  <div class="products">
-    {{ product_list }}
-  </div>
+    <div class="products">
+      {{ product_list }}
+    </div>
 
-  <a href="../index.html">← Back to Daily Top Picks</a>
+    <a href="../index.html">← Back to Daily Top Picks</a>
+  </main>
+
+  <footer>
+    <p>Made with ❤️ by Prodpick4u</p>
+  </footer>
 </body>
 </html>
