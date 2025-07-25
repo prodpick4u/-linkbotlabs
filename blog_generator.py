@@ -7,7 +7,7 @@ def generate_markdown(products, category_title):
         markdown += f"- **Price:** {product['price']}\n\n"
     return markdown
 
-def generate_html(products, category_title, template_path):
+def generate_html(products, category_title, template_path, category_description=""):
     if not os.path.exists(template_path):
         print(f"❌ Template not found: {template_path}")
         return f"<h1>{category_title}</h1><p>No template found.</p>"
@@ -25,6 +25,7 @@ def generate_html(products, category_title, template_path):
         """
 
     html = template.replace("{{ category_title }}", category_title)
+    html = html.replace("{{ category_description }}", category_description)
     html = html.replace("{{ product_list }}", product_html)
     return html
 
