@@ -6,89 +6,52 @@
   <title>{{ category_title }}</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fefefe;
-      max-width: 900px;
+      font-family: Arial, sans-serif;
       margin: 2rem auto;
+      max-width: 800px;
+      color: #333;
+      background: #fff;
       padding: 1rem 2rem;
-      color: #2c3e50;
     }
     h1 {
-      color: #34495e;
       text-align: center;
+      color: #222;
       margin-bottom: 1rem;
-      font-weight: 700;
     }
     p.description {
       font-style: italic;
+      color: #555;
       text-align: center;
-      color: #7f8c8d;
       margin-bottom: 2rem;
     }
-    .product-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-    }
     .product {
-      background: #f5f9ff;
-      border-radius: 12px;
-      padding: 1rem;
-      box-shadow: 0 4px 8px rgba(52, 73, 94, 0.1);
-      transition: box-shadow 0.3s ease;
+      border-bottom: 1px solid #ccc;
+      padding: 1rem 0;
     }
-    .product:hover {
-      box-shadow: 0 8px 16px rgba(52, 73, 94, 0.2);
-    }
-    .product img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-bottom: 0.75rem;
+    .product:last-child {
+      border-bottom: none;
     }
     .product-title {
+      font-weight: bold;
       font-size: 1.2rem;
-      font-weight: 700;
-      margin: 0.5rem 0;
-      color: #2c3e50;
+      margin-bottom: 0.25rem;
+      color: #1a73e8;
     }
     .product-price {
       color: #e67e22;
-      font-weight: 700;
+      font-weight: bold;
       margin-bottom: 0.5rem;
     }
     .product-desc {
-      font-size: 0.95rem;
-      color: #555;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
-    .buy-btn {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background: #3498db;
-      color: white;
+    a.buy-link {
+      color: #1a73e8;
       text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
+      font-weight: bold;
     }
-    .buy-btn:hover {
-      background: #2980b9;
-    }
-    .video-container {
-      margin-top: 1rem;
-      position: relative;
-      padding-bottom: 56.25%; /* 16:9 */
-      height: 0;
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .video-container iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
+    a.buy-link:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -96,23 +59,13 @@
   <h1>{{ category_title }}</h1>
   <p class="description">{{ category_description }}</p>
 
-  <div class="product-list">
-    {% for product in products %}
-      <div class="product">
-        {% if product.image %}
-          <img src="{{ product.image }}" alt="{{ product.title }}" />
-        {% endif %}
-        <div class="product-title">{{ product.title }}</div>
-        <div class="product-price">{{ product.price }}</div>
-        <div class="product-desc">{{ product.description }}</div>
-        <a class="buy-btn" href="{{ product.link }}" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        {% if product.video_url %}
-          <div class="video-container">
-            <iframe src="{{ product.video_url }}" allowfullscreen loading="lazy"></iframe>
-          </div>
-        {% endif %}
-      </div>
-    {% endfor %}
+  {% for product in products %}
+  <div class="product">
+    <div class="product-title">{{ product.title }}</div>
+    <div class="product-price">{{ product.price }}</div>
+    <div class="product-desc">{{ product.description }}</div>
+    <a class="buy-link" href="{{ product.link }}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
   </div>
+  {% endfor %}
 </body>
 </html>
