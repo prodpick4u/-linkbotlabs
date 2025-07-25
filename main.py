@@ -52,7 +52,7 @@ for category in categories:
         products,
         category_title=title,
         category_description=description,
-        template_path="templates/post-template.html"
+        template_path="posts/post-template.html"  # updated path here
     )
 
     output_path = f"posts/post-{slug}.html"
@@ -60,5 +60,10 @@ for category in categories:
     print(f"✅ Generated blog for: {title}")
 
 # === Generate homepage ===
-generate_index_html(categories)
+generate_index_html(
+    categories,
+    template_path="posts/index-template.html",  # updated path here
+    output_path="index.html"
+)
+
 print("🎉 All done! Homepage + blogs generated.")
