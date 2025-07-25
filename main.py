@@ -71,7 +71,7 @@ for category in categories:
 # === Generate homepage ===
 generate_index_html(
     categories,
-    template_path="index-template.html",
+    template_name="index-template.html",
     output_path="docs/index.html"
 )
 
