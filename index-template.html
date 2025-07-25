@@ -3,89 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick4U - AI Blog Generator</title>
-  <meta name="description" content="Automatically generates product review blogs with YouTube embeds and Amazon affiliate links." />
+  <title>Prodpick4U - Homepage</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f0f4ff, #d9e4ff);
-      color: #1a237e;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-      box-shadow: 0 4px 20px rgba(26, 35, 126, 0.1);
-      border-radius: 12px;
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      background: #fff;
+      color: #333;
     }
-
     h1 {
-      color: #283593;
       text-align: center;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-      letter-spacing: 1.2px;
-    }
-
-    p.description {
-      color: #5c6bc0;
-      text-align: center;
-      font-size: 1.1rem;
       margin-bottom: 2rem;
-      font-style: italic;
+      color: #1a73e8;
     }
-
-    h2 {
-      color: #3949ab;
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
       margin-bottom: 1rem;
-      border-bottom: 3px solid #5c6bc0;
-      padding-bottom: 0.3rem;
+      font-size: 1.1rem;
     }
-
-    .post-links {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .post-links a {
-      display: block;
-      padding: 1rem 1.5rem;
-      background: white;
-      border-left: 8px solid #3949ab;
+    a {
+      color: #1a73e8;
       text-decoration: none;
-      color: #303f9f;
-      font-weight: 600;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(57, 73, 171, 0.15);
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      font-weight: bold;
     }
-
-    .post-links a:hover {
-      background-color: #e8eaf6;
-      border-color: #1a237e;
-      color: #1a237e;
-    }
-
-    footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      color: #7986cb;
-      text-align: center;
-      font-weight: 500;
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h1>Prodpick4U: YouTube + Amazon Blog Generator</h1>
-  <p class="description">Automatically generates product review blogs with embedded YouTube videos and Amazon affiliate links.</p>
-
-  <h2>Latest Product Categories</h2>
-  <div class="post-links">
-    {{POST_LINKS}}
-  </div>
-
-  <footer>
-    <p>Made by Prodpick4U · Updated Daily</p>
-  </footer>
+  <h1>Welcome to Prodpick4U</h1>
+  <p>Explore our latest blog posts on top products for 2025:</p>
+  <ul>
+    {% for cat in categories %}
+      <li><a href="posts/post-{{ cat.slug }}.html">👉 {{ cat.title }}</a></li>
+    {% endfor %}
+  </ul>
 </body>
 </html>
