@@ -39,6 +39,9 @@ for category in categories:
     products = fetch_best_sellers(category=slug, limit=3)
     products_map[slug] = products
 
+# === Ensure output directory exists ===
+os.makedirs("docs", exist_ok=True)
+
 # === Generate blog posts for each category ===
 for category in categories:
     slug = category["slug"]
@@ -61,7 +64,7 @@ for category in categories:
         }
     )
 
-    output_path = f"posts/post-{slug}.html"
+    output_path = f"docs/post-{slug}.html"
     save_blog_files(title, markdown, html, output_path)
     print(f"✅ Generated blog for: {title}")
 
@@ -69,7 +72,13 @@ for category in categories:
 generate_index_html(
     categories,
     template_path="index-template.html",
-    output_path="index.html"
+    output_path="docs/index.html"
 )
 
-print("🎉 All done! Homepage and blog posts generated successfully.")
+# === Copy CSS to /docs folder for GitHub Pages ===
+if os.path.exists("styles.css"):
+    with open("styles.css", "r", encoding="utf-8") as src, open("docs/styles.css", "w", encoding="utf-8") as dst:
+        dst.write(src.read())
+    print("🎨 styles.css copied to docs/")
+
+print("🎉 All done! Homepage and blog posts generated in /docs/ for GitHub Pages.")
