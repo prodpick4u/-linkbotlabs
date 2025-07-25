@@ -1,6 +1,6 @@
 import os
 
-# Sample data – this will eventually come from your scraper
+# Sample product data for 3 categories
 categories = {
     "kitchen": {
         "title": "Top Kitchen Gadgets for 2025",
@@ -32,8 +32,69 @@ categories = {
                 "link": "https://www.amazon.com/dp/B07PZ4PK4R"
             },
         ]
+    },
+    "outdoors": {
+        "title": "Top Outdoor Gear for 2025",
+        "description": "Our favorite tools for adventure and travel.",
+        "filename": "post-outdoors.html",
+        "products": [
+            {
+                "title": "Coleman Sundome Tent",
+                "image": "https://example.com/outdoor1.jpg",
+                "price": "$69.99",
+                "pros": "Easy setup, Waterproof",
+                "cons": "Not great for winter",
+                "link": "https://www.amazon.com/dp/B0009PUSPI"
+            },
+            {
+                "title": "LifeStraw Water Filter",
+                "image": "https://example.com/outdoor2.jpg",
+                "price": "$19.95",
+                "pros": "Portable, Affordable",
+                "cons": "Slow filtration",
+                "link": "https://www.amazon.com/dp/B006QF3TW4"
+            },
+            {
+                "title": "Garmin GPS Handheld",
+                "image": "https://example.com/outdoor3.jpg",
+                "price": "$129.99",
+                "pros": "Accurate tracking, Durable",
+                "cons": "Small screen",
+                "link": "https://www.amazon.com/dp/B01MRZ0H7T"
+            },
+        ]
+    },
+    "beauty": {
+        "title": "Best Beauty Tools for 2025",
+        "description": "Beauty essentials our readers swear by.",
+        "filename": "post-beauty.html",
+        "products": [
+            {
+                "title": "Revlon Hair Dryer Brush",
+                "image": "https://example.com/beauty1.jpg",
+                "price": "$59.99",
+                "pros": "Volumizes, Quick drying",
+                "cons": "Bulky to store",
+                "link": "https://www.amazon.com/dp/B01LSUQSB0"
+            },
+            {
+                "title": "Neutrogena Hydro Boost Gel",
+                "image": "https://example.com/beauty2.jpg",
+                "price": "$16.99",
+                "pros": "Lightweight, Hydrating",
+                "cons": "Not great for very dry skin",
+                "link": "https://www.amazon.com/dp/B00NR1YQK4"
+            },
+            {
+                "title": "Olaplex Hair Perfector No. 3",
+                "image": "https://example.com/beauty3.jpg",
+                "price": "$28.00",
+                "pros": "Repairs damaged hair, Smells good",
+                "cons": "Expensive for size",
+                "link": "https://www.amazon.com/dp/B00SNM5US4"
+            },
+        ]
     }
-    # Add outdoor and beauty later
 }
 
 # Load the post template
