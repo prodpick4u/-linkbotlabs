@@ -4,10 +4,9 @@ from blog_generator import generate_markdown, save_blog_files
 from index_generator import generate_index_html
 from jinja2 import Environment, FileSystemLoader
 
-# === Setup Jinja2 ===
-env = Environment(loader=FileSystemLoader("templates"))
-
+# === Function to render template ===
 def render_template(template_path, context):
+    env = Environment(loader=FileSystemLoader("templates"))
     template = env.get_template(template_path)
     return template.render(context)
 
