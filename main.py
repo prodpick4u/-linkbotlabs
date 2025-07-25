@@ -1,14 +1,8 @@
 import os
 from fetch_best_sellers import fetch_best_sellers
-from blog_generator import generate_markdown, save_blog_files
+from blog_generator import generate_markdown, save_blog_files, generate_html
 from index_generator import generate_index_html
 from jinja2 import Environment, FileSystemLoader
-
-# === Function to render template ===
-def render_template(template_path, context):
-    env = Environment(loader=FileSystemLoader("templates"))
-    template = env.get_template(template_path)
-    return template.render(context)
 
 # === Categories metadata ===
 categories = [
@@ -31,7 +25,6 @@ categories = [
 
 # === Fetch live product data from API ===
 products_map = {}
-
 for category in categories:
     slug = category["slug"]
     print(f"🔍 Fetching products for category: {slug}")
@@ -41,36 +34,35 @@ for category in categories:
 # === Ensure output directory exists ===
 os.makedirs("docs", exist_ok=True)
 
-# === Generate blog posts for each category ===
-for category in categories:
-    slug = category["slug"]
-    title = category["title"]
-    description = category["description"]
-    products = products_map.get(slug, [])
+# === Generate blog posts with specific templates ===
+# Kitchen
+kitchen_products = products_map.get("kitchen", [])
+if kitchen_products:
+    kitchen_markdown = generate_markdown(kitchen_products, "Top Kitchen Picks 2025")
+    kitchen_html = generate_html(kitchen_products, "Top Kitchen Picks 2025", "templates/post-kitchen-template.html", "Discover the top trending kitchen gadgets and appliances in 2025.")
+    save_blog_files("Top Kitchen Picks 2025", kitchen_markdown, kitchen_html, "posts/post-kitchen.html")
+    print("✅ Generated blog for: Top Kitchen Picks 2025")
 
-    if not products:
-        print(f"⚠️ No products found for {title}, skipping blog generation.")
-        continue
+# Outdoors
+outdoor_products = products_map.get("outdoors", [])
+if outdoor_products:
+    outdoor_markdown = generate_markdown(outdoor_products, "Top Outdoor Essentials 2025")
+    outdoor_html = generate_html(outdoor_products, "Top Outdoor Essentials 2025", "templates/post-outdoor-template.html", "Explore must-have outdoor gear for 2025.")
+    save_blog_files("Top Outdoor Essentials 2025", outdoor_markdown, outdoor_html, "posts/post-outdoor.html")
+    print("✅ Generated blog for: Top Outdoor Essentials 2025")
 
-    markdown = generate_markdown(products, title)
-
-    html = render_template(
-        "post-template.html",
-        {
-            "category_title": title,
-            "category_description": description,
-            "products": products,
-        }
-    )
-
-    output_path = f"docs/post-{slug}.html"
-    save_blog_files(title, markdown, html, output_path)
-    print(f"✅ Generated blog for: {title}")
+# Beauty
+beauty_products = products_map.get("beauty", [])
+if beauty_products:
+    beauty_markdown = generate_markdown(beauty_products, "Top Beauty Products 2025")
+    beauty_html = generate_html(beauty_products, "Top Beauty Products 2025", "templates/post-beauty-template.html", "Uncover the most loved beauty products in 2025.")
+    save_blog_files("Top Beauty Products 2025", beauty_markdown, beauty_html, "posts/post-beauty.html")
+    print("✅ Generated blog for: Top Beauty Products 2025")
 
 # === Generate homepage ===
 generate_index_html(
     categories,
-    template_name="index-template.html",
+    template_path="templates/index-template.html",
     output_path="docs/index.html"
 )
 
