@@ -35,13 +35,14 @@ def save_blog_files(category_title, markdown, html, html_output_path):
         os.makedirs("posts")
         print("📁 Created folder: posts")
 
-    # Save markdown
-    markdown_filename = os.path.join("posts", f"blog_{category_title.lower()}.md")
+    # Save markdown file
+    safe_title = category_title.lower().replace(" ", "_")
+    markdown_filename = os.path.join("posts", f"blog_{safe_title}.md")
     with open(markdown_filename, "w", encoding="utf-8") as f:
         f.write(markdown)
     print(f"✅ Markdown saved to {markdown_filename}")
 
-    # Save HTML
+    # Save HTML file
     with open(html_output_path, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"✅ HTML saved to {html_output_path}")
@@ -61,11 +62,13 @@ def generate_index_html(categories, template_path, output_path):
     with open(template_path, "r", encoding="utf-8") as f:
         template = f.read()
 
+    # Build links list using 'slug' key (adjust if your categories use a different key)
     post_links_html = "<ul>\n"
     for category in categories:
-        filename = f"post-{category['folder']}.html"
-        title = f"Top 3 {category['title']} Products"
-        post_links_html += f'<li><a href="posts/{filename}">{title}</a></li>\n'
+        slug = category.get("slug") or category.get("folder") or "unknown"
+        title = category.get("title", "No Title")
+        filename = f"post-{slug}.html"
+        post_links_html += f'<li><a href="posts/{filename}">👉 {title}</a></li>\n'
     post_links_html += "</ul>"
 
     html = template.replace("{{POST_LINKS}}", post_links_html)
