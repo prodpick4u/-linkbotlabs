@@ -3,6 +3,8 @@ import os
 import time
 from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
 
+from fallback_products import get_fallback_products  # Import fallback
+
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY", "your_default_key")
 AMAZON_TAG = os.getenv("AMAZON_TAG", "mychanneld-20")
 
@@ -49,7 +51,11 @@ def fetch_best_sellers(category="beauty", country="us", page=1, limit=3, max_ret
                 else:
                     continue
 
-            return valid_products[:limit]
+            if valid_products:
+                return valid_products[:limit]
+            else:
+                print("⚠️ No valid products found from API, using fallback products.")
+                return get_fallback_products(category)
 
         except requests.exceptions.HTTPError as e:
             if response.status_code == 429:
@@ -64,8 +70,8 @@ def fetch_best_sellers(category="beauty", country="us", page=1, limit=3, max_ret
             print(f"❌ Request failed: {e}")
             break
 
-    print(f"❌ Failed to fetch products after {max_retries} retries.")
-    return []
+    print(f"❌ Failed to fetch products after {max_retries} retries. Using fallback products.")
+    return get_fallback_products(category)
 
 if __name__ == "__main__":
     print("🔍 Fetching top 3 best sellers in Beauty...\n")
