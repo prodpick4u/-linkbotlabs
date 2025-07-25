@@ -33,36 +33,53 @@ for category in categories:
 
 # === Ensure output directory exists ===
 os.makedirs("docs", exist_ok=True)
+os.makedirs("posts", exist_ok=True)
 
 # === Generate blog posts with specific templates ===
+
 # Kitchen
 kitchen_products = products_map.get("kitchen", [])
 if kitchen_products:
     kitchen_markdown = generate_markdown(kitchen_products, "Top Kitchen Picks 2025")
-    kitchen_html = generate_html(kitchen_products, "Top Kitchen Picks 2025", "templates/post-kitchen-template.html", "Discover the top trending kitchen gadgets and appliances in 2025.")
-    save_blog_files("Top Kitchen Picks 2025", kitchen_markdown, kitchen_html, "posts/post-kitchen.html")
+    kitchen_html = generate_html(
+        kitchen_products,
+        "Top Kitchen Picks 2025",
+        "templates/post-kitchen-template.html",
+        "Discover the top trending kitchen gadgets and appliances in 2025."
+    )
+    save_blog_files("Top Kitchen Picks 2025", kitchen_markdown, kitchen_html, "docs/posts/post-kitchen.html")
     print("✅ Generated blog for: Top Kitchen Picks 2025")
 
 # Outdoors
 outdoor_products = products_map.get("outdoors", [])
 if outdoor_products:
     outdoor_markdown = generate_markdown(outdoor_products, "Top Outdoor Essentials 2025")
-    outdoor_html = generate_html(outdoor_products, "Top Outdoor Essentials 2025", "templates/post-outdoor-template.html", "Explore must-have outdoor gear for 2025.")
-    save_blog_files("Top Outdoor Essentials 2025", outdoor_markdown, outdoor_html, "posts/post-outdoor.html")
+    outdoor_html = generate_html(
+        outdoor_products,
+        "Top Outdoor Essentials 2025",
+        "templates/post-outdoor-template.html",
+        "Explore must-have outdoor gear for 2025."
+    )
+    save_blog_files("Top Outdoor Essentials 2025", outdoor_markdown, outdoor_html, "docs/posts/post-outdoor.html")
     print("✅ Generated blog for: Top Outdoor Essentials 2025")
 
 # Beauty
 beauty_products = products_map.get("beauty", [])
 if beauty_products:
     beauty_markdown = generate_markdown(beauty_products, "Top Beauty Products 2025")
-    beauty_html = generate_html(beauty_products, "Top Beauty Products 2025", "templates/post-beauty-template.html", "Uncover the most loved beauty products in 2025.")
-    save_blog_files("Top Beauty Products 2025", beauty_markdown, beauty_html, "posts/post-beauty.html")
+    beauty_html = generate_html(
+        beauty_products,
+        "Top Beauty Products 2025",
+        "templates/post-beauty-template.html",
+        "Uncover the most loved beauty products in 2025."
+    )
+    save_blog_files("Top Beauty Products 2025", beauty_markdown, beauty_html, "docs/posts/post-beauty.html")
     print("✅ Generated blog for: Top Beauty Products 2025")
 
 # === Generate homepage ===
 generate_index_html(
     categories,
-    template_path="templates/index-template.html",
+    template_name="templates/index-template.html",
     output_path="docs/index.html"
 )
 
