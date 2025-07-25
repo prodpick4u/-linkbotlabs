@@ -1,5 +1,6 @@
 import requests
 import os
+import time
 from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
 
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY", "your_default_key")
@@ -12,7 +13,7 @@ def add_affiliate_tag(url, tag):
     new_query = urlencode(query, doseq=True)
     return urlunparse(parsed._replace(query=new_query))
 
-def fetch_best_sellers(category="beauty", country="us", page=1, limit=3):
+def fetch_best_sellers(category="beauty", country="us", page=1, limit=3, max_retries=5):
     url = "https://realtime-amazon-data.p.rapidapi.com/best-sellers"
     headers = {
         "x-rapidapi-host": "realtime-amazon-data.p.rapidapi.com",
@@ -24,36 +25,47 @@ def fetch_best_sellers(category="beauty", country="us", page=1, limit=3):
         "page": page
     }
 
-    try:
-        response = requests.get(url, headers=headers, params=params)
-        response.raise_for_status()
-        data = response.json()
-        products = data.get("products", [])
+    retry = 0
+    wait_time = 2  # seconds before first retry
 
-        valid_products = []
-        for product in products:
-            link = product.get("link", "")
-            # Check link validity: must include /dp/ and ASIN is 10 chars
-            if "/dp/" in link:
-                # Extract ASIN from link
-                try:
-                    asin = link.split("/dp/")[1].split("/")[0]
-                    if len(asin) == 10:
-                        # Add affiliate tag properly
-                        product["link"] = add_affiliate_tag(link, AMAZON_TAG)
-                        valid_products.append(product)
-                except IndexError:
-                    # malformed link, skip product
+    while retry < max_retries:
+        try:
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            data = response.json()
+            products = data.get("products", [])
+
+            valid_products = []
+            for product in products:
+                link = product.get("link", "")
+                if "/dp/" in link:
+                    try:
+                        asin = link.split("/dp/")[1].split("/")[0]
+                        if len(asin) == 10:
+                            product["link"] = add_affiliate_tag(link, AMAZON_TAG)
+                            valid_products.append(product)
+                    except IndexError:
+                        continue
+                else:
                     continue
+
+            return valid_products[:limit]
+
+        except requests.exceptions.HTTPError as e:
+            if response.status_code == 429:
+                print(f"⚠️ Rate limited by API. Retry {retry + 1}/{max_retries} after {wait_time} seconds...")
+                time.sleep(wait_time)
+                wait_time *= 2  # exponential backoff
+                retry += 1
             else:
-                # no /dp/ in link, skip product
-                continue
+                print(f"❌ HTTP error: {e}")
+                break
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Request failed: {e}")
+            break
 
-        return valid_products[:limit]
-
-    except requests.exceptions.RequestException as e:
-        print(f"❌ Request failed: {e}")
-        return []
+    print(f"❌ Failed to fetch products after {max_retries} retries.")
+    return []
 
 if __name__ == "__main__":
     print("🔍 Fetching top 3 best sellers in Beauty...\n")
