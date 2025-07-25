@@ -1,7 +1,15 @@
 import os
 from fetch_best_sellers import fetch_best_sellers
-from blog_generator import generate_markdown, generate_html, save_blog_files
+from blog_generator import generate_markdown, save_blog_files
 from index_generator import generate_index_html
+from jinja2 import Environment, FileSystemLoader
+
+# === Setup Jinja2 ===
+env = Environment(loader=FileSystemLoader("templates"))
+
+def render_template(template_path, context):
+    template = env.get_template(template_path)
+    return template.render(context)
 
 # === Categories metadata ===
 categories = [
@@ -43,18 +51,21 @@ for category in categories:
         continue
 
     markdown = generate_markdown(products, title)
-    html = generate_html(
-        products,
-        category_title=title,
-        category_description=description,
-        template_path="posts/post-template.html"
+
+    html = render_template(
+        "post-template.html",
+        {
+            "category_title": title,
+            "category_description": description,
+            "products": products,
+        }
     )
 
     output_path = f"posts/post-{slug}.html"
     save_blog_files(title, markdown, html, output_path)
     print(f"✅ Generated blog for: {title}")
 
-# === Generate homepage with links to blogs ===
+# === Generate homepage ===
 generate_index_html(
     categories,
     template_path="index-template.html",
