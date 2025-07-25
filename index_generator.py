@@ -1,18 +1,21 @@
+from jinja2 import Environment, FileSystemLoader
+import os
+
 def generate_index_html(categories, template_path="templates/index-template.html", output_path="index.html"):
-    # Build HTML for each category link
-    links_html = "\n".join([
-        f'<a href="posts/post-{cat["slug"]}.html">👉 {cat["title"]}</a>'
-        for cat in categories
-    ])
+    template_dir = os.path.dirname(template_path)
+    template_file = os.path.basename(template_path)
 
-    # Load and render template
-    with open(template_path, "r", encoding="utf-8") as f:
-        template = f.read()
+    env = Environment(loader=FileSystemLoader(template_dir))
+    template = env.get_template(template_file)
 
-    rendered = template.replace("{{POST_LINKS}}", links_html)
+    rendered = template.render(categories=categories)
 
-    # Write output file
+    # Ensure output folder exists
+    output_dir = os.path.dirname(output_path)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(rendered)
 
-    print("✅ index.html generated successfully.")
+    print(f"✅ {output_path} generated successfully.")
