@@ -35,8 +35,7 @@ jobs:
           pip install playwright imageio imageio-ffmpeg
 
       - name: Verify moviepy installation
-        run: |
-          python -c "import moviepy.editor; print('✅ moviepy.editor is working')"
+        run: python -c "import moviepy.editor; print('✅ moviepy.editor is working')"
 
       - name: Install Playwright browsers
         run: python -m playwright install chromium
@@ -61,8 +60,8 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
-          git add .
+          git add docs/ posts/ || true
           git commit -m "🤖 Auto-update blog and videos" || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/prodpick4u/Prodpick4u.git
+          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}.git
           git pull origin main --rebase || echo "No changes to pull"
-          git push origin main
+          git push origin main || echo "Nothing to push"
