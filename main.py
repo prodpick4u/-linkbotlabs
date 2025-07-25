@@ -22,6 +22,16 @@ categories = [
     }
 ]
 
+# === Hardcoded fallback camping product with affiliate tag ===
+fallback_camping_products = [
+    {
+        "title": "Coleman Sundome Tent",
+        "price": "$99.99",
+        "link": "https://www.amazon.com/dp/B004J2GUOU?tag=mychanneld-20",
+        "description": "A reliable and spacious 4-person tent perfect for camping trips."
+    }
+]
+
 # === Fetch live product data from API ===
 products_map = {}
 
@@ -29,6 +39,12 @@ for category in categories:
     slug = category["slug"]
     print(f"🔍 Fetching products for category: {slug}")
     products = fetch_best_sellers(category=slug, limit=3)
+
+    # Fallback for outdoors if API returns no products
+    if slug == "outdoors" and not products:
+        print("⚠️ No products fetched for outdoors. Using fallback camping product.")
+        products = fallback_camping_products
+
     products_map[slug] = products
 
 # === Generate blog posts for each category ===
