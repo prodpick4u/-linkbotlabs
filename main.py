@@ -52,7 +52,7 @@ for category in categories:
         products,
         category_title=title,
         category_description=description,
-        template_path="posts/post-template.html"  # updated path here
+        template_path="posts/post-template.html"  # Blog post template remains in posts/
     )
 
     output_path = f"posts/post-{slug}.html"
@@ -62,7 +62,7 @@ for category in categories:
 # === Generate homepage ===
 generate_index_html(
     categories,
-    template_path="posts/index-template.html",  # updated path here
+    template_path="index-template.html",  # Homepage template is now in root folder
     output_path="index.html"
 )
 
