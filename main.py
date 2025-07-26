@@ -81,7 +81,7 @@ if __name__ == "__main__":
             category_title=title,
             markdown=markdown,
             html=html,
-            html_filename=f"posts/post-{slug}.html"
+            html_filename=f"post-{slug}.html"
         )
 
         print(f"✅ Blog generated for: {title}")
