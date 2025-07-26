@@ -37,8 +37,8 @@ def save_blog_files(category_title, markdown, html, html_filename):
         f.write(markdown)
     print(f"✅ Markdown saved to {markdown_filename}")
 
-    # Save HTML to docs/
-    html_output_path = os.path.join("docs", html_filename)
+    # Save HTML to docs/posts/
+    html_output_path = os.path.join("docs", "posts", html_filename)
     os.makedirs(os.path.dirname(html_output_path), exist_ok=True)
     with open(html_output_path, "w", encoding="utf-8") as f:
         f.write(html)
@@ -56,7 +56,7 @@ def generate_index_html(categories, template_path="templates/index-template.html
     for category in categories:
         slug = category.get("slug") or category.get("folder") or category.get("title", "unknown").lower().replace(" ", "-")
         title = category.get("title", "No Title")
-        filename = f"post-{slug}.html"
+        filename = f"posts/post-{slug}.html"
         post_links_html += f'<li><a href="{filename}">👉 {title}</a></li>\n'
     post_links_html += "</ul>"
 
