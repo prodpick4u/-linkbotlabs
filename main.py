@@ -20,7 +20,7 @@ def clean_docs_root_posts():
     print(f"✅ Cleaned up docs root and ensured {posts_dir} exists.")
 
 if __name__ == "__main__":
-    # Clean misplaced post files before generation
+    # === Clean misplaced post files before generation ===
     clean_docs_root_posts()
 
     # === Categories metadata ===
@@ -50,7 +50,7 @@ if __name__ == "__main__":
         products = fetch_best_sellers(category=slug, limit=3)
         products_map[slug] = products
 
-    # === Ensure output directories ===
+    # === Ensure output directories exist ===
     os.makedirs("docs", exist_ok=True)
     os.makedirs("docs/posts", exist_ok=True)
     os.makedirs("posts", exist_ok=True)
@@ -76,11 +76,12 @@ if __name__ == "__main__":
             category_description=description
         )
 
+        # ✅ Save HTML to docs/posts/
         save_blog_files(
             category_title=title,
             markdown=markdown,
             html=html,
-            html_filename=f"post-{slug}.html"  # Just the filename, no folders
+            html_filename=f"posts/post-{slug}.html"
         )
 
         print(f"✅ Blog generated for: {title}")
