@@ -80,7 +80,7 @@ if __name__ == "__main__":
             category_title=title,
             markdown=markdown,
             html=html,
-            html_filename=os.path.join("docs", "posts", f"post-{slug}.html")  # ✅ Fixed path here
+            html_filename=f"post-{slug}.html"  # Just the filename, no folders
         )
 
         print(f"✅ Blog generated for: {title}")
