@@ -80,7 +80,7 @@ if __name__ == "__main__":
             category_title=title,
             markdown=markdown,
             html=html,
-            html_filename=f"docs/posts/post-{slug}.html"
+            html_filename=f"post-{slug}.html"  # ✅ Fixed path here
         )
 
         print(f"✅ Blog generated for: {title}")
