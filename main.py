@@ -3,11 +3,10 @@ from fetch_best_sellers import fetch_best_sellers
 from blog_generator import generate_markdown, save_blog_files, generate_html
 from index_generator import generate_index_html
 
-
 # === Categories metadata ===
 categories = [
     {
-        "title": "Top Kitchen Gadgets 2025",
+        "title": "Top Kitchen Picks 2025",
         "slug": "kitchen",
         "description": "Discover the top trending kitchen gadgets and appliances in 2025. From smart tools to time-saving helpers, upgrade your cooking game today."
     },
@@ -23,7 +22,7 @@ categories = [
     }
 ]
 
-# === Fetch live product data from API ===
+# === Fetch products ===
 products_map = {}
 for category in categories:
     slug = category["slug"]
@@ -31,60 +30,49 @@ for category in categories:
     products = fetch_best_sellers(category=slug, limit=3)
     products_map[slug] = products
 
-# === Ensure output directories exist ===
+# === Ensure output directories ===
 os.makedirs("docs", exist_ok=True)
 os.makedirs("docs/posts", exist_ok=True)
 os.makedirs("posts", exist_ok=True)
 
-# === Generate blog posts with specific templates ===
+# === Generate blog posts for each category ===
+for category in categories:
+    title = category["title"]
+    slug = category["slug"]
+    description = category["description"]
+    products = products_map.get(slug, [])
 
-# Kitchen
-kitchen_products = products_map.get("kitchen", [])
-if kitchen_products:
-    kitchen_markdown = generate_markdown(kitchen_products, "Top Kitchen Picks 2025")
-    kitchen_html = generate_html(
-        kitchen_products,
-        "Top Kitchen Picks 2025",
-        "templates/post-kitchen-template.html",
-        "Discover the top trending kitchen gadgets and appliances in 2025."
+    if not products:
+        print(f"⚠️ No products found for {slug}. Using fallback.")
+        continue
+
+    print(f"✍️ Generating blog for: {title}")
+    
+    markdown = generate_markdown(products, title)
+    html = generate_html(
+        products,
+        category_title=title,
+        template_path=f"templates/post-{slug}-template.html",
+        category_description=description
     )
-    save_blog_files("Top Kitchen Picks 2025", kitchen_markdown, kitchen_html, "docs/posts/post-kitchen.html")
-    print("✅ Generated blog for: Top Kitchen Picks 2025")
 
-# Outdoors
-outdoor_products = products_map.get("outdoors", [])
-if outdoor_products:
-    outdoor_markdown = generate_markdown(outdoor_products, "Top Outdoor Essentials 2025")
-    outdoor_html = generate_html(
-        outdoor_products,
-        "Top Outdoor Essentials 2025",
-        "templates/post-outdoor-template.html",
-        "Explore must-have outdoor gear for 2025."
+    save_blog_files(
+        category_title=title,
+        markdown=markdown,
+        html=html,
+        html_filename=f"docs/posts/post-{slug}.html"
     )
-    save_blog_files("Top Outdoor Essentials 2025", outdoor_markdown, outdoor_html, "docs/posts/post-outdoor.html")
-    print("✅ Generated blog for: Top Outdoor Essentials 2025")
 
-# Beauty
-beauty_products = products_map.get("beauty", [])
-if beauty_products:
-    beauty_markdown = generate_markdown(beauty_products, "Top Beauty Products 2025")
-    beauty_html = generate_html(
-        beauty_products,
-        "Top Beauty Products 2025",
-        "templates/post-beauty-template.html",
-        "Uncover the most loved beauty products in 2025."
-    )
-    save_blog_files("Top Beauty Products 2025", beauty_markdown, beauty_html, "docs/posts/post-beauty.html")
-    print("✅ Generated blog for: Top Beauty Products 2025")
+    print(f"✅ Blog generated for: {title}")
 
-# === Generate homepage ===
+# === Generate homepage index ===
 generate_index_html(
     categories,
-    template_name="index-template.html",  # only the filename, not the full path
+    template_path="templates/index-template.html",
     output_path="docs/index.html"
 )
 
-# === Copy CSS to /docs folder for GitHub Pages ===
+# === Copy CSS to docs folder for GitHub Pages ===
 if os.path.exists("styles.css"):
     with open("styles.css", "r", encoding="utf-8") as src, open("docs/styles.css", "w", encoding="utf-8") as dst:
         dst.write(src.read())
