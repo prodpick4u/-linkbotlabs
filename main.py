@@ -10,7 +10,7 @@ def clean_docs_root_posts():
     # Ensure posts directory exists
     os.makedirs(posts_dir, exist_ok=True)
 
-    # Remove any post-*.html files directly in docs root (misplaced files)
+    # Remove any misplaced post-*.html files directly in docs root
     for filename in os.listdir(docs_root):
         if filename.startswith("post-") and filename.endswith(".html"):
             file_path = os.path.join(docs_root, filename)
@@ -20,29 +20,29 @@ def clean_docs_root_posts():
     print(f"✅ Cleaned up docs root and ensured {posts_dir} exists.")
 
 if __name__ == "__main__":
-    # === Clean misplaced post files before generation ===
     clean_docs_root_posts()
 
-    # === Categories metadata ===
     categories = [
         {
             "title": "Top Kitchen Picks 2025",
             "slug": "kitchen",
+            "filename": "post-kitchen.html",
             "description": "Discover the top trending kitchen gadgets and appliances in 2025. From smart tools to time-saving helpers, upgrade your cooking game today."
         },
         {
             "title": "Top Outdoor Essentials 2025",
             "slug": "outdoors",
+            "filename": "post-outdoors.html",
             "description": "Explore must-have outdoor gear for 2025. Whether you’re camping, hiking, or just enjoying nature — these picks have you covered."
         },
         {
             "title": "Top Beauty Products 2025",
             "slug": "beauty",
+            "filename": "post-beauty.html",
             "description": "Uncover the most loved beauty products in 2025. From skincare to cosmetics — enhance your self-care routine with trending picks."
         }
     ]
 
-    # === Fetch products ===
     products_map = {}
     for category in categories:
         slug = category["slug"]
@@ -50,12 +50,11 @@ if __name__ == "__main__":
         products = fetch_best_sellers(category=slug, limit=3)
         products_map[slug] = products
 
-    # === Ensure output directories exist ===
-    os.makedirs("docs", exist_ok=True)
+    # Ensure output directories exist
     os.makedirs("docs/posts", exist_ok=True)
     os.makedirs("posts", exist_ok=True)
 
-    # === Generate blog posts for each category ===
+    # Generate blogs
     for category in categories:
         title = category["title"]
         slug = category["slug"]
@@ -67,7 +66,7 @@ if __name__ == "__main__":
             continue
 
         print(f"✍️ Generating blog for: {title}")
-        
+
         markdown = generate_markdown(products, title)
         html = generate_html(
             products,
@@ -76,24 +75,24 @@ if __name__ == "__main__":
             category_description=description
         )
 
-        # ✅ Save HTML to docs/posts/
         save_blog_files(
             category_title=title,
             markdown=markdown,
             html=html,
-            html_filename=f"post-{slug}.html"
+            html_filename=f"post-{slug}.html",
+            output_dir="docs/posts"
         )
 
         print(f"✅ Blog generated for: {title}")
 
-    # === Generate homepage index ===
+    # Generate homepage index
     generate_index_html(
         categories,
         template_path="templates/index-template.html",
         output_path="docs/index.html"
     )
 
-    # === Copy CSS to docs folder for GitHub Pages ===
+    # Copy styles.css to docs/
     if os.path.exists("styles.css"):
         with open("styles.css", "r", encoding="utf-8") as src, open("docs/styles.css", "w", encoding="utf-8") as dst:
             dst.write(src.read())
