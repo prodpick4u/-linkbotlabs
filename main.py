@@ -39,6 +39,24 @@ if __name__ == "__main__":
             "slug": "beauty",
             "filename": "post-beauty.html",
             "description": "Uncover the most loved beauty products in 2025. From skincare to cosmetics — enhance your self-care routine with trending picks."
+        },
+        {
+            "title": "Top Tech Gadgets 2025",
+            "slug": "tech",
+            "filename": "post-tech.html",
+            "description": "Discover the coolest tech gadgets and accessories trending in 2025."
+        },
+        {
+            "title": "Top Health & Wellness 2025",
+            "slug": "health",
+            "filename": "post-health.html",
+            "description": "Explore popular health and wellness products that will improve your lifestyle."
+        },
+        {
+            "title": "Top Home Decor Picks 2025",
+            "slug": "home-decor",
+            "filename": "post-home-decor.html",
+            "description": "Find the latest home decor trends and stylish essentials for 2025."
         }
     ]
 
@@ -47,7 +65,6 @@ if __name__ == "__main__":
         slug = category["slug"]
         print(f"🔍 Fetching products for category: {slug}")
         products = fetch_best_sellers(category=slug, limit=3)
-        # If API returns empty, fallback
         if not products:
             print(f"⚠️ API fetch failed or empty for {slug}. Using fallback products.")
             products = get_fallback_products(slug)
@@ -76,7 +93,6 @@ if __name__ == "__main__":
             category_description=description
         )
 
-        # REMOVE output_dir param here to fix error
         save_blog_files(
             category_title=title,
             markdown=markdown,
