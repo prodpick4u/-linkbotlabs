@@ -12,8 +12,10 @@
   <ul>
   {% for product in products %}
     <li>
-      <a href="{{ product.link }}" target="_blank" rel="noopener noreferrer">{{ product.title }}</a> - {{ product.price }}<br />
-      <small>{{ product.description }}</small>
+      <a href="{{ product.affiliate_link }}" target="_blank" rel="nofollow noopener noreferrer">
+        {{ product.title }}
+      </a> - {{ product.price }}<br />
+      <small>{{ product.description or "No description available." }}</small>
     </li>
   {% endfor %}
   </ul>
