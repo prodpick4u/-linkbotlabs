@@ -1,7 +1,7 @@
 import os
 import requests
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
-# ✅ Your Amazon affiliate tag
 AFFILIATE_TAG = "mychanneld-20"
 
 def add_affiliate_tag(url):
@@ -9,11 +9,15 @@ def add_affiliate_tag(url):
     if "amazon." not in url:
         return url  # Not an Amazon link
 
-    if "tag=" in url:
-        return url  # Already has a tag
+    parsed = urlparse(url)
+    query = parse_qs(parsed.query)
 
-    separator = "&" if "?" in url else "?"
-    return f"{url}{separator}tag={AFFILIATE_TAG}"
+    # Replace or add tag param
+    query['tag'] = [AFFILIATE_TAG]
+
+    new_query = urlencode(query, doseq=True)
+    new_url = urlunparse(parsed._replace(query=new_query))
+    return new_url
 
 def fetch_best_sellers(category="kitchen", limit=3):
     api_key = os.getenv("RAPIDAPI_KEY")
