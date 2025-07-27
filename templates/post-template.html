@@ -5,54 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ category_title }}</title>
   <style>
+    /* Google Fonts optional: you can add if you want a sleek font */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
       margin: 2rem auto;
       max-width: 800px;
-      color: #333;
-      background: #fff;
+      color: #fff;
+      background: #000000;
       padding: 1rem 2rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
+
     h1 {
       text-align: center;
-      color: #222;
+      color: #ffffffdd;
       margin-bottom: 1rem;
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
     }
+
     p.description {
       font-style: italic;
-      color: #555;
+      color: #ccccccbb;
       text-align: center;
       margin-bottom: 2rem;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
     }
+
     .product {
-      border-bottom: 1px solid #ccc;
-      padding: 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-radius: 15px;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba( 255, 255, 255, 0.07 );
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      transition: background 0.3s ease;
     }
-    .product:last-child {
-      border-bottom: none;
+
+    .product:hover {
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 12px 48px 0 rgba(255, 255, 255, 0.15);
+      cursor: pointer;
     }
+
+    .product-image {
+      width: 120px;
+      height: 90px;
+      object-fit: contain;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(255,255,255,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .product:hover .product-image {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
     .product-title {
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-bottom: 0.25rem;
-      color: #1a73e8;
+      font-weight: 600;
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+      color: #fff;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
     }
+
     .product-price {
-      color: #e67e22;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
+      color: #ffb347;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 0 5px rgba(255, 179, 71, 0.8);
     }
+
     .product-desc {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.7rem;
+      color: #ddddddcc;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      text-shadow: 0 0 3px rgba(255, 255, 255, 0.25);
     }
+
     a.buy-link {
-      color: #1a73e8;
+      display: inline-block;
+      background: #ffb347;
+      color: #000;
+      padding: 0.45rem 1.1rem;
+      border-radius: 25px;
+      font-weight: 700;
       text-decoration: none;
-      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(255,179,71,0.5);
+      transition: background 0.3s ease;
     }
+
     a.buy-link:hover {
-      text-decoration: underline;
+      background: #ffaa00;
+      box-shadow: 0 6px 14px rgba(255,170,0,0.7);
+      color: #fff;
     }
+
   </style>
 </head>
 <body>
@@ -60,11 +125,25 @@
   <p class="description">{{ category_description }}</p>
 
   {% for product in products %}
-  <div class="product">
-    <div class="product-title">{{ product.title }}</div>
-    <div class="product-price">{{ product.price }}</div>
-    <div class="product-desc">{{ product.description }}</div>
-    <a class="buy-link" href="{{ product.link }}" target="_blank" rel="noopener noreferrer">Buy on Amazon</a>
+  <div class="product" tabindex="0">
+    <img
+      src="{{ product.image_url or 'https://via.placeholder.com/120x90?text=No+Image' }}"
+      alt="{{ product.title }}"
+      class="product-image"
+      loading="lazy"
+    />
+    <div class="product-info">
+      <div class="product-title">{{ product.title }}</div>
+      <div class="product-price">{{ product.price }}</div>
+      <div class="product-desc">{{ product.description }}</div>
+      <a
+        class="buy-link"
+        href="{{ product.link }}"
+        target="_blank"
+        rel="noopener noreferrer nofollow"
+        >Buy on Amazon</a
+      >
+    </div>
   </div>
   {% endfor %}
 </body>
