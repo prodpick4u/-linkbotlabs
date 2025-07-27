@@ -1,5 +1,3 @@
-# fallback_products.py
-
 AMAZON_TAG = "mychanneld-20"
 
 def get_fallback_products(category):
@@ -63,6 +61,26 @@ def get_fallback_products(category):
                 "link": f"https://www.amazon.com/dp/B00SNM5US4?tag={AMAZON_TAG}",
                 "description": "Strengthens damaged hair and restores shine."
             },
+        ],
+        "household": [
+            {
+                "title": "iRobot Roomba i3+ EVO Self-Emptying Robot Vacuum",
+                "price": "$399.99",
+                "link": f"https://www.amazon.com/dp/B09NQNG7QJ?tag={AMAZON_TAG}",
+                "description": "Self-emptying smart vacuum with powerful suction — perfect for pet-friendly homes."
+            },
+            {
+                "title": "Levoit Core 300S Smart Air Purifier",
+                "price": "$149.99",
+                "link": f"https://www.amazon.com/dp/B08WJPBDFC?tag={AMAZON_TAG}",
+                "description": "HEPA air filter with app and voice control — removes allergens and odors quietly."
+            },
+            {
+                "title": "Tineco Floor ONE S5 Wet Dry Vacuum Cleaner",
+                "price": "$499.00",
+                "link": f"https://www.amazon.com/dp/B094N8YF1X?tag={AMAZON_TAG}",
+                "description": "2-in-1 mop and vacuum for deep cleaning hard floors with smart sensor technology."
+            }
         ]
     }
 
