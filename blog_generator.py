@@ -1,5 +1,10 @@
 import os
+import re
 from jinja2 import Environment, FileSystemLoader
+
+def slugify(text):
+    """Convert a string to a URL-safe slug."""
+    return re.sub(r'[^a-z0-9-]', '', text.lower().replace(" ", "-"))
 
 def generate_markdown(products, category_title):
     markdown = f"# Top 3 {category_title} Products\n\n"
@@ -12,6 +17,9 @@ def generate_html(products, category_title, template_path, category_description=
     if not os.path.exists(template_path):
         print(f"❌ Template not found: {template_path}")
         return f"<h1>{category_title}</h1><p>No template found.</p>"
+
+    if not products:
+        return f"<h1>{category_title}</h1><p>No products available.</p>"
 
     template_dir = os.path.dirname(template_path)
     template_file = os.path.basename(template_path)
@@ -26,18 +34,19 @@ def generate_html(products, category_title, template_path, category_description=
     )
     return html
 
-def save_blog_files(category_title, markdown, html, html_filename):
+def save_blog_files(category_title, markdown, html, html_filename=None):
     # Ensure posts/ folder exists
     os.makedirs("posts", exist_ok=True)
 
-    # Save Markdown to posts/
-    safe_title = category_title.lower().replace(" ", "_")
+    safe_title = slugify(category_title)
     markdown_filename = os.path.join("posts", f"blog_{safe_title}.md")
     with open(markdown_filename, "w", encoding="utf-8") as f:
         f.write(markdown)
     print(f"✅ Markdown saved to {markdown_filename}")
 
-    # Save HTML to docs/posts/
+    if not html_filename:
+        html_filename = f"post-{safe_title}.html"
+
     html_output_path = os.path.join("docs", "posts", html_filename)
     os.makedirs(os.path.dirname(html_output_path), exist_ok=True)
     with open(html_output_path, "w", encoding="utf-8") as f:
@@ -54,7 +63,7 @@ def generate_index_html(categories, template_path="templates/index-template.html
 
     post_links_html = "<ul>\n"
     for category in categories:
-        slug = category.get("slug") or category.get("folder") or category.get("title", "unknown").lower().replace(" ", "-")
+        slug = slugify(category.get("slug") or category.get("folder") or category.get("title", "unknown"))
         title = category.get("title", "No Title")
         filename = f"posts/post-{slug}.html"
         post_links_html += f'<li><a href="{filename}">👉 {title}</a></li>\n'
