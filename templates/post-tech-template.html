@@ -10,9 +10,16 @@
   <p>{{ category_description }}</p>
 
   <ul>
+  {% set affiliate_tag = 'mychanneld-20' %}
   {% for product in products %}
+    {% set link = product.link %}
+    {% if '?' in link %}
+      {% set link = link + '&tag=' + affiliate_tag %}
+    {% else %}
+      {% set link = link + '?tag=' + affiliate_tag %}
+    {% endif %}
     <li>
-      <a href="{{ product.link }}" target="_blank" rel="noopener noreferrer">{{ product.title }}</a> - {{ product.price }}<br />
+      <a href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ product.title }}</a> - {{ product.price }}<br />
       <small>{{ product.description }}</small>
     </li>
   {% endfor %}
