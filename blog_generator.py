@@ -1,18 +1,44 @@
 import os
+import re
 from jinja2 import Environment, FileSystemLoader
 
+AFFILIATE_TAG = "mychanneld-20"
+
+def extract_asin(url):
+    if not url:
+        return None
+    match = re.search(r"/dp/([A-Z0-9]{10})|/gp/product/([A-Z0-9]{10})", url)
+    if match:
+        return match.group(1) or match.group(2)
+    return None
+
+def make_affiliate_link(url):
+    asin = extract_asin(url)
+    if asin:
+        return f"https://www.amazon.com/dp/{asin}?tag={AFFILIATE_TAG}"
+    return url or "#"
+
+def prepare_products(products):
+    for product in products:
+        product['affiliate_link'] = make_affiliate_link(product.get('link') or product.get('url'))
+    return products
+
 def generate_markdown(products, category_title):
+    products = prepare_products(products)
     markdown = f"# {category_title}\n\n"
     for product in products:
-        markdown += f"## [{product['title']}]({product['link']})\n"
+        markdown += f"## [{product['title']}]({product['affiliate_link']})\n"
         markdown += f"- **Price:** {product['price']}\n"
-        markdown += f"- **Description:** {product['description']}\n\n"
+        markdown += f"- **Description:** {product.get('description', 'No description')}\n\n"
     return markdown
 
 def generate_html(products, category_title, template_path, category_description=""):
     env = Environment(loader=FileSystemLoader("templates"))
     template_name = os.path.basename(template_path)
     template = env.get_template(template_name)
+
+    products = prepare_products(products)
+
     return template.render(
         category_title=category_title,
         products=products,
@@ -23,6 +49,9 @@ def save_blog_files(category_title, markdown, html, html_filename):
     slug = html_filename.replace(".html", "")
     md_filename = f"posts/blog_{slug}.md"
     html_output_path = f"docs/posts/{html_filename}"
+
+    os.makedirs(os.path.dirname(md_filename), exist_ok=True)
+    os.makedirs(os.path.dirname(html_output_path), exist_ok=True)
 
     # Save markdown
     with open(md_filename, "w", encoding="utf-8") as f:
