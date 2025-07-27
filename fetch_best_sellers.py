@@ -1,7 +1,7 @@
 import requests
 import os
 import time
-from urllib.parse import urlparse, urlunparse, parse_qs, urlencode
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 from fallback_products import get_fallback_products
 
@@ -11,7 +11,7 @@ AMAZON_TAG = os.getenv("AMAZON_TAG", "mychanneld-20")
 def add_affiliate_tag(url, tag):
     parsed = urlparse(url)
     query = parse_qs(parsed.query)
-    query['tag'] = tag
+    query['tag'] = [tag]
     new_query = urlencode(query, doseq=True)
     return urlunparse(parsed._replace(query=new_query))
 
