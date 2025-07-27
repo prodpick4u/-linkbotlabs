@@ -81,6 +81,66 @@ def get_fallback_products(category):
                 "link": f"https://www.amazon.com/dp/B094N8YF1X?tag={AMAZON_TAG}",
                 "description": "2-in-1 mop and vacuum for deep cleaning hard floors with smart sensor technology."
             }
+        ],
+        "tech": [
+            {
+                "title": "Apple AirPods Pro",
+                "price": "$249.00",
+                "link": f"https://www.amazon.com/dp/B07ZPC9QD4?tag={AMAZON_TAG}",
+                "description": "Active noise cancellation wireless earbuds with transparency mode."
+            },
+            {
+                "title": "Samsung T7 Portable SSD 1TB",
+                "price": "$109.99",
+                "link": f"https://www.amazon.com/dp/B0874XNQ3Y?tag={AMAZON_TAG}",
+                "description": "Fast external SSD with USB 3.2 Gen 2 for high-speed data transfer."
+            },
+            {
+                "title": "Logitech MX Master 3 Mouse",
+                "price": "$99.99",
+                "link": f"https://www.amazon.com/dp/B07S395RWD?tag={AMAZON_TAG}",
+                "description": "Ergonomic wireless mouse with customizable buttons and long battery life."
+            }
+        ],
+        "health": [
+            {
+                "title": "Fitbit Charge 5",
+                "price": "$149.95",
+                "link": f"https://www.amazon.com/dp/B09BXQG2KT?tag={AMAZON_TAG}",
+                "description": "Advanced fitness tracker with heart rate and sleep monitoring."
+            },
+            {
+                "title": "Theragun Mini",
+                "price": "$199.00",
+                "link": f"https://www.amazon.com/dp/B07WRKXQWJ?tag={AMAZON_TAG}",
+                "description": "Compact percussive therapy device for muscle relief and recovery."
+            },
+            {
+                "title": "Philips Sonicare ProtectiveClean 6100",
+                "price": "$99.95",
+                "link": f"https://www.amazon.com/dp/B07GJ6ZMTT?tag={AMAZON_TAG}",
+                "description": "Electric toothbrush with pressure sensor and multiple cleaning modes."
+            }
+        ],
+        "home-decor": [
+            {
+                "title": "Philips Hue White and Color Ambiance Starter Kit",
+                "price": "$179.99",
+                "link": f"https://www.amazon.com/dp/B07L6N1YB8?tag={AMAZON_TAG}",
+                "description": "Smart LED light bulbs with millions of colors, compatible with Alexa and Google Assistant."
+            },
+            {
+                "title": "Umbra Trigg Geometric Wall Planter",
+                "price": "$34.99",
+                "link": f"https://www.amazon.com/dp/B01N7MRO7V?tag={AMAZON_TAG}",
+                "description": "Modern geometric hanging planter for succulents and small plants."
+            },
+            {
+                "title": "Safavieh Monaco Collection Area Rug",
+                "price": "$149.99",
+                "link": f"https://www.amazon.com/dp/B074D3QQNJ?tag={AMAZON_TAG}",
+                "description": "Soft and durable area rug with classic pattern and color."
+            }
         ]
     }
 
