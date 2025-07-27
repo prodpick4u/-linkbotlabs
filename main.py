@@ -2,15 +2,14 @@ import os
 from fetch_best_sellers import fetch_best_sellers
 from blog_generator import generate_markdown, save_blog_files, generate_html
 from index_generator import generate_index_html
+from fallback_products import get_fallback_products
 
 def clean_docs_root_posts():
     docs_root = "docs"
     posts_dir = os.path.join(docs_root, "posts")
 
-    # Ensure posts directory exists
     os.makedirs(posts_dir, exist_ok=True)
 
-    # Remove any misplaced post-*.html files directly in docs root
     for filename in os.listdir(docs_root):
         if filename.startswith("post-") and filename.endswith(".html"):
             file_path = os.path.join(docs_root, filename)
@@ -48,13 +47,15 @@ if __name__ == "__main__":
         slug = category["slug"]
         print(f"🔍 Fetching products for category: {slug}")
         products = fetch_best_sellers(category=slug, limit=3)
+        # If API returns empty, fallback
+        if not products:
+            print(f"⚠️ API fetch failed or empty for {slug}. Using fallback products.")
+            products = get_fallback_products(slug)
         products_map[slug] = products
 
-    # Ensure output directories exist
     os.makedirs("docs/posts", exist_ok=True)
     os.makedirs("posts", exist_ok=True)
 
-    # Generate blogs
     for category in categories:
         title = category["title"]
         slug = category["slug"]
@@ -62,7 +63,7 @@ if __name__ == "__main__":
         products = products_map.get(slug, [])
 
         if not products:
-            print(f"⚠️ No products found for {slug}. Using fallback.")
+            print(f"⚠️ No products available for {slug}, skipping blog generation.")
             continue
 
         print(f"✍️ Generating blog for: {title}")
@@ -75,24 +76,22 @@ if __name__ == "__main__":
             category_description=description
         )
 
+        # REMOVE output_dir param here to fix error
         save_blog_files(
             category_title=title,
             markdown=markdown,
             html=html,
-            html_filename=f"post-{slug}.html",
-            output_dir="docs/posts"
+            html_filename=f"post-{slug}.html"
         )
 
         print(f"✅ Blog generated for: {title}")
 
-    # Generate homepage index
     generate_index_html(
         categories,
         template_path="templates/index-template.html",
         output_path="docs/index.html"
     )
 
-    # Copy styles.css to docs/
     if os.path.exists("styles.css"):
         with open("styles.css", "r", encoding="utf-8") as src, open("docs/styles.css", "w", encoding="utf-8") as dst:
             dst.write(src.read())
