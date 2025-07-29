@@ -1,3 +1,8 @@
+# fetch_best_sellers.py
+
+from dotenv import load_dotenv
+load_dotenv()  # Load environment variables ASAP
+
 import os
 import requests
 import time
@@ -6,6 +11,9 @@ from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 AFFILIATE_TAG = os.getenv("AFFILIATE_TAG", "mychanneld-20")
 ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "epctex~google-search-scraper")
 APIFY_TOKEN = os.getenv("APIFY_TOKEN")
+
+print("🔍 fetch_best_sellers APIFY_TOKEN is set:", bool(APIFY_TOKEN))
+
 
 def add_affiliate_tag(url):
     """Append or update the affiliate tag in the Amazon URL."""
@@ -17,10 +25,14 @@ def add_affiliate_tag(url):
     new_query = urlencode(query, doseq=True)
     return urlunparse(parsed._replace(query=new_query))
 
-def fetch_best_sellers(category="kitchen", limit=3):
-    if not APIFY_TOKEN:
+
+def fetch_best_sellers(category="kitchen", limit=3, apify_token=None):
+    token = apify_token or APIFY_TOKEN
+    if not token:
         print("❌ Environment variable APIFY_TOKEN not set.")
         return []
+
+    print(f"🔧 Starting Apify run for category '{category}' with token present: {bool(token)}")
 
     input_payload = {
         "csvFriendlyOutput": False,
@@ -41,14 +53,14 @@ def fetch_best_sellers(category="kitchen", limit=3):
         "queries": [category]
     }
 
-    start_url = f"https://api.apify.com/v2/acts/{ACTOR_ID}/runs?token={APIFY_TOKEN}"
+    start_url = f"https://api.apify.com/v2/acts/{ACTOR_ID}/runs?token={token}"
     response = requests.post(start_url, json=input_payload)
     if not response.ok:
         print(f"❌ Failed to start Apify actor run: {response.text}")
         return []
 
     run_id = response.json()["data"]["id"]
-    status_url = f"https://api.apify.com/v2/actor-runs/{run_id}?token={APIFY_TOKEN}"
+    status_url = f"https://api.apify.com/v2/actor-runs/{run_id}?token={token}"
 
     while True:
         status_resp = requests.get(status_url)
@@ -63,7 +75,7 @@ def fetch_best_sellers(category="kitchen", limit=3):
         return []
 
     dataset_id = status_resp.json()["data"]["defaultDatasetId"]
-    dataset_url = f"https://api.apify.com/v2/datasets/{dataset_id}/items?token={APIFY_TOKEN}&clean=true"
+    dataset_url = f"https://api.apify.com/v2/datasets/{dataset_id}/items?token={token}&clean=true"
     dataset_resp = requests.get(dataset_url)
     if not dataset_resp.ok:
         print(f"❌ Failed to fetch Apify dataset: {dataset_resp.text}")
