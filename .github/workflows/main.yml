@@ -43,26 +43,3 @@ jobs:
         run: python -c "import moviepy.editor; print('✅ moviepy.editor is working')"
 
       - name: Install Playwright browsers
-        run: python -m playwright install chromium
-
-      - name: Run automation
-        env:
-          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
-          RAPIDAPI_HOST: real-time-amazon-data.p.rapidapi.com
-          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
-          AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
-        run: python main.py
-
-      - name: Commit and push changes using PAT
-        env:
-          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          git config user.name "Auto Commit Bot"
-          git config user.email "bot@example.com"
-          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}.git
-          git add docs/ posts/ || true
-          git commit -m "🤖 Auto-update blog and videos" || echo "No changes to commit"
-          git push origin main || echo "Nothing to push"
