@@ -3,6 +3,8 @@ import requests
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 AFFILIATE_TAG = "mychanneld-20"
+ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "epctex~google-search-scraper")
+APIFY_TOKEN = os.getenv("APIFY_TOKEN")
 
 def add_affiliate_tag(url):
     """Append or update the affiliate tag in the Amazon URL."""
@@ -11,57 +13,82 @@ def add_affiliate_tag(url):
 
     parsed = urlparse(url)
     query = parse_qs(parsed.query)
-
-    # Replace or add tag param
     query['tag'] = [AFFILIATE_TAG]
-
     new_query = urlencode(query, doseq=True)
     new_url = urlunparse(parsed._replace(query=new_query))
     return new_url
 
 def fetch_best_sellers(category="kitchen", limit=3):
-    api_key = os.getenv("RAPIDAPI_KEY")
-    if not api_key:
-        print("❌ RAPIDAPI_KEY not set in environment.")
+    if not APIFY_TOKEN:
+        print("❌ APIFY_TOKEN not set in environment.")
         return []
 
-    url = "https://real-time-amazon-data.p.rapidapi.com/search"
-    querystring = {
-        "query": category,
-        "page": "1",
-        "country": "US"
+    input_payload = {
+        "csvFriendlyOutput": False,
+        "customMapFunction": "(object) => { return {...object} }",
+        "endPage": 1,
+        "extendOutputFunction": """($) => {
+            return {
+                title: $("h3").first().text(),
+                url: $("a").first().attr("href"),
+                snippet: $("span").first().text()
+            };
+        }""",
+        "includePeopleAlsoAsk": True,
+        "includeUnfilteredResults": False,
+        "locationUule": "w+CAIQICIIaXN0YW5idWw=",
+        "maxItems": 20,
+        "proxy": {
+            "useApifyProxy": True
+        },
+        "queries": [category]
     }
 
-    headers = {
-        "X-RapidAPI-Key": api_key,
-        "X-RapidAPI-Host": "real-time-amazon-data.p.rapidapi.com"
-    }
-
-    try:
-        response = requests.get(url, headers=headers, params=querystring)
-        response.raise_for_status()
-        data = response.json()
-        items = data.get("data", {}).get("products", [])
-
-        products = []
-        for item in items[:limit]:
-            title = item.get("title")
-            link = add_affiliate_tag(item.get("product_url", ""))
-            price = item.get("price_str") or "N/A"
-            image = item.get("image_url") or ""
-            description = item.get("description") or ""
-
-            if title and link:
-                products.append({
-                    "title": title.strip(),
-                    "link": link,
-                    "price": price,
-                    "image": image,
-                    "description": description
-                })
-
-        return products
-
-    except Exception as e:
-        print(f"❌ Error fetching products: {e}")
+    # Start Apify actor run
+    start_url = f"https://api.apify.com/v2/acts/{ACTOR_ID}/runs?token={APIFY_TOKEN}"
+    response = requests.post(start_url, json=input_payload)
+    if not response.ok:
+        print(f"❌ Failed to start Apify actor run: {response.text}")
         return []
+    run_id = response.json()["data"]["id"]
+
+    # Poll until done
+    status_url = f"https://api.apify.com/v2/actor-runs/{run_id}?token={APIFY_TOKEN}"
+    while True:
+        status_resp = requests.get(status_url)
+        status = status_resp.json()["data"]["status"]
+        if status in ["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"]:
+            break
+        print(f"⌛ Apify run status: {status} (waiting 5s)")
+        import time; time.sleep(5)
+
+    if status != "SUCCEEDED":
+        print(f"❌ Apify run failed with status: {status}")
+        return []
+
+    dataset_id = status_resp.json()["data"]["defaultDatasetId"]
+
+    # Fetch dataset items
+    dataset_url = f"https://api.apify.com/v2/datasets/{dataset_id}/items?token={APIFY_TOKEN}&clean=true"
+    dataset_resp = requests.get(dataset_url)
+    if not dataset_resp.ok:
+        print(f"❌ Failed to fetch Apify dataset: {dataset_resp.text}")
+        return []
+    items = dataset_resp.json()
+
+    # Filter & prepare products
+    products = []
+    for item in items[:limit]:
+        title = item.get("title")
+        url = add_affiliate_tag(item.get("url", ""))
+        snippet = item.get("snippet", "")
+        if title and url:
+            products.append({
+                "title": title.strip(),
+                "link": url,
+                "price": "N/A",           # Apify results may not include price — update if possible
+                "image": "",              # Add if available
+                "description": snippet
+            })
+
+    return products
