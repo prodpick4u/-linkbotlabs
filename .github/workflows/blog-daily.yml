@@ -3,7 +3,7 @@ name: Blog Daily Generator
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * *'  # Daily at 03:00 UTC
+    - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
       - name: Run Apify scraper
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
-          APIFY_ACTOR_ID: epctex~google-search-scraper  # or your actor id
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
         run: python apify_runner.py
 
       - name: Run main script
@@ -44,6 +44,5 @@ jobs:
           git config --global user.email "autobot@example.com"
           git add .
           git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
-          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}
           git pull origin main --rebase || echo "No pull needed"
           git push origin main
