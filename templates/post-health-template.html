@@ -12,10 +12,19 @@
     <p class="description">{{ category_description }}</p>
 
     <div class="product-list">
+    {% set affiliate_tag = 'mychanneld-20' %}
     {% for product in products %}
+      {% set link = product.affiliate_link %}
+      {% if '?' in link %}
+        {% if 'tag=' not in link %}
+          {% set link = link + '&tag=' + affiliate_tag %}
+        {% endif %}
+      {% else %}
+        {% set link = link + '?tag=' + affiliate_tag %}
+      {% endif %}
       <div class="product-card">
         <h2>
-          <a href="{{ product.affiliate_link }}" target="_blank" rel="nofollow noopener noreferrer">
+          <a href="{{ link }}" target="_blank" rel="nofollow noopener noreferrer">
             {{ product.title }}
           </a>
         </h2>
