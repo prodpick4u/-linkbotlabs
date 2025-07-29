@@ -25,9 +25,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Run Apify scraper
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: epctex~google-search-scraper  # or your actor id
+        run: python apify_runner.py
+
       - name: Run main script
         env:
-          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
         run: python main.py
 
