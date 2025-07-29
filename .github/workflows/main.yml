@@ -1,4 +1,3 @@
-
 name: Auto Blog & Video Generator
 
 on:
@@ -16,8 +15,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Set up Python 3.x
         uses: actions/setup-python@v4
