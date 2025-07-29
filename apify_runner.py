@@ -3,11 +3,11 @@ import time
 import requests
 import json
 
-# Load API credentials from environment
+# === CONFIGURATION ===
 APIFY_TOKEN = os.getenv("APIFY_TOKEN")
-ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "jm4192gDoX7CHY7IB")  # Replace with your actor ID or keep as default
+ACTOR_ID = "V8SFJw3gKgULelpok"  # ✅ Your specific Apify Actor ID
 
-# Define your input for the actor
+# === INPUT PAYLOAD FOR ACTOR ===
 input_payload = {
     "csvFriendlyOutput": False,
     "customMapFunction": "(object) => { return {...object} }",
@@ -36,7 +36,11 @@ input_payload = {
     ]
 }
 
+# === RUNNER FUNCTION ===
 def run_apify_actor(input_payload):
+    if not APIFY_TOKEN:
+        raise EnvironmentError("❌ APIFY_TOKEN is not set in environment variables.")
+
     start_url = f"https://api.apify.com/v2/acts/{ACTOR_ID}/runs"
     headers = {
         "Content-Type": "application/json",
@@ -44,11 +48,11 @@ def run_apify_actor(input_payload):
     }
 
     print("🚀 Triggering Apify actor...")
-    response = requests.post(start_url, headers=headers, json=input_payload)  # ✅ Fixed line
+    response = requests.post(start_url, headers=headers, json=input_payload)
     response.raise_for_status()
     run_id = response.json()["data"]["id"]
 
-    # Poll until actor run is finished
+    # === POLL FOR STATUS ===
     status_url = f"https://api.apify.com/v2/actor-runs/{run_id}"
     while True:
         status_response = requests.get(status_url, headers=headers)
@@ -56,27 +60,32 @@ def run_apify_actor(input_payload):
         status = status_response.json()["data"]["status"]
         if status in ["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"]:
             break
-        print(f"⏳ Waiting for Apify run {run_id}... status: {status}")
+        print(f"⏳ Waiting... Actor status: {status}")
         time.sleep(5)
 
     if status != "SUCCEEDED":
-        raise Exception(f"Apify run failed with status: {status}")
+        raise Exception(f"❌ Apify run failed with status: {status}")
 
-    # Fetch output dataset
+    # === FETCH RESULTS ===
     dataset_id = status_response.json()["data"]["defaultDatasetId"]
     dataset_url = f"https://api.apify.com/v2/datasets/{dataset_id}/items?format=json"
     print(f"📦 Fetching results from dataset {dataset_id}...")
     dataset_response = requests.get(dataset_url)
     dataset_response.raise_for_status()
-
     return dataset_response.json()
 
+# === MAIN EXECUTION ===
 def main():
     try:
         results = run_apify_actor(input_payload)
         with open("apify_results.json", "w", encoding="utf-8") as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
         print("✅ Apify results saved to apify_results.json")
+
+        # Optional preview of first 3 items
+        print("🔍 Sample results:")
+        for item in results[:3]:
+            print(f"• {item.get('title')} → {item.get('url')}")
     except Exception as e:
         print("❌ Error running Apify actor:", e)
 
