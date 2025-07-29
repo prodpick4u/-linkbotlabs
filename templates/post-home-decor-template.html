@@ -2,22 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>{{ category_title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ category_title }} | Prodpick4U</title>
   <link rel="stylesheet" href="../styles.css" />
 </head>
 <body>
-  <h1>{{ category_title }}</h1>
-  <p>{{ category_description }}</p>
+  <div class="glass-container">
+    <h1>{{ category_title }}</h1>
+    <p class="description">{{ category_description }}</p>
 
-  <ul>
-  {% for product in products %}
-    <li>
-      <a href="{{ product.affiliate_link }}" target="_blank" rel="nofollow noopener noreferrer">
-        {{ product.title }}
-      </a> - {{ product.price }}<br />
-      <small>{{ product.description or "No description available." }}</small>
-    </li>
-  {% endfor %}
-  </ul>
+    <div class="product-list">
+      {% for product in products %}
+      <div class="product-card">
+        <h2>
+          <a href="{{ product.affiliate_link }}" target="_blank" rel="nofollow noopener noreferrer">
+            {{ product.title }}
+          </a>
+        </h2>
+        <p class="price">{{ product.price }}</p>
+        <p class="desc">{{ product.description or "No description available." }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </body>
 </html>
