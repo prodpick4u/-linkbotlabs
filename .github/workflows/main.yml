@@ -29,20 +29,20 @@ jobs:
             echo "❌ APIFY_TOKEN is missing!"
             exit 1
           fi
-          if [ -z "${{ secrets.APIFY_TASK_ID }}" ]; then
-            echo "❌ APIFY_TASK_ID is missing!"
+          if [ -z "${{ secrets.APIFY_ACTOR_ID }}" ]; then
+            echo "❌ APIFY_ACTOR_ID is missing!"
             exit 1
           fi
-          if [ -z "${{ secrets.AMAZON_TAG }}" ]; then
-            echo "❌ AMAZON_TAG is missing!"
+          if [ -z "${{ secrets.AFFILIATE_TAG }}" ]; then
+            echo "❌ AFFILIATE_TAG is missing!"
             exit 1
           fi
 
       - name: 🚀 Run Blog Generator
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
-          APIFY_TASK_ID: ${{ secrets.APIFY_TASK_ID }}
-          AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          AFFILIATE_TAG: ${{ secrets.AFFILIATE_TAG }}
         run: python main.py
 
       - name: 📤 Upload Generated Blog
