@@ -7,12 +7,13 @@ from index_generator import generate_index_html
 from fallback_products import get_fallback_products
 from dotenv import load_dotenv
 
-# === Load environment variables ===
-load_dotenv()  # Loads from .env if running locally
+# === Load environment variables (local .env for development) ===
+load_dotenv()
 
 # === Environment variables ===
+# In GitHub Actions, APIFY_API_KEY should be injected as: env: APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
 APIFY_API_KEY = os.getenv("APIFY_API_KEY")
-APIFY_ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "V8SFJw3gKgULelpok")  # Default actor
+APIFY_ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "V8SFJw3gKgULelpok")
 
 SEARCH_QUERIES = [
     "top kitchen gadgets 2025",
@@ -26,7 +27,7 @@ SEARCH_QUERIES = [
 def validate_apify_token():
     """Sanity-check that the Apify token works before running anything."""
     if not APIFY_API_KEY:
-        print("❌ APIFY_API_KEY is missing in environment.")
+        print("❌ ERROR: APIFY_API_KEY is missing. Please set it in GitHub Actions secrets or your .env file.")
         return False
     response = requests.get(f"https://api.apify.com/v2/actor-runs?token={APIFY_API_KEY}")
     if response.status_code == 200:
