@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+      APIFY_TOKEN: u8Y6n1FpF9eE3iJkwF7rxZYV1aVWXB4sKIrv
       APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
       AFFILIATE_TAG: ${{ secrets.AFFILIATE_TAG }}
 
