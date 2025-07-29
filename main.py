@@ -1,4 +1,5 @@
 import os
+import json
 from fetch_best_sellers import fetch_best_sellers
 from blog_generator import generate_markdown, save_blog_files, generate_html
 from index_generator import generate_index_html
@@ -17,6 +18,35 @@ def clean_docs_root_posts():
             os.remove(file_path)
 
     print(f"✅ Cleaned up docs root and ensured {posts_dir} exists.")
+
+def load_apify_keywords(filename="apify_results.json"):
+    if not os.path.exists(filename):
+        print("⚠️ Apify results file not found.")
+        return {}
+
+    with open(filename, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    keyword_map = {}
+    # You may need to adjust this depending on actual structure of apify_results.json
+    for item in data:
+        # Assume each item has a searchQuery or query field (adjust as needed)
+        query = item.get("searchQuery") or item.get("query") or ""
+        query = query.lower()
+        if "kitchen" in query:
+            keyword_map["kitchen"] = query
+        elif "outdoor" in query:
+            keyword_map["outdoors"] = query
+        elif "beauty" in query:
+            keyword_map["beauty"] = query
+        elif "tech" in query:
+            keyword_map["tech"] = query
+        elif "health" in query:
+            keyword_map["health"] = query
+        elif "home decor" in query or "home" in query:
+            keyword_map["home-decor"] = query
+
+    return keyword_map
 
 if __name__ == "__main__":
     clean_docs_root_posts()
@@ -60,11 +90,15 @@ if __name__ == "__main__":
         }
     ]
 
+    keyword_map = load_apify_keywords()
+
     products_map = {}
     for category in categories:
         slug = category["slug"]
-        print(f"🔍 Fetching products for category: {slug}")
-        products = fetch_best_sellers(category=slug, limit=3)
+        # Use the keyword from Apify results or fallback to slug
+        search_keyword = keyword_map.get(slug, slug)
+        print(f"🔍 Fetching products for category: {slug} using keyword: {search_keyword}")
+        products = fetch_best_sellers(category=search_keyword, limit=3)
         if not products:
             print(f"⚠️ API fetch failed or empty for {slug}. Using fallback products.")
             products = get_fallback_products(slug)
