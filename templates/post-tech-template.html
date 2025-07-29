@@ -2,27 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ category_title }}</title>
   <link rel="stylesheet" href="../styles.css" />
 </head>
 <body>
-  <h1>{{ category_title }}</h1>
-  <p>{{ category_description }}</p>
+  <div class="glass-container">
+    <h1>{{ category_title }}</h1>
+    <p class="description">{{ category_description }}</p>
 
-  <ul>
-  {% set affiliate_tag = 'mychanneld-20' %}
-  {% for product in products %}
-    {% set link = product.link %}
-    {% if '?' in link %}
-      {% set link = link + '&tag=' + affiliate_tag %}
-    {% else %}
-      {% set link = link + '?tag=' + affiliate_tag %}
-    {% endif %}
-    <li>
-      <a href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ product.title }}</a> - {{ product.price }}<br />
-      <small>{{ product.description }}</small>
-    </li>
-  {% endfor %}
-  </ul>
+    <div class="product-list">
+      {% set affiliate_tag = 'mychanneld-20' %}
+      {% for product in products %}
+        {% set link = product.link %}
+        {% if '?' in link %}
+          {% set link = link + '&tag=' + affiliate_tag %}
+        {% else %}
+          {% set link = link + '?tag=' + affiliate_tag %}
+        {% endif %}
+        <div class="product-card">
+          <h2><a href="{{ link }}" target="_blank" rel="nofollow noopener noreferrer">{{ product.title }}</a></h2>
+          <p class="price">{{ product.price }}</p>
+          <p class="desc">{{ product.description or "No description available." }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 </body>
 </html>
