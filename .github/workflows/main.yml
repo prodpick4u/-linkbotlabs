@@ -1,192 +1,72 @@
-import os
-import time
-import requests
-from fetch_best_sellers import fetch_best_sellers
-from blog_generator import generate_markdown, save_blog_files, generate_html
-from index_generator import generate_index_html
-from fallback_products import get_fallback_products
+name: 🛠️ Generate Blog with Apify
 
-APIFY_API_KEY = os.getenv("APIFY_API_KEY")
-APIFY_TASK_ID = os.getenv("APIFY_TASK_ID")  # Set this in your GitHub secrets
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'  # Runs daily at 2:00 AM UTC
 
-def start_apify_actor():
-    url = f"https://api.apify.com/v2/actor-tasks/{APIFY_TASK_ID}/runs"
-    headers = {
-        "Authorization": f"Bearer {APIFY_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    # Customize input for your actor here, or leave empty for default
-    payload = {
-        # Example input, adjust as needed
-        # "categories": ["kitchen", "outdoors", "beauty", "tech", "health", "home-decor"]
-    }
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-    print("🚀 Starting Apify actor run...")
-    response = requests.post(url, json=payload, headers=headers)
-    response.raise_for_status()
-    run_data = response.json()
-    run_id = run_data["data"]["id"]
-    print(f"✅ Actor run started with ID: {run_id}")
-    return run_id
+    env:
+      APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+      APIFY_TASK_ID: ${{ secrets.APIFY_TASK_ID }}
+      AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
 
-def wait_for_run_to_finish(run_id, timeout=600, poll_interval=10):
-    url = f"https://api.apify.com/v2/actor-runs/{run_id}"
-    headers = {
-        "Authorization": f"Bearer {APIFY_API_KEY}"
-    }
-    print(f"⏳ Waiting for run {run_id} to finish (timeout {timeout}s)...")
-    elapsed = 0
-    while elapsed < timeout:
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
-        run_info = response.json()
-        status = run_info["data"]["status"]
-        print(f"Status: {status}")
-        if status in ("SUCCEEDED", "FAILED", "ABORTED"):
-            return run_info["data"]
-        time.sleep(poll_interval)
-        elapsed += poll_interval
-    raise TimeoutError(f"Actor run {run_id} did not finish within {timeout} seconds.")
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v3
 
-def fetch_results(dataset_id):
-    url = f"https://api.apify.com/v2/datasets/{dataset_id}/items?clean=true"
-    headers = {
-        "Authorization": f"Bearer {APIFY_API_KEY}"
-    }
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    return response.json()
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-def clean_docs_root_posts():
-    docs_root = "docs"
-    posts_dir = os.path.join(docs_root, "posts")
+      - name: 📦 Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    os.makedirs(posts_dir, exist_ok=True)
+      - name: 🔐 Validate Secrets
+        run: |
+          if [ -z "$APIFY_TOKEN" ]; then
+            echo "❌ APIFY_TOKEN is missing!"
+            exit 1
+          else
+            echo "✅ APIFY_TOKEN found."
+          fi
 
-    for filename in os.listdir(docs_root):
-        if filename.startswith("post-") and filename.endswith(".html"):
-            file_path = os.path.join(docs_root, filename)
-            print(f"🧹 Removing misplaced file: {file_path}")
-            os.remove(file_path)
+          if [ -z "$APIFY_TASK_ID" ]; then
+            echo "❌ APIFY_TASK_ID is missing!"
+            exit 1
+          else
+            echo "✅ APIFY_TASK_ID found."
+          fi
 
-    print(f"✅ Cleaned up docs root and ensured {posts_dir} exists.")
+          if [ -z "$AMAZON_TAG" ]; then
+            echo "❌ AMAZON_TAG is missing!"
+            exit 1
+          else
+            echo "✅ AMAZON_TAG found."
+          fi
 
-def main():
-    clean_docs_root_posts()
+      - name: 🚀 Run Blog Generator
+        run: python main.py
 
-    # Start Apify actor run and wait for results
-    run_id = start_apify_actor()
-    run_data = wait_for_run_to_finish(run_id)
+      - name: 📤 Upload Generated Blog
+        uses: actions/upload-artifact@v3
+        with:
+          name: blog-site
+          path: docs/
 
-    dataset_id = run_data.get("defaultDatasetId")
-    if not dataset_id:
-        print("⚠️ No dataset ID found in run data, proceeding with fallback products.")
-        fetched_products = {}
-    else:
-        print(f"📥 Fetching results from dataset: {dataset_id}")
-        fetched_products = fetch_results(dataset_id)
-
-    categories = [
-        {
-            "title": "Top Kitchen Picks 2025",
-            "slug": "kitchen",
-            "filename": "post-kitchen.html",
-            "description": "Discover the top trending kitchen gadgets and appliances in 2025. From smart tools to time-saving helpers, upgrade your cooking game today."
-        },
-        {
-            "title": "Top Outdoor Essentials 2025",
-            "slug": "outdoors",
-            "filename": "post-outdoors.html",
-            "description": "Explore must-have outdoor gear for 2025. Whether you’re camping, hiking, or just enjoying nature — these picks have you covered."
-        },
-        {
-            "title": "Top Beauty Products 2025",
-            "slug": "beauty",
-            "filename": "post-beauty.html",
-            "description": "Uncover the most loved beauty products in 2025. From skincare to cosmetics — enhance your self-care routine with trending picks."
-        },
-        {
-            "title": "Top Tech Gadgets 2025",
-            "slug": "tech",
-            "filename": "post-tech.html",
-            "description": "Discover the coolest tech gadgets and accessories trending in 2025."
-        },
-        {
-            "title": "Top Health & Wellness 2025",
-            "slug": "health",
-            "filename": "post-health.html",
-            "description": "Explore popular health and wellness products that will improve your lifestyle."
-        },
-        {
-            "title": "Top Home Decor Picks 2025",
-            "slug": "home-decor",
-            "filename": "post-home-decor.html",
-            "description": "Find the latest home decor trends and stylish essentials for 2025."
-        }
-    ]
-
-    products_map = {}
-    # If fetched_products from Apify is a list of products with category info:
-    # you may need to map it by slug. Adjust below as per your actual data format.
-    if fetched_products:
-        for category in categories:
-            slug = category["slug"]
-            products_for_slug = [p for p in fetched_products if p.get("category") == slug]
-            if products_for_slug:
-                products_map[slug] = products_for_slug
-            else:
-                print(f"⚠️ No products fetched for {slug}, using fallback.")
-                products_map[slug] = get_fallback_products(slug)
-    else:
-        # Fallback entirely
-        for category in categories:
-            slug = category["slug"]
-            products_map[slug] = get_fallback_products(slug)
-
-    os.makedirs("docs/posts", exist_ok=True)
-    os.makedirs("posts", exist_ok=True)
-
-    for category in categories:
-        title = category["title"]
-        slug = category["slug"]
-        description = category["description"]
-        products = products_map.get(slug, [])
-
-        if not products:
-            print(f"⚠️ No products available for {slug}, skipping blog generation.")
-            continue
-
-        print(f"✍️ Generating blog for: {title}")
-
-        markdown = generate_markdown(products, title)
-        html = generate_html(
-            products,
-            category_title=title,
-            template_path=f"templates/post-{slug}-template.html",
-            category_description=description
-        )
-
-        save_blog_files(
-            category_title=title,
-            markdown=markdown,
-            html=html,
-            html_filename=f"post-{slug}.html"
-        )
-
-        print(f"✅ Blog generated for: {title}")
-
-    generate_index_html(
-        categories,
-        template_path="templates/index-template.html",
-        output_path="docs/index.html"
-    )
-
-    if os.path.exists("styles.css"):
-        with open("styles.css", "r", encoding="utf-8") as src, open("docs/styles.css", "w", encoding="utf-8") as dst:
-            dst.write(src.read())
-        print("🎨 styles.css copied to docs/")
-
-    print("🎉 All done! Homepage and blog posts generated in /docs/ for GitHub Pages.")
-
-if __name__ == "__main__":
-    main()
+      - name: 🚀 Commit & Push Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "Auto Bot"
+          git config --global user.email "autobot@example.com"
+          git add .
+          git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
+          git pull origin main --rebase || echo "No pull needed"
+          git push origin main
