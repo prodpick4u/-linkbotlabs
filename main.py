@@ -14,7 +14,7 @@ if os.path.exists(".env"):
 
 # === Environment variables ===
 # In GitHub Actions, these should be injected via env: section
-APIFY_API_KEY = os.getenv("APIFY_API_KEY")
+APIFY_TOKEN = os.getenv("APIFY_TOKEN")
 APIFY_ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "V8SFJw3gKgULelpok")
 
 SEARCH_QUERIES = [
@@ -28,10 +28,10 @@ SEARCH_QUERIES = [
 
 def validate_apify_token():
     """Sanity-check that the Apify token works before running anything."""
-    if not APIFY_API_KEY:
-        print("❌ ERROR: APIFY_API_KEY is missing. Please set it in GitHub Actions secrets or your .env file.")
+    if not APIFY_TOKEN:
+        print("❌ ERROR: APIFY_TOKEN is missing. Please set it in GitHub Actions secrets or your .env file.")
         return False
-    response = requests.get(f"https://api.apify.com/v2/actor-runs?token={APIFY_API_KEY}")
+    response = requests.get(f"https://api.apify.com/v2/actor-runs?token={APIFY_TOKEN}")
     if response.status_code == 200:
         print("✅ Apify token is valid.")
         return True
@@ -40,7 +40,7 @@ def validate_apify_token():
 
 def run_apify_google_search_scraper():
     """Triggers Apify Google Search Scraper and saves results locally."""
-    url = f"https://api.apify.com/v2/acts/epctex~google-search-scraper/run-sync-get-dataset-items?token={APIFY_API_KEY}"
+    url = f"https://api.apify.com/v2/acts/epctex~google-search-scraper/run-sync-get-dataset-items?token={APIFY_TOKEN}"
     payload = {
         "queries": SEARCH_QUERIES,
         "resultsPerPage": 1,
