@@ -5,9 +5,15 @@ from fetch_best_sellers import fetch_best_sellers
 from blog_generator import generate_markdown, save_blog_files, generate_html
 from index_generator import generate_index_html
 from fallback_products import get_fallback_products
+from dotenv import load_dotenv
 
-APIFY_API_KEY = "apify_api_86VfCoAQPrPyfZOrdqB5c2Ww6vYaQx0RqN8L"
-APIFY_ACTOR_ID = "V8SFJw3gKgULelpok"  # Google Search Scraper
+# === Load environment variables ===
+load_dotenv()  # Loads from .env if running locally
+
+# === Environment variables ===
+APIFY_API_KEY = os.getenv("APIFY_API_KEY")
+APIFY_ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "V8SFJw3gKgULelpok")  # Default actor
+
 SEARCH_QUERIES = [
     "top kitchen gadgets 2025",
     "best outdoor gear 2025",
@@ -17,7 +23,20 @@ SEARCH_QUERIES = [
     "latest home decor trends 2025"
 ]
 
+def validate_apify_token():
+    """Sanity-check that the Apify token works before running anything."""
+    if not APIFY_API_KEY:
+        print("❌ APIFY_API_KEY is missing in environment.")
+        return False
+    response = requests.get(f"https://api.apify.com/v2/actor-runs?token={APIFY_API_KEY}")
+    if response.status_code == 200:
+        print("✅ Apify token is valid.")
+        return True
+    print(f"❌ Invalid Apify token ({response.status_code}): {response.text}")
+    return False
+
 def run_apify_google_search_scraper():
+    """Triggers Apify Google Search Scraper and saves results locally."""
     url = f"https://api.apify.com/v2/acts/epctex~google-search-scraper/run-sync-get-dataset-items?token={APIFY_API_KEY}"
     payload = {
         "queries": SEARCH_QUERIES,
@@ -70,13 +89,17 @@ def load_apify_keywords(filename="apify_results.json"):
     return keyword_map
 
 if __name__ == "__main__":
+    # 0. Validate Apify token first
+    if not validate_apify_token():
+        exit(1)
+
     # 1. Run Apify Google Search Scraper
     run_apify_google_search_scraper()
 
     # 2. Clean old blog posts
     clean_docs_root_posts()
 
-    # 3. Load categories
+    # 3. Category list
     categories = [
         {"title": "Top Kitchen Picks 2025", "slug": "kitchen", "filename": "post-kitchen.html", "description": "Discover the top trending kitchen gadgets and appliances in 2025."},
         {"title": "Top Outdoor Essentials 2025", "slug": "outdoors", "filename": "post-outdoors.html", "description": "Explore must-have outdoor gear for 2025."},
@@ -86,10 +109,10 @@ if __name__ == "__main__":
         {"title": "Top Home Decor Picks 2025", "slug": "home-decor", "filename": "post-home-decor.html", "description": "Find the latest home decor trends and stylish essentials for 2025."}
     ]
 
-    # 4. Load keyword map from Apify
+    # 4. Load Apify keyword map
     keyword_map = load_apify_keywords()
 
-    # 5. Fetch products per category
+    # 5. Fetch products
     products_map = {}
     for category in categories:
         slug = category["slug"]
@@ -127,7 +150,7 @@ if __name__ == "__main__":
         )
         print(f"✅ Blog generated for: {title}")
 
-    # 7. Generate homepage
+    # 7. Generate index.html
     generate_index_html(
         categories,
         template_path="templates/index-template.html",
