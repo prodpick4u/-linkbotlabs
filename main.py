@@ -8,10 +8,12 @@ from fallback_products import get_fallback_products
 from dotenv import load_dotenv
 
 # === Load environment variables (local .env for development) ===
-load_dotenv()
+if os.path.exists(".env"):
+    load_dotenv()
+    print("🔧 Loaded environment from .env")
 
 # === Environment variables ===
-# In GitHub Actions, APIFY_API_KEY should be injected as: env: APIFY_API_KEY: ${{ secrets.APIFY_API_KEY }}
+# In GitHub Actions, these should be injected via env: section
 APIFY_API_KEY = os.getenv("APIFY_API_KEY")
 APIFY_ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "V8SFJw3gKgULelpok")
 
@@ -90,6 +92,8 @@ def load_apify_keywords(filename="apify_results.json"):
     return keyword_map
 
 if __name__ == "__main__":
+    print("🟢 Starting blog generator pipeline...")
+
     # 0. Validate Apify token first
     if not validate_apify_token():
         exit(1)
