@@ -1,10 +1,13 @@
 import os
 import time
 import requests
+import json
 
+# Load API credentials from environment
 APIFY_TOKEN = os.getenv("APIFY_TOKEN")
-ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "jm4192gDoX7CHY7IB")
+ACTOR_ID = os.getenv("APIFY_ACTOR_ID", "jm4192gDoX7CHY7IB")  # Replace with your actor ID or keep as default
 
+# Define your input for the actor
 input_payload = {
     "csvFriendlyOutput": False,
     "customMapFunction": "(object) => { return {...object} }",
@@ -41,10 +44,11 @@ def run_apify_actor(input_payload):
     }
 
     print("🚀 Triggering Apify actor...")
-    response = requests.post(start_url, headers=headers, json={"input": input_payload})
+    response = requests.post(start_url, headers=headers, json=input_payload)  # ✅ Fixed line
     response.raise_for_status()
     run_id = response.json()["data"]["id"]
 
+    # Poll until actor run is finished
     status_url = f"https://api.apify.com/v2/actor-runs/{run_id}"
     while True:
         status_response = requests.get(status_url, headers=headers)
@@ -58,6 +62,7 @@ def run_apify_actor(input_payload):
     if status != "SUCCEEDED":
         raise Exception(f"Apify run failed with status: {status}")
 
+    # Fetch output dataset
     dataset_id = status_response.json()["data"]["defaultDatasetId"]
     dataset_url = f"https://api.apify.com/v2/datasets/{dataset_id}/items?format=json"
     print(f"📦 Fetching results from dataset {dataset_id}...")
@@ -69,9 +74,7 @@ def run_apify_actor(input_payload):
 def main():
     try:
         results = run_apify_actor(input_payload)
-        # Save results to JSON file for main.py or other scripts to use
         with open("apify_results.json", "w", encoding="utf-8") as f:
-            import json
             json.dump(results, f, ensure_ascii=False, indent=2)
         print("✅ Apify results saved to apify_results.json")
     except Exception as e:
