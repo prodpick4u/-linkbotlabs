@@ -3,16 +3,11 @@ name: 🛠️ Generate Blog with Apify
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'  # Runs daily at 2:00 AM UTC
+    - cron: '0 2 * * *'  # Daily at 2:00 AM UTC
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    env:
-      APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
-      APIFY_TASK_ID: ${{ secrets.APIFY_TASK_ID }}
-      AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
 
     steps:
       - name: 📥 Checkout Repository
@@ -30,28 +25,24 @@ jobs:
 
       - name: 🔐 Validate Secrets
         run: |
-          if [ -z "$APIFY_TOKEN" ]; then
+          if [ -z "${{ secrets.APIFY_TOKEN }}" ]; then
             echo "❌ APIFY_TOKEN is missing!"
             exit 1
-          else
-            echo "✅ APIFY_TOKEN found."
           fi
-
-          if [ -z "$APIFY_TASK_ID" ]; then
+          if [ -z "${{ secrets.APIFY_TASK_ID }}" ]; then
             echo "❌ APIFY_TASK_ID is missing!"
             exit 1
-          else
-            echo "✅ APIFY_TASK_ID found."
           fi
-
-          if [ -z "$AMAZON_TAG" ]; then
+          if [ -z "${{ secrets.AMAZON_TAG }}" ]; then
             echo "❌ AMAZON_TAG is missing!"
             exit 1
-          else
-            echo "✅ AMAZON_TAG found."
           fi
 
       - name: 🚀 Run Blog Generator
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_TASK_ID: ${{ secrets.APIFY_TASK_ID }}
+          AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
         run: python main.py
 
       - name: 📤 Upload Generated Blog
