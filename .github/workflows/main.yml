@@ -8,8 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      APIFY_TOKEN: u8Y6n1FpF9eE3iJkwF7rxZYV1aVWXB4sKIrv
+
+    env:  # global scope (optional but helpful for other tools)
+      APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
       APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
       AFFILIATE_TAG: ${{ secrets.AFFILIATE_TAG }}
 
@@ -42,12 +43,22 @@ jobs:
             exit 1
           fi
 
-      # Uncomment this step to debug environment variables if needed
+      # Optional: View envs (do not print secret values)
       # - name: 🐞 Debug environment variables
       #   run: env
 
+      - name: 🚀 Run Apify Runner
+        run: python apify_runner.py
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+
       - name: 🚀 Run Blog Generator
         run: python main.py
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          AFFILIATE_TAG: ${{ secrets.AFFILIATE_TAG }}
 
       - name: 📤 Upload Generated Blog
         uses: actions/upload-artifact@v3
