@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import requests
 from fetch_best_sellers import fetch_best_sellers
 from blog_generator import generate_markdown, save_blog_files, generate_html
@@ -38,24 +39,58 @@ def validate_apify_token():
     return False
 
 def run_apify_google_search_scraper():
-    """Triggers Apify Google Search Scraper actor and saves results."""
-    url = f"https://api.apify.com/v2/acts/{APIFY_ACTOR_ID}/run-sync-get-dataset-items?token={APIFY_TOKEN}"
+    """Triggers Apify Google Search Scraper actor with proxy and saves results."""
+    print("🚀 Triggering Apify actor...")
+
+    run_url = f"https://api.apify.com/v2/acts/{APIFY_ACTOR_ID}/runs?token={APIFY_TOKEN}"
     payload = {
         "queries": SEARCH_QUERIES,
         "resultsPerPage": 1,
         "numPages": 1,
         "csvFriendlyOutput": False,
-        "customMapFunction": "(object) => { return {...object} }"
+        "customMapFunction": "(object) => { return {...object} }",
+        "proxyConfiguration": {
+            "useApifyProxy": True
+        }
     }
     headers = {"Content-Type": "application/json"}
-    response = requests.post(url, json=payload, headers=headers)
-    if response.status_code == 200:
-        with open("apify_results.json", "w", encoding="utf-8") as f:
-            json.dump(response.json(), f, ensure_ascii=False, indent=2)
-        print("🚀 Apify results saved to apify_results.json.")
-    else:
+    response = requests.post(run_url, json=payload, headers=headers)
+
+    if response.status_code != 201:
         print(f"❌ Apify request failed: {response.status_code}")
         print(response.text)
+        return
+
+    run_data = response.json()
+    run_id = run_data.get("id")
+    print(f"⏳ Waiting... Actor status: RUNNING")
+
+    # Poll for actor run status
+    status_url = f"https://api.apify.com/v2/actor-runs/{run_id}?token={APIFY_TOKEN}"
+    while True:
+        status_response = requests.get(status_url)
+        if status_response.status_code != 200:
+            print("❌ Failed to get run status.")
+            return
+        status = status_response.json().get("status")
+        if status in ["SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"]:
+            break
+        print(f"⏳ Waiting... Actor status: {status}")
+        time.sleep(5)
+
+    if status != "SUCCEEDED":
+        print(f"❌ Apify actor did not complete successfully: {status}")
+        return
+
+    # Fetch dataset results
+    dataset_url = f"https://api.apify.com/v2/actor-runs/{run_id}/dataset/items?token={APIFY_TOKEN}&clean=true"
+    dataset_response = requests.get(dataset_url)
+    if dataset_response.status_code == 200:
+        with open("apify_results.json", "w", encoding="utf-8") as f:
+            json.dump(dataset_response.json(), f, ensure_ascii=False, indent=2)
+        print("✅ Apify results saved to apify_results.json")
+    else:
+        print(f"❌ Failed to fetch dataset: {dataset_response.status_code}")
 
 def clean_docs_root_posts():
     docs_root = "docs"
