@@ -43,7 +43,7 @@ def run_apify_google_search_scraper():
     run_url = f"https://api.apify.com/v2/acts/{APIFY_ACTOR_ID}/runs?token={APIFY_TOKEN}"
     payload = {
         "queries": SEARCH_QUERIES,
-        "resultsPerPage": "1",  # ✅ Must be a string!
+        "resultsPerPage": "10",  # <-- Must be string and one of allowed values (10,20,...)
         "numPages": 1,
         "csvFriendlyOutput": False,
         "customMapFunction": "(object) => { return {...object} }",
