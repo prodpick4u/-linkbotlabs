@@ -50,11 +50,10 @@ def run_apify_google_search_scraper():
         "csvFriendlyOutput": False,
         "customMapFunction": "(object) => { return {...object} }",
         "proxy": {
-    "useApifyProxy": True
-}
-        
+            "useApifyProxy": True
         }
     }
+
     headers = {"Content-Type": "application/json"}
     response = requests.post(run_url, json=payload, headers=headers)
 
