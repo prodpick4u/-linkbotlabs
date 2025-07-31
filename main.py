@@ -2,13 +2,13 @@ import os
 import json
 import time
 import requests
+from dotenv import load_dotenv
 from fetch_best_sellers import fetch_best_sellers
 from blog_generator import generate_markdown, save_blog_files, generate_html
 from index_generator import generate_index_html
 from fallback_products import get_fallback_products
-from dotenv import load_dotenv
 
-# === Load environment variables (local .env for development) ===
+# === Load environment variables ===
 if os.path.exists(".env"):
     load_dotenv()
     print("🔧 Loaded environment from .env")
@@ -27,9 +27,8 @@ SEARCH_QUERIES = [
 ]
 
 def validate_apify_token():
-    """Sanity-check that the Apify token works before running anything."""
     if not APIFY_TOKEN:
-        print("❌ ERROR: APIFY_TOKEN is missing. Please set it in GitHub Actions secrets or your .env file.")
+        print("❌ ERROR: APIFY_TOKEN is missing. Please set it in your .env file or GitHub secrets.")
         return False
     response = requests.get(f"https://api.apify.com/v2/actor-runs?token={APIFY_TOKEN}")
     if response.status_code == 200:
@@ -39,13 +38,12 @@ def validate_apify_token():
     return False
 
 def run_apify_google_search_scraper():
-    """Triggers Apify Google Search Scraper actor with proxy and saves results."""
     print("🚀 Triggering Apify actor...")
 
     run_url = f"https://api.apify.com/v2/acts/{APIFY_ACTOR_ID}/runs?token={APIFY_TOKEN}"
     payload = {
         "queries": SEARCH_QUERIES,
-        "resultsPerPage": "1",  # must be string, not int to avoid 400 error
+        "resultsPerPage": "1",  # ✅ Must be a string!
         "numPages": 1,
         "csvFriendlyOutput": False,
         "customMapFunction": "(object) => { return {...object} }",
@@ -66,7 +64,6 @@ def run_apify_google_search_scraper():
     run_id = run_data.get("id")
     print(f"⏳ Waiting... Actor status: RUNNING")
 
-    # Poll for actor run status
     status_url = f"https://api.apify.com/v2/actor-runs/{run_id}?token={APIFY_TOKEN}"
     while True:
         status_response = requests.get(status_url)
@@ -83,7 +80,6 @@ def run_apify_google_search_scraper():
         print(f"❌ Apify actor did not complete successfully: {status}")
         return
 
-    # Fetch dataset results
     dataset_url = f"https://api.apify.com/v2/actor-runs/{run_id}/dataset/items?token={APIFY_TOKEN}&clean=true"
     dataset_response = requests.get(dataset_url)
     if dataset_response.status_code == 200:
