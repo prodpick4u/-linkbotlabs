@@ -45,7 +45,7 @@ def run_apify_google_search_scraper():
     run_url = f"https://api.apify.com/v2/acts/{APIFY_ACTOR_ID}/runs?token={APIFY_TOKEN}"
     payload = {
         "queries": SEARCH_QUERIES,
-        "resultsPerPage": 1,
+        "resultsPerPage": "1",  # must be string, not int to avoid 400 error
         "numPages": 1,
         "csvFriendlyOutput": False,
         "customMapFunction": "(object) => { return {...object} }",
