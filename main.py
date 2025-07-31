@@ -49,8 +49,10 @@ def run_apify_google_search_scraper():
         "numPages": 1,
         "csvFriendlyOutput": False,
         "customMapFunction": "(object) => { return {...object} }",
-        "proxyConfiguration": {
-            "useApifyProxy": True
+        "proxy": {
+    "useApifyProxy": True
+}
+        
         }
     }
     headers = {"Content-Type": "application/json"}
