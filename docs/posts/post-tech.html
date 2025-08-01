@@ -3,47 +3,154 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Tech Gadgets 2025</title>
-  <link rel="stylesheet" href="../styles.css" />
+  <title>Top Tech Picks 2025</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #eee;
+      text-shadow: 0 0 8px rgba(255 255 255 / 0.5);
+    }
+
+    .description {
+      text-align: center;
+      font-style: italic;
+      color: #ccc;
+      margin-bottom: 2rem;
+    }
+
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .product {
+      background: rgba(255 255 255 / 0.1);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255 255 255 / 0.15);
+      padding: 1rem 1.5rem;
+      box-shadow: 0 8px 32px rgba(255 255 255 / 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    .product:hover {
+      background: rgba(255 255 255 / 0.2);
+      box-shadow: 0 12px 48px rgba(255 255 255 / 0.1);
+      cursor: pointer;
+    }
+
+    .product img {
+      width: 100%;
+      max-width: 200px;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 10px rgba(255 255 255 / 0.2);
+      object-fit: contain;
+    }
+
+    .product-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 0 6px rgba(255 255 255 / 0.7);
+    }
+
+    .product-price {
+      color: #ffb347;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+      text-shadow: 0 0 5px rgba(255 179 71 / 0.8);
+    }
+
+    .product-desc {
+      color: #ddd;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .buy-btn {
+      background: #ffb347;
+      color: #000;
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(255 179 71 / 0.6);
+      transition: background 0.3s ease;
+    }
+
+    .buy-btn:hover {
+      background: #ffaa00;
+      box-shadow: 0 6px 16px rgba(255 170 0 / 0.8);
+      color: #fff;
+    }
+
+    .video-container {
+      margin-top: 1rem;
+      width: 100%;
+      max-width: 280px;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(255 255 255 / 0.2);
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
 </head>
 <body>
-  <div class="glass-container">
-    <h1>Top Tech Gadgets 2025</h1>
-    <p class="description">Discover the coolest tech gadgets and accessories trending in 2025.</p>
+  <h1>Top Tech Picks 2025</h1>
+  <p class="description">Explore the best tech gadgets and accessories trending in 2025.</p>
 
-    <div class="product-list">
-      
-      
-        
-        
-          
-        
-        <div class="product-card">
-          <h2><a href="https://www.amazon.com/dp/B07ZPC9QD4?tag=mychanneld-20&tag=mychanneld-20" target="_blank" rel="nofollow noopener noreferrer">Apple AirPods Pro</a></h2>
-          <p class="price">$249.00</p>
-          <p class="desc">Active noise cancellation wireless earbuds with transparency mode.</p>
-        </div>
-      
-        
-        
-          
-        
-        <div class="product-card">
-          <h2><a href="https://www.amazon.com/dp/B0874XNQ3Y?tag=mychanneld-20&tag=mychanneld-20" target="_blank" rel="nofollow noopener noreferrer">Samsung T7 Portable SSD 1TB</a></h2>
-          <p class="price">$109.99</p>
-          <p class="desc">Fast external SSD with USB 3.2 Gen 2 for high-speed data transfer.</p>
-        </div>
-      
-        
-        
-          
-        
-        <div class="product-card">
-          <h2><a href="https://www.amazon.com/dp/B07S395RWD?tag=mychanneld-20&tag=mychanneld-20" target="_blank" rel="nofollow noopener noreferrer">Logitech MX Master 3 Mouse</a></h2>
-          <p class="price">$99.99</p>
-          <p class="desc">Ergonomic wireless mouse with customizable buttons and long battery life.</p>
-        </div>
-      
+  <div class="product-list">
+    <div class="product">
+      <img src="https://m.media-amazon.com/images/I/61j17F3bDGL._AC_SL1500_.jpg" alt="Anker PowerCore 10000" />
+      <div class="product-title">Anker PowerCore 10000</div>
+      <div class="product-price">$25.99</div>
+      <div class="product-desc">Compact portable charger with high-speed charging technology.</div>
+      <a class="buy-btn" href="https://www.amazon.com/dp/B07211W6XQ?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/1xZKLpOaNBE" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="product">
+      <img src="https://m.media-amazon.com/images/I/71kDA4U8U+L._AC_SL1500_.jpg" alt="Logitech MX Master 3S" />
+      <div class="product-title">Logitech MX Master 3S</div>
+      <div class="product-price">$99.99</div>
+      <div class="product-desc">Ergonomic wireless mouse with ultra-fast scrolling and USB-C.</div>
+      <a class="buy-btn" href="https://www.amazon.com/dp/B09HM94VDS?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/gwGEB0VwEMc" allowfullscreen loading="lazy"></iframe>
+      </div>
     </div>
   </div>
 </body>
