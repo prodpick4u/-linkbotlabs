@@ -1,7 +1,5 @@
-# fetch_best_sellers.py
-
 from dotenv import load_dotenv
-load_dotenv()  # Load environment variables ASAP
+load_dotenv()
 
 import os
 import requests
@@ -14,7 +12,6 @@ APIFY_TOKEN = os.getenv("APIFY_TOKEN")
 
 print("🔍 fetch_best_sellers APIFY_TOKEN is set:", bool(APIFY_TOKEN))
 
-
 def add_affiliate_tag(url):
     """Append or update the affiliate tag in the Amazon URL."""
     if "amazon." not in url:
@@ -25,6 +22,11 @@ def add_affiliate_tag(url):
     new_query = urlencode(query, doseq=True)
     return urlunparse(parsed._replace(query=new_query))
 
+def is_valid_amazon_product_url(url):
+    """Check if URL is a valid Amazon product URL (contains /dp/)."""
+    if not url or "amazon." not in url:
+        return False
+    return "/dp/" in url
 
 def fetch_best_sellers(category="kitchen", limit=3, apify_token=None):
     token = apify_token or APIFY_TOKEN
@@ -84,17 +86,30 @@ def fetch_best_sellers(category="kitchen", limit=3, apify_token=None):
     items = dataset_resp.json()
     products = []
 
-    for item in items[:limit]:
+    for item in items:
         title = item.get("title")
-        url = add_affiliate_tag(item.get("url", ""))
+        url = item.get("url", "")
         snippet = item.get("snippet", "")
-        if title and url:
+        if title and is_valid_amazon_product_url(url):
+            url_with_tag = add_affiliate_tag(url)
             products.append({
                 "title": title.strip(),
-                "link": url,
+                "link": url_with_tag,
                 "price": "N/A",
                 "image": "",
                 "description": snippet
             })
+        if len(products) >= limit:
+            break
+
+    # Fallback if fewer than limit products
+    if len(products) < limit:
+        print(f"⚠️ Only found {len(products)} valid products, adding fallback...")
+        from fallback_products import get_fallback_products
+        fallback = get_fallback_products(category)
+        for fb_product in fallback:
+            if len(products) >= limit:
+                break
+            products.append(fb_product)
 
     return products
