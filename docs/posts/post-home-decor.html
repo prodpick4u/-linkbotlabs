@@ -3,157 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Home & Decor Picks 2025</title>
+  <title>Stylish Home Decor on Amazon</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
+
+    :root {
+      --color-bg: #fafafa;
+      --color-card-bg: #ffffff;
+      --color-primary: #2563eb;    /* Blue */
+      --color-primary-hover: #1e40af;
+      --color-text: #1f2937;       /* Dark slate */
+      --color-text-muted: #6b7280; /* Gray */
+      --color-price: #10b981;      /* Emerald green */
+      --font-base: 'Inter', system-ui, sans-serif;
+      --font-heading: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
-      background: #000;
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      font-family: var(--font-base);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
       max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem 2rem;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      margin: 0 auto;
     }
 
     h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: #eee;
-      text-shadow: 0 0 8px rgba(255 255 255 / 0.5);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 0.25rem;
+      color: var(--color-text);
+      letter-spacing: -0.025em;
     }
 
     .description {
-      text-align: center;
-      font-style: italic;
-      color: #ccc;
+      color: var(--color-text-muted);
+      font-size: 1.1rem;
+      margin-top: 0;
       margin-bottom: 2rem;
     }
 
-    .product-list {
+    .products-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
+      gap: 1.5rem;
     }
 
-    .product {
-      background: rgba(255 255 255 / 0.1);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255 255 255 / 0.15);
-      padding: 1rem 1.5rem;
-      box-shadow: 0 8px 32px rgba(255 255 255 / 0.05);
+    .product-card {
+      background-color: var(--color-card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      transition: background 0.3s ease;
+      justify-content: space-between;
+      transition: box-shadow 0.3s ease;
     }
 
-    .product:hover {
-      background: rgba(255 255 255 / 0.2);
-      box-shadow: 0 12px 48px rgba(255 255 255 / 0.1);
-      cursor: pointer;
+    .product-card:hover {
+      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
     }
 
-    .product img {
-      width: 100%;
-      max-width: 200px;
-      height: auto;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 10px rgba(255 255 255 / 0.2);
-      object-fit: contain;
-    }
-
-    .product-title {
+    .product-link {
+      font-family: var(--font-heading);
       font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      color: #fff;
-      text-align: center;
-      text-shadow: 0 0 6px rgba(255 255 255 / 0.7);
-    }
-
-    .product-price {
-      color: #ffb347;
-      font-weight: 700;
-      margin-bottom: 0.7rem;
-      text-shadow: 0 0 5px rgba(255 179 71 / 0.8);
-    }
-
-    .product-desc {
-      color: #ddd;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      line-height: 1.4;
-    }
-
-    .buy-btn {
-      background: #ffb347;
-      color: #000;
-      padding: 0.5rem 1.2rem;
-      border-radius: 30px;
-      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--color-primary);
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(255 179 71 / 0.6);
-      transition: background 0.3s ease;
+      margin-bottom: 0.6rem;
+      transition: color 0.25s ease;
     }
 
-    .buy-btn:hover {
-      background: #ffaa00;
-      box-shadow: 0 6px 16px rgba(255 170 0 / 0.8);
-      color: #fff;
+    .product-link:hover {
+      color: var(--color-primary-hover);
+      text-decoration: underline;
+    }
+
+    .price {
+      font-weight: 700;
+      color: var(--color-price);
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .description-text {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      flex-grow: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .products-list {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Top Home & Decor Picks 2025</h1>
-  <p class="description">Elevate your space with these beautiful and functional home decor essentials.</p>
+  <div class="container">
+    <h1>Stylish Home Decor on Amazon</h1>
+    <p class="description">Add a touch of charm to your home with these decorative finds.</p>
 
-  <div class="product-list">
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/71NNBqMQDIL._AC_SL1500_.jpg" alt="Greenco 5-Tier Wall Mount Corner Shelves" />
-      <div class="product-title">Greenco Corner Shelves</div>
-      <div class="product-price">$26.99</div>
-      <div class="product-desc">Modern floating corner shelves to organize and display your favorite pieces stylishly.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B017GSYQNC?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/71b2L+Y+PjL._AC_SL1500_.jpg" alt="Yankee Candle Large Jar Candle" />
-      <div class="product-title">Yankee Candle – Balsam & Cedar</div>
-      <div class="product-price">$17.87</div>
-      <div class="product-desc">Signature scent in a classic jar – perfect for cozy evenings or gifting.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B000JDGC78?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/71zRxT4f+jL._AC_SL1500_.jpg" alt="La Jolie Muse Ceramic Flower Vase" />
-      <div class="product-title">La Jolie Muse Ceramic Vase</div>
-      <div class="product-price">$27.99</div>
-      <div class="product-desc">A minimalist decorative vase for dried flowers, shelf display, or centerpiece art.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B08JQQC1MC?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/81x75UkGi1L._AC_SL1500_.jpg" alt="Rivet Modern Tripod Floor Lamp" />
-      <div class="product-title">Rivet Tripod Floor Lamp</div>
-      <div class="product-price">$82.76</div>
-      <div class="product-desc">Stylish tripod lamp with fabric shade adds modern flair and warm light to any room.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B072J93CW1?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/71g5+cTxGZL._AC_SL1500_.jpg" alt="nuLOOM Moroccan Blythe Area Rug" />
-      <div class="product-title">nuLOOM Moroccan Area Rug</div>
-      <div class="product-price">$79.00</div>
-      <div class="product-desc">Stylish and soft, this geometric area rug complements modern living rooms and bedrooms.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B00PWX7KY8?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
+    <ul class="products-list">
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07L6N1YB8?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Philips Hue White and Color Ambiance Starter Kit</a>
+        <div class="price">$179.99</div>
+        <p class="description-text">Smart LED light bulbs with millions of colors, compatible with Alexa and Google Assistant.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B01N7MRO7V?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Umbra Trigg Geometric Wall Planter</a>
+        <div class="price">$34.99</div>
+        <p class="description-text">Modern geometric hanging planter for succulents and small plants.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B074D3QQNJ?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Safavieh Monaco Collection Area Rug</a>
+        <div class="price">$149.99</div>
+        <p class="description-text">Soft and durable area rug with classic pattern and color.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B08L8QGVNZ?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">West Elm Mid-Century Coffee Table</a>
+        <div class="price">$399.00</div>
+        <p class="description-text">Stylish and sturdy coffee table with walnut veneer.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B008N02PTI?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">IKEA FADO Table Lamp</a>
+        <div class="price">$29.99</div>
+        <p class="description-text">Round glass lamp with soft ambient lighting.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00HLV1TGI?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Yankee Candle Large Jar</a>
+        <div class="price">$24.99</div>
+        <p class="description-text">Long-lasting scented candle for a cozy home atmosphere.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07VJ5PHSR?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Slipcovered Armchair</a>
+        <div class="price">$249.00</div>
+        <p class="description-text">Comfortable, easy-to-clean slipcover armchair.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B073TT2Z4P?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">MALM 6-Drawer Dresser</a>
+        <div class="price">$229.99</div>
+        <p class="description-text">Simple, functional dresser with ample storage.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07X5JYZ13?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Keenway Floating Shelves</a>
+        <div class="price">$39.99</div>
+        <p class="description-text">Set of two wooden shelves with modern design.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07NQTPGYL?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Etekcity LED String Lights</a>
+        <div class="price">$19.99</div>
+        <p class="description-text">Battery operated warm white fairy lights for decoration.</p>
+      </li>
+      
+    </ul>
   </div>
 </body>
 </html>

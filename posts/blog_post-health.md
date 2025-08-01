@@ -1,4 +1,4 @@
-# Top Health & Wellness 2025
+# Health & Wellness Picks
 
 ## [Fitbit Charge 5](https://www.amazon.com/dp/B09BXQG2KT?tag=mychanneld-20)
 - **Price:** $149.95

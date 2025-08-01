@@ -1,4 +1,4 @@
-# Top Outdoor Essentials 2025
+# Outdoor Gear Must-Haves
 
 ## [Coleman Sundome Tent](https://www.amazon.com/dp/B004J2GUOU?tag=mychanneld-20)
 - **Price:** $79.99

@@ -1,4 +1,4 @@
-# Top Kitchen Picks 2025
+# Top Kitchen Gadgets on Amazon
 
 ## [Instant Pot Duo 7-in-1](https://www.amazon.com/dp/B08PQ2KWHS?tag=mychanneld-20)
 - **Price:** $99.99

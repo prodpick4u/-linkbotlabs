@@ -1,4 +1,4 @@
-# Top Home Decor Picks 2025
+# Stylish Home Decor on Amazon
 
 ## [Philips Hue White and Color Ambiance Starter Kit](https://www.amazon.com/dp/B07L6N1YB8?tag=mychanneld-20)
 - **Price:** $179.99

@@ -1,4 +1,4 @@
-# Top Beauty Products 2025
+# Amazon Beauty Best Sellers
 
 ## [CeraVe Hydrating Cleanser](https://www.amazon.com/dp/B01MSSDEPK?tag=mychanneld-20)
 - **Price:** $14.99

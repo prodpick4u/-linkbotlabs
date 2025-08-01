@@ -3,149 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Health Picks 2025</title>
+  <title>Health & Wellness Picks</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
+
+    :root {
+      --color-bg: #fafafa;
+      --color-card-bg: #ffffff;
+      --color-primary: #2563eb;    /* Blue */
+      --color-primary-hover: #1e40af;
+      --color-text: #1f2937;       /* Dark slate */
+      --color-text-muted: #6b7280; /* Gray */
+      --color-price: #10b981;      /* Emerald green */
+      --font-base: 'Inter', system-ui, sans-serif;
+      --font-heading: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
-      background: #000;
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      font-family: var(--font-base);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
       max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem 2rem;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      margin: 0 auto;
     }
 
     h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: #eee;
-      text-shadow: 0 0 8px rgba(255 255 255 / 0.5);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 0.25rem;
+      color: var(--color-text);
+      letter-spacing: -0.025em;
     }
 
     .description {
-      text-align: center;
-      font-style: italic;
-      color: #ccc;
+      color: var(--color-text-muted);
+      font-size: 1.1rem;
+      margin-top: 0;
       margin-bottom: 2rem;
     }
 
-    .product-list {
+    .products-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
+      gap: 1.5rem;
     }
 
-    .product {
-      background: rgba(255 255 255 / 0.1);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255 255 255 / 0.15);
-      padding: 1rem 1.5rem;
-      box-shadow: 0 8px 32px rgba(255 255 255 / 0.05);
+    .product-card {
+      background-color: var(--color-card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      transition: background 0.3s ease;
+      justify-content: space-between;
+      transition: box-shadow 0.3s ease;
     }
 
-    .product:hover {
-      background: rgba(255 255 255 / 0.2);
-      box-shadow: 0 12px 48px rgba(255 255 255 / 0.1);
-      cursor: pointer;
+    .product-card:hover {
+      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
     }
 
-    .product img {
-      width: 100%;
-      max-width: 200px;
-      height: auto;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 10px rgba(255 255 255 / 0.2);
-      object-fit: contain;
-    }
-
-    .product-title {
+    .product-link {
+      font-family: var(--font-heading);
       font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      color: #fff;
-      text-align: center;
-      text-shadow: 0 0 6px rgba(255 255 255 / 0.7);
-    }
-
-    .product-price {
-      color: #ffb347;
-      font-weight: 700;
-      margin-bottom: 0.7rem;
-      text-shadow: 0 0 5px rgba(255 179 71 / 0.8);
-    }
-
-    .product-desc {
-      color: #ddd;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      line-height: 1.4;
-    }
-
-    .buy-btn {
-      background: #ffb347;
-      color: #000;
-      padding: 0.5rem 1.2rem;
-      border-radius: 30px;
-      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--color-primary);
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(255 179 71 / 0.6);
-      transition: background 0.3s ease;
+      margin-bottom: 0.6rem;
+      transition: color 0.25s ease;
     }
 
-    .buy-btn:hover {
-      background: #ffaa00;
-      box-shadow: 0 6px 16px rgba(255 170 0 / 0.8);
-      color: #fff;
+    .product-link:hover {
+      color: var(--color-primary-hover);
+      text-decoration: underline;
     }
 
-    .video-container {
-      margin-top: 1rem;
-      width: 100%;
-      max-width: 280px;
-      aspect-ratio: 16 / 9;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(255 255 255 / 0.2);
+    .price {
+      font-weight: 700;
+      color: var(--color-price);
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
     }
 
-    .video-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+    .description-text {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      flex-grow: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .products-list {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Top Health Picks 2025</h1>
-  <p class="description">Stay healthy with these top-rated wellness and fitness products.</p>
+  <div class="container">
+    <h1>Health & Wellness Picks</h1>
+    <p class="description">Stay healthy and fit with these top-rated wellness products.</p>
 
-  <div class="product-list">
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/71q5sA64jwL._AC_SL1500_.jpg" alt="Fitbit Charge 5" />
-      <div class="product-title">Fitbit Charge 5</div>
-      <div class="product-price">$149.95</div>
-      <div class="product-desc">Advanced fitness and health tracker with stress management and GPS.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B09BXQZN3P?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/61V+yzau2-L._AC_SL1500_.jpg" alt="Theragun Elite" />
-      <div class="product-title">Theragun Elite</div>
-      <div class="product-price">$299.00</div>
-      <div class="product-desc">Percussive therapy device for muscle recovery and pain relief.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B07RQR8H6K?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
+    <ul class="products-list">
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B09BXQG2KT?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Fitbit Charge 5</a>
+        <div class="price">$149.95</div>
+        <p class="description-text">Advanced fitness tracker with heart rate and sleep monitoring.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07WRKXQWJ?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Theragun Mini</a>
+        <div class="price">$199.00</div>
+        <p class="description-text">Compact percussive therapy device for muscle relief and recovery.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07GJ6ZMTT?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Philips Sonicare ProtectiveClean 6100</a>
+        <div class="price">$99.95</div>
+        <p class="description-text">Electric toothbrush with pressure sensor and multiple cleaning modes.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07RWK3V7V?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Omron Platinum Blood Pressure Monitor</a>
+        <div class="price">$69.99</div>
+        <p class="description-text">Clinically accurate home blood pressure monitor.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00LJP3V7U?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Nature Made Vitamin D3</a>
+        <div class="price">$12.99</div>
+        <p class="description-text">Supports bone, teeth, muscle, and immune health.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B000BQO6V4?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Gaiam Yoga Mat</a>
+        <div class="price">$24.98</div>
+        <p class="description-text">Non-slip, thick yoga mat for all fitness levels.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B01CZ0E4T2?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Waterpik Aquarius Water Flosser</a>
+        <div class="price">$79.99</div>
+        <p class="description-text">Dental water jet for effective plaque removal.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00006I5JU?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Dr. Scholl's Orthotic Inserts</a>
+        <div class="price">$29.95</div>
+        <p class="description-text">Comfortable shoe inserts for arch support.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07Q9MJKBV?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Bose Sleepbuds II</a>
+        <div class="price">$249.00</div>
+        <p class="description-text">Noise-masking sleepbuds with soothing sounds.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07D37FKGY?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Pure Enrichment PureGlow Crystal</a>
+        <div class="price">$39.99</div>
+        <p class="description-text">Himalayan salt lamp for calming ambiance and air purification.</p>
+      </li>
+      
+    </ul>
   </div>
 </body>
 </html>

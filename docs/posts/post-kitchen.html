@@ -3,253 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Kitchen Gadgets 2025</title>
+  <title>Top Kitchen Gadgets on Amazon</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
 
-    /* Base styles */
+    :root {
+      --color-bg: #fafafa;
+      --color-card-bg: #ffffff;
+      --color-primary: #2563eb;    /* Blue */
+      --color-primary-hover: #1e40af;
+      --color-text: #1f2937;       /* Dark slate */
+      --color-text-muted: #6b7280; /* Gray */
+      --color-price: #10b981;      /* Emerald green */
+      --font-base: 'Inter', system-ui, sans-serif;
+      --font-heading: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background: #000;
-      color: #eee;
-      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      font-family: var(--font-base);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
       max-width: 900px;
-      margin: 1.5rem auto;
-      padding: 1rem 1.5rem;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      margin: 0 auto;
     }
 
     h1 {
-      text-align: center;
-      margin-bottom: 1rem;
+      font-family: var(--font-heading);
       font-weight: 700;
-      color: #fff;
-      text-shadow: 0 0 8px rgba(255 255 255 / 0.6);
+      font-size: 2.5rem;
+      margin-bottom: 0.25rem;
+      color: var(--color-text);
+      letter-spacing: -0.025em;
     }
 
     .description {
-      text-align: center;
-      font-style: italic;
-      color: #bbb;
+      color: var(--color-text-muted);
+      font-size: 1.1rem;
+      margin-top: 0;
       margin-bottom: 2rem;
     }
 
-    /* Product list grid */
-    .product-list {
+    .products-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
     }
 
-    /* Product card */
-    .product {
-      background: rgba(255 255 255 / 0.1);
-      border-radius: 16px;
-      padding: 1rem 1.5rem;
-      box-shadow: 0 8px 32px rgba(255 255 255 / 0.07);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255 255 255 / 0.15);
+    .product-card {
+      background-color: var(--color-card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-    }
-    .product:hover {
-      background: rgba(255 255 255 / 0.2);
-      box-shadow: 0 12px 48px rgba(255 255 255 / 0.12);
-      cursor: pointer;
+      justify-content: space-between;
+      transition: box-shadow 0.3s ease;
     }
 
-    /* Product image */
-    .product img {
-      max-width: 100%;
-      max-height: 180px;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 12px rgba(255 255 255 / 0.2);
-      object-fit: contain;
+    .product-card:hover {
+      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
     }
 
-    /* Titles and text */
-    .product-title {
+    .product-link {
+      font-family: var(--font-heading);
       font-weight: 600;
       font-size: 1.25rem;
-      margin-bottom: 0.4rem;
-      color: #fff;
-      text-align: center;
-      text-shadow: 0 0 6px rgba(255 255 255 / 0.7);
-    }
-
-    .product-price {
-      color: #f39c12;
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-      text-shadow: 0 0 6px rgba(243 156 18 / 0.8);
-    }
-
-    .product-desc {
-      color: #ddd;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      line-height: 1.4;
-      min-height: 60px;
-    }
-
-    /* Buy button */
-    .buy-btn {
-      background: #f39c12;
-      color: #000;
-      padding: 0.5rem 1.2rem;
-      border-radius: 30px;
-      font-weight: 700;
+      color: var(--color-primary);
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(243 156 18 / 0.6);
-      transition: background 0.3s ease, color 0.3s ease;
-      text-align: center;
-      user-select: none;
-      min-width: 140px;
-    }
-    .buy-btn:hover {
-      background: #d78e10;
-      color: #fff;
-      box-shadow: 0 6px 16px rgba(215 142 16 / 0.8);
+      margin-bottom: 0.6rem;
+      transition: color 0.25s ease;
     }
 
-    /* Video container */
-    .video-container {
-      margin-top: 1rem;
-      width: 100%;
-      max-width: 280px;
-      aspect-ratio: 16 / 9;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(255 255 255 / 0.2);
-    }
-    .video-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+    .product-link:hover {
+      color: var(--color-primary-hover);
+      text-decoration: underline;
     }
 
-    /* Responsive tweaks for smaller devices */
+    .price {
+      font-weight: 700;
+      color: var(--color-price);
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .description-text {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      flex-grow: 1;
+    }
+
+    /* Responsive adjustments */
     @media (max-width: 480px) {
       body {
-        margin: 1rem;
-        padding: 1rem;
+        padding: 1rem 0.5rem;
       }
 
-      .product-title {
-        font-size: 1.1rem;
+      h1 {
+        font-size: 2rem;
       }
 
-      .product-desc {
-        min-height: auto;
-      }
-
-      .buy-btn {
-        min-width: 100%;
+      .products-list {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
-  <h1>Top Kitchen Gadgets 2025</h1>
-  <p class="description">Discover the top trending kitchen gadgets and appliances in 2025. From smart tools to time-saving helpers, upgrade your cooking game today.</p>
+  <div class="container">
+    <h1>Top Kitchen Gadgets on Amazon</h1>
+    <p class="description">Explore the best kitchen tools, appliances, and gadgets trending now.</p>
 
-  <div class="product-list">
-    
-      <div class="product">
-        
-        <div class="product-title">Instant Pot Duo 7-in-1</div>
-        <div class="product-price">$99.99</div>
-        <div class="product-desc">Multifunctional pressure cooker — cook meals faster and easier.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B08PQ2KWHS?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
-      <div class="product">
-        
-        <div class="product-title">Ninja Air Fryer</div>
-        <div class="product-price">$89.00</div>
-        <div class="product-desc">Crispy food with less oil — compact and easy to clean.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B07FDJMC9Q?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
-      <div class="product">
-        
-        <div class="product-title">KitchenAid Artisan Mixer</div>
-        <div class="product-price">$429.95</div>
-        <div class="product-desc">Powerful stand mixer with multiple attachments.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B00005UP2P?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
-      <div class="product">
-        
-        <div class="product-title">Lodge Cast Iron Skillet</div>
-        <div class="product-price">$19.90</div>
-        <div class="product-desc">Pre-seasoned cast iron skillet for even cooking.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B00006JSUA?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
-      <div class="product">
-        
-        <div class="product-title">OXO Good Grips Salad Spinner</div>
-        <div class="product-price">$29.95</div>
-        <div class="product-desc">Dry greens quickly with a soft non-slip knob and brake.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B00004OCKR?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
-      <div class="product">
-        
-        <div class="product-title">Breville Smart Oven Pro</div>
-        <div class="product-price">$279.95</div>
-        <div class="product-desc">Convection countertop oven with smart element IQ.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B00XBOXVIA?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
-      <div class="product">
-        
-        <div class="product-title">Brita Water Filter Pitcher</div>
-        <div class="product-price">$26.99</div>
-        <div class="product-desc">Improves taste and reduces chlorine and other contaminants.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B01FXN3E74?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
-      <div class="product">
-        
-        <div class="product-title">Dash Mini Waffle Maker</div>
-        <div class="product-price">$12.99</div>
-        <div class="product-desc">Compact waffle maker for single servings — heats quickly.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B01M9I779L?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
-      <div class="product">
-        
-        <div class="product-title">Hamilton Beach 2-Way Brewer</div>
-        <div class="product-price">$79.99</div>
-        <div class="product-desc">Brew a single cup or full pot — programmable and versatile.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B00EI7DPS0?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
-      <div class="product">
-        
-        <div class="product-title">Mueller Ultra Kettle</div>
-        <div class="product-price">$27.97</div>
-        <div class="product-desc">Fast boiling electric kettle with auto shut-off and boil-dry protection.</div>
-        <a class="buy-btn" href="https://www.amazon.com/dp/B07T1CH2C1?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-        
-      </div>
-    
+    <ul class="products-list">
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B08PQ2KWHS?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Instant Pot Duo 7-in-1</a>
+        <div class="price">$99.99</div>
+        <p class="description-text">Multifunctional pressure cooker — cook meals faster and easier.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07FDJMC9Q?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Ninja Air Fryer</a>
+        <div class="price">$89.00</div>
+        <p class="description-text">Crispy food with less oil — compact and easy to clean.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00005UP2P?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">KitchenAid Artisan Mixer</a>
+        <div class="price">$429.95</div>
+        <p class="description-text">Powerful stand mixer with multiple attachments.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00006JSUA?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Lodge Cast Iron Skillet</a>
+        <div class="price">$19.90</div>
+        <p class="description-text">Pre-seasoned cast iron skillet for even cooking.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00004OCKR?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">OXO Good Grips Salad Spinner</a>
+        <div class="price">$29.95</div>
+        <p class="description-text">Dry greens quickly with a soft non-slip knob and brake.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00XBOXVIA?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Breville Smart Oven Pro</a>
+        <div class="price">$279.95</div>
+        <p class="description-text">Convection countertop oven with smart element IQ.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B01FXN3E74?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Brita Water Filter Pitcher</a>
+        <div class="price">$26.99</div>
+        <p class="description-text">Improves taste and reduces chlorine and other contaminants.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B01M9I779L?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Dash Mini Waffle Maker</a>
+        <div class="price">$12.99</div>
+        <p class="description-text">Compact waffle maker for single servings — heats quickly.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00EI7DPS0?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Hamilton Beach 2-Way Brewer</a>
+        <div class="price">$79.99</div>
+        <p class="description-text">Brew a single cup or full pot — programmable and versatile.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B07T1CH2C1?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Mueller Ultra Kettle</a>
+        <div class="price">$27.97</div>
+        <p class="description-text">Fast boiling electric kettle with auto shut-off and boil-dry protection.</p>
+      </li>
+      
+    </ul>
   </div>
 </body>
 </html>

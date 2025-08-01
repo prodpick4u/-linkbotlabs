@@ -3,157 +3,193 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Outdoor Essentials 2025</title>
+  <title>Outdoor Gear Must-Haves</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
+
+    :root {
+      --color-bg: #fafafa;
+      --color-card-bg: #ffffff;
+      --color-primary: #2563eb;    /* Blue */
+      --color-primary-hover: #1e40af;
+      --color-text: #1f2937;       /* Dark slate */
+      --color-text-muted: #6b7280; /* Gray */
+      --color-price: #10b981;      /* Emerald green */
+      --font-base: 'Inter', system-ui, sans-serif;
+      --font-heading: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
-      background: #000;
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      font-family: var(--font-base);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .container {
       max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem 2rem;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      margin: 0 auto;
     }
 
     h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: #eee;
-      text-shadow: 0 0 8px rgba(255 255 255 / 0.5);
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-bottom: 0.25rem;
+      color: var(--color-text);
+      letter-spacing: -0.025em;
     }
 
     .description {
-      text-align: center;
-      font-style: italic;
-      color: #ccc;
+      color: var(--color-text-muted);
+      font-size: 1.1rem;
+      margin-top: 0;
       margin-bottom: 2rem;
     }
 
-    .product-list {
+    .products-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
+      gap: 1.5rem;
     }
 
-    .product {
-      background: rgba(255 255 255 / 0.1);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255 255 255 / 0.15);
-      padding: 1rem 1.5rem;
-      box-shadow: 0 8px 32px rgba(255 255 255 / 0.05);
+    .product-card {
+      background-color: var(--color-card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      transition: background 0.3s ease;
+      justify-content: space-between;
+      transition: box-shadow 0.3s ease;
     }
 
-    .product:hover {
-      background: rgba(255 255 255 / 0.2);
-      box-shadow: 0 12px 48px rgba(255 255 255 / 0.1);
-      cursor: pointer;
+    .product-card:hover {
+      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
     }
 
-    .product img {
-      width: 100%;
-      max-width: 200px;
-      height: auto;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 10px rgba(255 255 255 / 0.2);
-      object-fit: contain;
-    }
-
-    .product-title {
+    .product-link {
+      font-family: var(--font-heading);
       font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      color: #fff;
-      text-align: center;
-      text-shadow: 0 0 6px rgba(255 255 255 / 0.7);
-    }
-
-    .product-price {
-      color: #ffb347;
-      font-weight: 700;
-      margin-bottom: 0.7rem;
-      text-shadow: 0 0 5px rgba(255 179 71 / 0.8);
-    }
-
-    .product-desc {
-      color: #ddd;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      line-height: 1.4;
-    }
-
-    .buy-btn {
-      background: #ffb347;
-      color: #000;
-      padding: 0.5rem 1.2rem;
-      border-radius: 30px;
-      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--color-primary);
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(255 179 71 / 0.6);
-      transition: background 0.3s ease;
+      margin-bottom: 0.6rem;
+      transition: color 0.25s ease;
     }
 
-    .buy-btn:hover {
-      background: #ffaa00;
-      box-shadow: 0 6px 16px rgba(255 170 0 / 0.8);
-      color: #fff;
+    .product-link:hover {
+      color: var(--color-primary-hover);
+      text-decoration: underline;
+    }
+
+    .price {
+      font-weight: 700;
+      color: var(--color-price);
+      font-size: 1.1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .description-text {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      flex-grow: 1;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .products-list {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Top Outdoor Essentials 2025</h1>
-  <p class="description">Gear up for your next adventure with these top-rated outdoor essentials.</p>
+  <div class="container">
+    <h1>Outdoor Gear Must-Haves</h1>
+    <p class="description">Gear up for your next adventure with these outdoor best sellers.</p>
 
-  <div class="product-list">
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/61Bcu0R2czL._AC_SL1500_.jpg" alt="LifeStraw Personal Water Filter" />
-      <div class="product-title">LifeStraw Personal Water Filter</div>
-      <div class="product-price">$17.47</div>
-      <div class="product-desc">Lightweight and compact water filter removes bacteria and parasites for safe drinking anywhere.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B006QF3TW4?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/81A3S5+kpML._AC_SL1500_.jpg" alt="Coleman Sundome Tent" />
-      <div class="product-title">Coleman Sundome Tent</div>
-      <div class="product-price">$89.99</div>
-      <div class="product-desc">Durable 4-person tent with weather-resistant design and easy setup for all-season camping.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B004J2GUOU?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/71kl46DQ6VL._AC_SL1500_.jpg" alt="Osprey Atmos AG 65 Backpack" />
-      <div class="product-title">Osprey Atmos AG 65 Backpack</div>
-      <div class="product-price">$280.00</div>
-      <div class="product-desc">Comfortable hiking backpack with anti-gravity suspension and ample storage space.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B00NQT0X20?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/81oyj6q7DlL._AC_SL1500_.jpg" alt="Garmin GPSMAP 66i" />
-      <div class="product-title">Garmin GPSMAP 66i</div>
-      <div class="product-price">$599.99</div>
-      <div class="product-desc">Handheld GPS with two-way messaging, SOS, and topo maps for safe and reliable navigation.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B07W7GSX57?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/71Ty6PDRR3L._AC_SL1500_.jpg" alt="Jetboil Flash Cooking System" />
-      <div class="product-title">Jetboil Flash Cooking System</div>
-      <div class="product-price">$109.95</div>
-      <div class="product-desc">Compact and fast-boiling stove perfect for camping and backpacking.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B00I8BGFQ6?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
+    <ul class="products-list">
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B004J2GUOU?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Coleman Sundome Tent</a>
+        <div class="price">$79.99</div>
+        <p class="description-text">Spacious, weatherproof dome tent — ideal for 2-4 campers.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B006QF3TW4?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">LifeStraw Personal Water Filter</a>
+        <div class="price">$19.95</div>
+        <p class="description-text">Lightweight emergency water filter — perfect for hiking.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00A7EXF4C?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Intex Explorer K2 Kayak</a>
+        <div class="price">$149.99</div>
+        <p class="description-text">2-person inflatable kayak for lakes and mild rivers.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00XM0YGW8?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Etekcity Camping Lantern</a>
+        <div class="price">$26.99</div>
+        <p class="description-text">Ultra bright LED lanterns, battery-powered for emergencies.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00363WZSS?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Coleman Portable Camping Chair</a>
+        <div class="price">$39.99</div>
+        <p class="description-text">Durable folding chair with cooler in the armrest.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B01N7JTOI3?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Therm-a-Rest Sleeping Pad</a>
+        <div class="price">$47.95</div>
+        <p class="description-text">Ultralight self-inflating pad — perfect for backpacking.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B01N4B6VY4?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Wise Owl Outfitters Hammock</a>
+        <div class="price">$29.95</div>
+        <p class="description-text">Compact, lightweight hammock with tree straps included.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B01L2HYPNW?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Foxelli Trekking Poles</a>
+        <div class="price">$59.97</div>
+        <p class="description-text">Collapsible, shock-absorbing poles with adjustable length.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B0009PUR5E?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Coleman Propane Camping Stove</a>
+        <div class="price">$57.99</div>
+        <p class="description-text">Two-burner portable stove for outdoor cooking.</p>
+      </li>
+      
+      <li class="product-card">
+        <a href="https://www.amazon.com/dp/B00FA2RLX2?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Sawyer Products Mini Water Filtration System</a>
+        <div class="price">$24.95</div>
+        <p class="description-text">Removes 99.99999% of all bacteria — great for backpacking.</p>
+      </li>
+      
+    </ul>
   </div>
 </body>
 </html>
