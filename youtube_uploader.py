@@ -1,6 +1,5 @@
 import os
 import json
-from secrets import YT_CLIENT_ID, YT_CLIENT_SECRET
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 from googleapiclient.http import MediaFileUpload
@@ -8,7 +7,13 @@ from googleapiclient.http import MediaFileUpload
 SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
 
 def upload_video(video_file, title, description):
-    print("🔐 Preparing OAuth credentials from secrets.py...")
+    print("🔐 Preparing OAuth credentials from environment variables...")
+
+    YT_CLIENT_ID = os.getenv("YT_CLIENT_ID")
+    YT_CLIENT_SECRET = os.getenv("YT_CLIENT_SECRET")
+
+    if not YT_CLIENT_ID or not YT_CLIENT_SECRET:
+        raise Exception("Error: YT_CLIENT_ID and YT_CLIENT_SECRET must be set in environment variables.")
 
     creds_dict = {
         "installed": {
@@ -59,7 +64,6 @@ def upload_video(video_file, title, description):
         print("✅ Upload complete! Video ID:", response["id"])
 
     finally:
-        # Clean up the temp file
         if os.path.exists(temp_filename):
             os.remove(temp_filename)
 
@@ -68,5 +72,5 @@ if __name__ == "__main__":
     upload_video(
         "test_video.mp4",
         "Test Upload via API",
-        "This video was uploaded using Python with secrets.py credentials."
+        "This video was uploaded using Python with environment variable credentials."
     )
