@@ -73,6 +73,10 @@ for category in categories:
     html_filename = f"post-{slug}.html"
     save_blog_files(title, markdown, html, html_filename)
 
+# === Add filename keys to categories for index page links ===
+for category in categories:
+    category['filename'] = f"post-{category['slug']}.html"
+
 # === GENERATE HOMEPAGE INDEX ===
 generate_index_html(categories)
 
