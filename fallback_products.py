@@ -59,4 +59,22 @@ def get_fallback_products(category):
             {"title": "Roku Streaming Stick+", "price": "$49.99", "link": f"https://www.amazon.com/dp/B075XLWML4?tag={AMAZON_TAG}", "description": "4K streaming device with voice remote and easy setup."},
             {"title": "Anker PowerCore Portable Charger", "price": "$39.99", "link": f"https://www.amazon.com/dp/B07HBTY5Z2?tag={AMAZON_TAG}", "description": "High capacity power bank with fast charging technology."},
             {"title": "Fitbit Versa 3 Smartwatch", "price": "$229.95", "link": f"https://www.amazon.com/dp/B08DFGPTSK?tag={AMAZON_TAG}", "description": "Health and fitness smartwatch with GPS and heart rate."},
-            {"title": "Logitech C920 Webcam", "price": "$69.99", "link": f"https://www.amazon.com/dp/B006JH8T3S?tag={AMAZON
+            {"title": "Logitech C920 Webcam", "price": "$69.99", "link": f"https://www.amazon.com/dp/B006JH8T3S?tag={AMAZON_TAG}", "description": "HD 1080p webcam with autofocus and stereo mic."},
+            {"title": "Google Nest Mini", "price": "$49.00", "link": f"https://www.amazon.com/dp/B07N8V5Z1N?tag={AMAZON_TAG}", "description": "Smart speaker with Google Assistant for hands-free help."},
+            {"title": "Kindle Paperwhite", "price": "$129.99", "link": f"https://www.amazon.com/dp/B07CXG6C9W?tag={AMAZON_TAG}", "description": "Waterproof e-reader with a high-resolution display."},
+            {"title": "JBL Flip 5 Bluetooth Speaker", "price": "$99.95", "link": f"https://www.amazon.com/dp/B07QK2SPP7?tag={AMAZON_TAG}", "description": "Portable waterproof speaker with powerful sound."}
+        ],
+        "health": [
+            {"title": "Fitbit Charge 5", "price": "$149.95", "link": f"https://www.amazon.com/dp/B09BXQG2KT?tag={AMAZON_TAG}", "description": "Advanced fitness tracker with heart rate and sleep monitoring."},
+            {"title": "Theragun Mini", "price": "$199.00", "link": f"https://www.amazon.com/dp/B07WRKXQWJ?tag={AMAZON_TAG}", "description": "Compact percussive therapy device for muscle relief and recovery."},
+            {"title": "Philips Sonicare ProtectiveClean 6100", "price": "$99.95", "link": f"https://www.amazon.com/dp/B07GJ6ZMTT?tag={AMAZON_TAG}", "description": "Electric toothbrush with pressure sensor and multiple cleaning modes."},
+            {"title": "Omron Platinum Blood Pressure Monitor", "price": "$69.99", "link": f"https://www.amazon.com/dp/B07RWK3V7V?tag={AMAZON_TAG}", "description": "Clinically accurate home blood pressure monitor."},
+            {"title": "Nature Made Vitamin D3", "price": "$12.99", "link": f"https://www.amazon.com/dp/B00LJP3V7U?tag={AMAZON_TAG}", "description": "Supports bone, teeth, muscle, and immune health."},
+            {"title": "Gaiam Yoga Mat", "price": "$24.98", "link": f"https://www.amazon.com/dp/B000BQO6V4?tag={AMAZON_TAG}", "description": "Non-slip, thick yoga mat for all fitness levels."},
+            {"title": "Waterpik Aquarius Water Flosser", "price": "$79.99", "link": f"https://www.amazon.com/dp/B01CZ0E4T2?tag={AMAZON_TAG}", "description": "Dental water jet for effective plaque removal."},
+            {"title": "Dr. Scholl's Orthotic Inserts", "price": "$29.95", "link": f"https://www.amazon.com/dp/B00006I5JU?tag={AMAZON_TAG}", "description": "Comfortable shoe inserts for arch support."},
+            {"title": "Bose Sleepbuds II", "price": "$249.00", "link": f"https://www.amazon.com/dp/B07Q9MJKBV?tag={AMAZON_TAG}", "description": "Noise-masking sleepbuds with soothing sounds."},
+            {"title": "Pure Enrichment PureGlow Crystal", "price": "$39.99", "link": f"https://www.amazon.com/dp/B07D37FKGY?tag={AMAZON_TAG}", "description": "Himalayan salt lamp for calming ambiance and air purification."}
+        ]
+    }
+    return fallback_data.get(category, [])
