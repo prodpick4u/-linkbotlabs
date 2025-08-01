@@ -2,174 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Top 10 Beauty Products – Prodpick4U</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Beauty Picks 2025</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
     body {
-      background: #000;
-      color: #fff;
-      font-family: 'Poppins', sans-serif;
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 1rem 2rem;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      font-family: Arial, sans-serif;
+      background-color: #fdf6f9;
+      color: #222;
+      margin: 0;
+      padding: 20px;
     }
-
     h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: #eee;
-      text-shadow: 0 0 8px rgba(255 255 255 / 0.5);
+      color: #d63384;
     }
-
-    .description {
-      text-align: center;
-      font-style: italic;
-      color: #ccc;
-      margin-bottom: 2rem;
-    }
-
-    .product-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
-    }
-
     .product {
-      background: rgba(255 255 255 / 0.1);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255 255 255 / 0.15);
-      padding: 1rem 1.5rem;
-      box-shadow: 0 8px 32px rgba(255 255 255 / 0.05);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: background 0.3s ease;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
     }
-
-    .product:hover {
-      background: rgba(255 255 255 / 0.2);
-      box-shadow: 0 12px 48px rgba(255 255 255 / 0.1);
-      cursor: pointer;
-    }
-
     .product img {
-      width: 100%;
       max-width: 200px;
       height: auto;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      box-shadow: 0 0 10px rgba(255 255 255 / 0.2);
-      object-fit: contain;
     }
-
-    .product-title {
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      color: #fff;
-      text-align: center;
-      text-shadow: 0 0 6px rgba(255 255 255 / 0.7);
+    .product h2 {
+      font-size: 1.2em;
+      color: #b5179e;
     }
-
-    .product-price {
-      color: #ffb347;
-      font-weight: 700;
-      margin-bottom: 0.7rem;
-      text-shadow: 0 0 5px rgba(255 179 71 / 0.8);
-    }
-
-    .product-desc {
-      color: #ddd;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      line-height: 1.4;
-    }
-
-    .buy-btn {
-      background: #ffb347;
-      color: #000;
-      padding: 0.5rem 1.2rem;
-      border-radius: 30px;
-      font-weight: 700;
+    .buy-button {
+      background-color: #ff69b4;
+      color: white;
+      padding: 10px 15px;
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(255 179 71 / 0.6);
-      transition: background 0.3s ease;
-    }
-
-    .buy-btn:hover {
-      background: #ffaa00;
-      box-shadow: 0 6px 16px rgba(255 170 0 / 0.8);
-      color: #fff;
-    }
-
-    .video-container {
-      margin-top: 1rem;
-      width: 100%;
-      max-width: 280px;
-      aspect-ratio: 16 / 9;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(255 255 255 / 0.2);
-    }
-
-    .video-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+      display: inline-block;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Top Beauty Picks 2025</h1>
-  <p class="description">Explore the most popular beauty products of 2025—skincare, makeup, and grooming tools that everyone’s talking about.</p>
+  <h1>Top 10 Beauty Products You’ll Love</h1>
 
-  <div class="product-list">
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/71dhL9xDzzL._AC_SL1500_.jpg" alt="Maybelline Fit Me Matte + Poreless Foundation" />
-      <div class="product-title">Maybelline Fit Me Matte + Poreless Foundation</div>
-      <div class="product-price">$7.98</div>
-      <div class="product-desc">Ideal for normal to oily skin, this foundation provides a flawless natural finish and blends seamlessly.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B00PFCT0RM?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/61zH4vRpv+L._SL1500_.jpg" alt="CeraVe Hydrating Facial Cleanser" />
-      <div class="product-title">CeraVe Hydrating Facial Cleanser</div>
-      <div class="product-price">$14.97</div>
-      <div class="product-desc">Gently cleanses and hydrates the skin without disrupting the protective barrier with hyaluronic acid and ceramides.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B01MSSDEPK?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/71pE96rH43L._SL1500_.jpg" alt="Revlon One-Step Volumizer Plus 2.0" />
-      <div class="product-title">Revlon One-Step Volumizer Plus 2.0</div>
-      <div class="product-price">$44.99</div>
-      <div class="product-desc">A 2-in-1 styling tool that dries and styles hair in one step with less frizz and more volume.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B09K6HKZ29?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/61rJ2vGhZBL._SL1500_.jpg" alt="Neutrogena Hydro Boost Water Gel" />
-      <div class="product-title">Neutrogena Hydro Boost Water Gel</div>
-      <div class="product-price">$16.97</div>
-      <div class="product-desc">Lightweight gel moisturizer with hyaluronic acid that quenches dry skin and absorbs quickly like a gel.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B00NR1YQK4?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
-
-    <div class="product">
-      <img src="https://m.media-amazon.com/images/I/51g2zPvBxkL._SL1000_.jpg" alt="L'Oreal Paris Voluminous Lash Paradise Mascara" />
-      <div class="product-title">L'Oreal Voluminous Lash Paradise Mascara</div>
-      <div class="product-price">$9.99</div>
-      <div class="product-desc">Volumizing mascara that provides feathery soft, full lashes without clumping or flaking.</div>
-      <a class="buy-btn" href="https://www.amazon.com/dp/B01N4I8FOY?tag=mychanneld-20" target="_blank" rel="noopener noreferrer">View on Amazon</a>
-    </div>
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/61npiFJZ2DL._AC_SL1500_.jpg" alt="CeraVe Cleanser" />
+    <h2>CeraVe Hydrating Facial Cleanser</h2>
+    <p>Non-foaming cleanser with ceramides and hyaluronic acid. Ideal for sensitive skin.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B01MSSDEPK?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
   </div>
+
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/51UR0dG3JRL._AC_SL1000_.jpg" alt="Maybelline Mascara" />
+    <h2>Maybelline Lash Sensational Mascara</h2>
+    <p>Lengthens and volumizes lashes. Waterproof and long-wearing formula.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B00PFCT0VO?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
+  </div>
+
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/61LzNdIfOZL._AC_SL1500_.jpg" alt="Olay Regenerist Cream" />
+    <h2>Olay Regenerist Micro-Sculpting Cream</h2>
+    <p>Anti-aging cream with niacinamide and peptides for firmer, youthful skin.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B0039UTW5C?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
+  </div>
+
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/61PBjhD6qXL._AC_SL1500_.jpg" alt="L'Oréal Serum" />
+    <h2>L'Oréal Paris Revitalift 1.5% Hyaluronic Acid Serum</h2>
+    <p>Intensely hydrates and plumps skin. Dermatologist-tested.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B07XL3HZ4G?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
+  </div>
+
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/71uJg1AUEuL._AC_SL1500_.jpg" alt="Neutrogena Sunscreen" />
+    <h2>Neutrogena Ultra Sheer Dry-Touch Sunscreen SPF 70</h2>
+    <p>Lightweight, non-greasy protection with high SPF. Great under makeup.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B002JAYMEE?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
+  </div>
+
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/71EzWsnCwlL._AC_SL1500_.jpg" alt="Bioderma Micellar Water" />
+    <h2>Bioderma Sensibio H2O Micellar Water</h2>
+    <p>Gently removes makeup without drying. Ideal for sensitive skin.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B002XZLAWM?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
+  </div>
+
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/61qXGmT+4KL._AC_SL1500_.jpg" alt="NYX Setting Spray" />
+    <h2>NYX Professional Makeup Setting Spray - Matte</h2>
+    <p>Locks in makeup with a lightweight matte finish. Long-lasting formula.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B00B4YVU4G?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
+  </div>
+
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/71zOq5+eOjL._AC_SL1500_.jpg" alt="e.l.f. Putty Primer" />
+    <h2>e.l.f. Poreless Putty Primer</h2>
+    <p>Blurs imperfections and preps skin for makeup. Smooth velvety finish.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B07L6NPNK6?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
+  </div>
+
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/61oQo9xxo8L._AC_SL1500_.jpg" alt="Laneige Lip Mask" />
+    <h2>Laneige Lip Sleeping Mask</h2>
+    <p>Overnight lip treatment with vitamin C and antioxidants. Softens chapped lips.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B07H42Q2Y9?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
+  </div>
+
+  <div class="product">
+    <img src="https://m.media-amazon.com/images/I/61X1gyFFcSL._AC_SL1500_.jpg" alt="Revlon One-Step Dryer" />
+    <h2>Revlon One-Step Volumizer Hair Dryer</h2>
+    <p>Dry and style in one step. Adds volume and reduces frizz.</p>
+    <a class="buy-button" href="https://www.amazon.com/dp/B01LSUQSB0?tag=mychanneld-20" target="_blank">Buy on Amazon</a>
+  </div>
+
 </body>
 </html>
