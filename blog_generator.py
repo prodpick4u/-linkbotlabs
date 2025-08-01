@@ -1,6 +1,6 @@
 import os
 import re
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 
 AFFILIATE_TAG = "mychanneld-20"
 
@@ -33,9 +33,18 @@ def generate_markdown(products, category_title):
     return markdown
 
 def generate_html(products, category_title, template_path, category_description=""):
-    env = Environment(loader=FileSystemLoader("templates"))
+    # Get absolute path to templates folder
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    templates_dir = os.path.join(base_dir, "templates")
+    env = Environment(loader=FileSystemLoader(templates_dir))
+
     template_name = os.path.basename(template_path)
-    template = env.get_template(template_name)
+
+    try:
+        template = env.get_template(template_name)
+    except TemplateNotFound:
+        print(f"❌ Template '{template_name}' not found in '{templates_dir}'. Please check your templates folder.")
+        raise
 
     products = prepare_products(products)
 
