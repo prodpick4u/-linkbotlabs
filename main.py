@@ -43,7 +43,7 @@ def run_apify_google_search_scraper():
     run_url = f"https://api.apify.com/v2/acts/{APIFY_ACTOR_ID}/runs?token={APIFY_TOKEN}"
     payload = {
         "queries": SEARCH_QUERIES,
-        "resultsPerPage": "10",  # <-- Must be string and one of allowed values (10,20,...)
+        "resultsPerPage": "10",
         "numPages": 1,
         "csvFriendlyOutput": False,
         "customMapFunction": "(object) => { return {...object} }",
@@ -125,6 +125,17 @@ def load_apify_keywords(filename="apify_results.json"):
 
     return keyword_map
 
+def fetch_products_with_fallback(slug, search_keyword):
+    try:
+        products = fetch_best_sellers(category=search_keyword, limit=3)
+    except Exception as e:
+        print(f"⚠️ API fetch error for {slug}: {e}")
+        products = []
+    if not products:
+        print(f"⚠️ No API products for {slug}, using fallback.")
+        products = get_fallback_products(slug)
+    return products
+
 if __name__ == "__main__":
     print("🟢 Starting blog generator pipeline...")
 
@@ -150,10 +161,7 @@ if __name__ == "__main__":
         slug = category["slug"]
         search_keyword = keyword_map.get(slug, slug)
         print(f"🔍 Fetching products for category: {slug} using keyword: {search_keyword}")
-        products = fetch_best_sellers(category=search_keyword, limit=3)
-        if not products:
-            print(f"⚠️ No API products for {slug}, using fallback.")
-            products = get_fallback_products(slug)
+        products = fetch_products_with_fallback(slug, search_keyword)
         products_map[slug] = products
 
     os.makedirs("docs/posts", exist_ok=True)
