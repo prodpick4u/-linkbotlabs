@@ -1,35 +1,48 @@
 import os
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
 from googleapiclient.http import MediaFileUpload
 
-def upload_video(video_path, title, description):
-    creds = Credentials(
-        token=None,
-        refresh_token=os.getenv("YT_REFRESH_TOKEN"),
-        token_uri="https://oauth2.googleapis.com/token",
-        client_id=os.getenv("YT_CLIENT_ID"),
-        client_secret=os.getenv("YT_CLIENT_SECRET")
+# Set the required scope
+SCOPES = ["https://www.googleapis.com/auth/youtube.upload"]
+
+def upload_video(video_file, title, description):
+    # Step 1: Authorize with Google
+    print("🔐 Authorizing...")
+    flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+        "client_secret.json", SCOPES
     )
-    creds.refresh(Request())
+    credentials = flow.run_console()
 
-    youtube = build("youtube", "v3", credentials=creds)
+    # Step 2: Build the YouTube service
+    youtube = googleapiclient.discovery.build("youtube", "v3", credentials=credentials)
 
+    # Step 3: Prepare video metadata
     request_body = {
         "snippet": {
+            "categoryId": "22",
             "title": title,
             "description": description,
-            "tags": ["affiliate", "automation"],
-            "categoryId": "28"
+            "tags": ["api", "upload", "python"]
         },
         "status": {
-            "privacyStatus": "private"  # safe for testing
+            "privacyStatus": "unlisted"  # or "private", "public"
         }
     }
 
-    media = MediaFileUpload(video_path, chunksize=-1, resumable=True, mimetype="video/*")
-    request = youtube.videos().insert(part="snippet,status", body=request_body, media_body=media)
+    # Step 4: Upload the video file
+    print("📤 Uploading video...")
+    media_file = MediaFileUpload(video_file, resumable=True)
+    request = youtube.videos().insert(
+        part="snippet,status",
+        body=request_body,
+        media_body=media_file
+    )
     response = request.execute()
-    print("✅ Uploaded to YouTube (private):", response.get("id"))
-    return response.get("id")
+
+    # Step 5: Confirm upload
+    print("✅ Upload complete! Video ID:", response["id"])
+
+if __name__ == "__main__":
+    # Change filename and title here if needed
+    upload_video("test_video.mp4", "Test Upload via API", "This video was uploaded using Python.")
