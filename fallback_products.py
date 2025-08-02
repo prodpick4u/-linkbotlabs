@@ -1,75 +1,87 @@
-AMAZON_TAG = "mychanneld-20"
+import random
+
+AFFILIATE_TAG = "mychanneld-20"
+
+def with_tag(asin):
+    return f"https://www.amazon.com/dp/{asin}/?tag={AFFILIATE_TAG}"
+
+fallback_products = {
+    "kitchen": [
+        {"title": "Instant Pot Pro Plus", "price": "$169.95", "url": with_tag("B08PQ2KWHS")},
+        {"title": "Ninja AF161 Max XL Air Fryer", "price": "$139.99", "url": with_tag("B07S6529ZZ")},
+        {"title": "COSORI Pro II Air Fryer", "price": "$129.99", "url": with_tag("B09C8NP2K3")},
+        {"title": "KitchenAid Artisan Series 5-Qt. Mixer", "price": "$449.95", "url": with_tag("B00005UP2P")},
+        {"title": "Breville Smart Oven Pro", "price": "$279.95", "url": with_tag("B00XBOXVIA")},
+        {"title": "Vitamix 5200 Blender", "price": "$479.95", "url": with_tag("B008H4SLV6")},
+        {"title": "Cuckoo 10-Cup Rice Cooker", "price": "$164.99", "url": with_tag("B00IOQ5L1Q")},
+        {"title": "All-Clad Stainless Steel Cookware Set", "price": "$699.95", "url": with_tag("B00FXP2AOI")},
+        {"title": "GE Profile Opal Nugget Ice Maker", "price": "$579.00", "url": with_tag("B0842FSKJ6")},
+        {"title": "Anova Culinary Sous Vide Precision Cooker", "price": "$199.00", "url": with_tag("B07C7PW3PC")}
+    ],
+    "outdoors": [
+        {"title": "Coleman Sundome Camping Tent", "price": "$124.99", "url": with_tag("B07GX54QVW")},
+        {"title": "Weber Q1200 Liquid Propane Grill", "price": "$259.00", "url": with_tag("B00FDOON9C")},
+        {"title": "Garmin Instinct 2X Solar Watch", "price": "$449.99", "url": with_tag("B0BV3KL25M")},
+        {"title": "YETI Tundra 45 Cooler", "price": "$325.00", "url": with_tag("B00IYJK7VS")},
+        {"title": "MSR Hubba Hubba 2-Person Tent", "price": "$549.95", "url": with_tag("B08QSPFB6J")},
+        {"title": "BioLite FirePit+ Smokeless Grill", "price": "$299.95", "url": with_tag("B08GXXNWRJ")},
+        {"title": "Black Diamond Storm 500 Headlamp", "price": "$79.95", "url": with_tag("B098D3QW53")},
+        {"title": "TETON Sports Scout 3400 Backpack", "price": "$129.99", "url": with_tag("B000F34ZKS")},
+        {"title": "ALPS Mountaineering King Kong Chair", "price": "$129.99", "url": with_tag("B001RLQNSY")},
+        {"title": "Jetboil Flash Cooking System", "price": "$124.95", "url": with_tag("B00L1F2I54")}
+    ],
+    "beauty": [
+        {"title": "NuFACE Trinity Starter Kit", "price": "$339.00", "url": with_tag("B01B66YH6K")},
+        {"title": "PMD Clean Pro RQ", "price": "$179.00", "url": with_tag("B08FBF2KZT")},
+        {"title": "Dyson Supersonic Hair Dryer", "price": "$429.00", "url": with_tag("B01FIG1JIM")},
+        {"title": "FOREO LUNA 4 Facial Cleansing", "price": "$279.00", "url": with_tag("B09YH5LK1X")},
+        {"title": "Solawave 4-in-1 Skincare Wand", "price": "$169.00", "url": with_tag("B09FYHY2P2")},
+        {"title": "T3 AireLuxe Hair Dryer", "price": "$199.99", "url": with_tag("B096G9X1N9")},
+        {"title": "Shani Darden Retinol Reform", "price": "$88.00", "url": with_tag("B07DLR5FRR")},
+        {"title": "Olaplex No. 3 Hair Perfector", "price": "$30.00", "url": with_tag("B00SNM5US4")},
+        {"title": "Dermalogica Daily Microfoliant", "price": "$65.00", "url": with_tag("B0007CXWC2")},
+        {"title": "Sunday Riley Good Genes", "price": "$122.00", "url": with_tag("B00Q27UX26")}
+    ],
+    "home-decor": [
+        {"title": "Dyson Purifier Cool", "price": "$569.99", "url": with_tag("B093CHZD1N")},
+        {"title": "iRobot Braava Jet m6", "price": "$449.99", "url": with_tag("B07RL5L79H")},
+        {"title": "Philips Hue White and Color Smart Bulbs", "price": "$199.99", "url": with_tag("B07N1WW638")},
+        {"title": "Levoit Core 600S Air Purifier", "price": "$299.99", "url": with_tag("B09WYSGBYQ")},
+        {"title": "Nixplay 10.1 Inch Smart Digital Frame", "price": "$179.99", "url": with_tag("B08529TZMC")},
+        {"title": "Brightech Maxwell LED Shelf Floor Lamp", "price": "$129.99", "url": with_tag("B01MXXR0YU")},
+        {"title": "Ruggable Washable Rug", "price": "$199.00", "url": with_tag("B07Z82Z1LS")},
+        {"title": "Keurig K-Café Smart", "price": "$249.99", "url": with_tag("B09JVG57TX")},
+        {"title": "Umbra Trigg Wall Planter Set", "price": "$39.99", "url": with_tag("B00UVSNT30")},
+        {"title": "LIFX Smart LED Lightstrip", "price": "$89.99", "url": with_tag("B08GXDZ64M")}
+    ],
+    "tech": [
+        {"title": "Apple iPad Air M2", "price": "$599.00", "url": with_tag("B0CVGS9D9C")},
+        {"title": "Anker 737 Power Bank", "price": "$159.99", "url": with_tag("B09WQYF23D")},
+        {"title": "Sony WH-1000XM5 Headphones", "price": "$398.00", "url": with_tag("B09XS7JWHH")},
+        {"title": "Oculus Quest 2 VR", "price": "$299.00", "url": with_tag("B099VMT8VZ")},
+        {"title": "Logitech MX Keys Keyboard", "price": "$119.99", "url": with_tag("B07VZF5DS8")},
+        {"title": "Elgato Stream Deck MK.2", "price": "$149.99", "url": with_tag("B0973877N3")},
+        {"title": "Samsung T7 Portable SSD 2TB", "price": "$139.99", "url": with_tag("B0874XN4D8")},
+        {"title": "DJI Osmo Pocket 3", "price": "$519.00", "url": with_tag("B0CJHCDH15")},
+        {"title": "LG UltraFine 5K Display", "price": "$1,299.99", "url": with_tag("B07DGN6HR3")},
+        {"title": "Razer Kiyo Pro Webcam", "price": "$199.99", "url": with_tag("B08T9VQWCH")}
+    ],
+    "health": [
+        {"title": "Fitbit Charge 6", "price": "$159.95", "url": with_tag("B0CGVGWVVH")},
+        {"title": "RENPHO Smart Body Scale", "price": "$129.99", "url": with_tag("B01N1UX8RW")},
+        {"title": "Theragun Mini 2.0", "price": "$199.00", "url": with_tag("B09V2LYG1L")},
+        {"title": "Pure Enrichment MistAire XL Humidifier", "price": "$119.99", "url": with_tag("B01N9KOLUX")},
+        {"title": "Withings Sleep Tracking Mat", "price": "$129.95", "url": with_tag("B07CVCHV3H")},
+        {"title": "iHealth Air Wireless Pulse Oximeter", "price": "$129.99", "url": with_tag("B01MRC0K8X")},
+        {"title": "Omron Platinum Blood Pressure Monitor", "price": "$104.99", "url": with_tag("B07RZBPMS7")},
+        {"title": "Beurer Infrared Heat Lamp", "price": "$139.99", "url": with_tag("B003X26TWM")},
+        {"title": "Dodow Sleep Aid Device", "price": "$129.00", "url": with_tag("B00WUX6XGW")},
+        {"title": "Carex Day-Light Classic Plus", "price": "$159.99", "url": with_tag("B00PC5HUA6")}
+    ]
+}
 
 def get_fallback_products(category):
-    fallback_data = {
-        "kitchen": [
-            {"title": "Instant Pot Duo 7-in-1", "price": "$99.99", "link": f"https://www.amazon.com/dp/B08PQ2KWHS?tag={AMAZON_TAG}", "description": "Multifunctional pressure cooker — cook meals faster and easier."},
-            {"title": "Ninja Air Fryer", "price": "$89.00", "link": f"https://www.amazon.com/dp/B07FDJMC9Q?tag={AMAZON_TAG}", "description": "Crispy food with less oil — compact and easy to clean."},
-            {"title": "KitchenAid Artisan Mixer", "price": "$429.95", "link": f"https://www.amazon.com/dp/B00005UP2P?tag={AMAZON_TAG}", "description": "Powerful stand mixer with multiple attachments."},
-            {"title": "Breville Smart Oven Pro", "price": "$279.95", "link": f"https://www.amazon.com/dp/B00XBOXVIA?tag={AMAZON_TAG}", "description": "Convection countertop oven with smart element IQ."},
-            {"title": "Lodge Cast Iron Skillet", "price": "$19.90", "link": f"https://www.amazon.com/dp/B00006JSUA?tag={AMAZON_TAG}", "description": "Pre-seasoned cast iron skillet for even cooking."},
-            {"title": "OXO Good Grips Salad Spinner", "price": "$29.95", "link": f"https://www.amazon.com/dp/B00004OCKR?tag={AMAZON_TAG}", "description": "Dry greens quickly with a soft non-slip knob and brake."},
-            {"title": "Hamilton Beach 2-Way Brewer", "price": "$79.99", "link": f"https://www.amazon.com/dp/B00EI7DPS0?tag={AMAZON_TAG}", "description": "Brew a single cup or full pot — programmable and versatile."},
-            {"title": "Mueller Ultra Kettle", "price": "$27.97", "link": f"https://www.amazon.com/dp/B07T1CH2C1?tag={AMAZON_TAG}", "description": "Fast boiling electric kettle with auto shut-off and boil-dry protection."},
-            {"title": "Breville Barista Express Espresso Machine", "price": "$699.95", "link": f"https://www.amazon.com/dp/B00CH9QWOU?tag={AMAZON_TAG}", "description": "All-in-one espresso machine for barista-style coffee at home."},
-            {"title": "Cuisinart 14-Cup Food Processor", "price": "$199.95", "link": f"https://www.amazon.com/dp/B01AXM4WVY?tag={AMAZON_TAG}", "description": "Versatile food processor with multiple blades and settings."}
-        ],
-        "outdoors": [
-            {"title": "Intex Explorer K2 Kayak", "price": "$149.99", "link": f"https://www.amazon.com/dp/B00A7EXF4C?tag={AMAZON_TAG}", "description": "2-person inflatable kayak for lakes and mild rivers."},
-            {"title": "Coleman Sundome Tent", "price": "$79.99", "link": f"https://www.amazon.com/dp/B004J2GUOU?tag={AMAZON_TAG}", "description": "Spacious, weatherproof dome tent — ideal for 2-4 campers."},
-            {"title": "Etekcity Camping Lantern", "price": "$26.99", "link": f"https://www.amazon.com/dp/B00XM0YGW8?tag={AMAZON_TAG}", "description": "Ultra bright LED lanterns, battery-powered for emergencies."},
-            {"title": "Foxelli Trekking Poles", "price": "$59.97", "link": f"https://www.amazon.com/dp/B01L2HYPNW?tag={AMAZON_TAG}", "description": "Collapsible, shock-absorbing poles with adjustable length."},
-            {"title": "Coleman Portable Camping Chair", "price": "$39.99", "link": f"https://www.amazon.com/dp/B00363WZSS?tag={AMAZON_TAG}", "description": "Durable folding chair with cooler in the armrest."},
-            {"title": "Therm-a-Rest Sleeping Pad", "price": "$47.95", "link": f"https://www.amazon.com/dp/B01N7JTOI3?tag={AMAZON_TAG}", "description": "Ultralight self-inflating pad — perfect for backpacking."},
-            {"title": "Sawyer Products Mini Water Filtration System", "price": "$24.95", "link": f"https://www.amazon.com/dp/B00FA2RLX2?tag={AMAZON_TAG}", "description": "Removes 99.99999% of all bacteria — great for backpacking."},
-            {"title": "Wise Owl Outfitters Hammock", "price": "$29.95", "link": f"https://www.amazon.com/dp/B01N4B6VY4?tag={AMAZON_TAG}", "description": "Compact, lightweight hammock with tree straps included."},
-            {"title": "Coleman Propane Camping Stove", "price": "$57.99", "link": f"https://www.amazon.com/dp/B0009PUR5E?tag={AMAZON_TAG}", "description": "Two-burner portable stove for outdoor cooking."},
-            {"title": "LifeStraw Personal Water Filter", "price": "$19.95", "link": f"https://www.amazon.com/dp/B006QF3TW4?tag={AMAZON_TAG}", "description": "Lightweight emergency water filter — perfect for hiking."}
-        ],
-        "beauty": [
-            {"title": "Olaplex No.3 Hair Perfector", "price": "$30.00", "link": f"https://www.amazon.com/dp/B00SNM5US4?tag={AMAZON_TAG}", "description": "Strengthens damaged hair and restores shine."},
-            {"title": "Revlon One-Step Hair Dryer", "price": "$41.88", "link": f"https://www.amazon.com/dp/B01LSUQSB0?tag={AMAZON_TAG}", "description": "Volumizing hot air brush for salon blowouts at home."},
-            {"title": "CeraVe Hydrating Cleanser", "price": "$14.99", "link": f"https://www.amazon.com/dp/B01MSSDEPK?tag={AMAZON_TAG}", "description": "Gentle face wash with ceramides and hyaluronic acid."},
-            {"title": "Neutrogena Hydro Boost Gel Cream", "price": "$18.99", "link": f"https://www.amazon.com/dp/B00NR1YQK4?tag={AMAZON_TAG}", "description": "Hydrates skin with hyaluronic acid and absorbs quickly."},
-            {"title": "Bio-Oil Skincare Oil", "price": "$14.99", "link": f"https://www.amazon.com/dp/B004AI97MA?tag={AMAZON_TAG}", "description": "Improves appearance of scars and stretch marks."},
-            {"title": "L'Oréal Paris Magic Root Cover Up", "price": "$9.97", "link": f"https://www.amazon.com/dp/B01M7Z83KD?tag={AMAZON_TAG}", "description": "Temporary gray concealer spray — easy and quick fix."},
-            {"title": "Essie Nail Polish", "price": "$9.00", "link": f"https://www.amazon.com/dp/B00O1A35PQ?tag={AMAZON_TAG}", "description": "Glossy, chip-resistant color in wide shade range."},
-            {"title": "Maybelline Lash Sensational Mascara", "price": "$8.98", "link": f"https://www.amazon.com/dp/B00PFCT0ZA?tag={AMAZON_TAG}", "description": "Lengthens and volumizes lashes with fan effect."},
-            {"title": "e.l.f. Poreless Putty Primer", "price": "$10.00", "link": f"https://www.amazon.com/dp/B07L4JL8Z5?tag={AMAZON_TAG}", "description": "Smooths skin and helps makeup last longer."},
-            {"title": "NYX Matte Setting Spray", "price": "$8.47", "link": f"https://www.amazon.com/dp/B00B4YVU4G?tag={AMAZON_TAG}", "description": "Long-lasting setting spray for a matte finish."}
-        ],
-        "home-decor": [
-            {"title": "COLAMY Sherpa Accent Chair + Ottoman", "price": "$229.99", "link": f"https://www.amazon.com/dp/B0FBWFTBX3?tag={AMAZON_TAG}", "description": "Plush sherpa swivel barrel chair with hidden storage ottoman—cozy and stylish."},
-            {"title": "MAXYOYO Velvet Tufted Armchair", "price": "$199.99", "link": f"https://www.amazon.com/dp/B0D1BS51XJ?tag={AMAZON_TAG}", "description": "Elegant velvet tufted chair with metal legs—modern glam and comfort."},
-            {"title": "Antok Arched Full‑Length Mirror 71×28″", "price": "$139.99", "link": f"https://www.amazon.com/dp/B0DB772S6Z?tag={AMAZON_TAG}", "description": "Ornate arched floor mirror with gold aluminum alloy frame—adds elegance and light."},
-            {"title": "HARRITPURE 76×34″ Arched Full‑Length Mirror", "price": "$149.99", "link": f"https://www.amazon.com/dp/B0C8M8216Q?tag={AMAZON_TAG}", "description": "Oversized arched mirror with aluminum alloy frame—HD glass, wall-mounted or freestanding."},
-            {"title": "Kelly Miller Gold Framed Wall Mirror 24×48″", "price": "$150.00", "link": f"https://www.amazon.com/dp/B0CDCN8CCR?tag={AMAZON_TAG}", "description": "Large decorative beveled mirror with brushed gold scalloped frame—farmhouse chic."},
-            {"title": "WACASA Mid‑Century Accent Chair", "price": "$142.00", "link": f"https://www.amazon.com/dp/B092ZSFGM5?tag={AMAZON_TAG}", "description": "Compact mid‑century modern side chair—wood frame and cushioned seat for style & comfort."},
-            {"title": "INZOY Mid‑Century Chair + Ottoman", "price": "$150.00", "link": f"https://www.amazon.com/dp/B0C39S3T4Y?tag={AMAZON_TAG}", "description": "Soft velvet accent chair with ottoman and adjustable back—stylish and functional."}
-        ],
-        "tech": [
-            {"title": "Apple AirPods Pro", "price": "$249.00", "link": f"https://www.amazon.com/dp/B07ZPC9QD4?tag={AMAZON_TAG}", "description": "Active noise cancellation wireless earbuds with transparency mode."},
-            {"title": "Samsung T7 Portable SSD 1TB", "price": "$109.99", "link": f"https://www.amazon.com/dp/B0874XNQ3Y?tag={AMAZON_TAG}", "description": "Fast external SSD with USB 3.2 Gen 2 for high-speed data transfer."},
-            {"title": "Fitbit Versa 3 Smartwatch", "price": "$229.95", "link": f"https://www.amazon.com/dp/B08DFGPTSK?tag={AMAZON_TAG}", "description": "Health and fitness smartwatch with GPS and heart rate."},
-            {"title": "Kindle Paperwhite", "price": "$129.99", "link": f"https://www.amazon.com/dp/B07CXG6C9W?tag={AMAZON_TAG}", "description": "Waterproof e-reader with a high-resolution display."},
-            {"title": "Logitech MX Master 3 Mouse", "price": "$99.99", "link": f"https://www.amazon.com/dp/B07S395RWD?tag={AMAZON_TAG}", "description": "Ergonomic wireless mouse with customizable buttons and long battery life."},
-            {"title": "JBL Flip 5 Bluetooth Speaker", "price": "$99.95", "link": f"https://www.amazon.com/dp/B07QK2SPP7?tag={AMAZON_TAG}", "description": "Portable waterproof speaker with powerful sound."},
-            {"title": "Roku Streaming Stick+", "price": "$49.99", "link": f"https://www.amazon.com/dp/B075XLWML4?tag={AMAZON_TAG}", "description": "4K streaming device with voice remote and easy setup."},
-            {"title": "Anker PowerCore Portable Charger", "price": "$39.99", "link": f"https://www.amazon.com/dp/B07HBTY5Z2?tag={AMAZON_TAG}", "description": "High capacity power bank with fast charging technology."},
-            {"title": "Logitech C920 Webcam", "price": "$69.99", "link": f"https://www.amazon.com/dp/B006JH8T3S?tag={AMAZON_TAG}", "description": "HD 1080p webcam with autofocus and stereo mic."},
-            {"title": "Google Nest Mini", "price": "$49.00", "link": f"https://www.amazon.com/dp/B07N8V5Z1N?tag={AMAZON_TAG}", "description": "Smart speaker with Google Assistant for hands-free help."}
-        ],
-        "health": [
-            {"title": "Fitbit Charge 5", "price": "$149.95", "link": f"https://www.amazon.com/dp/B09BXQG2KT?tag={AMAZON_TAG}", "description": "Advanced fitness tracker with heart rate and sleep monitoring."},
-            {"title": "Theragun Mini", "price": "$199.00", "link": f"https://www.amazon.com/dp/B07WRKXQWJ?tag={AMAZON_TAG}", "description": "Compact percussive therapy device for muscle relief and recovery."},
-            {"title": "Philips Sonicare ProtectiveClean 6100", "price": "$99.95", "link": f"https://www.amazon.com/dp/B07GJ6ZMTT?tag={AMAZON_TAG}", "description": "Electric toothbrush with pressure sensor and multiple cleaning modes."},
-            {"title": "Omron Platinum Blood Pressure Monitor", "price": "$69.99", "link": f"https://www.amazon.com/dp/B07RWK3V7V?tag={AMAZON_TAG}", "description": "Clinically accurate home blood pressure monitor."},
-            {"title": "Nature Made Vitamin D3", "price": "$12.99", "link": f"https://www.amazon.com/dp/B00LJP3V7U?tag={AMAZON_TAG}", "description": "Supports bone, teeth, muscle, and immune health."},
-            {"title": "Gaiam Yoga Mat", "price": "$24.98", "link": f"https://www.amazon.com/dp/B000BQO6V4?tag={AMAZON_TAG}", "description": "Non-slip, thick yoga mat for all fitness levels."},
-            {"title": "Waterpik Aquarius Water Flosser", "price": "$79.99", "link": f"https://www.amazon.com/dp/B01CZ0E4T2?tag={AMAZON_TAG}", "description": "Dental water jet for effective plaque removal."},
-            {"title": "Dr. Scholl's Orthotic Inserts", "price": "$29.95", "link": f"https://www.amazon.com/dp/B00006I5JU?tag={AMAZON_TAG}", "description": "Comfortable shoe inserts for arch support."},
-            {"title": "Bose Sleepbuds II", "price": "$249.00", "link": f"https://www.amazon.com/dp/B07Q9MJKBV?tag={AMAZON_TAG}", "description": "Noise-masking sleepbuds with soothing sounds."},
-            {"title": "Pure Enrichment PureGlow Crystal", "price": "$39.99", "link": f"https://www.amazon.com/dp/B07D37FKGY?tag={AMAZON_TAG}", "description": "Himalayan salt lamp for calming ambiance and air purification."}
-        ]
-    }
-    return fallback_data.get(category, [])
+    """Return 3 random fallback products for a given category."""
+    if category not in fallback_products:
+        return []
+    return random.sample(fallback_products[category], 3)
