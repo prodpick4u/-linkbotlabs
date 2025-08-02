@@ -1,14 +1,14 @@
 # Top Kitchen Gadgets on Amazon
 
-## [GE Profile Opal Nugget Ice Maker](https://www.amazon.com/dp/B0842FSKJ6?tag=mychanneld-20)
-- **Price:** $579.00
+## [Anova Culinary Sous Vide Precision Cooker](https://www.amazon.com/dp/B07C7PW3PC?tag=mychanneld-20)
+- **Price:** $199.00
 - **Description:** No description
 
-## [Vitamix 5200 Blender](https://www.amazon.com/dp/B008H4SLV6?tag=mychanneld-20)
-- **Price:** $479.95
+## [COSORI Pro II Air Fryer](https://www.amazon.com/dp/B09C8NP2K3?tag=mychanneld-20)
+- **Price:** $129.99
 - **Description:** No description
 
-## [All-Clad Stainless Steel Cookware Set](https://www.amazon.com/dp/B00FXP2AOI?tag=mychanneld-20)
-- **Price:** $699.95
+## [Cuckoo 10-Cup Rice Cooker](https://www.amazon.com/dp/B00IOQ5L1Q?tag=mychanneld-20)
+- **Price:** $164.99
 - **Description:** No description
 
