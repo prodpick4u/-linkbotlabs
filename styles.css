@@ -8,9 +8,15 @@
   --color-primary-hover: #63b3ed;   /* Light Blue */
   --color-text: #e0e0e0;            /* Light gray text */
   --color-text-muted: #9ca3af;      /* Muted gray */
-  --color-price: #10b981;           /* Emerald green (same) */
+  --color-price: #10b981;           /* Emerald green */
   --font-base: 'Inter', system-ui, sans-serif;
   --font-heading: 'Montserrat', sans-serif;
+
+  /* Accent colors for glow */
+  --color-accent1: #f472b6; /* Pink */
+  --color-accent2: #facc15; /* Yellow */
+  --color-accent3: #34d399; /* Teal */
+  --color-accent4: #a78bfa; /* Purple */
 }
 
 * {
@@ -39,6 +45,18 @@ h1 {
   color: var(--color-text);
   letter-spacing: -0.025em;
   text-shadow: 0 0 8px var(--color-primary);
+  position: relative;
+}
+
+/* Colorful underline under heading */
+h1::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  margin-top: 0.5rem;
+  background: linear-gradient(90deg, var(--color-accent1), var(--color-accent4));
+  border-radius: 4px;
 }
 
 .description {
@@ -57,18 +75,38 @@ h1 {
   gap: 1.5rem;
 }
 
+/* Colorful glowing border on product cards */
 .product-card {
   background-color: var(--color-card-bg);
   border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(30, 144, 255, 0.2);
+  border: 2px solid transparent;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: box-shadow 0.3s ease;
+  box-shadow: 0 6px 15px rgba(30, 144, 255, 0.15);
+  transition: border 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  background-clip: padding-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Glowing multi-color border behind card */
+.product-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(135deg, var(--color-accent1), var(--color-accent2), var(--color-accent3), var(--color-accent4));
+  z-index: -1;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
 }
 
 .product-card:hover {
+  transform: translateY(-5px);
   box-shadow: 0 12px 25px rgba(30, 144, 255, 0.4);
 }
 
