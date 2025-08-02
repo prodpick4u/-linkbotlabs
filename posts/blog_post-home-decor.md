@@ -1,42 +1,30 @@
 # Stylish Home Decor on Amazon
 
-## [Philips Hue White and Color Ambiance Starter Kit](https://www.amazon.com/dp/B07L6N1YB8?tag=mychanneld-20)
-- **Price:** $179.99
-- **Description:** Smart LED light bulbs with millions of colors, compatible with Alexa and Google Assistant.
-
-## [Umbra Trigg Geometric Wall Planter](https://www.amazon.com/dp/B01N7MRO7V?tag=mychanneld-20)
-- **Price:** $34.99
-- **Description:** Modern geometric hanging planter for succulents and small plants.
-
-## [Safavieh Monaco Collection Area Rug](https://www.amazon.com/dp/B074D3QQNJ?tag=mychanneld-20)
-- **Price:** $149.99
-- **Description:** Soft and durable area rug with classic pattern and color.
-
-## [West Elm Mid-Century Coffee Table](https://www.amazon.com/dp/B08L8QGVNZ?tag=mychanneld-20)
-- **Price:** $399.00
-- **Description:** Stylish and sturdy coffee table with walnut veneer.
-
-## [IKEA FADO Table Lamp](https://www.amazon.com/dp/B008N02PTI?tag=mychanneld-20)
-- **Price:** $29.99
-- **Description:** Round glass lamp with soft ambient lighting.
-
-## [Yankee Candle Large Jar](https://www.amazon.com/dp/B00HLV1TGI?tag=mychanneld-20)
-- **Price:** $24.99
-- **Description:** Long-lasting scented candle for a cozy home atmosphere.
-
-## [Slipcovered Armchair](https://www.amazon.com/dp/B07VJ5PHSR?tag=mychanneld-20)
-- **Price:** $249.00
-- **Description:** Comfortable, easy-to-clean slipcover armchair.
-
-## [MALM 6-Drawer Dresser](https://www.amazon.com/dp/B073TT2Z4P?tag=mychanneld-20)
+## [COLAMY Sherpa Accent Chair + Ottoman](https://www.amazon.com/dp/B0FBWFTBX3?tag=mychanneld-20)
 - **Price:** $229.99
-- **Description:** Simple, functional dresser with ample storage.
+- **Description:** Plush sherpa swivel barrel chair with hidden storage ottoman—cozy and stylish.
 
-## [Keenway Floating Shelves](https://www.amazon.com/dp/B07X5JYZ13?tag=mychanneld-20)
-- **Price:** $39.99
-- **Description:** Set of two wooden shelves with modern design.
+## [MAXYOYO Velvet Tufted Armchair](https://www.amazon.com/dp/B0D1BS51XJ?tag=mychanneld-20)
+- **Price:** $199.99
+- **Description:** Elegant velvet tufted chair with metal legs—modern glam and comfort.
 
-## [Etekcity LED String Lights](https://www.amazon.com/dp/B07NQTPGYL?tag=mychanneld-20)
-- **Price:** $19.99
-- **Description:** Battery operated warm white fairy lights for decoration.
+## [Antok Arched Full‑Length Mirror 71×28″](https://www.amazon.com/dp/B0DB772S6Z?tag=mychanneld-20)
+- **Price:** $139.99
+- **Description:** Ornate arched floor mirror with gold aluminum alloy frame—adds elegance and light.
+
+## [HARRITPURE 76×34″ Arched Full‑Length Mirror](https://www.amazon.com/dp/B0C8M8216Q?tag=mychanneld-20)
+- **Price:** $149.99
+- **Description:** Oversized arched mirror with aluminum alloy frame—HD glass, wall-mounted or freestanding.
+
+## [Kelly Miller Gold Framed Wall Mirror 24×48″](https://www.amazon.com/dp/B0CDCN8CCR?tag=mychanneld-20)
+- **Price:** $150.00
+- **Description:** Large decorative beveled mirror with brushed gold scalloped frame—farmhouse chic.
+
+## [WACASA Mid‑Century Accent Chair](https://www.amazon.com/dp/B092ZSFGM5?tag=mychanneld-20)
+- **Price:** $142.00
+- **Description:** Compact mid‑century modern side chair—wood frame and cushioned seat for style & comfort.
+
+## [INZOY Mid‑Century Chair + Ottoman](https://www.amazon.com/dp/B0C39S3T4Y?tag=mychanneld-20)
+- **Price:** $150.00
+- **Description:** Soft velvet accent chair with ottoman and adjustable back—stylish and functional.
 
