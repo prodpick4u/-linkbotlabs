@@ -2,13 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
 
 :root {
-  --color-bg: #fafafa;
-  --color-card-bg: #ffffff;
-  --color-primary: #2563eb;    /* Blue */
-  --color-primary-hover: #1e40af;
-  --color-text: #1f2937;       /* Dark slate */
-  --color-text-muted: #6b7280; /* Gray */
-  --color-price: #10b981;      /* Emerald green */
+  --color-bg: #121212;              /* Dark background */
+  --color-card-bg: #1e1e1e;         /* Slightly lighter card bg */
+  --color-primary: #1e90ff;         /* Dodger Blue */
+  --color-primary-hover: #63b3ed;   /* Light Blue */
+  --color-text: #e0e0e0;            /* Light gray text */
+  --color-text-muted: #9ca3af;      /* Muted gray */
+  --color-price: #10b981;           /* Emerald green (same) */
   --font-base: 'Inter', system-ui, sans-serif;
   --font-heading: 'Montserrat', sans-serif;
 }
@@ -38,6 +38,7 @@ h1 {
   margin-bottom: 0.25rem;
   color: var(--color-text);
   letter-spacing: -0.025em;
+  text-shadow: 0 0 8px var(--color-primary);
 }
 
 .description {
@@ -59,7 +60,7 @@ h1 {
 .product-card {
   background-color: var(--color-card-bg);
   border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+  box-shadow: 0 6px 15px rgba(30, 144, 255, 0.2);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -68,7 +69,7 @@ h1 {
 }
 
 .product-card:hover {
-  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+  box-shadow: 0 12px 25px rgba(30, 144, 255, 0.4);
 }
 
 .product-link {
@@ -79,6 +80,7 @@ h1 {
   text-decoration: none;
   margin-bottom: 0.6rem;
   transition: color 0.25s ease;
+  text-shadow: 0 0 4px var(--color-primary);
 }
 
 .product-link:hover {
@@ -91,6 +93,7 @@ h1 {
   color: var(--color-price);
   font-size: 1.1rem;
   margin-bottom: 0.8rem;
+  text-shadow: 0 0 5px var(--color-price);
 }
 
 .description-text {
