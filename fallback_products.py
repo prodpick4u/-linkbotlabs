@@ -1,4 +1,4 @@
-# fallback_products.py
+## fallback_products.py
 
 AMAZON_TAG = "mychanneld-20"
 
@@ -41,16 +41,13 @@ def get_fallback_products(category):
             {"title": "Bio-Oil Skincare Oil", "price": "$14.99", "link": f"https://www.amazon.com/dp/B004AI97MA?tag={AMAZON_TAG}", "description": "Improves appearance of scars and stretch marks."}
         ],
         "home-decor": [
-            {"title": "Philips Hue White and Color Ambiance Starter Kit", "price": "$179.99", "link": f"https://www.amazon.com/dp/B07L6N1YB8?tag={AMAZON_TAG}", "description": "Smart LED light bulbs with millions of colors, compatible with Alexa and Google Assistant."},
-            {"title": "Umbra Trigg Geometric Wall Planter", "price": "$34.99", "link": f"https://www.amazon.com/dp/B01N7MRO7V?tag={AMAZON_TAG}", "description": "Modern geometric hanging planter for succulents and small plants."},
-            {"title": "Safavieh Monaco Collection Area Rug", "price": "$149.99", "link": f"https://www.amazon.com/dp/B074D3QQNJ?tag={AMAZON_TAG}", "description": "Soft and durable area rug with classic pattern and color."},
-            {"title": "West Elm Mid-Century Coffee Table", "price": "$399.00", "link": f"https://www.amazon.com/dp/B08L8QGVNZ?tag={AMAZON_TAG}", "description": "Stylish and sturdy coffee table with walnut veneer."},
-            {"title": "IKEA FADO Table Lamp", "price": "$29.99", "link": f"https://www.amazon.com/dp/B008N02PTI?tag={AMAZON_TAG}", "description": "Round glass lamp with soft ambient lighting."},
-            {"title": "Yankee Candle Large Jar", "price": "$24.99", "link": f"https://www.amazon.com/dp/B00HLV1TGI?tag={AMAZON_TAG}", "description": "Long-lasting scented candle for a cozy home atmosphere."},
-            {"title": "Slipcovered Armchair", "price": "$249.00", "link": f"https://www.amazon.com/dp/B07VJ5PHSR?tag={AMAZON_TAG}", "description": "Comfortable, easy-to-clean slipcover armchair."},
-            {"title": "MALM 6-Drawer Dresser", "price": "$229.99", "link": f"https://www.amazon.com/dp/B073TT2Z4P?tag={AMAZON_TAG}", "description": "Simple, functional dresser with ample storage."},
-            {"title": "Keenway Floating Shelves", "price": "$39.99", "link": f"https://www.amazon.com/dp/B07X5JYZ13?tag={AMAZON_TAG}", "description": "Set of two wooden shelves with modern design."},
-            {"title": "Etekcity LED String Lights", "price": "$19.99", "link": f"https://www.amazon.com/dp/B07NQTPGYL?tag={AMAZON_TAG}", "description": "Battery operated warm white fairy lights for decoration."}
+            {"title": "COLAMY Sherpa Accent Chair + Ottoman", "price": "$229.99", "link": f"https://www.amazon.com/dp/B0FBWFTBX3?tag={AMAZON_TAG}", "description": "Plush sherpa swivel barrel chair with hidden storage ottoman—cozy and stylish."},
+            {"title": "MAXYOYO Velvet Tufted Armchair", "price": "$199.99", "link": f"https://www.amazon.com/dp/B0D1BS51XJ?tag={AMAZON_TAG}", "description": "Elegant velvet tufted chair with metal legs—modern glam and comfort."},
+            {"title": "Antok Arched Full‑Length Mirror 71×28″", "price": "$139.99", "link": f"https://www.amazon.com/dp/B0DB772S6Z?tag={AMAZON_TAG}", "description": "Ornate arched floor mirror with gold aluminum alloy frame—adds elegance and light."},
+            {"title": "HARRITPURE 76×34″ Arched Full‑Length Mirror", "price": "$149.99", "link": f"https://www.amazon.com/dp/B0C8M8216Q?tag={AMAZON_TAG}", "description": "Oversized arched mirror with aluminum alloy frame—HD glass, wall-mounted or freestanding."},
+            {"title": "Kelly Miller Gold Framed Wall Mirror 24×48″", "price": "$150.00", "link": f"https://www.amazon.com/dp/B0CDCN8CCR?tag={AMAZON_TAG}", "description": "Large decorative beveled mirror with brushed gold scalloped frame—farmhouse chic."},
+            {"title": "WACASA Mid‑Century Accent Chair", "price": "$142.00", "link": f"https://www.amazon.com/dp/B092ZSFGM5?tag={AMAZON_TAG}", "description": "Compact mid‑century modern side chair—wood frame and cushioned seat for style & comfort."},
+            {"title": "INZOY Mid‑Century Chair + Ottoman", "price": "$150.00", "link": f"https://www.amazon.com/dp/B0C39S3T4Y?tag={AMAZON_TAG}", "description": "Soft velvet accent chair with ottoman and adjustable back—stylish and functional."}
         ],
         "tech": [
             {"title": "Apple AirPods Pro", "price": "$249.00", "link": f"https://www.amazon.com/dp/B07ZPC9QD4?tag={AMAZON_TAG}", "description": "Active noise cancellation wireless earbuds with transparency mode."},
