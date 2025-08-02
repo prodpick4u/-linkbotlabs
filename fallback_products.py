@@ -81,7 +81,8 @@ fallback_products = {
 }
 
 def get_fallback_products(category):
-    """Return 3 random fallback products for a given category."""
-    if category not in fallback_products:
-        return []
-    return random.sample(fallback_products[category], 3)
+    """Return up to 3 random fallback products for a given category."""
+    products = fallback_products.get(category, [])
+    if len(products) <= 3:
+        return products
+    return random.sample(products, 3)
