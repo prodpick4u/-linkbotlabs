@@ -8,13 +8,13 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
 
     :root {
-      --color-bg: #0e0f11;               /* True dark background */
-      --color-card-bg: #1a1c1f;          /* Slightly lighter card bg */
-      --color-primary: #3ea6ff;          /* Vibrant blue */
-      --color-primary-hover: #66ccff;    /* Lighter blue hover */
-      --color-text: #f1f1f1;             /* Light text */
-      --color-text-muted: #b0b3b8;       /* Muted gray */
-      --color-price: #34d399;            /* Mint green for price */
+      --color-bg: #0e0f11;
+      --color-card-bg: #1a1c1f;
+      --color-primary: #3ea6ff;
+      --color-primary-hover: #66ccff;
+      --color-text: #f1f1f1;
+      --color-text-muted: #b0b3b8;
+      --color-price: #34d399;
       --font-base: 'Inter', system-ui, sans-serif;
       --font-heading: 'Montserrat', sans-serif;
     }
@@ -131,7 +131,7 @@
     <ul class="products-list">
       {% for product in products %}
       <li class="product-card">
-        <a href="{{ product.affiliate_link }}" class="product-link" target="_blank" rel="noopener noreferrer">{{ product.title }}</a>
+        <a href="{{ product.url }}" class="product-link" target="_blank" rel="nofollow noopener noreferrer">{{ product.title }}</a>
         <div class="price">{{ product.price }}</div>
         <p class="description-text">{{ product.description or 'No description available.' }}</p>
       </li>
