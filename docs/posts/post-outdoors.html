@@ -5,17 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Outdoor Gear Must-Haves</title>
   <style>
-    /* Import Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
 
     :root {
-      --color-bg: #fafafa;
-      --color-card-bg: #ffffff;
-      --color-primary: #2563eb;    /* Blue */
-      --color-primary-hover: #1e40af;
-      --color-text: #1f2937;       /* Dark slate */
-      --color-text-muted: #6b7280; /* Gray */
-      --color-price: #10b981;      /* Emerald green */
+      --color-bg: #121212;              /* Dark background */
+      --color-card-bg: #1e1e1e;         /* Slightly lighter card bg */
+      --color-primary: #1e90ff;         /* Dodger Blue */
+      --color-primary-hover: #63b3ed;   /* Light Blue */
+      --color-text: #e0e0e0;            /* Light gray text */
+      --color-text-muted: #9ca3af;      /* Muted gray */
+      --color-price: #10b981;           /* Emerald green */
       --font-base: 'Inter', system-ui, sans-serif;
       --font-heading: 'Montserrat', sans-serif;
     }
@@ -45,6 +44,7 @@
       margin-bottom: 0.25rem;
       color: var(--color-text);
       letter-spacing: -0.025em;
+      text-shadow: 0 0 8px var(--color-primary);
     }
 
     .description {
@@ -66,7 +66,7 @@
     .product-card {
       background-color: var(--color-card-bg);
       border-radius: 12px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+      box-shadow: 0 6px 15px rgba(30, 144, 255, 0.2);
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
@@ -75,7 +75,7 @@
     }
 
     .product-card:hover {
-      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+      box-shadow: 0 12px 25px rgba(30, 144, 255, 0.4);
     }
 
     .product-link {
@@ -86,6 +86,7 @@
       text-decoration: none;
       margin-bottom: 0.6rem;
       transition: color 0.25s ease;
+      text-shadow: 0 0 4px var(--color-primary);
     }
 
     .product-link:hover {
@@ -98,6 +99,7 @@
       color: var(--color-price);
       font-size: 1.1rem;
       margin-bottom: 0.8rem;
+      text-shadow: 0 0 5px var(--color-price);
     }
 
     .description-text {
@@ -130,21 +132,9 @@
     <ul class="products-list">
       
       <li class="product-card">
-        <a href="https://www.amazon.com/dp/B004J2GUOU?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Coleman Sundome Tent</a>
-        <div class="price">$79.99</div>
-        <p class="description-text">Spacious, weatherproof dome tent — ideal for 2-4 campers.</p>
-      </li>
-      
-      <li class="product-card">
-        <a href="https://www.amazon.com/dp/B006QF3TW4?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">LifeStraw Personal Water Filter</a>
-        <div class="price">$19.95</div>
-        <p class="description-text">Lightweight emergency water filter — perfect for hiking.</p>
-      </li>
-      
-      <li class="product-card">
-        <a href="https://www.amazon.com/dp/B00A7EXF4C?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Intex Explorer K2 Kayak</a>
-        <div class="price">$149.99</div>
-        <p class="description-text">2-person inflatable kayak for lakes and mild rivers.</p>
+        <a href="https://www.amazon.com/dp/B0009PUR5E?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Coleman Propane Camping Stove</a>
+        <div class="price">$57.99</div>
+        <p class="description-text">Two-burner portable stove for outdoor cooking.</p>
       </li>
       
       <li class="product-card">
@@ -154,9 +144,9 @@
       </li>
       
       <li class="product-card">
-        <a href="https://www.amazon.com/dp/B00363WZSS?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Coleman Portable Camping Chair</a>
-        <div class="price">$39.99</div>
-        <p class="description-text">Durable folding chair with cooler in the armrest.</p>
+        <a href="https://www.amazon.com/dp/B00FA2RLX2?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Sawyer Products Mini Water Filtration System</a>
+        <div class="price">$24.95</div>
+        <p class="description-text">Removes 99.99999% of all bacteria — great for backpacking.</p>
       </li>
       
       <li class="product-card">
@@ -166,27 +156,9 @@
       </li>
       
       <li class="product-card">
-        <a href="https://www.amazon.com/dp/B01N4B6VY4?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Wise Owl Outfitters Hammock</a>
-        <div class="price">$29.95</div>
-        <p class="description-text">Compact, lightweight hammock with tree straps included.</p>
-      </li>
-      
-      <li class="product-card">
         <a href="https://www.amazon.com/dp/B01L2HYPNW?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Foxelli Trekking Poles</a>
         <div class="price">$59.97</div>
         <p class="description-text">Collapsible, shock-absorbing poles with adjustable length.</p>
-      </li>
-      
-      <li class="product-card">
-        <a href="https://www.amazon.com/dp/B0009PUR5E?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Coleman Propane Camping Stove</a>
-        <div class="price">$57.99</div>
-        <p class="description-text">Two-burner portable stove for outdoor cooking.</p>
-      </li>
-      
-      <li class="product-card">
-        <a href="https://www.amazon.com/dp/B00FA2RLX2?tag=mychanneld-20" class="product-link" target="_blank" rel="noopener noreferrer">Sawyer Products Mini Water Filtration System</a>
-        <div class="price">$24.95</div>
-        <p class="description-text">Removes 99.99999% of all bacteria — great for backpacking.</p>
       </li>
       
     </ul>
