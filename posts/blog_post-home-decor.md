@@ -1,22 +1,14 @@
 # Stylish Home Decor on Amazon
 
-## [Kelly Miller Gold Framed Wall Mirror 24×48″](https://www.amazon.com/dp/B0CDCN8CCR?tag=mychanneld-20)
-- **Price:** $150.00
-- **Description:** Large decorative beveled mirror with brushed gold scalloped frame—farmhouse chic.
+## [Umbra Trigg Wall Planter Set](https://www.amazon.com/dp/B00UVSNT30?tag=mychanneld-20)
+- **Price:** $39.99
+- **Description:** No description
 
-## [WACASA Mid‑Century Accent Chair](https://www.amazon.com/dp/B092ZSFGM5?tag=mychanneld-20)
-- **Price:** $142.00
-- **Description:** Compact mid‑century modern side chair—wood frame and cushioned seat for style & comfort.
-
-## [MAXYOYO Velvet Tufted Armchair](https://www.amazon.com/dp/B0D1BS51XJ?tag=mychanneld-20)
+## [Philips Hue White and Color Smart Bulbs](https://www.amazon.com/dp/B07N1WW638?tag=mychanneld-20)
 - **Price:** $199.99
-- **Description:** Elegant velvet tufted chair with metal legs—modern glam and comfort.
+- **Description:** No description
 
-## [HARRITPURE 76×34″ Arched Full‑Length Mirror](https://www.amazon.com/dp/B0C8M8216Q?tag=mychanneld-20)
-- **Price:** $149.99
-- **Description:** Oversized arched mirror with aluminum alloy frame—HD glass, wall-mounted or freestanding.
-
-## [Antok Arched Full‑Length Mirror 71×28″](https://www.amazon.com/dp/B0DB772S6Z?tag=mychanneld-20)
-- **Price:** $139.99
-- **Description:** Ornate arched floor mirror with gold aluminum alloy frame—adds elegance and light.
+## [Dyson Purifier Cool](https://www.amazon.com/dp/B093CHZD1N?tag=mychanneld-20)
+- **Price:** $569.99
+- **Description:** No description
 
