@@ -3,118 +3,122 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick4U - AI Blog Generator</title>
-  <meta name="description" content="Automatically generates product review blogs with YouTube embeds and Amazon affiliate links." />
+  <title>Prodpick – You View, We Review</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #000;
-      color: #eee;
-      padding: 2rem;
-      max-width: 900px;
-      margin: auto;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fefefe;
+      color: #222;
+      line-height: 1.6;
     }
-    h1, h2, p.description {
-      color: #eee;
-      text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-      text-align: center;
-    }
-    p.description {
-      font-style: italic;
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-    }
-    .post-links {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      max-width: 600px;
-      margin: 0 auto 3rem;
-    }
-    .post-links a {
-      display: block;
-      padding: 1rem 1.5rem;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: #eee;
-      font-weight: 600;
-      font-size: 1.2rem;
-      text-decoration: none;
-      box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.1);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
-    }
-    .post-links a:hover {
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.25);
+
+    header {
+      background: #0d6efd;
       color: #fff;
-    }
-    h2 {
-      margin-bottom: 1rem;
-      border-bottom: 3px solid rgba(255, 255, 255, 0.2);
-      padding-bottom: 0.3rem;
-    }
-    footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      color: #bbb;
+      padding: 2rem 1rem;
       text-align: center;
-      font-weight: 500;
     }
-    a {
-      color: #82aaff;
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      max-width: 100%;
+      background: #000;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .content {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: 0.3s ease;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card a {
       text-decoration: none;
-      transition: color 0.3s ease;
+      color: #0d6efd;
+      font-weight: 600;
     }
-    a:hover {
-      color: #aabbff;
-      text-decoration: underline;
+
+    footer {
+      background: #f8f9fa;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Prodpick4U: YouTube + Amazon Blog Generator</h1>
-  <p class="description">Automatically generates product review blogs with embedded YouTube videos and Amazon affiliate links.</p>
+  <header>
+    <h1>Prodpick – You View, We Review</h1>
+    <p>Amazon Finds in Kitchen, Outdoors, Beauty, Tech & More</p>
+  </header>
 
-  <!-- Advertisement Banner -->
-  <section style="background: #1e90ff; color: white; padding: 1.5rem; border-radius: 12px; text-align: center; margin: 2rem auto; max-width: 900px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; box-shadow: 0 4px 15px rgba(30, 144, 255, 0.4);">
-    <h2 style="margin: 0 0 0.5rem;">🚀 Start Your Affiliate Business Today!</h2>
-    <p style="margin: 0 0 1rem;">Get instant access to our AI-powered Amazon & YouTube review generator. Automate content creation and boost your income!</p>
-    <a href="http://bit.ly/3U9Q092" target="_blank" rel="noopener" style="display: inline-block; background: #fff; color: #1e90ff; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 700; text-decoration: none; transition: background-color 0.3s ease;">
-      Try It Now &rarr;
-    </a>
-  </section>
-
-  <h2>✅ Blog Post URLs (Live or Soon-to-be Live):</h2>
-  <p>Once GitHub Pages refreshes (typically within 30–60 seconds), you’ll be able to access them here:</p>
-  <div class="post-links">
-    {% for category in categories %}
-      <a href="/Prodpick4u/posts/{{ category.filename }}">👉 {{ category.title }}</a>
-    {% endfor %}
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/9gNanC4o1BQ?si=pMBRgi1tXphtZ32S"
+            title="YouTube video player"
+            frameborder="0"
+            allowfullscreen></iframe>
   </div>
 
-  <h2>🏠 Homepage</h2>
-  <p><a href="/Prodpick4u/index.html">Homepage</a></p>
-
-  <h2>🎥 Demo Video</h2>
-  <p>Watch a quick demo showing how the AI blog and video generator works.</p>
-  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width: 900px; margin: auto;">
-    <iframe 
-      src="https://www.youtube.com/embed/9gNanC4o1BQ" 
-      title="YouTube demo video" 
-      frameborder="0" 
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-      allowfullscreen
-      style="position:absolute; top:0; left:0; width:100%; height:100%;">
-    </iframe>
+  <div class="content">
+    <h2 style="text-align:center; margin-bottom:1rem;">Explore by Category</h2>
+    <div class="grid">
+      <div class="card"><a href="posts/post-kitchen.html">🍳 Kitchen</a></div>
+      <div class="card"><a href="posts/post-outdoors.html">⛺ Outdoors</a></div>
+      <div class="card"><a href="posts/post-beauty.html">💄 Beauty</a></div>
+      <div class="card"><a href="posts/post-home-decor.html">🏠 Home Decor</a></div>
+      <div class="card"><a href="posts/post-tech.html">💻 Tech</a></div>
+      <div class="card"><a href="posts/post-health.html">🧘 Health</a></div>
+    </div>
   </div>
 
   <footer>
-    <p>Made by Prodpick4U · Updated Daily</p>
+    &copy; 2025 Prodpick. All Amazon links include affiliate tracking (<code>mychanneld-20</code>).
   </footer>
 </body>
 </html>
