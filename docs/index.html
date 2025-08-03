@@ -2,64 +2,127 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Prodpick Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prodpick4u – Amazon Blog Demo</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     body {
+      background: #0a0a0a;
+      color: #ffffff;
       font-family: 'Inter', sans-serif;
-      padding: 20px;
-      background: #f8fafc;
-      color: #1f2937;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      text-align: center;
+      padding: 2rem;
     }
     h1 {
       font-size: 2rem;
-      margin-bottom: 10px;
+      margin-bottom: 0.5rem;
     }
-    ul {
-      list-style-type: none;
-      padding: 0;
+    p {
+      color: #ccc;
+      max-width: 600px;
+      margin: 0 auto 2rem;
     }
-    li {
-      margin: 10px 0;
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
     }
-    a {
-      color: #2563eb;
-      font-weight: bold;
+    .card {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 8px;
+      width: 280px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .card:hover {
+      border-color: #00ffd5;
+      box-shadow: 0 0 10px #00ffd5;
+    }
+    .card a {
+      color: #00ffd5;
       text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .video-container {
-      margin-top: 30px;
-      max-width: 640px;
-      aspect-ratio: 16 / 9;
+      font-weight: 600;
+      display: block;
+      margin-top: 0.5rem;
     }
     iframe {
-      width: 100%;
-      height: 100%;
+      margin-top: 3rem;
       border: none;
+      border-radius: 10px;
+      max-width: 90%;
+    }
+    footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.8rem;
+      padding: 2rem 1rem;
+    }
+    .cta {
+      background: #00ffd5;
+      color: #000;
+      font-weight: bold;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 10px;
+      margin: 2rem auto;
+      max-width: 500px;
+    }
+    .cta a {
+      text-decoration: none;
+      color: #000;
     }
   </style>
 </head>
 <body>
-  <h1>📝 Prodpick Blog Posts</h1>
-  <ul>
-    <li><a href="posts/post-beauty.html">Post Beauty</a></li>
-    <li><a href="posts/post-health.html">Post Health</a></li>
-    <li><a href="posts/post-home-decor.html">Post Home Decor</a></li>
-    <li><a href="posts/post-kitchen.html">Post Kitchen</a></li>
-    <li><a href="posts/post-outdoors.html">Post Outdoors</a></li>
-    <li><a href="posts/post-tech.html">Post Tech</a></li>
-  </ul>
+  <header>
+    <h1>🛒 Prodpick4u Amazon Blog Demo</h1>
+    <p>Explore a working sample of an automated affiliate blog powered by fallback products and Amazon links.</p>
+  </header>
 
-  <div class="video-container">
-    <iframe 
-      src="https://www.youtube.com/embed/qwfACbh93M0"
-      title="Prodpick Intro"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen>
-    </iframe>
+  <div class="grid">
+    <div class="card">
+      <h3>Kitchen Gadgets</h3>
+      <a href="post-kitchen.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Outdoors</h3>
+      <a href="post-outdoors.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Beauty</h3>
+      <a href="post-beauty.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Home Decor</h3>
+      <a href="post-home-decor.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Tech</h3>
+      <a href="post-tech.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Health</h3>
+      <a href="post-health.html">View Post</a>
+    </div>
   </div>
+
+  <div class="cta">
+    💼 Try this demo now & get the full automation kit on <a href="https://www.fiverr.com/s/DUMMYLINK" target="_blank">Fiverr</a>
+  </div>
+
+  <center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/qwfACbh93M0?si=iKkxvuGZ6UL8PfQL" title="Demo Video" allowfullscreen></iframe>
+  </center>
+
+  <footer>
+    © 2025 Prodpick4u · Demo powered by GitHub Pages · Includes Amazon affiliate examples
+  </footer>
 </body>
 </html>

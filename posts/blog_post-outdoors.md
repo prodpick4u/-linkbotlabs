@@ -1,14 +1,14 @@
 # Outdoor Gear Must-Haves
 
-## [Coleman Skydome Camping Tent](https://www.amazon.com/dp/B08L6YJ5ZK?tag=mychanneld-20)
-- **Price:** $149.99
-- **Description:** Easy 5-minute setup tent with dark room technology and weather protection.
+## [Osprey Atmos AG 65 Backpack](https://www.amazon.com/dp/B07TJRGWYQ?tag=mychanneld-20)
+- **Price:** $269.99
+- **Description:** High-performance hiking backpack with anti-gravity suspension.
 
-## [Therm-a-Rest NeoAir XTherm Sleeping Pad](https://www.amazon.com/dp/B06W55JYD7?tag=mychanneld-20)
-- **Price:** $199.95
-- **Description:** Lightweight and warm sleeping pad for camping.
+## [Solo Stove Bonfire 2.0](https://www.amazon.com/dp/B0B2D7MT4R?tag=mychanneld-20)
+- **Price:** $299.99
+- **Description:** Smokeless stainless steel fire pit perfect for outdoor gatherings.
 
-## [Weber Q1200 Liquid Propane Grill](https://www.amazon.com/dp/B00FDOON9C?tag=mychanneld-20)
-- **Price:** $259.00
-- **Description:** Compact yet powerful gas grill for backyard or travel use.
+## [Black Diamond Spot Headlamp](https://www.amazon.com/dp/B00NHHY4IS?tag=mychanneld-20)
+- **Price:** $39.95
+- **Description:** Powerful and waterproof headlamp for outdoor adventures.
 
