@@ -29,9 +29,13 @@ for cat in categories:
 
     products = get_fallback_products(slug)
 
-    # Generate markdown and HTML using the full metadata
     markdown = generate_markdown(products, title)
-    html = generate_html(products, category_title=title, category_description=description)
+    html = generate_html(
+        products,
+        category_title=title,
+        category_description=description,
+        template_path="templates/post.html"  # <-- This is required
+    )
 
     filename = f"post-{slug}.html"
     save_blog_files(title, markdown, html, filename)
