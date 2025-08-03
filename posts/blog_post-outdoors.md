@@ -1,22 +1,14 @@
 # Outdoor Gear Must-Haves
 
-## [Garmin Instinct 2X Solar Watch](https://www.amazon.com/dp/B0BV3KL25M?tag=mychanneld-20)
-- **Price:** $449.99
-- **Description:** No description
-
 ## [Weber Q1200 Liquid Propane Grill](https://www.amazon.com/dp/B00FDOON9C?tag=mychanneld-20)
 - **Price:** $259.00
-- **Description:** No description
+- **Description:** Compact yet powerful gas grill for backyard or travel use.
 
-## [Jetboil Flash Cooking System](https://www.amazon.com/dp/B00L1F2I54?tag=mychanneld-20)
-- **Price:** $124.95
-- **Description:** No description
+## [Coleman Skydome Camping Tent](https://www.amazon.com/dp/B08L6YJ5ZK?tag=mychanneld-20)
+- **Price:** $149.99
+- **Description:** Easy 5-minute setup tent with dark room technology and weather protection.
 
-## [YETI Tundra 45 Cooler](https://www.amazon.com/dp/B00IYJK7VS?tag=mychanneld-20)
-- **Price:** $325.00
-- **Description:** No description
-
-## [ALPS Mountaineering King Kong Chair](https://www.amazon.com/dp/B001RLQNSY?tag=mychanneld-20)
-- **Price:** $129.99
-- **Description:** No description
+## [Solo Stove Bonfire 2.0](https://www.amazon.com/dp/B0B2D7MT4R?tag=mychanneld-20)
+- **Price:** $299.99
+- **Description:** Smokeless stainless steel fire pit perfect for outdoor gatherings.
 

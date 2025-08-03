@@ -1,22 +1,14 @@
 # Health & Wellness Picks
 
-## [Fitbit Charge 6](https://www.amazon.com/dp/B0CGVGWVVH?tag=mychanneld-20)
+## [Fitbit Charge 6 Fitness Tracker](https://www.amazon.com/dp/B0C6J79PTF?tag=mychanneld-20)
 - **Price:** $159.95
-- **Description:** No description
+- **Description:** Monitor heart rate, sleep, GPS activity, and stress with Google integration.
 
-## [Beurer Infrared Heat Lamp](https://www.amazon.com/dp/B003X26TWM?tag=mychanneld-20)
+## [RENPHO Smart Scale for Body Weight](https://www.amazon.com/dp/B07Y2XQ4Z4?tag=mychanneld-20)
 - **Price:** $139.99
-- **Description:** No description
+- **Description:** Tracks 13 body metrics and syncs with fitness apps.
 
-## [Pure Enrichment MistAire XL](https://www.amazon.com/dp/B01N9KOLUX?tag=mychanneld-20)
-- **Price:** $119.99
-- **Description:** No description
-
-## [RENPHO Smart Body Scale](https://www.amazon.com/dp/B01N1UX8RW?tag=mychanneld-20)
-- **Price:** $129.99
-- **Description:** No description
-
-## [Withings Sleep Tracking Mat](https://www.amazon.com/dp/B07CVCHV3H?tag=mychanneld-20)
-- **Price:** $129.95
-- **Description:** No description
+## [Omron Platinum Blood Pressure Monitor](https://www.amazon.com/dp/B07RL8Z3ZG?tag=mychanneld-20)
+- **Price:** $109.99
+- **Description:** Clinically accurate readings with Bluetooth sync and dual-user support.
 

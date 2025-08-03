@@ -8,13 +8,13 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
 
     :root {
-      --color-bg: #0e0f11;
-      --color-card-bg: #1a1c1f;
-      --color-primary: #3ea6ff;
-      --color-primary-hover: #66ccff;
-      --color-text: #f1f1f1;
-      --color-text-muted: #b0b3b8;
-      --color-price: #34d399;
+      --color-bg: #f9fafb;
+      --color-card-bg: #ffffff;
+      --color-primary: #2563eb;
+      --color-primary-hover: #1d4ed8;
+      --color-text: #111827;
+      --color-text-muted: #6b7280;
+      --color-price: #10b981;
       --font-base: 'Inter', system-ui, sans-serif;
       --font-heading: 'Montserrat', sans-serif;
     }
@@ -44,7 +44,7 @@
       margin-bottom: 0.5rem;
       color: var(--color-text);
       letter-spacing: -0.03em;
-      text-shadow: 0 0 12px var(--color-primary);
+      text-shadow: none;
     }
 
     .description {
@@ -66,27 +66,26 @@
     .product-card {
       background-color: var(--color-card-bg);
       border-radius: 14px;
-      box-shadow: 0 8px 20px rgba(62, 166, 255, 0.15);
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 32px rgba(62, 166, 255, 0.35);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.3);
     }
 
     .product-link {
       font-family: var(--font-heading);
       font-weight: 600;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       color: var(--color-primary);
       text-decoration: none;
       margin-bottom: 0.8rem;
-      text-shadow: 0 0 4px rgba(62, 166, 255, 0.4);
     }
 
     .product-link:hover {
@@ -97,13 +96,12 @@
     .price {
       font-weight: 700;
       color: var(--color-price);
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       margin-bottom: 0.75rem;
-      text-shadow: 0 0 4px rgba(52, 211, 153, 0.4);
     }
 
     .description-text {
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: var(--color-text-muted);
       flex-grow: 1;
     }
@@ -131,33 +129,21 @@
     <ul class="products-list">
       
       <li class="product-card">
-        <a href="https://www.amazon.com/dp/B0CGVGWVVH/?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">Fitbit Charge 6</a>
+        <a href="https://www.amazon.com/dp/B0C6J79PTF?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">Fitbit Charge 6 Fitness Tracker</a>
         <div class="price">$159.95</div>
-        <p class="description-text">No description available.</p>
+        <p class="description-text">Monitor heart rate, sleep, GPS activity, and stress with Google integration.</p>
       </li>
       
       <li class="product-card">
-        <a href="https://www.amazon.com/dp/B003X26TWM/?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">Beurer Infrared Heat Lamp</a>
+        <a href="https://www.amazon.com/dp/B07Y2XQ4Z4?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">RENPHO Smart Scale for Body Weight</a>
         <div class="price">$139.99</div>
-        <p class="description-text">No description available.</p>
+        <p class="description-text">Tracks 13 body metrics and syncs with fitness apps.</p>
       </li>
       
       <li class="product-card">
-        <a href="https://www.amazon.com/dp/B01N9KOLUX/?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">Pure Enrichment MistAire XL</a>
-        <div class="price">$119.99</div>
-        <p class="description-text">No description available.</p>
-      </li>
-      
-      <li class="product-card">
-        <a href="https://www.amazon.com/dp/B01N1UX8RW/?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">RENPHO Smart Body Scale</a>
-        <div class="price">$129.99</div>
-        <p class="description-text">No description available.</p>
-      </li>
-      
-      <li class="product-card">
-        <a href="https://www.amazon.com/dp/B07CVCHV3H/?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">Withings Sleep Tracking Mat</a>
-        <div class="price">$129.95</div>
-        <p class="description-text">No description available.</p>
+        <a href="https://www.amazon.com/dp/B07RL8Z3ZG?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">Omron Platinum Blood Pressure Monitor</a>
+        <div class="price">$109.99</div>
+        <p class="description-text">Clinically accurate readings with Bluetooth sync and dual-user support.</p>
       </li>
       
     </ul>
