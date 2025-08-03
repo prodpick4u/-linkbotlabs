@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:  # global scope (optional but helpful for other tools)
+    env:
       APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
       APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
       AFFILIATE_TAG: ${{ secrets.AFFILIATE_TAG }}
@@ -17,6 +17,14 @@ jobs:
     steps:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: 🐍 Set up Python
         uses: actions/setup-python@v4
@@ -43,10 +51,6 @@ jobs:
             exit 1
           fi
 
-      # Optional: View envs (do not print secret values)
-      # - name: 🐞 Debug environment variables
-      #   run: env
-
       - name: 🚀 Run Apify Runner
         run: python apify_runner.py
         env:
@@ -60,6 +64,9 @@ jobs:
           APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
           AFFILIATE_TAG: ${{ secrets.AFFILIATE_TAG }}
 
+      - name: 🧹 Cleanup rogue posts index file
+        run: rm -f posts/index.html || true
+
       - name: 📤 Upload Generated Blog
         uses: actions/upload-artifact@v3
         with:
@@ -72,7 +79,8 @@ jobs:
         run: |
           git config --global user.name "Auto Bot"
           git config --global user.email "autobot@example.com"
-          git add .
+          # Add only expected files to avoid committing rogue files
+          git add docs/posts/*.html docs/index.html posts/*.md
           git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
           git pull origin main --rebase || echo "No pull needed"
           git push origin main
