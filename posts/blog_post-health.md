@@ -1,14 +1,14 @@
 # Health & Wellness Picks
 
+## [Withings Body+ - Smart Body Composition Wi-Fi Scale](https://www.amazon.com/dp/B074VFY3QD?tag=mychanneld-20)
+- **Price:** $99.95
+- **Description:** Advanced weight and body composition tracking.
+
 ## [Theragun Elite Handheld Percussive Therapy Device](https://www.amazon.com/dp/B07N8YGR7R?tag=mychanneld-20)
 - **Price:** $399.00
 - **Description:** Muscle treatment device for deep tissue massage.
 
-## [Omron Platinum Blood Pressure Monitor](https://www.amazon.com/dp/B07RL8Z3ZG?tag=mychanneld-20)
-- **Price:** $109.99
-- **Description:** Clinically accurate readings with Bluetooth sync and dual-user support.
-
-## [Hydro Flask Standard Mouth Water Bottle](https://www.amazon.com/dp/B01ACAX6Q0?tag=mychanneld-20)
-- **Price:** $39.95
-- **Description:** Durable insulated water bottle keeps drinks cold or hot.
+## [Philips Sonicare DiamondClean Smart 9750](https://www.amazon.com/dp/B07RFX7QY7?tag=mychanneld-20)
+- **Price:** $199.95
+- **Description:** Electric toothbrush with smart sensor technology.
 
