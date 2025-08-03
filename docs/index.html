@@ -3,153 +3,164 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick – You View, We Review</title>
+  <title>Prodpick4u – Amazon Affiliate Blog Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
     body {
       font-family: 'Inter', sans-serif;
+      background: #fdfdfd;
+      color: #222;
       margin: 0;
       padding: 0;
-      background: #fefefe;
-      color: #222;
       line-height: 1.6;
     }
-
     header {
-      background: #0d6efd;
-      color: #fff;
-      padding: 2rem 1rem;
+      background: #2e8b57;
+      color: white;
+      padding: 20px;
       text-align: center;
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
+    section {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
     }
-
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      max-width: 100%;
-      background: #000;
-    }
-
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
+    iframe {
       width: 100%;
-      height: 100%;
+      height: 400px;
+      border: none;
+      margin-bottom: 20px;
     }
-
-    .content {
-      max-width: 960px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+    h1, h2 {
+      color: #2e8b57;
     }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: 0.3s ease;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .card a {
+    .category-links a {
+      display: inline-block;
+      margin: 8px;
+      padding: 10px 20px;
+      background: #eee;
+      color: #333;
       text-decoration: none;
-      color: #0d6efd;
-      font-weight: 600;
+      border-radius: 5px;
     }
-
-    .demo-box {
-      background: #e9f2ff;
-      padding: 1.5rem;
-      margin-top: 2rem;
-      border-left: 4px solid #0d6efd;
-      border-radius: 8px;
+    .category-links a:hover {
+      background: #2e8b57;
+      color: #fff;
     }
-
-    .demo-box p {
-      margin: 0.5rem 0;
+    .demo-block {
+      background: #f3f3f3;
+      padding: 20px;
+      border-left: 4px solid #2e8b57;
+      margin-top: 30px;
     }
-
-    .contact-box {
-      margin-top: 2rem;
+    .demo-block input {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .demo-block button {
+      background: #2e8b57;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .demo-block button:hover {
+      background: #246947;
+    }
+    .footer {
       text-align: center;
-      font-size: 1rem;
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #666;
     }
-
-    footer {
-      background: #f8f9fa;
+    .cta {
       text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #555;
+      margin-top: 40px;
     }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 1.8rem;
-      }
+    .cta a {
+      background: #f57c00;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .cta a:hover {
+      background: #e65100;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Prodpick – You View, We Review</h1>
-    <p>Amazon Finds in Kitchen, Outdoors, Beauty, Tech & More</p>
-  </header>
 
-  <div class="video-container">
-    <iframe src="https://www.youtube.com/embed/9gNanC4o1BQ?si=pMBRgi1tXphtZ32S"
-            title="YouTube video player"
-            frameborder="0"
-            allowfullscreen></iframe>
+<header>
+  <h1>Prodpick4u</h1>
+  <p>Your AI-Powered Amazon Affiliate Blog Generator</p>
+</header>
+
+<section>
+  <h2>🎬 How It Works</h2>
+  <iframe src="https://www.youtube.com/embed/9gNanC4o1BQ?si=pMBRgi1tXphtZ32S" allowfullscreen></iframe>
+
+  <p>Prodpick4u generates a complete affiliate blog from Amazon best sellers – including blog posts, video content, affiliate links, and a hosted website via GitHub Pages. Everything is automated and customizable with your API key and affiliate ID.</p>
+
+  <div class="demo-block" id="demoBlock">
+    <h3>🧪 Try the Demo (One Time Only)</h3>
+    <p>Enter your Amazon affiliate tag and YouTube API key to preview a post below. This is a one-time preview per visitor.</p>
+    <input type="text" id="demoAffiliate" placeholder="Amazon Affiliate Tag (e.g., yourtag-20)">
+    <input type="text" id="demoYouTube" placeholder="YouTube API Key">
+    <button onclick="runDemo()">Run Demo</button>
+    <p id="demoStatus"></p>
   </div>
 
-  <div class="content">
-    <h2 style="text-align:center; margin-bottom:1rem;">Explore by Category</h2>
-    <div class="grid">
-      <div class="card"><a href="posts/post-kitchen.html">🍳 Kitchen</a></div>
-      <div class="card"><a href="posts/post-outdoors.html">⛺ Outdoors</a></div>
-      <div class="card"><a href="posts/post-beauty.html">💄 Beauty</a></div>
-      <div class="card"><a href="posts/post-home-decor.html">🏠 Home Decor</a></div>
-      <div class="card"><a href="posts/post-tech.html">💻 Tech</a></div>
-      <div class="card"><a href="posts/post-health.html">🧘 Health</a></div>
-    </div>
-
-    <div class="demo-box">
-      <h3>🧪 Try the Prodpick Demo</h3>
-      <p>This project includes a customer version that runs on your desktop via terminal.</p>
-      <p>👉 Test it by entering your own Amazon Affiliate ID and YouTube API key. See it auto-generate blogs and videos.</p>
-      <p><strong>No coding needed</strong> — just plug and play.</p>
-    </div>
-
-    <div class="contact-box">
-      <p>💡 Want your own version?</p>
-      <p>Email: <a href="mailto:omnistall70@gmail.com">omnistall70@gmail.com</a></p>
-      <p>Or hire me on <a href="https://www.fiverr.com" target="_blank">Fiverr</a> for setup help or a private build.</p>
-    </div>
+  <h2>🗂️ Explore Product Categories</h2>
+  <div class="category-links">
+    <a href="posts/post-kitchen.html">🍳 Kitchen</a>
+    <a href="posts/post-outdoors.html">🌳 Outdoors</a>
+    <a href="posts/post-beauty.html">💄 Beauty</a>
+    <a href="posts/post-tech.html">💻 Tech</a>
+    <a href="posts/post-health.html">🩺 Health</a>
+    <a href="posts/post-home-decor.html">🏡 Home Decor</a>
   </div>
 
-  <footer>
-    &copy; 2025 Prodpick. All Amazon links include affiliate tracking (<code>mychanneld-20</code>).
-  </footer>
+  <div class="cta">
+    <h2>💼 Interested in Your Own Setup?</h2>
+    <p>Email: <a href="mailto:omnistall70@gmail.com">omnistall70@gmail.com</a></p>
+    <a href="https://www.fiverr.com/s/yourusername" target="_blank">View on Fiverr</a>
+  </div>
+
+</section>
+
+<div class="footer">
+  &copy; 2025 Prodpick4u – Built with Python, GitHub Pages & Amazon Affiliate API
+</div>
+
+<script>
+function runDemo() {
+  const affiliate = document.getElementById("demoAffiliate").value.trim();
+  const ytApi = document.getElementById("demoYouTube").value.trim();
+  const status = document.getElementById("demoStatus");
+
+  if (localStorage.getItem("demoUsed") === "true") {
+    status.innerText = "You’ve already tried the demo.";
+    return;
+  }
+
+  if (!affiliate || !ytApi) {
+    status.innerText = "Please enter both fields.";
+    return;
+  }
+
+  // Simulate demo behavior
+  localStorage.setItem("demoUsed", "true");
+  status.innerText = "✅ Success! Your demo is running. Check the 'Tech' post for your preview.";
+  setTimeout(() => {
+    window.location.href = "posts/post-tech.html";
+  }, 3000);
+}
+</script>
+
 </body>
 </html>
