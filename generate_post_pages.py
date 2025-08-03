@@ -101,7 +101,9 @@ categories = {
 with open("posts/post-template.html", "r", encoding="utf-8") as f:
     post_template = f.read()
 
-# Generate category post pages
+# Generate category post pages into the 'docs/' folder
+os.makedirs("docs", exist_ok=True)
+
 for cat_key, cat_data in categories.items():
     product_cards = ""
     for product in cat_data["products"]:
@@ -116,13 +118,11 @@ for cat_key, cat_data in categories.items():
         </div>
         """
 
-    final_html = post_template
-    final_html = final_html.replace("{{ category_title }}", cat_data["title"])
+    final_html = post_template.replace("{{ category_title }}", cat_data["title"])
     final_html = final_html.replace("{{ category_description }}", cat_data["description"])
     final_html = final_html.replace("{{ product_list }}", product_cards)
 
-    os.makedirs("posts", exist_ok=True)
-    filepath = os.path.join("posts", cat_data["filename"])
+    filepath = os.path.join("docs", cat_data["filename"])
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(final_html)
 
