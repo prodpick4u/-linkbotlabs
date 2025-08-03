@@ -1,23 +1,12 @@
 import os
-from fallback_products import FALLBACK_PRODUCTS
 
-# Optional: map keys to nicer display titles
-CATEGORY_TITLES = {
-    "kitchen": "Kitchen Gadgets",
-    "outdoors": "Outdoors",
-    "beauty": "Beauty",
-    "home-decor": "Home Decor",
-    "tech": "Tech",
-    "health": "Health",
-}
-
-def generate_index_html(output_path="docs/index.html"):
-    categories = FALLBACK_PRODUCTS  # Get all categories
+def generate_index_html(all_posts, output_path="docs/index.html"):
+    # all_posts is a list of dicts: [{"category": ..., "filename": ...}, ...]
 
     cards_html = ""
-    for cat_key in sorted(categories.keys()):
-        title = CATEGORY_TITLES.get(cat_key, cat_key.replace("-", " ").title())
-        filename = f"post-{cat_key}.html"
+    for post in all_posts:
+        title = post.get("category", "No Title")
+        filename = post.get("filename", "#")
         cards_html += f'''
         <div class="card">
           <h3>{title}</h3>
@@ -47,11 +36,6 @@ def generate_index_html(output_path="docs/index.html"):
       font-size: 2rem;
       margin-bottom: 0.5rem;
     }}
-    p {{
-      color: #ccc;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }}
     .grid {{
       display: flex;
       flex-wrap: wrap;
@@ -79,32 +63,6 @@ def generate_index_html(output_path="docs/index.html"):
       display: block;
       margin-top: 0.5rem;
     }}
-    iframe {{
-      margin-top: 3rem;
-      border: none;
-      border-radius: 10px;
-      max-width: 90%;
-    }}
-    footer {{
-      text-align: center;
-      color: #888;
-      font-size: 0.8rem;
-      padding: 2rem 1rem;
-    }}
-    .cta {{
-      background: #00ffd5;
-      color: #000;
-      font-weight: bold;
-      padding: 1rem;
-      text-align: center;
-      border-radius: 10px;
-      margin: 2rem auto;
-      max-width: 500px;
-    }}
-    .cta a {{
-      text-decoration: none;
-      color: #000;
-    }}
   </style>
 </head>
 <body>
@@ -117,17 +75,6 @@ def generate_index_html(output_path="docs/index.html"):
     {cards_html}
   </div>
 
-  <div class="cta">
-    💼 Try this demo now & get the full automation kit on <a href="https://www.fiverr.com/s/DUMMYLINK" target="_blank">Fiverr</a>
-  </div>
-
-  <center>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/qwfACbh93M0?si=iKkxvuGZ6UL8PfQL" title="Demo Video" allowfullscreen></iframe>
-  </center>
-
-  <footer>
-    © 2025 Prodpick4u · Demo powered by GitHub Pages · Includes Amazon affiliate examples
-  </footer>
 </body>
 </html>"""
 
@@ -136,6 +83,4 @@ def generate_index_html(output_path="docs/index.html"):
         f.write(html)
 
     print(f"✅ {output_path} generated successfully.")
-
-if __name__ == "__main__":
-    generate_index_html()
+    return html
