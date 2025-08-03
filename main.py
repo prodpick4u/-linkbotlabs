@@ -45,10 +45,5 @@ for cat in categories:
         "filename": filename
     })
 
-# Generate main index.html
-index_html = generate_index_html(all_posts)
-index_path = os.path.join("docs", "index.html")
-
-with open(index_path, "w", encoding="utf-8") as f:
-    f.write(index_html)
-    print(f"✅ index.html generated at: {index_path}")
+# Generate main index.html (writes file internally)
+generate_index_html(all_posts)
