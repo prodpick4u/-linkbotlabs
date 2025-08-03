@@ -101,9 +101,10 @@ categories = {
 with open("posts/post-template.html", "r", encoding="utf-8") as f:
     post_template = f.read()
 
-# Generate category post pages into the 'docs/' folder
+# Ensure the docs directory exists
 os.makedirs("docs", exist_ok=True)
 
+# Generate HTML for each category
 for cat_key, cat_data in categories.items():
     product_cards = ""
     for product in cat_data["products"]:
