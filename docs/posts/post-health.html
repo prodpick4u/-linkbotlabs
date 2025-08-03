@@ -3,20 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Health & Wellness Picks</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
+  <title>Health & Wellness Picks | Prodpick4u Affiliate Blog</title>
 
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Stay healthy and fit with these top-rated wellness products." />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Health & Wellness Picks | Prodpick4u Affiliate Blog" />
+  <meta property="og:description" content="Stay healthy and fit with these top-rated wellness products." />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Health & Wellness Picks | Prodpick4u Affiliate Blog" />
+  <meta name="twitter:description" content="Stay healthy and fit with these top-rated wellness products." />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@600&display=swap" rel="stylesheet" />
+
+  <!-- FontAwesome CDN for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-papbYqCJK0+bzT2tD6RhxRgFVGXREKQ0CtWzD8VpKnR8bbX2vYVGwRrQ7GnkXsz6CUbHbM7VlM3q0j1g6sdn5A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <style>
     :root {
-      --color-bg: #f9fafb;
-      --color-card-bg: #ffffff;
+      --color-bg: #ffffff;
+      --color-card-bg: #f8fafc;
       --color-primary: #2563eb;
       --color-primary-hover: #1d4ed8;
       --color-text: #111827;
       --color-text-muted: #6b7280;
       --color-price: #10b981;
+      --color-button-bg: #2563eb;
+      --color-button-hover: #1d4ed8;
       --font-base: 'Inter', system-ui, sans-serif;
       --font-heading: 'Montserrat', sans-serif;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+      --box-shadow-hover: 0 12px 30px rgba(37, 99, 235, 0.3);
     }
 
     * {
@@ -45,6 +75,7 @@
       color: var(--color-text);
       letter-spacing: -0.03em;
       text-shadow: none;
+      text-align: center;
     }
 
     .description {
@@ -52,6 +83,10 @@
       font-size: 1.1rem;
       margin-top: 0;
       margin-bottom: 2rem;
+      text-align: center;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .products-list {
@@ -59,24 +94,27 @@
       padding: 0;
       margin: 0;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 1.5rem;
     }
 
     .product-card {
       background-color: var(--color-card-bg);
-      border-radius: 14px;
-      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid transparent;
     }
 
-    .product-card:hover {
+    .product-card:hover, .product-card:focus-within {
       transform: translateY(-6px);
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.3);
+      box-shadow: var(--box-shadow-hover);
+      border-color: var(--color-primary);
+      outline: none;
     }
 
     .product-link {
@@ -85,34 +123,67 @@
       font-size: 1.25rem;
       color: var(--color-primary);
       text-decoration: none;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.6rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .product-link:hover {
+    .product-link:hover,
+    .product-link:focus {
       color: var(--color-primary-hover);
       text-decoration: underline;
+      outline: none;
     }
 
     .price {
       font-weight: 700;
       color: var(--color-price);
-      font-size: 1.1rem;
-      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
     }
 
     .description-text {
       font-size: 1rem;
       color: var(--color-text-muted);
       flex-grow: 1;
+      margin-bottom: 1.25rem;
     }
 
+    .buy-button {
+      background-color: var(--color-button-bg);
+      color: white;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .buy-button:hover,
+    .buy-button:focus {
+      background-color: var(--color-button-hover);
+      box-shadow: 0 6px 14px rgba(29, 78, 216, 0.6);
+      outline: none;
+    }
+
+    /* Responsive adjustments */
     @media (max-width: 480px) {
       body {
         padding: 1rem 0.75rem;
       }
 
       h1 {
-        font-size: 2.1rem;
+        font-size: 2rem;
       }
 
       .products-list {
@@ -120,30 +191,118 @@
       }
     }
   </style>
+
+  <!-- Structured Data JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "ItemList",
+    "name": "Health & Wellness Picks",
+    "description": "Stay healthy and fit with these top-rated wellness products.",
+    "itemListElement": [
+      
+      {
+        "@type": "Product",
+        "position": 1,
+        "name": "Omron Platinum Blood Pressure Monitor",
+        "url": "https://www.amazon.com/dp/B07RL8Z3ZG?tag=mychanneld-20"
+      },
+      
+      {
+        "@type": "Product",
+        "position": 2,
+        "name": "Hydro Flask Standard Mouth Water Bottle",
+        "url": "https://www.amazon.com/dp/B01ACAX6Q0?tag=mychanneld-20"
+      },
+      
+      {
+        "@type": "Product",
+        "position": 3,
+        "name": "Fitbit Charge 6 Fitness Tracker",
+        "url": "https://www.amazon.com/dp/B0C6J79PTF?tag=mychanneld-20"
+      }
+      
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="container">
     <h1>Health & Wellness Picks</h1>
     <p class="description">Stay healthy and fit with these top-rated wellness products.</p>
 
-    <ul class="products-list">
+    <ul class="products-list" role="list">
       
-      <li class="product-card">
-        <a href="https://www.amazon.com/dp/B07RL8Z3ZG?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">Omron Platinum Blood Pressure Monitor</a>
-        <div class="price">$109.99</div>
+      <li class="product-card" role="listitem" tabindex="0">
+        <a
+          href="https://www.amazon.com/dp/B07RL8Z3ZG?tag=mychanneld-20"
+          class="product-link"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          aria-label="Buy Omron Platinum Blood Pressure Monitor on Amazon"
+        >
+          <i class="fa-solid fa-box-open"></i>
+          Omron Platinum Blood Pressure Monitor
+        </a>
+        <div class="price" aria-label="Price: $109.99">$109.99</div>
         <p class="description-text">Clinically accurate readings with Bluetooth sync and dual-user support.</p>
+        <a
+          href="https://www.amazon.com/dp/B07RL8Z3ZG?tag=mychanneld-20"
+          class="buy-button"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          aria-label="Buy Omron Platinum Blood Pressure Monitor now on Amazon"
+        >
+          <i class="fa-brands fa-amazon"></i> Buy Now
+        </a>
       </li>
       
-      <li class="product-card">
-        <a href="https://www.amazon.com/dp/B07N8YGR7R?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">Theragun Elite Handheld Percussive Therapy Device</a>
-        <div class="price">$399.00</div>
-        <p class="description-text">Muscle treatment device for deep tissue massage.</p>
+      <li class="product-card" role="listitem" tabindex="0">
+        <a
+          href="https://www.amazon.com/dp/B01ACAX6Q0?tag=mychanneld-20"
+          class="product-link"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          aria-label="Buy Hydro Flask Standard Mouth Water Bottle on Amazon"
+        >
+          <i class="fa-solid fa-box-open"></i>
+          Hydro Flask Standard Mouth Water Bottle
+        </a>
+        <div class="price" aria-label="Price: $39.95">$39.95</div>
+        <p class="description-text">Durable insulated water bottle keeps drinks cold or hot.</p>
+        <a
+          href="https://www.amazon.com/dp/B01ACAX6Q0?tag=mychanneld-20"
+          class="buy-button"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          aria-label="Buy Hydro Flask Standard Mouth Water Bottle now on Amazon"
+        >
+          <i class="fa-brands fa-amazon"></i> Buy Now
+        </a>
       </li>
       
-      <li class="product-card">
-        <a href="https://www.amazon.com/dp/B07Y2XQ4Z4?tag=mychanneld-20" class="product-link" target="_blank" rel="nofollow noopener noreferrer">RENPHO Smart Scale for Body Weight</a>
-        <div class="price">$139.99</div>
-        <p class="description-text">Tracks 13 body metrics and syncs with fitness apps.</p>
+      <li class="product-card" role="listitem" tabindex="0">
+        <a
+          href="https://www.amazon.com/dp/B0C6J79PTF?tag=mychanneld-20"
+          class="product-link"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          aria-label="Buy Fitbit Charge 6 Fitness Tracker on Amazon"
+        >
+          <i class="fa-solid fa-box-open"></i>
+          Fitbit Charge 6 Fitness Tracker
+        </a>
+        <div class="price" aria-label="Price: $159.95">$159.95</div>
+        <p class="description-text">Monitor heart rate, sleep, GPS activity, and stress with Google integration.</p>
+        <a
+          href="https://www.amazon.com/dp/B0C6J79PTF?tag=mychanneld-20"
+          class="buy-button"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          aria-label="Buy Fitbit Charge 6 Fitness Tracker now on Amazon"
+        >
+          <i class="fa-brands fa-amazon"></i> Buy Now
+        </a>
       </li>
       
     </ul>

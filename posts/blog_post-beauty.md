@@ -1,14 +1,14 @@
 # Amazon Beauty Best Sellers
 
-## [Revlon One-Step Hair Dryer & Volumizer](https://www.amazon.com/dp/B07Q3FYK5L?tag=mychanneld-20)
-- **Price:** $139.99
-- **Description:** Dryer and volumizer combo for silky smooth hair.
+## [Dyson Supersonic Hair Dryer](https://www.amazon.com/dp/B01MQ0M3SO?tag=mychanneld-20)
+- **Price:** $429.00
+- **Description:** Fast-drying hair care tool with intelligent heat control and magnetic attachments.
 
-## [T3 Cura Luxe Hair Dryer](https://www.amazon.com/dp/B00I58L0KS?tag=mychanneld-20)
-- **Price:** $299.00
-- **Description:** Professional hair dryer with ionic technology.
+## [PMD Clean Pro RQ Smart Facial Cleansing Device](https://www.amazon.com/dp/B07X6LZ9ZG?tag=mychanneld-20)
+- **Price:** $179.00
+- **Description:** SonicGlow technology and rose quartz facial massager for deep cleansing and anti-aging.
 
-## [Olaplex Hair Perfector No 3 Repairing Treatment](https://www.amazon.com/dp/B00SNM5US4?tag=mychanneld-20)
-- **Price:** $28.00
-- **Description:** Hair treatment to repair damaged and broken hair.
+## [NuFACE Trinity Facial Toning Device](https://www.amazon.com/dp/B01N0QFVWY?tag=mychanneld-20)
+- **Price:** $325.00
+- **Description:** Microcurrent device for facial contouring and wrinkle reduction.
 
