@@ -36,13 +36,17 @@ jobs:
           AMAZON_TAG: ${{ secrets.AMAZON_TAG }}
         run: python main.py
 
+      - name: Cleanup rogue posts index
+        run: rm -f posts/index.html || true
+
       - name: Commit and push changes
         env:
           PAT_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           git config --global user.name "Auto Bot"
           git config --global user.email "autobot@example.com"
-          git add .
+          # Only add relevant files — avoid accidentally adding rogue files
+          git add docs/posts/*.html docs/index.html posts/*.md
           git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
           git pull origin main --rebase || echo "No pull needed"
           git push origin main
