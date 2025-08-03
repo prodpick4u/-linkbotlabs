@@ -1,164 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick – You View, We Review</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+<!-- Replaces only relevant new section in <body> -->
 
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #fefefe;
-      color: #222;
-      line-height: 1.6;
+<section class="how-it-works">
+  <h2>How It Works</h2>
+  <ol>
+    <li>
+      <strong>Browse & Shop with Our Affiliate Links</strong><br />
+      Explore our curated categories like Kitchen, Outdoors, Beauty, and more. Every link includes our affiliate tag so your support means everything.
+    </li>
+    <li>
+      <strong>Try the Live Demo (One-Time Use)</strong><br />
+      Want to see your own affiliate tag in action? Enter it once below. After your test, this input will be locked for security.
+      <br /><br />
+      <form id="demoForm">
+        <input type="text" id="affiliateId" placeholder="Enter your Affiliate ID" required style="padding: 0.5rem; width: 60%;" />
+        <button type="submit" id="demoButton" style="padding: 0.5rem 1rem;">Generate Demo</button>
+      </form>
+      <p id="demoStatus" style="color: green; margin-top: 0.5rem;"></p>
+    </li>
+    <li>
+      <strong>Download the Full Demo ZIP</strong><br />
+      Want to build your own? Run the terminal script on your machine and generate your affiliate blog. Use the <code>README</code> for setup.
+    </li>
+  </ol>
+</section>
+
+<script>
+  const form = document.getElementById('demoForm');
+  const button = document.getElementById('demoButton');
+  const status = document.getElementById('demoStatus');
+
+  if (localStorage.getItem('demoUsed') === 'true') {
+    button.disabled = true;
+    status.textContent = 'Demo already used in this session.';
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const affId = document.getElementById('affiliateId').value.trim();
+    if (affId) {
+      localStorage.setItem('demoUsed', 'true');
+      button.disabled = true;
+      status.textContent = `Demo generated using ID: ${affId}`;
     }
-
-    header {
-      background: #0d6efd;
-      color: #fff;
-      padding: 2rem 1rem;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5rem;
-    }
-
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      max-width: 100%;
-      background: #000;
-    }
-
-    .video-container iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .content {
-      max-width: 960px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .how-it-works {
-      margin: 3rem 0;
-      color: #333;
-    }
-
-    .how-it-works h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .how-it-works ol {
-      font-size: 1rem;
-      line-height: 1.6;
-      padding-left: 1.5rem;
-    }
-
-    .how-it-works li {
-      margin-bottom: 1rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: 0.3s ease;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .card a {
-      text-decoration: none;
-      color: #0d6efd;
-      font-weight: 600;
-    }
-
-    footer {
-      background: #f8f9fa;
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 1.8rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Prodpick – You View, We Review</h1>
-    <p>Amazon Finds in Kitchen, Outdoors, Beauty, Tech &amp; More</p>
-  </header>
-
-  <div class="video-container">
-    <iframe src="https://www.youtube.com/embed/9gNanC4o1BQ?si=pMBRgi1tXphtZ32S"
-            title="YouTube video player"
-            frameborder="0"
-            allowfullscreen></iframe>
-  </div>
-
-  <div class="content">
-
-    <section class="how-it-works">
-      <h2>How It Works</h2>
-      <ol>
-        <li>
-          <strong>Browse &amp; Shop with Our Affiliate Links</strong><br />
-          Explore our curated product categories like Kitchen, Outdoors, Beauty, Tech, and more. All product links include our Amazon affiliate tag, so when you purchase through these links, you support our site at no extra cost to you.
-        </li>
-        <li>
-          <strong>Try the Live Demo on Our Website</strong><br />
-          Interested in creating your own affiliate product blog? Use our live demo form on the homepage to enter your own Amazon Affiliate ID and API key. Generate product pages dynamically and see how your own affiliate site could look — all within your browser, with no setup required!
-        </li>
-        <li>
-          <strong>Download the Customer Demo Zip</strong><br />
-          For developers and serious affiliates, we provide a downloadable demo package. Run the Python script on your own computer terminal to generate full blog posts and product pages using your personal API credentials. Perfect for testing, customization, or building your own affiliate site from scratch.
-        </li>
-      </ol>
-    </section>
-
-    <h2 style="text-align:center; margin-bottom:1rem;">Explore by Category</h2>
-    <div class="grid">
-      <div class="card"><a href="posts/post-kitchen.html">🍳 Kitchen</a></div>
-      <div class="card"><a href="posts/post-outdoors.html">⛺ Outdoors</a></div>
-      <div class="card"><a href="posts/post-beauty.html">💄 Beauty</a></div>
-      <div class="card"><a href="posts/post-home-decor.html">🏠 Home Decor</a></div>
-      <div class="card"><a href="posts/post-tech.html">💻 Tech</a></div>
-      <div class="card"><a href="posts/post-health.html">🧘 Health</a></div>
-    </div>
-
-  </div>
-
-  <footer>
-    &copy; 2025 Prodpick. All Amazon links include affiliate tracking (<code>mychanneld-20</code>).
-  </footer>
-</body>
-</html>
+  });
+</script>
