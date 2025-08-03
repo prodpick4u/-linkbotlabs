@@ -3,7 +3,7 @@ name: Blog Daily Generator
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * *'  # Runs daily at 03:00 UTC
+    - cron: '0 3 * * *'
 
 jobs:
   build:
@@ -45,8 +45,21 @@ jobs:
         run: |
           git config --global user.name "Auto Bot"
           git config --global user.email "autobot@example.com"
-          # Only add relevant files — avoid accidentally adding rogue files
           git add docs/posts/*.html docs/index.html posts/*.md
           git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
           git pull origin main --rebase || echo "No pull needed"
           git push origin main
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v3
