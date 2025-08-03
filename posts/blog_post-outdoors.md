@@ -1,14 +1,14 @@
 # Outdoor Gear Must-Haves
 
-## [Therm-a-Rest NeoAir XTherm Sleeping Pad](https://www.amazon.com/dp/B06W55JYD7?tag=mychanneld-20)
-- **Price:** $199.95
-- **Description:** Lightweight and warm sleeping pad for camping.
+## [Garmin GPSMAP 66i Handheld Hiking GPS](https://www.amazon.com/dp/B07RR5KWMC?tag=mychanneld-20)
+- **Price:** $599.99
+- **Description:** Satellite communication and navigation device.
 
-## [YETI Rambler 36 oz Tumbler](https://www.amazon.com/dp/B01J5EOM68?tag=mychanneld-20)
-- **Price:** $39.99
-- **Description:** Durable insulated tumbler for hot or cold drinks.
+## [Weber Q1200 Liquid Propane Grill](https://www.amazon.com/dp/B00FDOON9C?tag=mychanneld-20)
+- **Price:** $259.00
+- **Description:** Compact yet powerful gas grill for backyard or travel use.
 
-## [Osprey Atmos AG 65 Backpack](https://www.amazon.com/dp/B07TJRGWYQ?tag=mychanneld-20)
-- **Price:** $269.99
-- **Description:** High-performance hiking backpack with anti-gravity suspension.
+## [Solo Stove Bonfire 2.0](https://www.amazon.com/dp/B0B2D7MT4R?tag=mychanneld-20)
+- **Price:** $299.99
+- **Description:** Smokeless stainless steel fire pit perfect for outdoor gatherings.
 
