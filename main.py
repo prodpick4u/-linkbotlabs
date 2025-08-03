@@ -4,9 +4,7 @@ import json
 import random
 from fetch_best_sellers import fetch_best_sellers
 from blog_generator import generate_markdown, save_blog_files, generate_html
-from index_generator import generate_index_html
 from fallback_products import get_fallback_products
-from blog_index_generator import generate_blog_index
 from dotenv import load_dotenv
 
 # === CLEANUP OLD POSTS FOLDER BEFORE RUNNING ===
@@ -61,14 +59,5 @@ for category in categories:
 
     html_filename = f"post-{slug}.html"
     save_blog_files(title, markdown, html, html_filename)
-
-    # Store filename for homepage index
-    category['filename'] = html_filename
-
-# Generate blog index inside /posts
-generate_blog_index(posts_folder="docs/posts", output_file="docs/posts/index.html")
-
-# Generate homepage index
-generate_index_html()
 
 print("✅ Blog generation complete.")
