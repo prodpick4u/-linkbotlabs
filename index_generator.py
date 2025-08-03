@@ -7,10 +7,11 @@ def generate_index_html(all_posts, output_path="docs/index.html"):
     for post in all_posts:
         title = post.get("category", "No Title")
         filename = post.get("filename", "#")
+        # Prepend posts/ folder so links are correct relative to index.html
         cards_html += f'''
         <div class="card">
           <h3>{title}</h3>
-          <a href="{filename}">View Post</a>
+          <a href="posts/{filename}">View Post</a>
         </div>
         '''
 
