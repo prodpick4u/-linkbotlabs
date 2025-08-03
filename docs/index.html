@@ -2,66 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick – You View, We Review</title>
+  <title>Prodpick Blog</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
-      background-color: #111;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem;
+      padding: 20px;
+      background: #f8fafc;
+      color: #1f2937;
     }
-
     h1 {
       font-size: 2rem;
-      margin-bottom: 2rem;
-      color: #00ffcc;
+      margin-bottom: 10px;
     }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      width: 100%;
-      max-width: 1000px;
+    ul {
+      list-style-type: none;
+      padding: 0;
     }
-
-    .card {
-      background-color: #1e1e1e;
-      border-radius: 10px;
-      padding: 1.5rem;
-      text-align: center;
-      transition: transform 0.2s;
+    li {
+      margin: 10px 0;
     }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 15px rgba(0, 255, 204, 0.1);
-    }
-
-    .card a {
+    a {
+      color: #2563eb;
+      font-weight: bold;
       text-decoration: none;
-      color: #00ffcc;
-      font-size: 1.2rem;
-      font-weight: 600;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .video-container {
+      margin-top: 30px;
+      max-width: 640px;
+      aspect-ratio: 16 / 9;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
   </style>
 </head>
 <body>
-  <h1>Prodpick – You View, We Review</h1>
-  <div class="card-grid">
-    <div class="card"><a href="posts/post-beauty.html">Beauty</a></div>
-    <div class="card"><a href="posts/post-health.html">Health</a></div>
-    <div class="card"><a href="posts/post-home-decor.html">Home Decor</a></div>
-    <div class="card"><a href="posts/post-kitchen.html">Kitchen</a></div>
-    <div class="card"><a href="posts/post-outdoors.html">Outdoors</a></div>
-    <div class="card"><a href="posts/post-tech.html">Tech</a></div>
+  <h1>📝 Prodpick Blog Posts</h1>
+  <ul>
+    <li><a href="posts/post-beauty.html">Post Beauty</a></li>
+    <li><a href="posts/post-health.html">Post Health</a></li>
+    <li><a href="posts/post-home-decor.html">Post Home Decor</a></li>
+    <li><a href="posts/post-kitchen.html">Post Kitchen</a></li>
+    <li><a href="posts/post-outdoors.html">Post Outdoors</a></li>
+    <li><a href="posts/post-tech.html">Post Tech</a></li>
+  </ul>
+
+  <div class="video-container">
+    <iframe 
+      src="https://www.youtube.com/embed/qwfACbh93M0"
+      title="Prodpick Intro"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
   </div>
 </body>
 </html>
