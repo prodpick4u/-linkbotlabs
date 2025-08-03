@@ -1,3 +1,4 @@
+import shutil
 import os
 import json
 import random
@@ -7,6 +8,12 @@ from index_generator import generate_index_html
 from fallback_products import get_fallback_products
 from blog_index_generator import generate_blog_index
 from dotenv import load_dotenv
+
+# === CLEANUP OLD POSTS FOLDER BEFORE RUNNING ===
+posts_folder = "docs/posts"
+if os.path.exists(posts_folder):
+    shutil.rmtree(posts_folder)
+    print(f"🗑️ Deleted old posts folder: {posts_folder}")
 
 # Load environment variables from .env if available
 if os.path.exists(".env"):
@@ -61,7 +68,7 @@ for category in categories:
 # Generate blog index inside /posts
 generate_blog_index(posts_folder="docs/posts", output_file="docs/posts/index.html")
 
-# Generate homepage index (fix: don't pass full categories list!)
-generate_index_html()  # ✅ fixed
+# Generate homepage index
+generate_index_html()
 
 print("✅ Blog generation complete.")
