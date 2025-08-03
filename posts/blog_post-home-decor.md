@@ -1,14 +1,14 @@
 # Stylish Home Decor on Amazon
 
-## [iRobot Roomba i3+ (3550) Robot Vacuum](https://www.amazon.com/dp/B07GNPDMRP?tag=mychanneld-20)
-- **Price:** $399.99
-- **Description:** Smart robot vacuum with automatic dirt disposal.
+## [Sonos One (Gen 2) - Voice Controlled Smart Speaker](https://www.amazon.com/dp/B07W95BQ69?tag=mychanneld-20)
+- **Price:** $199.00
+- **Description:** Rich sound with Alexa and Google Assistant built-in.
 
-## [LEVOIT Smart Humidifier with Aroma Diffuser](https://www.amazon.com/dp/B08Q3LS1GQ?tag=mychanneld-20)
-- **Price:** $109.99
-- **Description:** Stylish ultrasonic humidifier with voice control and essential oil tray for a cozy atmosphere.
+## [Philips Hue White and Color Ambiance Starter Kit](https://www.amazon.com/dp/B07351P1JK?tag=mychanneld-20)
+- **Price:** $199.99
+- **Description:** Smart lighting kit with customizable colors and voice control.
 
-## [Vornado Whole Room Air Circulator Fan](https://www.amazon.com/dp/B000E5WAUO?tag=mychanneld-20)
-- **Price:** $129.99
-- **Description:** Iconic vortex technology for full-room circulation and quiet performance.
+## [Nespresso Vertuo Coffee and Espresso Machine](https://www.amazon.com/dp/B01MYRR6XO?tag=mychanneld-20)
+- **Price:** $159.00
+- **Description:** Easy-to-use coffee maker with barcode brewing technology.
 
