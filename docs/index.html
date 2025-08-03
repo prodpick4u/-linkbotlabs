@@ -3,164 +3,162 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick4u – Amazon Affiliate Blog Demo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Prodpick – You View, We Review</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
     body {
       font-family: 'Inter', sans-serif;
-      background: #fdfdfd;
-      color: #222;
       margin: 0;
       padding: 0;
+      background: #fefefe;
+      color: #222;
       line-height: 1.6;
     }
+
     header {
-      background: #2e8b57;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-    section {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 20px;
-    }
-    iframe {
-      width: 100%;
-      height: 400px;
-      border: none;
-      margin-bottom: 20px;
-    }
-    h1, h2 {
-      color: #2e8b57;
-    }
-    .category-links a {
-      display: inline-block;
-      margin: 8px;
-      padding: 10px 20px;
-      background: #eee;
-      color: #333;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    .category-links a:hover {
-      background: #2e8b57;
+      background: #0d6efd;
       color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
     }
-    .demo-block {
-      background: #f3f3f3;
-      padding: 20px;
-      border-left: 4px solid #2e8b57;
-      margin-top: 30px;
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
     }
-    .demo-block input {
-      padding: 10px;
-      margin: 10px 0;
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      max-width: 100%;
+      background: #000;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      box-sizing: border-box;
+      height: 100%;
     }
-    .demo-block button {
-      background: #2e8b57;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
+
+    .content {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
-    .demo-block button:hover {
-      background: #246947;
+
+    .how-it-works {
+      margin: 3rem 0;
+      color: #333;
     }
-    .footer {
+
+    .how-it-works h2 {
       text-align: center;
-      margin-top: 40px;
-      font-size: 0.9em;
-      color: #666;
+      margin-bottom: 1rem;
     }
-    .cta {
+
+    .how-it-works ol {
+      font-size: 1rem;
+      line-height: 1.6;
+      padding-left: 1.5rem;
+    }
+
+    .how-it-works li {
+      margin-bottom: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: 0.3s ease;
+      padding: 1rem;
       text-align: center;
-      margin-top: 40px;
     }
-    .cta a {
-      background: #f57c00;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 5px;
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card a {
       text-decoration: none;
-      display: inline-block;
-      margin-top: 10px;
+      color: #0d6efd;
+      font-weight: 600;
     }
-    .cta a:hover {
-      background: #e65100;
+
+    footer {
+      background: #f8f9fa;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Prodpick – You View, We Review</h1>
+    <p>Amazon Finds in Kitchen, Outdoors, Beauty, Tech &amp; More</p>
+  </header>
 
-<header>
-  <h1>Prodpick4u</h1>
-  <p>Your AI-Powered Amazon Affiliate Blog Generator</p>
-</header>
-
-<section>
-  <h2>🎬 How It Works</h2>
-  <iframe src="https://www.youtube.com/embed/9gNanC4o1BQ?si=pMBRgi1tXphtZ32S" allowfullscreen></iframe>
-
-  <p>Prodpick4u generates a complete affiliate blog from Amazon best sellers – including blog posts, video content, affiliate links, and a hosted website via GitHub Pages. Everything is automated and customizable with your API key and affiliate ID.</p>
-
-  <div class="demo-block" id="demoBlock">
-    <h3>🧪 Try the Demo (One Time Only)</h3>
-    <p>Enter your Amazon affiliate tag and YouTube API key to preview a post below. This is a one-time preview per visitor.</p>
-    <input type="text" id="demoAffiliate" placeholder="Amazon Affiliate Tag (e.g., yourtag-20)">
-    <input type="text" id="demoYouTube" placeholder="YouTube API Key">
-    <button onclick="runDemo()">Run Demo</button>
-    <p id="demoStatus"></p>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/9gNanC4o1BQ?si=pMBRgi1tXphtZ32S"
+            title="YouTube video player"
+            frameborder="0"
+            allowfullscreen></iframe>
   </div>
 
-  <h2>🗂️ Explore Product Categories</h2>
-  <div class="category-links">
-    <a href="posts/post-kitchen.html">🍳 Kitchen</a>
-    <a href="posts/post-outdoors.html">🌳 Outdoors</a>
-    <a href="posts/post-beauty.html">💄 Beauty</a>
-    <a href="posts/post-tech.html">💻 Tech</a>
-    <a href="posts/post-health.html">🩺 Health</a>
-    <a href="posts/post-home-decor.html">🏡 Home Decor</a>
+  <div class="content">
+
+    <section class="how-it-works">
+      <h2>How It Works</h2>
+      <ol>
+        <li>
+          <strong>Browse &amp; Shop with Our Affiliate Links</strong><br />
+          Explore our curated product categories like Kitchen, Outdoors, Beauty, Tech, and more. All product links include our Amazon affiliate tag, so when you purchase through these links, you support our site at no extra cost to you.
+        </li>
+        <li>
+          <strong>Try the Live Demo on Our Website</strong><br />
+          Interested in creating your own affiliate product blog? Use our live demo form on the homepage to enter your own Amazon Affiliate ID and API key. Generate product pages dynamically and see how your own affiliate site could look — all within your browser, with no setup required!
+        </li>
+        <li>
+          <strong>Download the Customer Demo Zip</strong><br />
+          For developers and serious affiliates, we provide a downloadable demo package. Run the Python script on your own computer terminal to generate full blog posts and product pages using your personal API credentials. Perfect for testing, customization, or building your own affiliate site from scratch.
+        </li>
+      </ol>
+    </section>
+
+    <h2 style="text-align:center; margin-bottom:1rem;">Explore by Category</h2>
+    <div class="grid">
+      <div class="card"><a href="posts/post-kitchen.html">🍳 Kitchen</a></div>
+      <div class="card"><a href="posts/post-outdoors.html">⛺ Outdoors</a></div>
+      <div class="card"><a href="posts/post-beauty.html">💄 Beauty</a></div>
+      <div class="card"><a href="posts/post-home-decor.html">🏠 Home Decor</a></div>
+      <div class="card"><a href="posts/post-tech.html">💻 Tech</a></div>
+      <div class="card"><a href="posts/post-health.html">🧘 Health</a></div>
+    </div>
+
   </div>
 
-  <div class="cta">
-    <h2>💼 Interested in Your Own Setup?</h2>
-    <p>Email: <a href="mailto:omnistall70@gmail.com">omnistall70@gmail.com</a></p>
-    <a href="https://www.fiverr.com/s/yourusername" target="_blank">View on Fiverr</a>
-  </div>
-
-</section>
-
-<div class="footer">
-  &copy; 2025 Prodpick4u – Built with Python, GitHub Pages & Amazon Affiliate API
-</div>
-
-<script>
-function runDemo() {
-  const affiliate = document.getElementById("demoAffiliate").value.trim();
-  const ytApi = document.getElementById("demoYouTube").value.trim();
-  const status = document.getElementById("demoStatus");
-
-  if (localStorage.getItem("demoUsed") === "true") {
-    status.innerText = "You’ve already tried the demo.";
-    return;
-  }
-
-  if (!affiliate || !ytApi) {
-    status.innerText = "Please enter both fields.";
-    return;
-  }
-
-  // Simulate demo behavior
-  localStorage.setItem("demoUsed", "true");
-  status.innerText = "✅ Success! Your demo is running. Check the 'Tech' post for your preview.";
-  setTimeout(() => {
-    window.location.href = "posts/post-tech.html";
-  }, 3000);
-}
-</script>
-
+  <footer>
+    &copy; 2025 Prodpick. All Amazon links include affiliate tracking (<code>mychanneld-20</code>).
+  </footer>
 </body>
 </html>

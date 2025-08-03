@@ -1,12 +1,12 @@
 # Stylish Home Decor on Amazon
 
-## [Philips Hue White and Color Ambiance Starter Kit](https://www.amazon.com/dp/B07351P1JK?tag=mychanneld-20)
-- **Price:** $199.99
-- **Description:** Smart lighting kit with customizable colors and voice control.
+## [Vornado Whole Room Air Circulator Fan](https://www.amazon.com/dp/B000E5WAUO?tag=mychanneld-20)
+- **Price:** $129.99
+- **Description:** Iconic vortex technology for full-room circulation and quiet performance.
 
-## [Sonos One (Gen 2) - Voice Controlled Smart Speaker](https://www.amazon.com/dp/B07W95BQ69?tag=mychanneld-20)
-- **Price:** $199.00
-- **Description:** Rich sound with Alexa and Google Assistant built-in.
+## [Levoit Air Purifier for Home](https://www.amazon.com/dp/B07VVK39F7?tag=mychanneld-20)
+- **Price:** $139.99
+- **Description:** Compact air purifier with HEPA filter for allergens and dust.
 
 ## [iRobot Roomba i3+ (3550) Robot Vacuum](https://www.amazon.com/dp/B07GNPDMRP?tag=mychanneld-20)
 - **Price:** $399.99
