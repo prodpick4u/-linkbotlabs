@@ -1,5 +1,5 @@
 import os
-from fallback_products import get_fallback_products
+from fallback_products import FALLBACK_PRODUCTS
 
 # Optional: map keys to nicer display titles
 CATEGORY_TITLES = {
@@ -12,8 +12,8 @@ CATEGORY_TITLES = {
 }
 
 def generate_index_html(output_path="docs/index.html"):
-    categories = get_fallback_products()
-    
+    categories = FALLBACK_PRODUCTS  # Get all categories
+
     cards_html = ""
     for cat_key in sorted(categories.keys()):
         title = CATEGORY_TITLES.get(cat_key, cat_key.replace("-", " ").title())
@@ -24,7 +24,7 @@ def generate_index_html(output_path="docs/index.html"):
           <a href="{filename}">View Post</a>
         </div>
         '''
-    
+
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
