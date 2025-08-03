@@ -154,6 +154,63 @@
         margin: 0 auto;
       }
     }
+
+    /* New live demo download section */
+    section.demo-download {
+      max-width: 800px;
+      margin: 0 auto 4rem;
+      text-align: center;
+      background: white;
+      padding: 2rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgb(37 99 235 / 0.15);
+    }
+    section.demo-download h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      color: #2563eb;
+      margin-bottom: 1rem;
+    }
+    section.demo-download p {
+      font-size: 1.1rem;
+      color: #444;
+      margin-bottom: 1rem;
+    }
+    section.demo-download ul {
+      list-style: none;
+      padding: 0;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #555;
+      margin-bottom: 1.5rem;
+    }
+    section.demo-download ul li {
+      margin-bottom: 0.5rem;
+    }
+    section.demo-download a.download-btn {
+      display: inline-block;
+      background-color: #2563eb;
+      color: white;
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 15px rgb(37 99 235 / 0.5);
+      transition: background-color 0.3s ease;
+    }
+    section.demo-download a.download-btn:hover,
+    section.demo-download a.download-btn:focus {
+      background-color: #1e40af;
+      outline: none;
+      box-shadow: 0 6px 20px rgb(30 64 175 / 0.7);
+    }
+    section.demo-download p.note {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 0.75rem;
+    }
   </style>
 </head>
 <body>
@@ -202,6 +259,29 @@
         <h3>Health</h3>
         <a href="posts/post-health.html" aria-label="View Health post">View Post</a>
       </article>
+    </section>
+
+    <!-- Live Demo Download Section -->
+    <section class="demo-download" aria-label="Live demo download section">
+      <h2>💻 Download the Prodpick4u Live Demo</h2>
+      <p>
+        Run the full affiliate automation workflow on your own machine — no setup required.
+      </p>
+      <ul>
+        <li>✅ Includes blog + video generator</li>
+        <li>✅ Supports Amazon API and YouTube upload</li>
+        <li>✅ Works with your own <code>.env</code> file</li>
+      </ul>
+      <a href="https://drive.google.com/uc?export=download&id=1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J" 
+         class="download-btn" 
+         target="_blank" 
+         rel="noopener" 
+         title="Download Prodpick4u live demo ZIP">
+        ⬇️ Download ZIP (Live Demo)
+      </a>
+      <p class="note">
+        Note: Add your own <code>.env</code> file with API keys to use this demo.
+      </p>
     </section>
   </main>
 
