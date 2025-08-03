@@ -5,6 +5,7 @@ from fetch_best_sellers import fetch_best_sellers
 from blog_generator import generate_markdown, save_blog_files, generate_html
 from index_generator import generate_index_html
 from fallback_products import get_fallback_products
+from blog_index_generator import generate_blog_index
 from dotenv import load_dotenv
 
 if os.path.exists(".env"):
@@ -54,6 +55,9 @@ for category in categories:
 
     # Add filename to category dict for index links
     category['filename'] = html_filename
+
+# Generate blog index page
+generate_blog_index(posts_folder="docs/posts", output_file="docs/posts/index.html")
 
 # Generate homepage index with updated categories including filenames
 generate_index_html(categories)
