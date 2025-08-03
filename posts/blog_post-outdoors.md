@@ -1,14 +1,14 @@
 # Outdoor Gear Must-Haves
 
-## [Coleman Skydome Camping Tent](https://www.amazon.com/dp/B08L6YJ5ZK?tag=mychanneld-20)
-- **Price:** $149.99
-- **Description:** Easy 5-minute setup tent with dark room technology and weather protection.
+## [Garmin GPSMAP 66i Handheld GPS](https://www.amazon.com/dp/B07RP3FJY4?tag=mychanneld-20)
+- **Price:** $599.99
+- **Description:** InReach communication and navigation device.
 
-## [Weber Q1200 Liquid Propane Grill](https://www.amazon.com/dp/B00FDOON9C?tag=mychanneld-20)
-- **Price:** $259.00
-- **Description:** Compact yet powerful gas grill for backyard or travel use.
-
-## [Solo Stove Bonfire 2.0](https://www.amazon.com/dp/B0B2D7MT4R?tag=mychanneld-20)
+## [YETI Tundra 45 Cooler](https://www.amazon.com/dp/B073V7QJDY?tag=mychanneld-20)
 - **Price:** $299.99
-- **Description:** Smokeless stainless steel fire pit perfect for outdoor gatherings.
+- **Description:** Durable cooler with excellent ice retention.
+
+## [Coleman Sundome 4‑Person Tent](https://www.amazon.com/dp/B004J2GUOU?tag=mychanneld-20)
+- **Price:** $149.99
+- **Description:** Weather‑resistant, easy‑setup family tent.
 
