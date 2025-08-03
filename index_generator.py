@@ -1,50 +1,39 @@
-import os
-
-def generate_index_html(all_posts, output_path="docs/index.html"):
-    # all_posts is a list of dicts: [{"category": ..., "filename": ...}, ...]
-
-    cards_html = ""
-    for post in all_posts:
-        title = post.get("category", "No Title")
-        filename = post.get("filename", "#")
-        # Prepend posts/ folder so links are correct relative to index.html
-        cards_html += f'''
-        <div class="card">
-          <h3>{title}</h3>
-          <a href="posts/{filename}">View Post</a>
-        </div>
-        '''
-
-    html = f"""<!DOCTYPE html>
+def generate_index_html():
+    html = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Prodpick4u – Amazon Blog Demo</title>
   <style>
-    body {{
+    body {
       background: #0a0a0a;
       color: #ffffff;
       font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
-    }}
-    header {{
+    }
+    header {
       text-align: center;
       padding: 2rem;
-    }}
-    h1 {{
+    }
+    h1 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
-    }}
-    .grid {{
+    }
+    p {
+      color: #ccc;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    .grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
       padding: 1rem;
-    }}
-    .card {{
+    }
+    .card {
       background: #1e1e1e;
       border: 1px solid #333;
       border-radius: 8px;
@@ -52,18 +41,44 @@ def generate_index_html(all_posts, output_path="docs/index.html"):
       padding: 1rem;
       text-align: center;
       transition: all 0.2s;
-    }}
-    .card:hover {{
+    }
+    .card:hover {
       border-color: #00ffd5;
       box-shadow: 0 0 10px #00ffd5;
-    }}
-    .card a {{
+    }
+    .card a {
       color: #00ffd5;
       text-decoration: none;
       font-weight: 600;
       display: block;
       margin-top: 0.5rem;
-    }}
+    }
+    iframe {
+      margin-top: 3rem;
+      border: none;
+      border-radius: 10px;
+      max-width: 90%;
+    }
+    footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.8rem;
+      padding: 2rem 1rem;
+    }
+    .cta {
+      background: #00ffd5;
+      color: #000;
+      font-weight: bold;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 10px;
+      margin: 2rem auto;
+      max-width: 500px;
+    }
+    .cta a {
+      text-decoration: none;
+      color: #000;
+    }
   </style>
 </head>
 <body>
@@ -73,15 +88,46 @@ def generate_index_html(all_posts, output_path="docs/index.html"):
   </header>
 
   <div class="grid">
-    {cards_html}
+    <div class="card">
+      <h3>Kitchen Gadgets</h3>
+      <a href="post-kitchen.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Outdoors</h3>
+      <a href="post-outdoors.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Beauty</h3>
+      <a href="post-beauty.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Home Decor</h3>
+      <a href="post-home-decor.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Tech</h3>
+      <a href="post-tech.html">View Post</a>
+    </div>
+    <div class="card">
+      <h3>Health</h3>
+      <a href="post-health.html">View Post</a>
+    </div>
   </div>
 
+  <div class="cta">
+    💼 Try this demo now & get the full automation kit on <a href="https://www.fiverr.com/s/DUMMYLINK" target="_blank">Fiverr</a>
+  </div>
+
+  <center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/qwfACbh93M0?si=iKkxvuGZ6UL8PfQL" title="Demo Video" allowfullscreen></iframe>
+  </center>
+
+  <footer>
+    © 2025 Prodpick4u · Demo powered by GitHub Pages · Includes Amazon affiliate examples
+  </footer>
 </body>
-</html>"""
-
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
+</html>
+"""
+    with open("docs/index.html", "w", encoding="utf-8") as f:
         f.write(html)
-
-    print(f"✅ {output_path} generated successfully.")
-    return html
+    print("✅ index.html updated with embedded YouTube and product links.")
