@@ -1,23 +1,141 @@
 import os
-from jinja2 import Environment, FileSystemLoader
+from fallback_products import get_fallback_products
 
-def generate_index_html(categories, template_path="templates/index-template.html", output_path="docs/index.html"):
-    # Extract the directory and file name from template_path
-    template_dir = os.path.dirname(template_path)
-    template_file = os.path.basename(template_path)
+# Optional: map keys to nicer display titles
+CATEGORY_TITLES = {
+    "kitchen": "Kitchen Gadgets",
+    "outdoors": "Outdoors",
+    "beauty": "Beauty",
+    "home-decor": "Home Decor",
+    "tech": "Tech",
+    "health": "Health",
+}
 
-    # Setup Jinja2 environment
-    env = Environment(loader=FileSystemLoader(template_dir or "."))
-    template = env.get_template(template_file)
-    rendered = template.render(categories=categories)
+def generate_index_html(output_path="docs/index.html"):
+    categories = get_fallback_products()
+    
+    cards_html = ""
+    for cat_key in sorted(categories.keys()):
+        title = CATEGORY_TITLES.get(cat_key, cat_key.replace("-", " ").title())
+        filename = f"post-{cat_key}.html"
+        cards_html += f'''
+        <div class="card">
+          <h3>{title}</h3>
+          <a href="{filename}">View Post</a>
+        </div>
+        '''
+    
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prodpick4u – Amazon Blog Demo</title>
+  <style>
+    body {{
+      background: #0a0a0a;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+    }}
+    header {{
+      text-align: center;
+      padding: 2rem;
+    }}
+    h1 {{
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }}
+    p {{
+      color: #ccc;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }}
+    .grid {{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }}
+    .card {{
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 8px;
+      width: 280px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.2s;
+    }}
+    .card:hover {{
+      border-color: #00ffd5;
+      box-shadow: 0 0 10px #00ffd5;
+    }}
+    .card a {{
+      color: #00ffd5;
+      text-decoration: none;
+      font-weight: 600;
+      display: block;
+      margin-top: 0.5rem;
+    }}
+    iframe {{
+      margin-top: 3rem;
+      border: none;
+      border-radius: 10px;
+      max-width: 90%;
+    }}
+    footer {{
+      text-align: center;
+      color: #888;
+      font-size: 0.8rem;
+      padding: 2rem 1rem;
+    }}
+    .cta {{
+      background: #00ffd5;
+      color: #000;
+      font-weight: bold;
+      padding: 1rem;
+      text-align: center;
+      border-radius: 10px;
+      margin: 2rem auto;
+      max-width: 500px;
+    }}
+    .cta a {{
+      text-decoration: none;
+      color: #000;
+    }}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🛒 Prodpick4u Amazon Blog Demo</h1>
+    <p>Explore a working sample of an automated affiliate blog powered by fallback products and Amazon links.</p>
+  </header>
 
-    # Ensure output directory exists
-    output_dir = os.path.dirname(output_path)
-    if output_dir and not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+  <div class="grid">
+    {cards_html}
+  </div>
 
-    # Save rendered HTML
+  <div class="cta">
+    💼 Try this demo now & get the full automation kit on <a href="https://www.fiverr.com/s/DUMMYLINK" target="_blank">Fiverr</a>
+  </div>
+
+  <center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/qwfACbh93M0?si=iKkxvuGZ6UL8PfQL" title="Demo Video" allowfullscreen></iframe>
+  </center>
+
+  <footer>
+    © 2025 Prodpick4u · Demo powered by GitHub Pages · Includes Amazon affiliate examples
+  </footer>
+</body>
+</html>"""
+
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write(rendered)
+        f.write(html)
 
     print(f"✅ {output_path} generated successfully.")
+
+if __name__ == "__main__":
+    generate_index_html()
