@@ -51,6 +51,26 @@
       padding: 0 1rem;
     }
 
+    .how-it-works {
+      margin: 3rem 0;
+      color: #333;
+    }
+
+    .how-it-works h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .how-it-works ol {
+      font-size: 1rem;
+      line-height: 1.6;
+      padding-left: 1.5rem;
+    }
+
+    .how-it-works li {
+      margin-bottom: 1rem;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -77,24 +97,6 @@
       font-weight: 600;
     }
 
-    .demo-box {
-      background: #e9f2ff;
-      padding: 1.5rem;
-      margin-top: 2rem;
-      border-left: 4px solid #0d6efd;
-      border-radius: 8px;
-    }
-
-    .demo-box p {
-      margin: 0.5rem 0;
-    }
-
-    .contact-box {
-      margin-top: 2rem;
-      text-align: center;
-      font-size: 1rem;
-    }
-
     footer {
       background: #f8f9fa;
       text-align: center;
@@ -113,7 +115,7 @@
 <body>
   <header>
     <h1>Prodpick – You View, We Review</h1>
-    <p>Amazon Finds in Kitchen, Outdoors, Beauty, Tech & More</p>
+    <p>Amazon Finds in Kitchen, Outdoors, Beauty, Tech &amp; More</p>
   </header>
 
   <div class="video-container">
@@ -124,6 +126,25 @@
   </div>
 
   <div class="content">
+
+    <section class="how-it-works">
+      <h2>How It Works</h2>
+      <ol>
+        <li>
+          <strong>Browse &amp; Shop with Our Affiliate Links</strong><br />
+          Explore our curated product categories like Kitchen, Outdoors, Beauty, Tech, and more. All product links include our Amazon affiliate tag, so when you purchase through these links, you support our site at no extra cost to you.
+        </li>
+        <li>
+          <strong>Try the Live Demo on Our Website</strong><br />
+          Interested in creating your own affiliate product blog? Use our live demo form on the homepage to enter your own Amazon Affiliate ID and API key. Generate product pages dynamically and see how your own affiliate site could look — all within your browser, with no setup required!
+        </li>
+        <li>
+          <strong>Download the Customer Demo Zip</strong><br />
+          For developers and serious affiliates, we provide a downloadable demo package. Run the Python script on your own computer terminal to generate full blog posts and product pages using your personal API credentials. Perfect for testing, customization, or building your own affiliate site from scratch.
+        </li>
+      </ol>
+    </section>
+
     <h2 style="text-align:center; margin-bottom:1rem;">Explore by Category</h2>
     <div class="grid">
       <div class="card"><a href="posts/post-kitchen.html">🍳 Kitchen</a></div>
@@ -134,18 +155,6 @@
       <div class="card"><a href="posts/post-health.html">🧘 Health</a></div>
     </div>
 
-    <div class="demo-box">
-      <h3>🧪 Try the Prodpick Demo</h3>
-      <p>This project includes a customer version that runs on your desktop via terminal.</p>
-      <p>👉 Test it by entering your own Amazon Affiliate ID and YouTube API key. See it auto-generate blogs and videos.</p>
-      <p><strong>No coding needed</strong> — just plug and play.</p>
-    </div>
-
-    <div class="contact-box">
-      <p>💡 Want your own version?</p>
-      <p>Email: <a href="mailto:omnistall70@gmail.com">omnistall70@gmail.com</a></p>
-      <p>Or hire me on <a href="https://www.fiverr.com" target="_blank">Fiverr</a> for setup help or a private build.</p>
-    </div>
   </div>
 
   <footer>
