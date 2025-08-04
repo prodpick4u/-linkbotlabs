@@ -28,6 +28,7 @@ jobs:
           python main.py
 
       - name: Commit and push changes
+        shell: bash
         run: |
           git config --global user.name "Auto Bot"
           git config --global user.email "bot@example.com"
