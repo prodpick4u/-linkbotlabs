@@ -2,25 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://prodpick4u.github.io/Prodpick4u/index.html</loc>
-    <lastmod>2025-07-25</lastmod>
+    <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://prodpick4u.github.io/Prodpick4u/posts/post-kitchen.html</loc>
-    <lastmod>2025-07-25</lastmod>
+    <loc>https://prodpick4u.github.io/Prodpick4u/post-kitchen.html</loc>
+    <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://prodpick4u.github.io/Prodpick4u/posts/post-outdoors.html</loc>
-    <lastmod>2025-07-25</lastmod>
+    <loc>https://prodpick4u.github.io/Prodpick4u/post-outdoors.html</loc>
+    <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://prodpick4u.github.io/Prodpick4u/posts/post-beauty.html</loc>
-    <lastmod>2025-07-25</lastmod>
+    <loc>https://prodpick4u.github.io/Prodpick4u/post-beauty.html</loc>
+    <lastmod>2025-08-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://prodpick4u.github.io/Prodpick4u/post-health.html</loc>
+    <lastmod>2025-08-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://prodpick4u.github.io/Prodpick4u/post-home-decor.html</loc>
+    <lastmod>2025-08-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://prodpick4u.github.io/Prodpick4u/post-tech.html</loc>
+    <lastmod>2025-08-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
