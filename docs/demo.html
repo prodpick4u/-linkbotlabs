@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Try the Demo – Prodpick4u</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #00ffaa;
+    }
+    .try-demo {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+    input {
+      display: block;
+      width: 100%;
+      margin: 5px 0 15px;
+      padding: 10px;
+      font-size: 1em;
+      background: #222;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #00ffaa;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .demo-output {
+      background: #000;
+      color: #0f0;
+      padding: 10px;
+      margin-top: 15px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      border-radius: 5px;
+    }
+    a {
+      color: #00ffaa;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧪 Try Our AI Blog + Video Generator</h1>
+  <p>Enter your own Amazon affiliate ID and YouTube API key to test how the tool works. This demo simulates a full blog/video generation.</p>
+
+  <div class="try-demo">
+    <form id="demoForm" onsubmit="runDemo(event)">
+      <label>🔍 Product Keyword:
+        <input type="text" id="keyword" placeholder="e.g. smart vacuum" required>
+      </label>
+      <label>🛒 Amazon Affiliate Tag:
+        <input type="text" id="affiliate" placeholder="yourtag-20" required>
+      </label>
+      <label>📺 YouTube API Key:
+        <input type="text" id="ytapi" placeholder="AIza..." required>
+      </label>
+      <button type="submit">▶️ Run One-Time Demo</button>
+    </form>
+
+    <pre id="demoOutput" class="demo-output"></pre>
+  </div>
+
+  <h2>📦 Download Full Version (Terminal Tool)</h2>
+  <p>This version opens a browser window from your terminal and runs the real generator using your affiliate tag and YouTube API key.</p>
+  <p>
+    <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank">📥 Download the ZIP File</a>
+  </p>
+
+  <h2>📺 Watch the Demo Video</h2>
+  <p>
+    <a href="https://youtu.be/qwfACbh93M0?si=evaIryCHxQz7Or0Q" target="_blank">▶️ Watch on YouTube</a>
+  </p>
+
+  <script>
+    function runDemo(event) {
+      event.preventDefault();
+      const keyword = document.getElementById('keyword').value;
+      const affiliate = document.getElementById('affiliate').value;
+      const ytapi = document.getElementById('ytapi').value;
+      const output = document.getElementById('demoOutput');
+
+      output.textContent =
+        `🔍 Generating blog for keyword: "${keyword}"\n\n` +
+        `✅ Amazon Tag: ${affiliate}\n` +
+        `✅ YouTube API Key: ${ytapi.substring(0, 8)}... (hidden)\n\n` +
+        `📄 Blog page and 📹 video would be generated here!\n\n` +
+        `🧪 This is a simulation. To run the full tool, download the ZIP above.`;
+    }
+  </script>
+
+</body>
+</html>
