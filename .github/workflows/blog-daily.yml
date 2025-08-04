@@ -33,7 +33,7 @@ jobs:
         run: python main.py
 
       - name: 🧹 Clean up old index (if any)
-        run: rm -f posts/index.html || true
+        run: rm -f docs/index.html || true
 
       - name: 🤖 Commit and push changes
         env:
@@ -41,7 +41,7 @@ jobs:
         run: |
           git config --global user.name "Auto Bot"
           git config --global user.email "bot@example.com"
-          git add .
+          git add docs/*.html docs/*.md
           git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
           git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}.git
           git pull origin main --rebase || echo "No pull needed"
