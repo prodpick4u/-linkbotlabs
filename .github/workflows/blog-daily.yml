@@ -3,7 +3,7 @@ name: Daily Blog Generator
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 4 * * *'  # Runs daily at 11:00 AM Thailand time (UTC+7)
+    - cron: '0 4 * * *'  # Daily at 11:00 AM Thailand time (UTC+7)
 
 jobs:
   build:
@@ -24,7 +24,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run blog generator
-        run: python main.py
+        run: |
+          python main.py
 
       - name: Commit and push changes
         run: |
