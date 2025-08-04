@@ -1,58 +1,46 @@
-name: 🛠️ Auto Generate Blog
+name: Auto Update Blog
 
 on:
+  push:
+    branches:
+      - main
   schedule:
-    - cron: '0 0 * * *'  # Daily at midnight UTC
-  workflow_dispatch:      # Allow manual trigger
+    - cron: '0 0 * * *'  # daily at midnight UTC, adjust as needed
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
-    env:
-      AFFILIATE_TAG: mychanneld-20  # Or use secrets here if preferred
-
     steps:
-      - name: 📥 Checkout repository
+      - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: 🛠️ Set up Python 3.12
-        uses: actions/setup-python@v5
+      - name: Set up Python 3.x
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: '3.x'
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: ⚙️ Run Blog Generator
+      - name: Run blog generator
         run: python main.py
 
-      - name: 🤖 Commit and push updated blog files
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit and push changes
         run: |
           git config --global user.name "Auto Bot"
           git config --global user.email "bot@example.com"
           git add docs/
-          git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
-          git pull origin main --rebase || echo "No pull needed"
-          git push origin main
+          if ! git diff --cached --quiet; then
+            git commit -m "🤖 Auto-update blog"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
 
-      - name: 📤 Upload GitHub Pages artifact
+      - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs
-
-  deploy:
-    needs: build-and-deploy
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-    steps:
-      - name: 🚀 Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
