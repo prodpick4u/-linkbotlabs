@@ -23,7 +23,7 @@
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 30px;
       max-width: 1200px;
-      margin: auto;
+      margin: 40px auto 80px auto;
     }
     .card {
       background: #111;
@@ -52,12 +52,137 @@
       font-size: 0.8rem;
       color: #666;
     }
+    .video-section {
+      max-width: 800px;
+      margin: 0 auto 40px auto;
+      text-align: center;
+    }
+    .video-section h2 {
+      font-weight: 700;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
+    .video-section iframe {
+      width: 100%;
+      height: 450px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+    }
+    .demo-link {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 12px 25px;
+      background-color: #00aaff;
+      color: #fff;
+      border-radius: 30px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .demo-link:hover {
+      background-color: #008fcc;
+    }
+    .description {
+      max-width: 800px;
+      margin: 0 auto 40px auto;
+      color: #ccc;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .api-demo-box {
+      max-width: 600px;
+      margin: 0 auto 60px auto;
+      background: #222;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 30px rgba(0, 170, 255, 0.3);
+      color: #ddd;
+      text-align: center;
+    }
+    .api-demo-box h3 {
+      margin-bottom: 20px;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    .api-demo-box input[type="text"] {
+      width: 70%;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 6px;
+      margin-right: 10px;
+      font-size: 1rem;
+    }
+    .api-demo-box button {
+      padding: 11px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #00aaff;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .api-demo-box button:hover {
+      background-color: #008fcc;
+    }
+    .api-demo-result {
+      margin-top: 20px;
+      background: #111;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      text-align: left;
+      max-height: 200px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
   <h1>Prodpick4u – Amazon Blog Categories</h1>
-  <div class="grid">
 
+  <section class="video-section">
+    <h2>Watch Our Latest Product Review</h2>
+    <iframe
+      src="https://www.youtube.com/embed/qwfACbh93M0"
+      title="YouTube video player"
+      allowfullscreen
+      loading="lazy"
+    ></iframe>
+    <a
+      href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="demo-link"
+    >
+      View the Tool Demo on Google Drive
+    </a>
+  </section>
+
+  <section class="description">
+    <p>
+      Welcome to Prodpick4u — your automated Amazon product review blog.  
+      This tool auto-generates up-to-date blog posts showcasing top products in various categories,
+      including beauty, health, home decor, kitchen gadgets, outdoors gear, and tech.  
+      Our system curates and updates product picks daily to help you find the best buys easily.
+    </p>
+    <p>
+      The linked demo on Google Drive showcases the behind-the-scenes tool in action —  
+      automating blog creation, product selection, and content updates for your convenience.
+    </p>
+  </section>
+
+  <section class="api-demo-box">
+    <h3>Try Our API & Affiliate Demo</h3>
+    <input id="apiInput" type="text" placeholder="Enter product keyword (e.g. vacuum)" />
+    <button onclick="runDemo()">Try Demo</button>
+    <pre id="apiDemoResult" class="api-demo-result" aria-live="polite"></pre>
+  </section>
+
+  <div class="grid">
     <a class="card" href="post-beauty.html">
       <h2>Amazon Beauty Best Sellers</h2>
       <p>View top picks and reviews</p>
@@ -87,10 +212,53 @@
       <h2>Best Tech Gadgets 2025</h2>
       <p>View top picks and reviews</p>
     </a>
-
   </div>
+
   <footer>
     © 2025 Prodpick4u. Powered by automation and Amazon Associates.
   </footer>
+
+  <script>
+    function runDemo() {
+      const input = document.getElementById('apiInput').value.trim();
+      const resultEl = document.getElementById('apiDemoResult');
+
+      if (!input) {
+        resultEl.textContent = 'Please enter a product keyword to try the demo.';
+        return;
+      }
+
+      resultEl.textContent = 'Fetching demo data for "' + input + '"...';
+
+      // Placeholder: Simulate API response after 1.5 seconds
+      setTimeout(() => {
+        // Demo response example: affiliate links and product info
+        const demoResponse = {
+          keyword: input,
+          products: [
+            {
+              title: "Example Product 1 for " + input,
+              affiliateLink: "https://www.amazon.com/dp/EXAMPLEASIN1?tag=mychanneld-20"
+            },
+            {
+              title: "Example Product 2 for " + input,
+              affiliateLink: "https://www.amazon.com/dp/EXAMPLEASIN2?tag=mychanneld-20"
+            },
+            {
+              title: "Example Product 3 for " + input,
+              affiliateLink: "https://www.amazon.com/dp/EXAMPLEASIN3?tag=mychanneld-20"
+            }
+          ]
+        };
+
+        let outputText = `Demo results for keyword: "${demoResponse.keyword}"\n\n`;
+        demoResponse.products.forEach((prod, idx) => {
+          outputText += `${idx + 1}. ${prod.title}\n   Affiliate link: ${prod.affiliateLink}\n\n`;
+        });
+
+        resultEl.textContent = outputText;
+      }, 1500);
+    }
+  </script>
 </body>
 </html>
