@@ -56,11 +56,11 @@ def generate_html(products, category_title, template_path, category_description=
 
 def save_blog_files(category_title, markdown, html, html_filename):
     if isinstance(html_filename, list):
-        html_filename = html_filename[0]  # 💡 Just in case it’s accidentally passed as a list
+        html_filename = html_filename[0]  # Just in case it’s accidentally passed as a list
 
     slug = html_filename.replace(".html", "")
-    md_filename = f"posts/blog_{slug}.md"
-    html_output_path = f"docs/posts/{html_filename}"
+    md_filename = f"docs/blog_{slug}.md"          # Save markdown inside docs/
+    html_output_path = f"docs/{html_filename}"    # Save HTML inside docs/
 
     os.makedirs(os.path.dirname(md_filename), exist_ok=True)
     os.makedirs(os.path.dirname(html_output_path), exist_ok=True)
