@@ -1,121 +1,85 @@
-def generate_index_html(posts):
-    cards_html = ""
-    for post in posts:
-        cards_html += f"""
-        <div class="card">
-          <h3>{post['category']}</h3>
-          <a href="{post['filename']}">View Post</a>
-        </div>
-        """
+import os
 
-    html = f"""<!DOCTYPE html>
+def generate_index_html(all_posts):
+    html = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Prodpick4u – Amazon Blog Demo</title>
   <style>
-    body {{
-      background: #0a0a0a;
-      color: #ffffff;
-      font-family: 'Inter', sans-serif;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    body {
       margin: 0;
-      padding: 0;
-    }}
-    header {{
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #0f0f0f, #1c1c1c);
+      color: #fff;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 2.5rem;
       text-align: center;
-      padding: 2rem;
-    }}
-    h1 {{
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }}
-    p {{
+      margin-bottom: 40px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .card {
+      background: #111;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 30px rgba(255, 255, 255, 0.1);
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      margin: 0 0 10px;
+    }
+    .card p {
+      font-size: 0.95rem;
       color: #ccc;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }}
-    .grid {{
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      padding: 1rem;
-    }}
-    .card {{
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 8px;
-      width: 280px;
-      padding: 1rem;
+    }
+    footer {
+      margin-top: 60px;
       text-align: center;
-      transition: all 0.2s;
-    }}
-    .card:hover {{
-      border-color: #00ffd5;
-      box-shadow: 0 0 10px #00ffd5;
-    }}
-    .card a {{
-      color: #00ffd5;
-      text-decoration: none;
-      font-weight: 600;
-      display: block;
-      margin-top: 0.5rem;
-    }}
-    iframe {{
-      margin-top: 3rem;
-      border: none;
-      border-radius: 10px;
-      max-width: 90%;
-    }}
-    footer {{
-      text-align: center;
-      color: #888;
       font-size: 0.8rem;
-      padding: 2rem 1rem;
-    }}
-    .cta {{
-      background: #00ffd5;
-      color: #000;
-      font-weight: bold;
-      padding: 1rem;
-      text-align: center;
-      border-radius: 10px;
-      margin: 2rem auto;
-      max-width: 500px;
-    }}
-    .cta a {{
-      text-decoration: none;
-      color: #000;
-    }}
+      color: #666;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🛒 Prodpick4u Amazon Blog Demo</h1>
-    <p>Explore a working sample of an automated affiliate blog powered by fallback products and Amazon links.</p>
-  </header>
-
+  <h1>Prodpick4u – Amazon Blog Categories</h1>
   <div class="grid">
-    {cards_html}
+"""
+
+    for post in all_posts:
+        html += f"""
+    <a class="card" href="{post['filename']}">
+      <h2>{post['category']}</h2>
+      <p>View top picks and reviews</p>
+    </a>
+"""
+
+    html += """
   </div>
-
-  <div class="cta">
-    💼 Try this demo now & get the full automation kit on <a href="https://www.fiverr.com/s/DUMMYLINK" target="_blank">Fiverr</a>
-  </div>
-
-  <center>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/qwfACbh93M0?si=iKkxvuGZ6UL8PfQL" title="Demo Video" allowfullscreen></iframe>
-  </center>
-
   <footer>
-    © 2025 Prodpick4u · Demo powered by GitHub Pages · Includes Amazon affiliate examples
+    © 2025 Prodpick4u. Powered by automation and Amazon Associates.
   </footer>
 </body>
 </html>
 """
 
+    os.makedirs("docs", exist_ok=True)
     with open("docs/index.html", "w", encoding="utf-8") as f:
         f.write(html)
-
-    print("✅ index.html dynamically generated from post list.")
+    print("✅ Generated updated docs/index.html")
