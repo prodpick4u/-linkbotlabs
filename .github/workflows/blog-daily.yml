@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * *'  # daily at midnight UTC, adjust as needed
+    - cron: '0 0 * * *'  # daily at midnight UTC
 
 jobs:
   build:
@@ -28,17 +28,19 @@ jobs:
       - name: Run blog generator
         run: python main.py
 
+      - name: Check for changes
+        id: git-check
+        run: |
+          git add docs/
+          echo "::set-output name=changes::$(git diff --cached --quiet && echo 'false' || echo 'true')"
+
       - name: Commit and push changes
+        if: steps.git-check.outputs.changes == 'true'
         run: |
           git config --global user.name "Auto Bot"
           git config --global user.email "bot@example.com"
-          git add docs/
-          if ! git diff --cached --quiet; then
-            git commit -m "🤖 Auto-update blog"
-            git push origin main
-          else
-            echo "No changes to commit"
-          fi
+          git commit -m "🤖 Auto-update blog"
+          git push origin main
 
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@v3
