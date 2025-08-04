@@ -3,7 +3,7 @@ name: Blog Daily Generator
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '0 3 * * *'  # Runs daily at 3 AM UTC
 
 jobs:
   build:
@@ -47,7 +47,12 @@ jobs:
           git config --global user.email "autobot@example.com"
           git add docs/posts/*.html docs/index.html posts/*.md || true
           git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
-          git pull origin main --rebase || echo "No pull needed"
+
+          # Safer pull logic with stash
+          git stash --include-untracked || true
+          git pull origin main --rebase || echo "No changes to pull"
+          git stash pop || true
+
           git push origin main
 
       - name: Upload GitHub Pages artifact
