@@ -2,8 +2,8 @@ name: Auto Generate Blog
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs daily at midnight UTC
-  workflow_dispatch:      # Allows manual trigger
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch:    # Manual trigger
 
 jobs:
   build-and-deploy:
@@ -41,9 +41,11 @@ jobs:
         run: |
           git config --global user.name "Auto Bot"
           git config --global user.email "bot@example.com"
-          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}.git
           git add .
           git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
+          # Set remote URL with token for authentication
+          git remote set-url origin https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }}.git
+          git pull origin main --rebase || echo "No pull needed"
           git push origin main
 
       - name: 📤 Upload GitHub Pages artifact
@@ -53,15 +55,14 @@ jobs:
 
   deploy:
     needs: build-and-deploy
+    runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
-
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: 🚀 Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
