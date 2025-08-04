@@ -64,9 +64,6 @@ jobs:
           APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
           AFFILIATE_TAG: ${{ secrets.AFFILIATE_TAG }}
 
-      - name: 🧹 Cleanup rogue posts index file
-        run: rm -f posts/index.html || true
-
       - name: 📤 Upload Generated Blog
         uses: actions/upload-artifact@v3
         with:
@@ -79,8 +76,14 @@ jobs:
         run: |
           git config --global user.name "Auto Bot"
           git config --global user.email "autobot@example.com"
-          # Add only expected files to avoid committing rogue files
-          git add docs/posts/*.html docs/index.html posts/*.md
+          git add docs/*.html docs/*.md docs/index.html
           git commit -m "🤖 Auto-update blog" || echo "No changes to commit"
           git pull origin main --rebase || echo "No pull needed"
           git push origin main
+
+      # Optional: Uncomment to deploy to GitHub Pages branch
+      # - name: Deploy to GitHub Pages
+      #   uses: peaceiris/actions-gh-pages@v4
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./docs
