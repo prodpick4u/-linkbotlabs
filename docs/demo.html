@@ -22,6 +22,10 @@
       border-radius: 10px;
       margin-bottom: 2rem;
     }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
     input {
       display: block;
       width: 100%;
@@ -63,13 +67,13 @@
 
   <div class="try-demo">
     <form id="demoForm" onsubmit="runDemo(event)">
-      <label>🔍 Product Keyword:
+      <label for="keyword">🔍 Product Keyword:
         <input type="text" id="keyword" placeholder="e.g. smart vacuum" required>
       </label>
-      <label>🛒 Amazon Affiliate Tag:
+      <label for="affiliate">🛒 Amazon Affiliate Tag:
         <input type="text" id="affiliate" placeholder="yourtag-20" required>
       </label>
-      <label>📺 YouTube API Key:
+      <label for="ytapi">📺 YouTube API Key:
         <input type="text" id="ytapi" placeholder="AIza..." required>
       </label>
       <button type="submit">▶️ Run One-Time Demo</button>
@@ -81,28 +85,48 @@
   <h2>📦 Download Full Version (Terminal Tool)</h2>
   <p>This version opens a browser window from your terminal and runs the real generator using your affiliate tag and YouTube API key.</p>
   <p>
-    <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank">📥 Download the ZIP File</a>
+    <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank" rel="noopener">📥 Download the ZIP File</a>
   </p>
 
   <h2>📺 Watch the Demo Video</h2>
   <p>
-    <a href="https://youtu.be/qwfACbh93M0?si=evaIryCHxQz7Or0Q" target="_blank">▶️ Watch on YouTube</a>
+    <a href="https://youtu.be/qwfACbh93M0?si=evaIryCHxQz7Or0Q" target="_blank" rel="noopener">▶️ Watch on YouTube</a>
   </p>
 
   <script>
     function runDemo(event) {
       event.preventDefault();
-      const keyword = document.getElementById('keyword').value;
-      const affiliate = document.getElementById('affiliate').value;
-      const ytapi = document.getElementById('ytapi').value;
+      const form = document.getElementById('demoForm');
+      const keyword = document.getElementById('keyword').value.trim();
+      const affiliate = document.getElementById('affiliate').value.trim() || 'demo123-20';
+      const ytapi = document.getElementById('ytapi').value.trim();
       const output = document.getElementById('demoOutput');
 
-      output.textContent =
-        `🔍 Generating blog for keyword: "${keyword}"\n\n` +
-        `✅ Amazon Tag: ${affiliate}\n` +
-        `✅ YouTube API Key: ${ytapi.substring(0, 8)}... (hidden)\n\n` +
-        `📄 Blog page and 📹 video would be generated here!\n\n` +
-        `🧪 This is a simulation. To run the full tool, download the ZIP above.`;
+      const demoASIN = 'B0XYZ123';
+      const demoProductName = 'Robot Vacuum X20+';
+      const productLink = `https://www.amazon.com/dp/${demoASIN}?tag=${encodeURIComponent(affiliate)}`;
+
+      const scriptText = `
+Hi everyone! Today we're reviewing the ${demoProductName}, your smart cleaning assistant. It features AI navigation, long battery life, and quiet operation.
+
+Grab yours here: ${productLink}
+
+Thank you for watching! Make sure to like and subscribe.
+      `;
+
+      output.innerHTML = `
+✅ <strong>Keyword:</strong> "${keyword}"<br>
+✅ <strong>Amazon Affiliate Tag:</strong> ${affiliate}<br>
+✅ <strong>YouTube API Key:</strong> ${ytapi.substring(0,8)}... (hidden)<br><br>
+
+🛒 <strong>Demo Product Link:</strong> <a href="${productLink}" target="_blank" rel="noopener">${demoProductName}</a><br><br>
+
+📝 <strong>Video Script Preview:</strong><pre style="white-space: pre-wrap; background: #000; color: #0f0; padding: 10px; border-radius: 5px;">${scriptText}</pre>
+
+🎬 Your video script is ready to upload!
+      `;
+
+      [...form.elements].forEach(el => el.disabled = true);
     }
   </script>
 
