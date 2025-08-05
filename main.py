@@ -1,11 +1,11 @@
 import os
 from blog_generator import generate_blog_post
 from html_generator import render_html_from_template
-from your_script_module import generate_script       # Generates video script text from products
-from tts_module import generate_tts                   # Generates audio file from text
-from video_creator import create_video_script         # Creates video from image + audio
-from youtube_uploader import upload_video             # Uploads video to YouTube
-from image_downloader import download_image           # Helper to download product image
+from youtube_script_generator import generate_script       # Generates video script text from products
+from tts_module import generate_tts                         # Generates audio file from text
+from video_creator import create_video_script               # Creates video from image + audio
+from youtube_uploader import upload_video                   # Uploads video to YouTube
+from image_downloader import download_image                 # Helper to download product image
 
 # Define your categories here
 CATEGORIES = ["beauty", "health", "home-decor", "kitchen", "outdoors", "tech"]
