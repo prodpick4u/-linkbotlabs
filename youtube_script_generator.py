@@ -3,8 +3,19 @@ from blog_generator import generate_blog_post, write_to_blog
 from tts_module import generate_tts
 from youtube_uploader import upload_video
 
-# <-- Add this import -->
-from your_script_module import generate_script  # <-- This is where generate_script lives
+# ✅ Define the script generator function here
+def generate_script(products):
+    script_lines = ["Welcome to our Top 3 Kitchen Picks! 🍽️", ""]
+    for i, product in enumerate(products, 1):
+        script_lines.append(f"{i}. {product['title']}")
+        if 'description' in product and product['description']:
+            script_lines.append(f"    - {product['description']}")
+        script_lines.append(f"    - Price: {product['price']}")
+        script_lines.append(f"    - Check it out here: {product['url']}")
+        script_lines.append("")  # blank line between products
+
+    script_lines.append("Like what you see? Tap the link to grab your favorite. Don’t forget to like and subscribe for more weekly picks!")
+    return "\n".join(script_lines)
 
 def main():
     # 1. Fetch products (Playwright first, fallback to API)
