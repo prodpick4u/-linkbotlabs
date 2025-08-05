@@ -3,164 +3,152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick4u – Amazon Blog Demo</title>
+  <title>Prodpick4u – Amazon Affiliate Automation</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
     body {
-      background: #0a0a0a;
-      color: #ffffff;
       font-family: 'Inter', sans-serif;
       margin: 0;
-      padding: 0 10px 40px 10px;
+      padding: 0;
+      background-color: #f7f7f7;
+      color: #333;
     }
+
     header {
+      background-color: #111;
+      color: #fff;
+      padding: 20px;
       text-align: center;
-      padding: 2rem 1rem;
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+
+    main {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
-    p.description {
-      color: #ccc;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      font-size: 1.1rem;
-      line-height: 1.5;
+
+    h1, h2 {
+      color: #111;
     }
-    .links {
-      text-align: center;
-      margin-bottom: 3rem;
-      font-size: 1rem;
-      color: #eee;
-    }
-    .links a {
-      color: #00ffd5;
+
+    a {
+      color: #0070f3;
       text-decoration: none;
-      font-weight: 600;
     }
-    .links small {
-      color: #999;
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .category-link {
       display: block;
-      margin-top: 4px;
-    }
-    .grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-      padding: 1rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    .card {
-      background: #1e1e1e;
-      border: 1px solid #333;
+      padding: 14px;
+      background-color: #fff;
+      border: 2px solid #0070f3;
       border-radius: 8px;
-      width: 280px;
-      padding: 1rem;
       text-align: center;
-      transition: all 0.2s;
-    }
-    .card:hover {
-      border-color: #00ffd5;
-      box-shadow: 0 0 10px #00ffd5;
-    }
-    .card a {
-      color: #00ffd5;
-      text-decoration: none;
       font-weight: 600;
-      display: block;
-      margin-top: 0.5rem;
+      transition: background-color 0.2s, color 0.2s;
     }
+
+    .category-link:hover {
+      background-color: #0070f3;
+      color: #fff;
+    }
+
     iframe {
-      display: block;
-      margin: 3rem auto 4rem auto;
-      border: none;
-      border-radius: 10px;
-      max-width: 90%;
-      width: 560px;
+      width: 100%;
       height: 315px;
+      border: none;
+      margin-top: 20px;
     }
+
     footer {
       text-align: center;
-      color: #888;
-      font-size: 0.8rem;
-      padding: 2rem 1rem;
-    }
-    .cta {
-      background: #00ffd5;
-      color: #000;
-      font-weight: bold;
-      padding: 1rem;
-      text-align: center;
-      border-radius: 10px;
-      margin: 2rem auto 3rem auto;
-      max-width: 500px;
-    }
-    .cta a {
-      text-decoration: none;
-      color: #000;
+      padding: 40px 0;
+      color: #777;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>🛒 Prodpick4u Amazon Blog Demo</h1>
-    <p class="description">Explore a working sample of an automated affiliate blog powered by fallback products and Amazon affiliate links. This tool automates product listing generation, blog creation, and YouTube video embedding to help you launch a niche affiliate site quickly.</p>
+    <h1>Prodpick4u – Amazon Blog & Video Automation Tool</h1>
   </header>
 
-  <div class="links">
-    🎥 Watch the demo video:<br />
-    <a href="https://youtu.be/qwfACbh93M0?si=O7_J2zhAENUKHsPe" target="_blank" rel="noopener noreferrer">https://youtu.be/qwfACbh93M0</a>
-    <br /><br />
-    🚀 Try the live demo here:<br />
-    <a href="https://prodpick4u.github.io/Prodpick4u/demo.html" target="_blank" rel="noopener noreferrer">Live Demo Page</a>
-    <br /><br />
-    📂 Download the demo automation kit (ZIP) from Google Drive:<br />
-    <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">Prodpick4u Demo Kit ZIP</a>
-    <br />
-    <small>This ZIP contains the full Python automation scripts and templates to generate your own affiliate blog demo.</small>
-  </div>
+  <main>
+    <p>
+      🚀 This tool helps affiliate marketers automatically fetch Amazon products, generate blog posts, and create YouTube videos — all from trending keywords.
+      It uses APIs like Apify and RapidAPI, integrates your Amazon affiliate links, and formats content with a clean blog design.
+    </p>
 
-  <iframe
-    src="https://www.youtube.com/embed/qwfACbh93M0?si=O7_J2zhAENUKHsPe"
-    title="Demo Video"
-    allowfullscreen
-  ></iframe>
+    <h2>🎥 Tool Demo</h2>
+    <iframe src="https://www.youtube.com/embed/qwfACbh93M0?si=O7_J2zhAENUKHsPe" allowfullscreen></iframe>
 
-  <div class="grid">
-    <div class="card">
-      <h3>Kitchen Gadgets</h3>
-      <a href="post-kitchen.html">View Post</a>
-    </div>
-    <div class="card">
-      <h3>Outdoors</h3>
-      <a href="post-outdoors.html">View Post</a>
-    </div>
-    <div class="card">
-      <h3>Beauty</h3>
-      <a href="post-beauty.html">View Post</a>
-    </div>
-    <div class="card">
-      <h3>Home Decor</h3>
-      <a href="post-home-decor.html">View Post</a>
-    </div>
-    <div class="card">
-      <h3>Tech</h3>
-      <a href="post-tech.html">View Post</a>
-    </div>
-    <div class="card">
-      <h3>Health</h3>
-      <a href="post-health.html">View Post</a>
-    </div>
-  </div>
+    <h2>🧪 Try the Live Demo</h2>
+    <p>
+      Explore the product demo to see a sample blog post created using this tool:
+    </p>
+    <a href="demo.html" target="_blank" style="
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: #fff;
+      border-radius: 6px;
+      font-weight: bold;
+      text-decoration: none;
+      margin-top: 8px;
+    ">🔍 View Demo Page</a>
 
-  <div class="cta">
-    💼 Try this demo now & get the full automation kit on <a href="https://www.fiverr.com/s/DUMMYLINK" target="_blank" rel="noopener noreferrer">Fiverr</a>
-  </div>
+    <div style="margin-top: 40px;">
+      <h2>🔧 Download the ZIP Demo</h2>
+      <p>
+        Want to try the full Amazon affiliate automation tool on your own device?
+        <br /><br />
+        ✅ The ZIP file includes everything you need: code, templates, a working terminal demo, and instructions.
+        <br /><br />
+        📦 Just download it, unzip it on your desktop or laptop, and follow the included README to run it locally (no setup required).
+      </p>
+
+      <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank" style="
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #0070f3;
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 8px;
+        margin-top: 12px;
+        transition: background-color 0.3s ease;
+      " onmouseover="this.style.backgroundColor='#0051aa'" onmouseout="this.style.backgroundColor='#0070f3'">
+        👉 Download ZIP Demo from Google Drive
+      </a>
+
+      <p style="margin-top: 16px; font-size: 0.95rem; color: #555;">
+        ⚠️ Note: Works best on desktop. No install needed — just unzip and double-click the terminal or follow the README.
+      </p>
+    </div>
+
+    <h2 style="margin-top: 50px;">🛒 Product Categories</h2>
+    <div class="categories">
+      <a href="post-beauty.html" class="category-link">Beauty</a>
+      <a href="post-health.html" class="category-link">Health</a>
+      <a href="post-home-decor.html" class="category-link">Home Decor</a>
+      <a href="post-tech.html" class="category-link">Tech</a>
+      <a href="post-kitchen.html" class="category-link">Kitchen</a>
+      <a href="post-outdoors.html" class="category-link">Outdoors</a>
+    </div>
+  </main>
 
   <footer>
-    © 2025 Prodpick4u · Demo powered by GitHub Pages · Includes Amazon affiliate examples
+    &copy; 2025 Prodpick4u. All rights reserved.
   </footer>
 </body>
 </html>
