@@ -1,85 +1,20 @@
 import os
+from jinja2 import Environment, FileSystemLoader
 
-def generate_index_html(all_posts):
-    html = """<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick4u – Amazon Blog Demo</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to right, #0f0f0f, #1c1c1c);
-      color: #fff;
-      padding: 40px 20px;
-    }
-    h1 {
-      font-size: 2.5rem;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 30px;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .card {
-      background: #111;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
-      transition: transform 0.3s, box-shadow 0.3s;
-      text-decoration: none;
-      color: inherit;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 30px rgba(255, 255, 255, 0.1);
-    }
-    .card h2 {
-      font-size: 1.3rem;
-      margin: 0 0 10px;
-    }
-    .card p {
-      font-size: 0.95rem;
-      color: #ccc;
-    }
-    footer {
-      margin-top: 60px;
-      text-align: center;
-      font-size: 0.8rem;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-  <h1>Prodpick4u – Amazon Blog Categories</h1>
-  <div class="grid">
-"""
+def generate_index_html():
+    env = Environment(loader=FileSystemLoader("templates"))
+    template = env.get_template("index_template.html")
 
-    for post in all_posts:
-        html += f"""
-    <a class="card" href="{post['filename']}">
-      <h2>{post['category']}</h2>
-      <p>View top picks and reviews</p>
-    </a>
-"""
+    html = template.render(
+        title="Prodpick – Amazon Blog Demo",
+        categories=["beauty", "health", "home-decor", "kitchen", "outdoors", "tech"]
+    )
 
-    html += """
-  </div>
-  <footer>
-    © 2025 Prodpick4u. Powered by automation and Amazon Associates.
-  </footer>
-</body>
-</html>
-"""
+    output_path = "docs/index.html"
 
-    os.makedirs("docs", exist_ok=True)
-    with open("docs/index.html", "w", encoding="utf-8") as f:
-        f.write(html)
-    print("✅ Generated updated docs/index.html")
+    if os.path.exists(output_path):
+        print("⚠️  Skipping index.html – already exists.")
+    else:
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(html)
+        print("✅ Created index.html")
