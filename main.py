@@ -1,5 +1,6 @@
 import os
 from blog_generator import generate_markdown, save_blog_files, generate_html
+from index_generator import generate_index_html
 from fallback_products import get_fallback_products
 from dotenv import load_dotenv
 
@@ -7,7 +8,6 @@ if os.path.exists(".env"):
     load_dotenv()
     print("🔧 Loaded environment from .env")
 
-# Define full category info (slug, title, description)
 categories = [
     {"slug": "beauty", "title": "Amazon Beauty Best Sellers", "description": "Discover the most loved beauty and skincare products."},
     {"slug": "health", "title": "Health & Wellness Picks", "description": "Stay healthy and fit with these top-rated wellness products."},
@@ -16,6 +16,18 @@ categories = [
     {"slug": "outdoors", "title": "Outdoor Gear Must-Haves", "description": "Gear up for your next adventure with these outdoor best sellers."},
     {"slug": "tech", "title": "Best Tech Gadgets 2025", "description": "From smart devices to must-have accessories, here's what's trending in tech."},
 ]
+
+all_posts = []
+
+def write_html_file(filename, content):
+    if filename == "index.html":
+        print("⚠️ Skipping overwrite of docs/index.html to preserve custom homepage.")
+        return
+    os.makedirs("docs", exist_ok=True)
+    path = os.path.join("docs", filename)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"✅ Saved {path}")
 
 for cat in categories:
     slug = cat["slug"]
@@ -37,5 +49,13 @@ for cat in categories:
     filename = f"post-{slug}.html"
     save_blog_files(title, markdown, html, filename)
 
-print("✅ Category pages updated.")
-print("🛑 Skipped index.html generation to preserve custom landing page.")
+    all_posts.append({
+        "category": title,
+        "filename": filename
+    })
+
+# Generate index HTML but DO NOT overwrite docs/index.html
+# If you want to update index.html manually, skip this call or modify generate_index_html accordingly.
+print("⚠️ Skipping automated index.html generation to avoid overwrite.")
+# If you want, comment out the next line:
+# generate_index_html(all_posts)
