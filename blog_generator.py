@@ -74,6 +74,13 @@ def save_blog_files(category_title, markdown, html, html_filename):
     print(f"📝 Saved Markdown: {md_filename}")
     print(f"🌐 Saved HTML: {html_output_path}")
 
+# New function added for your usage in youtube_script_generator or elsewhere:
+def write_to_blog(markdown_content, filename="docs/blog_post.md"):
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(markdown_content)
+    print(f"📝 Blog post saved to {filename}")
+
 # ✅ This function is required by main.py — added below
 def generate_blog_post(category):
     category_title = f"Top {category.title()} Products"
