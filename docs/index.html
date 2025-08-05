@@ -1,5 +1,4 @@
-def generate_index_html():
-    html = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -11,20 +10,38 @@ def generate_index_html():
       color: #ffffff;
       font-family: 'Inter', sans-serif;
       margin: 0;
-      padding: 0;
+      padding: 0 10px 40px 10px;
     }
     header {
       text-align: center;
-      padding: 2rem;
+      padding: 2rem 1rem;
     }
     h1 {
       font-size: 2rem;
       margin-bottom: 0.5rem;
     }
-    p {
+    p.description {
       color: #ccc;
       max-width: 600px;
       margin: 0 auto 2rem;
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+    .links {
+      text-align: center;
+      margin-bottom: 3rem;
+      font-size: 1rem;
+      color: #eee;
+    }
+    .links a {
+      color: #00ffd5;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .links small {
+      color: #999;
+      display: block;
+      margin-top: 4px;
     }
     .grid {
       display: flex;
@@ -32,6 +49,8 @@ def generate_index_html():
       justify-content: center;
       gap: 1rem;
       padding: 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
     }
     .card {
       background: #1e1e1e;
@@ -54,10 +73,13 @@ def generate_index_html():
       margin-top: 0.5rem;
     }
     iframe {
-      margin-top: 3rem;
+      display: block;
+      margin: 3rem auto 4rem auto;
       border: none;
       border-radius: 10px;
       max-width: 90%;
+      width: 560px;
+      height: 315px;
     }
     footer {
       text-align: center;
@@ -72,7 +94,7 @@ def generate_index_html():
       padding: 1rem;
       text-align: center;
       border-radius: 10px;
-      margin: 2rem auto;
+      margin: 2rem auto 3rem auto;
       max-width: 500px;
     }
     .cta a {
@@ -84,8 +106,27 @@ def generate_index_html():
 <body>
   <header>
     <h1>🛒 Prodpick4u Amazon Blog Demo</h1>
-    <p>Explore a working sample of an automated affiliate blog powered by fallback products and Amazon links.</p>
+    <p class="description">Explore a working sample of an automated affiliate blog powered by fallback products and Amazon affiliate links. This tool automates product listing generation, blog creation, and YouTube video embedding to help you launch a niche affiliate site quickly.</p>
   </header>
+
+  <div class="links">
+    🎥 Watch the demo video:<br />
+    <a href="https://youtu.be/qwfACbh93M0?si=O7_J2zhAENUKHsPe" target="_blank" rel="noopener noreferrer">https://youtu.be/qwfACbh93M0</a>
+    <br /><br />
+    🚀 Try the live demo here:<br />
+    <a href="https://prodpick4u.github.io/Prodpick4u/demo.html" target="_blank" rel="noopener noreferrer">Live Demo Page</a>
+    <br /><br />
+    📂 Download the demo automation kit (ZIP) from Google Drive:<br />
+    <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank" rel="noopener noreferrer">Prodpick4u Demo Kit ZIP</a>
+    <br />
+    <small>This ZIP contains the full Python automation scripts and templates to generate your own affiliate blog demo.</small>
+  </div>
+
+  <iframe
+    src="https://www.youtube.com/embed/qwfACbh93M0?si=O7_J2zhAENUKHsPe"
+    title="Demo Video"
+    allowfullscreen
+  ></iframe>
 
   <div class="grid">
     <div class="card">
@@ -115,19 +156,11 @@ def generate_index_html():
   </div>
 
   <div class="cta">
-    💼 Try this demo now & get the full automation kit on <a href="https://www.fiverr.com/s/DUMMYLINK" target="_blank">Fiverr</a>
+    💼 Try this demo now & get the full automation kit on <a href="https://www.fiverr.com/s/DUMMYLINK" target="_blank" rel="noopener noreferrer">Fiverr</a>
   </div>
-
-  <center>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/qwfACbh93M0?si=iKkxvuGZ6UL8PfQL" title="Demo Video" allowfullscreen></iframe>
-  </center>
 
   <footer>
     © 2025 Prodpick4u · Demo powered by GitHub Pages · Includes Amazon affiliate examples
   </footer>
 </body>
 </html>
-"""
-    with open("docs/index.html", "w", encoding="utf-8") as f:
-        f.write(html)
-    print("✅ index.html updated with embedded YouTube and product links.")
