@@ -1,6 +1,5 @@
 import os
 from blog_generator import generate_markdown, save_blog_files, generate_html
-from index_generator import generate_index_html
 from fallback_products import get_fallback_products
 from dotenv import load_dotenv
 
@@ -18,8 +17,6 @@ categories = [
     {"slug": "tech", "title": "Best Tech Gadgets 2025", "description": "From smart devices to must-have accessories, here's what's trending in tech."},
 ]
 
-all_posts = []
-
 for cat in categories:
     slug = cat["slug"]
     title = cat["title"]
@@ -34,16 +31,11 @@ for cat in categories:
         products,
         category_title=title,
         category_description=description,
-        template_path="templates/post.html"  # <-- This is required
+        template_path="templates/post.html"
     )
 
     filename = f"post-{slug}.html"
     save_blog_files(title, markdown, html, filename)
 
-    all_posts.append({
-        "category": title,
-        "filename": filename
-    })
-
-# Generate main index.html (writes file internally)
-generate_index_html(all_posts)
+print("✅ Category pages updated.")
+print("🛑 Skipped index.html generation to preserve custom landing page.")
