@@ -73,3 +73,25 @@ def save_blog_files(category_title, markdown, html, html_filename):
 
     print(f"📝 Saved Markdown: {md_filename}")
     print(f"🌐 Saved HTML: {html_output_path}")
+
+# ✅ This function is required by main.py — added below
+def generate_blog_post(category):
+    category_title = f"Top {category.title()} Products"
+    category_description = f"Discover the best {category} products handpicked to save you time and money."
+
+    from fallback_products import FALLBACK_PRODUCTS
+    products = FALLBACK_PRODUCTS.get(category, [])[:3]
+
+    markdown = generate_markdown(products, category_title)
+    html = generate_html(
+        products,
+        category_title,
+        template_path="product_template.html",
+        category_description=category_description
+    )
+
+    return markdown, {
+        "category_title": category_title,
+        "products": products,
+        "html": html
+    }
