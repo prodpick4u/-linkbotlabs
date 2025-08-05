@@ -3,7 +3,7 @@ name: Daily Blog Generator
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 4 * * *'  # Every day at 11:00 AM Thailand time (UTC+7)
+    - cron: '0 4 * * *'  # 11:00 AM Thailand time
 
 permissions:
   contents: write
@@ -35,9 +35,14 @@ jobs:
           pip install -r requirements.txt
           playwright install
 
+      - name: Install FFmpeg (for moviepy)
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
       - name: Run blog generator script
-        run: |
-          python main.py
+        run: python main.py
+
+      - name: Run YouTube script generator
+        run: python youtube_script_generator.py
 
       - name: Commit and push generated blog
         shell: bash
@@ -50,4 +55,3 @@ jobs:
             git push origin main
           else
             echo "No changes to commit"
-          fi
