@@ -3,7 +3,7 @@ name: Daily Blog Generator
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 4 * * *'  # 11:00 AM Thailand time
+    - cron: '0 4 * * *'  # 11:00 AM Thailand time (UTC+7)
 
 permissions:
   contents: write
@@ -55,3 +55,4 @@ jobs:
             git push origin main
           else
             echo "No changes to commit"
+          fi
