@@ -2,13 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
 
 :root {
-  --color-bg: #fafafa;
-  --color-card-bg: #ffffff;
-  --color-primary: #2563eb;    /* Blue */
-  --color-primary-hover: #1e40af;
-  --color-text: #1f2937;       /* Dark slate */
-  --color-text-muted: #6b7280; /* Gray */
-  --color-price: #10b981;      /* Emerald green */
+  --color-bg: #0a0a0a;           /* dark background */
+  --color-card-bg: #1a1a1a;      /* card background */
+  --color-primary: #00ffaa;      /* bright green for links/buttons */
+  --color-primary-hover: #00cc88;/* darker green hover */
+  --color-text: #ffffff;          /* white main text */
+  --color-text-muted: #cccccc;    /* lighter muted text */
+  --color-price: #10b981;         /* keep emerald green for price */
   --font-base: 'Inter', system-ui, sans-serif;
   --font-heading: 'Montserrat', sans-serif;
 }
@@ -59,7 +59,7 @@ h1 {
 .product-card {
   background-color: var(--color-card-bg);
   border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+  box-shadow: 0 6px 15px rgba(0,255,170,0.2);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -68,7 +68,7 @@ h1 {
 }
 
 .product-card:hover {
-  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+  box-shadow: 0 12px 25px rgba(0,255,170,0.4);
 }
 
 .product-link {
