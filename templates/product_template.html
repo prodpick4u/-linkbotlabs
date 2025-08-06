@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Top 10 {{ category_title }} Products – Prodpick4U</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fdf6f9;
+      color: #222;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #d63384;
+    }
+    .product {
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+    }
+    .product img {
+      max-width: 200px;
+      height: auto;
+    }
+    .product h2 {
+      font-size: 1.2em;
+      color: #b5179e;
+    }
+    .buy-button {
+      background-color: #ff69b4;
+      color: white;
+      padding: 10px 15px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Top 10 {{ category_title }} Products You’ll Love</h1>
+
+  {% for product in products %}
+  <div class="product">
+    <img src="{{ product.image_url }}" alt="{{ product.title }}" />
+    <h2>{{ product.title }}</h2>
+    <p>{{ product.description }}</p>
+    <a class="buy-button" href="{{ product.url }}" target="_blank">Buy on Amazon</a>
+  </div>
+  {% endfor %}
+</body>
+</html>
