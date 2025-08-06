@@ -215,7 +215,7 @@
 <body>
   <div class="container">
     <h1>{{ category_title }}</h1>
-    <p class="description">{{ category_description }}</p>
+    <p class="description">{{ category_description or ('Explore top products in ' ~ category_title ~ '.') }}</p>
 
     <ul class="products-list" role="list">
       {% for product in products %}
