@@ -1,6 +1,7 @@
 import random
 
 AFFILIATE_TAG = "mychanneld-20"
+
 FALLBACK_PRODUCTS = {
     "kitchen": [
         {"title":"Breville Barista Express Espresso Machine","price":"$749.95",
