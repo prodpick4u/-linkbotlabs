@@ -1,97 +1,124 @@
-import random
-
 AFFILIATE_TAG = "mychanneld-20"
 
 FALLBACK_PRODUCTS = {
-    "kitchen": [
-        {"title":"Breville Barista Express Espresso Machine","price":"$749.95",
-         "url":f"https://www.amazon.com/dp/B00CH9QWOU?tag={AFFILIATE_TAG}",
-         "description":"Built-in grinder & steam wand for café‑style espresso."},
-        {"title":"KitchenAid Artisan 5‑Qt Stand Mixer","price":"$379.99",
-         "url":f"https://www.amazon.com/dp/B00005UP2P?tag={AFFILIATE_TAG}",
-         "description":"Versatile stand mixer with multiple attachments."},
-        {"title":"Vitamix 5200 Blender","price":"$449.95",
-         "url":f"https://www.amazon.com/dp/B008H3XZ6Y?tag={AFFILIATE_TAG}",
-         "description":"High‑performance variable‑speed blender."},
-    ],
-    "outdoors": [
-        {"title":"Coleman Sundome 4‑Person Tent","price":"$149.99",
-         "url":f"https://www.amazon.com/dp/B004J2GUOU?tag={AFFILIATE_TAG}",
-         "description":"Weather‑resistant, easy‑setup family tent."},
-        {"title":"YETI Tundra 45 Cooler","price":"$299.99",
-         "url":f"https://www.amazon.com/dp/B073V7QJDY?tag={AFFILIATE_TAG}",
-         "description":"Durable cooler with excellent ice retention."},
-        {"title":"Garmin GPSMAP 66i Handheld GPS","price":"$599.99",
-         "url":f"https://www.amazon.com/dp/B07RP3FJY4?tag={AFFILIATE_TAG}",
-         "description":"InReach communication and navigation device."},
-    ],
-    "home-decor": [
-        {"title":"Dyson Purifier Cool TP07 Fan","price":"$599.99",
-         "url":f"https://www.amazon.com/dp/B0949GV3TJ?tag={AFFILIATE_TAG}",
-         "description":"Smart HEPA air purifier and cooling fan."},
-        {"title":"Philips Hue Color Starter Kit","price":"$199.97",
-         "url":f"https://www.amazon.com/dp/B07351P1JK?tag={AFFILIATE_TAG}",
-         "description":"Smart bulb kit with 16M colors & voice control."},
-        {"title":"iRobot Roomba i3+ Robot Vacuum","price":"$399.99",
-         "url":f"https://www.amazon.com/dp/B07GNPDMRP?tag={AFFILIATE_TAG}",
-         "description":"Self‑emptying smart robot vacuum."},
-    ],
     "beauty": [
-        {"title":"Dyson Supersonic Hair Dryer","price":"$399.99",
-         "url":f"https://www.amazon.com/dp/B01MYL9IPR?tag={AFFILIATE_TAG}",
-         "description":"High-end fast drying hair dryer with intelligent heat control."},
-        {"title":"Foreo Luna 3 Facial Cleansing Brush","price":"$169.00",
-         "url":f"https://www.amazon.com/dp/B07JY71CLJ?tag={AFFILIATE_TAG}",
-         "description":"Silicone sonic facial cleansing brush with anti-aging mode."},
-        {"title":"La Mer The Moisturizing Cream 2 oz","price":"$235.00",
-         "url":f"https://www.amazon.com/dp/B001LML6V8?tag={AFFILIATE_TAG}",
-         "description":"Luxurious moisturizing cream known for skin regeneration."},
-        {"title":"T3 Cura Hair Dryer","price":"$185.00",
-         "url":f"https://www.amazon.com/dp/B01LZP48CG?tag={AFFILIATE_TAG}",
-         "description":"Professional-grade hair dryer with ionic technology."},
-        {"title":"NuFACE Trinity Facial Toning Device","price":"$325.00",
-         "url":f"https://www.amazon.com/dp/B00Q2O7N3I?tag={AFFILIATE_TAG}",
-         "description":"Microcurrent device for facial toning and contouring."},
-        {"title":"Clarisonic Mia Smart Sonic Facial Cleansing Brush","price":"$159.99",
-         "url":f"https://www.amazon.com/dp/B076H73G4Q?tag={AFFILIATE_TAG}",
-         "description":"Smart device for deep facial cleansing and skincare."},
-        {"title":"Jo Malone London Peony & Blush Suede Body & Hand Wash 250ml","price":"$105.00",
-         "url":f"https://www.amazon.com/dp/B0746FZ9ZK?tag={AFFILIATE_TAG}",
-         "description":"Luxury fragrant body wash with floral notes."},
-        {"title":"GHD Platinum+ Professional Performance Styler","price":"$249.00",
-         "url":f"https://www.amazon.com/dp/B07L5V7X2H?tag={AFFILIATE_TAG}",
-         "description":"Smart hair straightener with predictive technology."},
-        {"title":"Elizabeth Arden Prevage Anti-Aging Daily Serum, 1 oz","price":"$150.00",
-         "url":f"https://www.amazon.com/dp/B000AS1QXE?tag={AFFILIATE_TAG}",
-         "description":"Powerful anti-aging serum with idebenone."},
-        {"title":"Sunday Riley Good Genes All-In-One Lactic Acid Treatment, 1 oz","price":"$122.00",
-         "url":f"https://www.amazon.com/dp/B00HAGJ11W?tag={AFFILIATE_TAG}",
-         "description":"Lactic acid treatment for smoother, brighter skin."},
-    ],
-    "tech": [
-        {"title":"Sony WH-1000XM5 Headphones","price":"$398.00",
-         "url":f"https://www.amazon.com/dp/B09XS7K6WY?tag={AFFILIATE_TAG}",
-         "description":"Industry-leading noise cancellation."},
-        {"title":"Apple Watch Series 9 (45 mm)","price":"$429.00",
-         "url":f"https://www.amazon.com/dp/B0CHX2F5SP?tag={AFFILIATE_TAG}",
-         "description":"Advanced GPS health & fitness tracking."},
-        {"title":"Dell UltraSharp 4K 27\" Monitor","price":"$649.99",
-         "url":f"https://www.amazon.com/dp/B0B9GYG7D1?tag={AFFILIATE_TAG}",
-         "description":"High-resolution color-accurate display."},
+        {
+            "title": "Revlon One-Step Volumizer",
+            "price": "$39.87",
+            "url": f"https://www.amazon.com/dp/B08N6ZLX9B?tag={AFFILIATE_TAG}",
+            "description": "2-in-1 hot air brush for volume and shine in one pass."
+        },
+        {
+            "title": "CeraVe Hydrating Facial Cleanser",
+            "price": "$15.32",
+            "url": f"https://www.amazon.com/dp/B01MSSDEPK?tag={AFFILIATE_TAG}",
+            "description": "Gentle face wash with hyaluronic acid and ceramides."
+        },
+        {
+            "title": "Maybelline Lash Sensational Mascara",
+            "price": "$8.94",
+            "url": f"https://www.amazon.com/dp/B00PFCT0QA?tag={AFFILIATE_TAG}",
+            "description": "Buildable volume mascara for fuller, longer lashes."
+        }
     ],
     "health": [
-        {"title":"Omron Platinum BP Monitor","price":"$109.99",
-         "url":f"https://www.amazon.com/dp/B07RL8Z3ZG?tag={AFFILIATE_TAG}",
-         "description":"Clinically accurate pressure readings."},
-        {"title":"Theragun Elite Percussion Device","price":"$399.00",
-         "url":f"https://www.amazon.com/dp/B07N8YGR7R?tag={AFFILIATE_TAG}",
-         "description":"Deep tissue muscle recovery tool."},
-        {"title":"Philips Sonicare DiamondClean Smart","price":"$199.95",
-         "url":f"https://www.amazon.com/dp/B07RFX7QY7?tag={AFFILIATE_TAG}",
-         "description":"Smart toothbrush with sensor feedback."},
+        {
+            "title": "Fitbit Charge 5",
+            "price": "$149.95",
+            "url": f"https://www.amazon.com/dp/B09BXQ4HMB?tag={AFFILIATE_TAG}",
+            "description": "Advanced fitness tracker with stress management and heart rate."
+        },
+        {
+            "title": "Nature Made Vitamin D3 2000 IU",
+            "price": "$13.99",
+            "url": f"https://www.amazon.com/dp/B0038NF9Z8?tag={AFFILIATE_TAG}",
+            "description": "Essential immune support in easy-to-swallow softgels."
+        },
+        {
+            "title": "TheraGun Mini Massage Gun",
+            "price": "$199.00",
+            "url": f"https://www.amazon.com/dp/B086T4R5ZP?tag={AFFILIATE_TAG}",
+            "description": "Compact percussive therapy for pain relief and recovery."
+        }
+    ],
+    "home-decor": [
+        {
+            "title": "Govee Smart LED Strip Lights",
+            "price": "$29.99",
+            "url": f"https://www.amazon.com/dp/B07RGBYQXG?tag={AFFILIATE_TAG}",
+            "description": "Voice-controlled RGB lights with app control and DIY modes."
+        },
+        {
+            "title": "Mkono Macrame Wall Hanging",
+            "price": "$16.99",
+            "url": f"https://www.amazon.com/dp/B075M4Q7R4?tag={AFFILIATE_TAG}",
+            "description": "Boho-inspired cotton wall décor for any space."
+        },
+        {
+            "title": "Yankee Candle Balsam & Cedar",
+            "price": "$19.87",
+            "url": f"https://www.amazon.com/dp/B000JDGC78?tag={AFFILIATE_TAG}",
+            "description": "Long-lasting holiday scent in a classic jar candle."
+        }
+    ],
+    "kitchen": [
+        {
+            "title": "Breville Barista Express Espresso Machine",
+            "price": "$749.95",
+            "url": f"https://www.amazon.com/dp/B00CH9QWOU?tag={AFFILIATE_TAG}",
+            "description": "Built-in grinder & steam wand for café-style espresso at home."
+        },
+        {
+            "title": "Ninja AF101 Air Fryer",
+            "price": "$89.99",
+            "url": f"https://www.amazon.com/dp/B07FDJMC9Q?tag={AFFILIATE_TAG}",
+            "description": "Crispy, guilt-free fried food with less oil."
+        },
+        {
+            "title": "Lodge Cast Iron Skillet",
+            "price": "$29.90",
+            "url": f"https://www.amazon.com/dp/B00006JSUA?tag={AFFILIATE_TAG}",
+            "description": "Pre-seasoned, versatile pan for stovetop and oven."
+        }
+    ],
+    "outdoors": [
+        {
+            "title": "Coleman Sundome Camping Tent",
+            "price": "$86.49",
+            "url": f"https://www.amazon.com/dp/B004J2GUOU?tag={AFFILIATE_TAG}",
+            "description": "Weatherproof, easy-setup tent for 2-4 people."
+        },
+        {
+            "title": "LifeStraw Personal Water Filter",
+            "price": "$17.47",
+            "url": f"https://www.amazon.com/dp/B006QF3TW4?tag={AFFILIATE_TAG}",
+            "description": "Filters bacteria and parasites from up to 1,000 gallons of water."
+        },
+        {
+            "title": "Osprey Daylite Plus Backpack",
+            "price": "$75.00",
+            "url": f"https://www.amazon.com/dp/B01N5OUBY4?tag={AFFILIATE_TAG}",
+            "description": "Lightweight, durable daypack for hiking or commuting."
+        }
+    ],
+    "tech": [
+        {
+            "title": "Apple AirPods Pro (2nd Gen)",
+            "price": "$249.00",
+            "url": f"https://www.amazon.com/dp/B0BDHWDR12?tag={AFFILIATE_TAG}",
+            "description": "Active noise cancellation and transparency mode with spatial audio."
+        },
+        {
+            "title": "Anker PowerCore Portable Charger 20,000mAh",
+            "price": "$49.99",
+            "url": f"https://www.amazon.com/dp/B07S829LBX?tag={AFFILIATE_TAG}",
+            "description": "High-capacity power bank with dual USB-A output."
+        },
+        {
+            "title": "Samsung T7 Portable SSD 1TB",
+            "price": "$94.99",
+            "url": f"https://www.amazon.com/dp/B0874Y2FVK?tag={AFFILIATE_TAG}",
+            "description": "Fast external storage with USB 3.2 for files and media."
+        }
     ]
 }
-
-def get_fallback_products(category):
-    category = category.lower()
-    return FALLBACK_PRODUCTS.get(category, [])
