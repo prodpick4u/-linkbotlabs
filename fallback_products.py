@@ -92,7 +92,7 @@ FALLBACK_PRODUCTS = {
     ]
 }
 
-def get_fallback_products(category, count=3):
+def get_fallback_products(category):
     category = category.lower()
     products = FALLBACK_PRODUCTS.get(category, [])
-    return random.sample(products, min(count, len(products)))
+    return products  # Return all products without sampling
