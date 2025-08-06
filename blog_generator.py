@@ -74,24 +74,18 @@ def save_blog_files(category_title, markdown, html, html_filename):
     print(f"📝 Saved Markdown: {md_filename}")
     print(f"🌐 Saved HTML: {html_output_path}")
 
-def write_to_blog(markdown_content, filename="docs/blog_post.md"):
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(markdown_content)
-    print(f"📝 Blog post saved to {filename}")
-
 def generate_blog_post(category):
     category_title = f"Top {category.title()} Products"
     category_description = f"Discover the best {category} products handpicked to save you time and money."
 
     from fallback_products import FALLBACK_PRODUCTS
-    products = FALLBACK_PRODUCTS.get(category, [])[:3]
+    products = FALLBACK_PRODUCTS.get(category, [])  # <-- show ALL fallback products
 
     markdown = generate_markdown(products, category_title)
     html = generate_html(
         products,
         category_title,
-        template_path="post_template.html",  # ✅ Corrected here
+        template_path="post_template.html",
         category_description=category_description
     )
 
