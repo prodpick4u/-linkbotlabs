@@ -2,177 +2,169 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Prodpick4U – Smart Amazon Product Picks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick4u – Amazon Affiliate Automation</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
     body {
-      font-family: 'Inter', sans-serif;
       margin: 0;
-      padding: 0;
-      background-color: #f7f7f7;
-      color: #333;
-    }
-
-    header {
-      background-color: #111;
-      color: #00ffaa;
-      padding: 40px 20px;
-      text-align: center;
       font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      font-size: 2.5rem;
-      letter-spacing: 1.5px;
-    }
-
-    main {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    h1, h2 {
-      color: #111;
-    }
-
-    a {
-      color: #0070f3;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 16px;
-      margin-top: 32px;
-    }
-
-    .category-link {
-      display: block;
-      padding: 14px;
-      background-color: #fff;
-      border: 2px solid #0070f3;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: 600;
-      transition: background-color 0.2s, color 0.2s;
-    }
-
-    .category-link:hover {
-      background-color: #0070f3;
+      background: #0d0d0d;
       color: #fff;
     }
 
-    iframe {
-      width: 100%;
-      height: 315px;
+    header {
+      background: #111;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.2em;
+      color: #f5a623;
+    }
+
+    nav {
+      background: #222;
+      padding: 10px;
+      text-align: center;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: #f5a623;
+    }
+
+    section {
+      padding: 30px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #f5a623;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 15px;
+      background: #f5a623;
+      color: #000;
+      font-weight: bold;
       border: none;
-      margin-top: 20px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .button:hover {
+      background: #ffc04d;
     }
 
     footer {
+      background: #111;
       text-align: center;
-      padding: 40px 0;
-      color: #777;
+      padding: 20px;
+      font-size: 0.9em;
+      color: #999;
+    }
+
+    iframe {
+      max-width: 100%;
+      border: none;
+    }
+
+    .cta {
+      background: #1a1a1a;
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 2px solid #333;
+      margin-top: 40px;
+    }
+
+    .cta h3 {
+      margin-bottom: 15px;
+      font-size: 1.5em;
+    }
+
+    .category-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .category-links a {
+      background: #333;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+
+    .category-links a:hover {
+      background: #f5a623;
+      color: #000;
     }
   </style>
 </head>
 <body>
+
   <header>
-    Welcome to AI Prodpick Tool
+    <h1>Prodpick4U</h1>
+    <p>Smart Daily Amazon Product Picks with AI</p>
   </header>
 
-  <!-- 🚀 CTA Banner Start -->
-  <section style="font-family: 'Inter', sans-serif; padding: 2em; background: #1a1a1a; color: #ffffff; text-align: center;">
-    <h2 style="font-size: 2em; margin-bottom: 0.5em;">🚀 Build Affiliate Blogs & YouTube Videos — Automatically</h2>
-    <p style="font-size: 1.1em; max-width: 700px; margin: 0 auto 1.5em;">
-      Auto-generate Amazon product blogs and voiceover videos with one click.<br>
-      ✅ Affiliate-ready blog posts &nbsp; ✅ AI-written video scripts &nbsp; ✅ Auto-upload to your YouTube channel
-    </p>
+  <nav>
+    <a href="docs/post-beauty.html">Beauty</a>
+    <a href="docs/post-health.html">Health</a>
+    <a href="docs/post-home-decor.html">Home Decor</a>
+    <a href="docs/post-kitchen.html">Kitchen</a>
+    <a href="docs/post-outdoors.html">Outdoors</a>
+    <a href="docs/post-tech.html">Tech</a>
+  </nav>
 
-    <div style="margin-bottom: 1.5em;">
-      <a href="demo.html" style="display: inline-block; margin: 0.4em; padding: 0.7em 1.4em; background: #ff7f50; color: #fff; text-decoration: none; border-radius: 6px;">🔍 Try Demo</a>
-      <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank" style="display: inline-block; margin: 0.4em; padding: 0.7em 1.4em; background: #4caf50; color: #fff; text-decoration: none; border-radius: 6px;">⬇️ Desktop Trial</a>
-      <a href="https://www.fiverr.com/" target="_blank" style="display: inline-block; margin: 0.4em; padding: 0.7em 1.4em; background: #0077b5; color: #fff; text-decoration: none; border-radius: 6px;">💼 Buy on Fiverr</a>
-    </div>
-
-    <p style="font-size: 1em; color: #ccc;">
-      Or scroll down to view sample products, categories,<br> and a real video created using this tool.
-    </p>
+  <section>
+    <h2>What is Prodpick4U?</h2>
+    <p>We automatically curate and generate product reviews from Amazon Best Sellers using AI tools. New content every day, complete with voiceovers and YouTube videos. Perfect for affiliate marketers and content creators.</p>
+    <a class="button" href="https://drive.google.com/uc?export=download&id=1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z" target="_blank">💻 Download Desktop Trial (ZIP)</a>
   </section>
-  <!-- 🚀 CTA Banner End -->
 
-  <main>
-    <p>
-      🚀 This tool helps affiliate marketers automatically fetch Amazon products, generate blog posts, and create YouTube videos — all from trending keywords.
-      It uses APIs like Apify and RapidAPI, integrates your Amazon affiliate links, and formats content with a clean blog design.
-    </p>
+  <section>
+    <h2>Watch Demo</h2>
+    <iframe width="100%" height="415" src="https://www.youtube.com/embed/w_y5aK_6Kz0?rel=0" allowfullscreen></iframe>
+  </section>
 
-    <h2>🎥 Tool Demo</h2>
-    <iframe src="https://www.youtube.com/embed/qwfACbh93M0?si=O7_J2zhAENUKHsPe" allowfullscreen></iframe>
-
-    <h2>🧪 Try the Live Demo</h2>
-    <p>
-      Explore the product demo to see a sample blog post created using this tool:
-    </p>
-    <a href="demo.html" target="_blank" style="
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: #fff;
-      border-radius: 6px;
-      font-weight: bold;
-      text-decoration: none;
-      margin-top: 8px;
-    ">🔍 View Demo Page</a>
-
-    <div style="margin-top: 40px;">
-      <h2>🔧 Download the ZIP Demo</h2>
-      <p>
-        Want to try the full Amazon affiliate automation tool on your own device?
-        <br /><br />
-        ✅ The ZIP file includes everything you need: code, templates, a working terminal demo, and instructions.
-        <br /><br />
-        📦 Just download it, unzip it on your desktop or laptop, and follow the included README to run it locally (no setup required).
-      </p>
-
-      <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank" style="
-        display: inline-block;
-        padding: 12px 24px;
-        background-color: #0070f3;
-        color: #fff;
-        font-weight: 600;
-        text-decoration: none;
-        border-radius: 8px;
-        margin-top: 12px;
-        transition: background-color 0.3s ease;
-      " onmouseover="this.style.backgroundColor='#0051aa'" onmouseout="this.style.backgroundColor='#0070f3'">
-        👉 Download ZIP Demo from Google Drive
-      </a>
-
-      <p style="margin-top: 16px; font-size: 0.95rem; color: #555;">
-        ⚠️ Note: Works best on desktop. No install needed — just unzip and double-click the terminal or follow the README.
-      </p>
+  <section class="cta">
+    <h3>Explore Today’s Top Amazon Picks</h3>
+    <div class="category-links">
+      <a href="docs/post-beauty.html">Beauty</a>
+      <a href="docs/post-health.html">Health</a>
+      <a href="docs/post-home-decor.html">Home Decor</a>
+      <a href="docs/post-kitchen.html">Kitchen</a>
+      <a href="docs/post-outdoors.html">Outdoors</a>
+      <a href="docs/post-tech.html">Tech</a>
     </div>
+  </section>
 
-    <h2 style="margin-top: 50px;">🛒 Product Categories</h2>
-    <div class="categories">
-      <a href="post-beauty.html" class="category-link">Beauty</a>
-      <a href="post-health.html" class="category-link">Health</a>
-      <a href="post-home-decor.html" class="category-link">Home Decor</a>
-      <a href="post-tech.html" class="category-link">Tech</a>
-      <a href="post-kitchen.html" class="category-link">Kitchen</a>
-      <a href="post-outdoors.html" class="category-link">Outdoors</a>
-    </div>
-  </main>
+  <section>
+    <h2>Try It Yourself</h2>
+    <p>Want to automate your own product blog with videos and Amazon links? Download the full setup with working scripts:</p>
+    <a class="button" href="https://drive.google.com/uc?export=download&id=1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z" target="_blank">⬇️ Download ZIP Demo from Google Drive</a>
+  </section>
 
   <footer>
-    &copy; 2025 Prodpick4u. All rights reserved.
+    &copy; 2025 Prodpick4U. Built with AI.
   </footer>
+
 </body>
 </html>
