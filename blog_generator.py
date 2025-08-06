@@ -56,11 +56,11 @@ def generate_html(products, category_title, template_path, category_description=
 
 def save_blog_files(category_title, markdown, html, html_filename):
     if isinstance(html_filename, list):
-        html_filename = html_filename[0]  # Just in case it’s accidentally passed as a list
+        html_filename = html_filename[0]
 
     slug = html_filename.replace(".html", "")
-    md_filename = f"docs/blog_{slug}.md"          # Save markdown inside docs/
-    html_output_path = f"docs/{html_filename}"    # Save HTML inside docs/
+    md_filename = f"docs/blog_{slug}.md"
+    html_output_path = f"docs/{html_filename}"
 
     os.makedirs(os.path.dirname(md_filename), exist_ok=True)
     os.makedirs(os.path.dirname(html_output_path), exist_ok=True)
@@ -74,14 +74,12 @@ def save_blog_files(category_title, markdown, html, html_filename):
     print(f"📝 Saved Markdown: {md_filename}")
     print(f"🌐 Saved HTML: {html_output_path}")
 
-# New function added for your usage in youtube_script_generator or elsewhere:
 def write_to_blog(markdown_content, filename="docs/blog_post.md"):
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, "w", encoding="utf-8") as f:
         f.write(markdown_content)
     print(f"📝 Blog post saved to {filename}")
 
-# ✅ This function is required by main.py — added below
 def generate_blog_post(category):
     category_title = f"Top {category.title()} Products"
     category_description = f"Discover the best {category} products handpicked to save you time and money."
@@ -93,7 +91,7 @@ def generate_blog_post(category):
     html = generate_html(
         products,
         category_title,
-        template_path="product_template.html",
+        template_path="post_template.html",  # ✅ Corrected here
         category_description=category_description
     )
 
