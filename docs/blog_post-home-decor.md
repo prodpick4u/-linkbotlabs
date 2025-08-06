@@ -1,14 +1,14 @@
 # Top Home-Decor Products
 
-## [Dyson Purifier Cool TP07 Fan](https://www.amazon.com/dp/B0949GV3TJ?tag=mychanneld-20)
-- **Price:** $599.99
-- **Description:** Smart HEPA air purifier and cooling fan.
+## [Govee Smart LED Strip Lights](https://www.amazon.com/dp/B07RGBYQXG?tag=mychanneld-20)
+- **Price:** $29.99
+- **Description:** Voice-controlled RGB lights with app control and DIY modes.
 
-## [Philips Hue Color Starter Kit](https://www.amazon.com/dp/B07351P1JK?tag=mychanneld-20)
-- **Price:** $199.97
-- **Description:** Smart bulb kit with 16M colors & voice control.
+## [Mkono Macrame Wall Hanging](https://www.amazon.com/dp/B075M4Q7R4?tag=mychanneld-20)
+- **Price:** $16.99
+- **Description:** Boho-inspired cotton wall décor for any space.
 
-## [iRobot Roomba i3+ Robot Vacuum](https://www.amazon.com/dp/B07GNPDMRP?tag=mychanneld-20)
-- **Price:** $399.99
-- **Description:** Self‑emptying smart robot vacuum.
+## [Yankee Candle Balsam & Cedar](https://www.amazon.com/dp/B000JDGC78?tag=mychanneld-20)
+- **Price:** $19.87
+- **Description:** Long-lasting holiday scent in a classic jar candle.
 

@@ -1,14 +1,14 @@
 # Top Outdoors Products
 
-## [Coleman Sundome 4‑Person Tent](https://www.amazon.com/dp/B004J2GUOU?tag=mychanneld-20)
-- **Price:** $149.99
-- **Description:** Weather‑resistant, easy‑setup family tent.
+## [Coleman Sundome Camping Tent](https://www.amazon.com/dp/B004J2GUOU?tag=mychanneld-20)
+- **Price:** $86.49
+- **Description:** Weatherproof, easy-setup tent for 2-4 people.
 
-## [YETI Tundra 45 Cooler](https://www.amazon.com/dp/B073V7QJDY?tag=mychanneld-20)
-- **Price:** $299.99
-- **Description:** Durable cooler with excellent ice retention.
+## [LifeStraw Personal Water Filter](https://www.amazon.com/dp/B006QF3TW4?tag=mychanneld-20)
+- **Price:** $17.47
+- **Description:** Filters bacteria and parasites from up to 1,000 gallons of water.
 
-## [Garmin GPSMAP 66i Handheld GPS](https://www.amazon.com/dp/B07RP3FJY4?tag=mychanneld-20)
-- **Price:** $599.99
-- **Description:** InReach communication and navigation device.
+## [Osprey Daylite Plus Backpack](https://www.amazon.com/dp/B01N5OUBY4?tag=mychanneld-20)
+- **Price:** $75.00
+- **Description:** Lightweight, durable daypack for hiking or commuting.
 
