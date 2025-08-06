@@ -1,14 +1,22 @@
 # Top Beauty Products
 
-## [Revlon One-Step Volumizer](https://www.amazon.com/dp/B08N6ZLX9B?tag=mychanneld-20)
-- **Price:** $39.87
-- **Description:** 2-in-1 hot air brush for volume and shine in one pass.
+## [Revlon One-Step Hair Dryer And Volumizer Hot Air Brush](https://amzn.to/40SbniQ)
+- **Price:** $59.99
+- **Description:** Hair styling tool for drying and volumizing.
 
-## [CeraVe Hydrating Facial Cleanser](https://www.amazon.com/dp/B01MSSDEPK?tag=mychanneld-20)
-- **Price:** $15.32
-- **Description:** Gentle face wash with hyaluronic acid and ceramides.
+## [Olay Regenerist Micro-Sculpting Cream Face Moisturizer](https://amzn.to/41r3Ibr)
+- **Price:** $25.99
+- **Description:** Anti-aging facial moisturizer.
 
-## [Maybelline Lash Sensational Mascara](https://www.amazon.com/dp/B00PFCT0QA?tag=mychanneld-20)
-- **Price:** $8.94
-- **Description:** Buildable volume mascara for fuller, longer lashes.
+## [Neutrogena Makeup Remover Cleansing Towelettes](https://amzn.to/40OFPdO)
+- **Price:** $9.99
+- **Description:** Gentle wipes for makeup removal.
+
+## [Maybelline Lash Sensational Washable Mascara](https://amzn.to/4opz1NO)
+- **Price:** $7.99
+- **Description:** Volumizing mascara with buildable formula.
+
+## [CeraVe Hydrating Facial Cleanser](https://amzn.to/3J34u8n)
+- **Price:** $14.99
+- **Description:** Gentle face cleanser for normal to dry skin.
 
