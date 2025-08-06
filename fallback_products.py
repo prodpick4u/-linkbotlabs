@@ -94,5 +94,4 @@ FALLBACK_PRODUCTS = {
 
 def get_fallback_products(category):
     category = category.lower()
-    products = FALLBACK_PRODUCTS.get(category, [])
-    return products  # Return all products without sampling
+    return FALLBACK_PRODUCTS.get(category, [])
