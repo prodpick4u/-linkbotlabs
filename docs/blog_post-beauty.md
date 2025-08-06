@@ -1,14 +1,14 @@
-# Amazon Beauty Best Sellers
+# Top Beauty Products
 
-## [Foreo Luna 4 Cleansing Brush](https://www.amazon.com/dp/B09WJ1TZ34?tag=mychanneld-20)
-- **Price:** $279.00
-- **Description:** T‑Sonic facial cleansing with anti‑aging mode.
+## [Dyson Supersonic Hair Dryer](https://www.amazon.com/dp/B01MYL9IPR?tag=mychanneld-20)
+- **Price:** $399.99
+- **Description:** High-end fast drying hair dryer with intelligent heat control.
 
-## [Dyson Supersonic Hair Dryer](https://www.amazon.com/dp/B01MQ0M3SO?tag=mychanneld-20)
-- **Price:** $429.00
-- **Description:** Fast‑drying tool with heat control.
+## [Foreo Luna 3 Facial Cleansing Brush](https://www.amazon.com/dp/B07JY71CLJ?tag=mychanneld-20)
+- **Price:** $169.00
+- **Description:** Silicone sonic facial cleansing brush with anti-aging mode.
 
-## [NuFACE Trinity Facial Toning Device](https://www.amazon.com/dp/B01N0QFVWY?tag=mychanneld-20)
-- **Price:** $325.00
-- **Description:** Micro‑current device for facial contouring.
+## [La Mer The Moisturizing Cream 2 oz](https://www.amazon.com/dp/B001LML6V8?tag=mychanneld-20)
+- **Price:** $235.00
+- **Description:** Luxurious moisturizing cream known for skin regeneration.
 
