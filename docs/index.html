@@ -2,102 +2,107 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Prodpick4U – Amazon Affiliate Product Tool</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Prodpick4U – Auto-generate blog and YouTube content with your Amazon Affiliate products. Try the demo now or explore top categories." />
-  <link rel="icon" href="https://www.youtube.com/s/desktop/d5c37d52/img/favicon_32.png" />
+  <meta name="description" content="Prodpick4U – AI-powered Amazon affiliate automation tool. Generate blogs, videos, and product reviews with your affiliate links.">
+  <meta name="keywords" content="Amazon affiliate, AI automation, SEO blog, YouTube video generator, product reviews, GitHub demo, Prodpick, RapidAPI, YouTube API, Blogger monetization">
+  <meta name="author" content="Prodpick4U Team">
+  <title>Prodpick4U – Amazon Affiliate AI Tool</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
     body {
-      margin: 0;
       font-family: 'Inter', sans-serif;
+      margin: 0;
       background-color: #0f0f0f;
-      color: #fff;
+      color: #f0f0f0;
+      text-align: center;
       line-height: 1.6;
-      padding: 0 1rem;
     }
     header {
-      text-align: center;
-      padding: 3rem 1rem 1rem;
+      padding: 40px 20px;
     }
     h1 {
-      font-size: 2.4rem;
-      margin-bottom: 0.5rem;
+      font-size: 2.5em;
+      margin-bottom: 10px;
     }
     p {
-      max-width: 700px;
-      margin: 0 auto 1.5rem;
+      max-width: 800px;
+      margin: 0 auto 20px;
     }
-    .video-container {
-      position: relative;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      margin: 2rem auto;
-      max-width: 720px;
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #3b82f6;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
     }
-    .video-container iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+    .btn:hover {
+      background-color: #2563eb;
     }
-    .btn-grid {
-      display: grid;
-      gap: 1rem;
-      max-width: 400px;
-      margin: 2rem auto;
-    }
-    .btn-grid a {
+    iframe {
+      margin: 40px auto;
       display: block;
-      text-align: center;
-      background: #ff3366;
-      color: white;
-      padding: 1rem;
+      width: 90%;
+      max-width: 800px;
+      height: 450px;
+      border: none;
+      border-radius: 10px;
+    }
+    .categories {
+      margin: 40px auto;
+      max-width: 800px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .categories a {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #22c55e;
+      color: #fff;
       text-decoration: none;
       border-radius: 5px;
       font-weight: bold;
     }
     footer {
-      margin-top: 4rem;
-      padding: 2rem 0;
-      text-align: center;
-      font-size: 0.9rem;
-      border-top: 1px solid #333;
-    }
-    footer a {
-      color: #ff3366;
-      text-decoration: none;
-      margin: 0 0.5rem;
+      padding: 20px;
+      font-size: 14px;
+      color: #aaa;
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
-    <h1>Welcome to Prodpick4U</h1>
-    <p>🎯 Your AI-powered tool for generating Amazon Affiliate blog posts and YouTube videos automatically.</p>
-    <p>Try the <a href="https://prodpick4u.github.io/Prodpick4u/demo.html" style="color:#66ccff;">interactive demo</a> or explore product categories below.</p>
+    <h1>Prodpick4U – You View, We Review</h1>
+    <p>
+      Welcome to <strong>Prodpick4U</strong>, the ultimate AI-powered Amazon affiliate automation tool.
+      Instantly generate <strong>SEO blog posts</strong>, <strong>YouTube product reviews</strong>, and
+      <strong>affiliate-rich content</strong> with your own API keys.
+      Perfect for bloggers, marketers, YouTubers, and online entrepreneurs.
+    </p>
+    <a class="btn" href="https://www.youtube.com/@Prodpick4u" target="_blank">📺 Visit YouTube Channel</a>
+    <a class="btn" href="https://github.com/prodpick4u/Prodpick4u/releases/latest/download/demo.zip" target="_blank">⬇️ Download Demo ZIP</a>
+    <a class="btn" href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank">📝 View Blogger Post</a>
+    <a class="btn" style="background-color:gray; cursor: not-allowed;">🛠️ Fiverr Gig – Coming Soon</a>
   </header>
 
-  <div class="video-container">
-    <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=Prodpick4u" frameborder="0" allowfullscreen></iframe>
-  </div>
+  <iframe src="https://www.youtube.com/embed?listType=user_uploads&list=Prodpick4u" allowfullscreen></iframe>
 
-  <div class="btn-grid">
-    <a href="post-beauty.html">Top 10 Beauty Products</a>
-    <a href="post-health.html">Top 10 Health Products</a>
-    <a href="post-home-decor.html">Top 10 Home Decor</a>
-    <a href="post-kitchen.html">Top 10 Kitchen Picks</a>
-    <a href="post-outdoors.html">Top 10 Outdoor Gear</a>
-    <a href="post-tech.html">Top 10 Tech Products</a>
-    <a href="demo.html">🧪 Try the Demo Tool</a>
-    <a href="https://drive.google.com/file/d/1OGz-Q4bEjY2U_aRv7yPAAgmiqF0z2FzJ/view?usp=sharing" target="_blank">⬇️ Download Demo ZIP</a>
-  </div>
+  <section class="categories">
+    <a href="post-beauty.html">💄 Beauty</a>
+    <a href="post-health.html">💊 Health</a>
+    <a href="post-home-decor.html">🏠 Home Decor</a>
+    <a href="post-kitchen.html">🍳 Kitchen</a>
+    <a href="post-outdoors.html">🏕️ Outdoors</a>
+    <a href="post-tech.html">💻 Tech</a>
+  </section>
 
   <footer>
-    <p>Created by David & AI using GitHub Pages, Blogger, and YouTube.</p>
-    <a href="https://github.com/prodpick4u/Prodpick4u" target="_blank">GitHub</a> |
-    <a href="https://www.youtube.com/@Prodpick4u" target="_blank">YouTube</a> |
-    <a href="https://prodpick4u.blogspot.com" target="_blank">Blogger</a>
+    &copy; 2025 Prodpick4U. Built with ❤️ for affiliate marketers.
   </footer>
 </body>
 </html>
