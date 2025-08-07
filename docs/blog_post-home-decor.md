@@ -1,22 +1,26 @@
 # Top Home-Decor Products
 
-## [Decorative Boho Throw Pillow Covers (Set of 4)](https://www.amazon.com/dp/B09MRY7NBN?tag=mychanneld-20)
-- **Price:** $23.99
-- **Description:** Trendy pillowcases to enhance living room or bedroom decor.
+## [KARMA AND LUCK Calming Spirit Amethyst Crystal Feng Shui Tree of Life](https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20)
+- **Price:** $39.95
+- **Description:** A handcrafted amethyst crystal tree symbolizing peace and spiritual growth, mounted on a crystal base.
 
-## [Stonebriar Sunburst Wall Mirror](https://www.amazon.com/dp/B01MQGVZ5X?tag=mychanneld-20)
-- **Price:** $34.99
-- **Description:** Stylish accent mirror adds a modern touch.
+## [Linon Brooklyn Sherpa Office Chair, Ivory](https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20)
+- **Price:** $129.99
+- **Description:** A plush, ivory sherpa upholstered office chair with a silver base and adjustable height, offering comfort and style.
 
-## [LED Flameless Candles with Remote (Set of 9)](https://www.amazon.com/dp/B00M4QIF3G?tag=mychanneld-20)
-- **Price:** $25.99
-- **Description:** Battery operated candles for cozy ambiance.
+## [Jersey Home Decor Wall Waterfall XL 47" Wide x 24" Tall](https://www.amazon.com/dp/B01KP0ONSY?tag=mychanneld-20)
+- **Price:** $399.99
+- **Description:** A large, wall-mounted waterfall feature that adds a tranquil ambiance to any room.
 
-## [Mkono Macrame Plant Hanger (Set of 4)](https://www.amazon.com/dp/B075K58Z9H?tag=mychanneld-20)
-- **Price:** $17.99
-- **Description:** Handmade indoor plant holders add texture and style.
+## [Medify MA-40 Air Purifier with True HEPA H13 Filter](https://www.amazon.com/dp/B07LGDYV3C?tag=mychanneld-20)
+- **Price:** $249.99
+- **Description:** An air purifier covering up to 1,793 sq ft, featuring a HEPA H13 filter to remove particles down to 0.1 microns.
 
-## [Umbra Trigg Hanging Planter Wall Decor](https://www.amazon.com/dp/B01B25PD5I?tag=mychanneld-20)
-- **Price:** $25.00
-- **Description:** Geometric ceramic wall planters for succulents or small plants.
+## [Kyzfy 24.4-Inch Relaxing Liquid Motion Lamp](https://www.amazon.com/dp/B0DRBZS1DR?tag=mychanneld-20)
+- **Price:** $44.95
+- **Description:** A soothing liquid motion lamp with vibrant colors, perfect for relaxation and ambiance.
+
+## [VIAHART 14" Glass Mini Aquarium](https://www.amazon.com/dp/B0CRDP8TM9?tag=mychanneld-20)
+- **Price:** $69.99
+- **Description:** A compact glass mini aquarium for tabletop decoration and fish keeping.
 
