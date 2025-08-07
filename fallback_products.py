@@ -231,34 +231,40 @@ FALLBACK_PRODUCTS = {
 
     "home-decor": [
         {
-            "title": "Decorative Boho Throw Pillow Covers (Set of 4)",
-            "url": "https://www.amazon.com/dp/B09MRY7NBN?tag=mychanneld-20",
-            "price": "$23.99",
-            "description": "Trendy pillowcases to enhance living room or bedroom decor."
+            "title": "KARMA AND LUCK Calming Spirit Amethyst Crystal Feng Shui Tree of Life",
+            "url": "https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20",
+            "price": "$39.95",
+            "description": "A handcrafted amethyst crystal tree symbolizing peace and spiritual growth, mounted on a crystal base."
         },
         {
-            "title": "Stonebriar Sunburst Wall Mirror",
-            "url": "https://www.amazon.com/dp/B01MQGVZ5X?tag=mychanneld-20",
-            "price": "$34.99",
-            "description": "Stylish accent mirror adds a modern touch."
+            "title": "Linon Brooklyn Sherpa Office Chair, Ivory",
+            "url": "https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20",
+            "price": "$129.99",
+            "description": "A plush, ivory sherpa upholstered office chair with a silver base and adjustable height, offering comfort and style."
         },
         {
-            "title": "LED Flameless Candles with Remote (Set of 9)",
-            "url": "https://www.amazon.com/dp/B00M4QIF3G?tag=mychanneld-20",
-            "price": "$25.99",
-            "description": "Battery operated candles for cozy ambiance."
+            "title": "Jersey Home Decor Wall Waterfall XL 47\" Wide x 24\" Tall",
+            "url": "https://www.amazon.com/dp/B01KP0ONSY?tag=mychanneld-20",
+            "price": "$399.99",
+            "description": "A large, wall-mounted waterfall feature that adds a tranquil ambiance to any room."
         },
         {
-            "title": "Mkono Macrame Plant Hanger (Set of 4)",
-            "url": "https://www.amazon.com/dp/B075K58Z9H?tag=mychanneld-20",
-            "price": "$17.99",
-            "description": "Handmade indoor plant holders add texture and style."
+            "title": "Medify MA-40 Air Purifier with True HEPA H13 Filter",
+            "url": "https://www.amazon.com/dp/B07LGDYV3C?tag=mychanneld-20",
+            "price": "$249.99",
+            "description": "An air purifier covering up to 1,793 sq ft, featuring a HEPA H13 filter to remove particles down to 0.1 microns."
         },
         {
-            "title": "Umbra Trigg Hanging Planter Wall Decor",
-            "url": "https://www.amazon.com/dp/B01B25PD5I?tag=mychanneld-20",
-            "price": "$25.00",
-            "description": "Geometric ceramic wall planters for succulents or small plants."
+            "title": "Kyzfy 24.4-Inch Relaxing Liquid Motion Lamp",
+            "url": "https://www.amazon.com/dp/B0DRBZS1DR?tag=mychanneld-20",
+            "price": "$44.95",
+            "description": "A soothing liquid motion lamp with vibrant colors, perfect for relaxation and ambiance."
+        },
+        {
+            "title": "VIAHART 14\" Glass Mini Aquarium",
+            "url": "https://www.amazon.com/dp/B0CRDP8TM9?tag=mychanneld-20",
+            "price": "$69.99",
+            "description": "A compact glass mini aquarium for tabletop decoration and fish keeping."
         },
     ],
 }
