@@ -59,19 +59,15 @@
       transform: scale(1.05);
     }
 
-    .youtube-carousel {
-      display: flex;
-      overflow-x: auto;
-      gap: 20px;
-      padding: 20px;
-      scroll-snap-type: x mandatory;
+    .youtube-container {
+      text-align: center;
+      margin: 20px auto;
     }
 
-    .youtube-carousel iframe {
-      flex: 0 0 90%;
+    .youtube-container iframe {
+      width: 90%;
       max-width: 720px;
       height: 400px;
-      scroll-snap-align: start;
       border: none;
       border-radius: 12px;
       box-shadow: 0 0 15px #00ffe0aa;
@@ -170,23 +166,9 @@
       border-radius: 4px;
     }
 
-    /* Smooth scroll for carousel */
-    .youtube-carousel::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .youtube-carousel::-webkit-scrollbar-thumb {
-      background: #00ffe066;
-      border-radius: 4px;
-    }
-
-    .youtube-carousel::-webkit-scrollbar-track {
-      background: #000;
-    }
-
     @media screen and (max-width: 600px) {
       header h1 { font-size: 2rem; }
-      .youtube-carousel iframe { height: 220px; }
+      .youtube-container iframe { height: 220px; }
     }
   </style>
 </head>
@@ -205,11 +187,9 @@
     <a href="https://www.youtube.com/@Prodpick4u" target="_blank">▶️ YouTube Channel</a>
   </div>
 
-  <!-- 🎥 Rotating YouTube Videos -->
-  <div class="youtube-carousel">
-    <iframe src="https://www.youtube.com/embed/qwfACbh93M0" allowfullscreen title="Prodpick4U Video 1"></iframe>
-    <iframe src="https://www.youtube.com/embed/w2IhZ9r5HBI" allowfullscreen title="Prodpick4U Video 2"></iframe>
-    <iframe src="https://www.youtube.com/embed/LOKMJKWheGA" allowfullscreen title="Prodpick4U Video 3"></iframe>
+  <!-- 🎥 Single YouTube Video Embed -->
+  <div class="youtube-container">
+    <iframe src="https://www.youtube.com/embed/T81maTrI-kw?autoplay=1&mute=1" allow="autoplay; encrypted-media" allowfullscreen title="Prodpick4U Featured Video"></iframe>
   </div>
 
   <div class="section">
