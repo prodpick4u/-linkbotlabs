@@ -1,38 +1,18 @@
-# fallback.py
-
 AFFILIATE_TAG = "mychanneld-20"
 
 FALLBACK_PRODUCTS = {
     "health": [
         {
-            "title": "Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer",
-            "url": "https://amzn.to/3H8Olh3",
-            "price": "$199.99",
-            "description": "Multi-cooker with air frying and pressure cooking features."
-        },
-        {
             "title": "Fitbit Charge 5 Advanced Fitness & Health Tracker",
-            "url": "https://www.amazon.com/dp/B0DGPQKF2W/ref=cm_sw_r_as_gl_api_gl_i_Q74S6H3YM6WJ4CK91HY7?linkCode=ml1&tag=mychanneld-20&linkId=ffd3d6a6f247ae23af70c81de70fa1ed",
+            "url": "https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20",
             "price": "$129.95",
             "description": "Fitness tracker with built-in GPS and health metrics."
-        },
-        {
-            "title": "NutriBullet Pro High-Speed Blender/Mixer System",
-            "url": "https://amzn.to/47eVzKT",
-            "price": "$89.99",
-            "description": "Compact blender for smoothies and shakes."
         },
         {
             "title": "Theragun Elite Handheld Percussive Therapy Device",
             "url": "https://amzn.to/3Hm7HiH",
             "price": "$299.00",
             "description": "Deep muscle treatment massage device."
-        },
-        {
-            "title": "Hydro Flask Stainless Steel Water Bottle",
-            "url": "https://amzn.to/4myBCTZ",
-            "price": "$39.95",
-            "description": "Vacuum insulated bottle keeps drinks cold or hot."
         },
         {
             "title": "Methylene Blue",
@@ -53,6 +33,7 @@ FALLBACK_PRODUCTS = {
             "description": "Ancient herbal resin used to boost energy, vitality, and performance."
         },
     ],
+
     "beauty": [
         {
             "title": "Revlon One-Step Hair Dryer And Volumizer Hot Air Brush",
@@ -85,6 +66,7 @@ FALLBACK_PRODUCTS = {
             "description": "Gentle face cleanser for normal to dry skin."
         },
     ],
+
     "kitchen": [
         {
             "title": "Instant Pot Duo 7-in-1 Electric Pressure Cooker",
@@ -116,7 +98,26 @@ FALLBACK_PRODUCTS = {
             "price": "$149.95",
             "description": "Powerful food processor for chopping and slicing."
         },
+        {
+            "title": "Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer",
+            "url": "https://amzn.to/3H8Olh3",
+            "price": "$199.99",
+            "description": "Multi-cooker with air frying and pressure cooking features."
+        },
+        {
+            "title": "NutriBullet Pro High-Speed Blender/Mixer System",
+            "url": "https://amzn.to/47eVzKT",
+            "price": "$89.99",
+            "description": "Compact blender for smoothies and shakes."
+        },
+        {
+            "title": "Hydro Flask Stainless Steel Water Bottle",
+            "url": "https://amzn.to/4myBCTZ",
+            "price": "$39.95",
+            "description": "Vacuum insulated bottle keeps drinks cold or hot."
+        },
     ],
+
     "tech": [
         {
             "title": "Apple AirPods Pro (2nd Generation)",
@@ -128,7 +129,7 @@ FALLBACK_PRODUCTS = {
             "title": "Samsung Galaxy Buds FE (Fan Edition)",
             "url": "https://amzn.to/4m6BhIh",
             "price": "$99.99",
-            "description": "Offers reliable active noise cancellation, auto device switching, and balanced audio at a mid-tier priceâideal for Android users."
+            "description": "Offers reliable active noise cancellation, auto device switching, and balanced audio at a mid-tier price—ideal for Android users."
         },
         {
             "title": "Anker Soundcore P20i",
@@ -155,12 +156,13 @@ FALLBACK_PRODUCTS = {
             "description": "Industry-leading noise cancelling headphones."
         },
         {
-            "title": "Kindle Paperwhite â Now Waterproof with 2x the Storage",
+            "title": "Kindle Paperwhite – Now Waterproof with 2x the Storage",
             "url": "https://amzn.to/4ftSYyW",
             "price": "$139.99",
             "description": "Waterproof e-reader with high-resolution display."
         },
     ],
+
     "outdoors": [
         {
             "title": "Coleman Sundome Tent",
@@ -193,6 +195,7 @@ FALLBACK_PRODUCTS = {
             "description": "Rugged GPS device for outdoor navigation."
         },
     ],
+
     "household": [
         {
             "title": "iRobot Roomba 694 Robot Vacuum",
@@ -223,6 +226,39 @@ FALLBACK_PRODUCTS = {
             "url": "https://amzn.to/46LByvu",
             "price": "$199.00",
             "description": "Single serve coffee and espresso machine."
+        },
+    ],
+
+    "home-decor": [
+        {
+            "title": "Decorative Boho Throw Pillow Covers (Set of 4)",
+            "url": "https://www.amazon.com/dp/B09MRY7NBN?tag=mychanneld-20",
+            "price": "$23.99",
+            "description": "Trendy pillowcases to enhance living room or bedroom decor."
+        },
+        {
+            "title": "Stonebriar Sunburst Wall Mirror",
+            "url": "https://www.amazon.com/dp/B01MQGVZ5X?tag=mychanneld-20",
+            "price": "$34.99",
+            "description": "Stylish accent mirror adds a modern touch."
+        },
+        {
+            "title": "LED Flameless Candles with Remote (Set of 9)",
+            "url": "https://www.amazon.com/dp/B00M4QIF3G?tag=mychanneld-20",
+            "price": "$25.99",
+            "description": "Battery operated candles for cozy ambiance."
+        },
+        {
+            "title": "Mkono Macrame Plant Hanger (Set of 4)",
+            "url": "https://www.amazon.com/dp/B075K58Z9H?tag=mychanneld-20",
+            "price": "$17.99",
+            "description": "Handmade indoor plant holders add texture and style."
+        },
+        {
+            "title": "Umbra Trigg Hanging Planter Wall Decor",
+            "url": "https://www.amazon.com/dp/B01B25PD5I?tag=mychanneld-20",
+            "price": "$25.00",
+            "description": "Geometric ceramic wall planters for succulents or small plants."
         },
     ],
 }
