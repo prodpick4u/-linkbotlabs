@@ -34,6 +34,24 @@ FALLBACK_PRODUCTS = {
             "price": "$39.95",
             "description": "Vacuum insulated bottle keeps drinks cold or hot."
         },
+        {
+            "title": "Methylene Blue",
+            "url": "https://amzn.to/4ldkJwL",
+            "price": "Varies",
+            "description": "Supplement researched for mitochondrial support and cognitive function."
+        },
+        {
+            "title": "Irish Sea Moss",
+            "url": "https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20",
+            "price": "Varies",
+            "description": "Rich in iodine and essential minerals for immune and thyroid support."
+        },
+        {
+            "title": "Shilajit",
+            "url": "https://amzn.to/4li6vuC",
+            "price": "Varies",
+            "description": "Ancient herbal resin used to boost energy, vitality, and performance."
+        },
     ],
     "beauty": [
         {
@@ -102,9 +120,21 @@ FALLBACK_PRODUCTS = {
     "tech": [
         {
             "title": "Apple AirPods Pro (2nd Generation)",
-            "url": "https://amzn.to/41uuO1g",
+            "url": "https://amzn.to/3UAYMx7",
             "price": "$249.00",
-            "description": "Wireless earbuds with noise cancellation."
+            "description": "Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality. Perfect for professionals and iPhone users."
+        },
+        {
+            "title": "Samsung Galaxy Buds FE (Fan Edition)",
+            "url": "https://amzn.to/4m6BhIh",
+            "price": "$99.99",
+            "description": "Offers reliable active noise cancellation, auto device switching, and balanced audio at a mid-tier priceâideal for Android users."
+        },
+        {
+            "title": "Anker Soundcore P20i",
+            "url": "https://amzn.to/4mqytoV",
+            "price": "$29.99",
+            "description": "Budget-friendly bestseller wireless earbuds with decent ANC and comfort."
         },
         {
             "title": "Samsung T7 Portable SSD 1TB",
@@ -125,7 +155,7 @@ FALLBACK_PRODUCTS = {
             "description": "Industry-leading noise cancelling headphones."
         },
         {
-            "title": "Kindle Paperwhite – Now Waterproof with 2x the Storage",
+            "title": "Kindle Paperwhite â Now Waterproof with 2x the Storage",
             "url": "https://amzn.to/4ftSYyW",
             "price": "$139.99",
             "description": "Waterproof e-reader with high-resolution display."
