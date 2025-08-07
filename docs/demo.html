@@ -1,3 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Try the Demo – Prodpick4u</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+  <style>
+    body {
+      background: #0a0a0a;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #00ffaa;
+    }
+    .try-demo {
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input {
+      display: block;
+      width: 100%;
+      margin: 5px 0 15px;
+      padding: 10px;
+      font-size: 1em;
+      background: #222;
+      color: #fff;
+      border: 1px solid #444;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #00ffaa;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .demo-output {
+      background: #000;
+      color: #0f0;
+      padding: 10px;
+      margin-top: 15px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      border-radius: 5px;
+    }
+    a {
+      color: #00ffaa;
+    }
+    iframe {
+      width: 100%;
+      max-width: 640px;
+      height: 360px;
+      border: none;
+      margin: 2rem auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧪 Try Our AI Blog + Video Generator</h1>
+  <p>Enter your own Amazon affiliate ID and YouTube API key to test how the tool works. This demo simulates a full blog/video generation.</p>
+
+  <!-- Embedded YouTube Shorts Video -->
+  <iframe 
+    src="https://www.youtube.com/embed/1JLdbOGsOzk"
+    title="Prodpick4U Demo"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+
+  <div class="try-demo">
+    <form id="demoForm" onsubmit="runDemo(event)">
+      <label for="keyword">🔍 Product Keyword:
+        <input type="text" id="keyword" placeholder="e.g. smart vacuum" required>
+      </label>
+      <label for="affiliate">🛒 Amazon Affiliate Tag:
+        <input type="text" id="affiliate" placeholder="yourtag-20" required>
+      </label>
+      <label for="ytapi">📺 YouTube API Key:
+        <input type="text" id="ytapi" placeholder="AIza..." required>
+      </label>
+      <button type="submit">▶️ Run One-Time Demo</button>
+    </form>
+
+    <pre id="demoOutput" class="demo-output"></pre>
+  </div>
+
+  <h2>📦 Download Full Version (Terminal Tool)</h2>
+  <p>This version opens a browser window from your terminal and runs the real generator using your affiliate tag and YouTube API key.</p>
+  <p>
+    <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank" rel="noopener">📥 Download the ZIP File</a>
+  </p>
+
+  <h2>📺 Watch the Demo Video</h2>
+  <p>
+    <a href="https://youtu.be/qwfACbh93M0?si=evaIryCHxQz7Or0Q" target="_blank" rel="noopener">▶️ Watch on YouTube</a>
+  </p>
+
+  <script>
+    function runDemo(event) {
+      event.preventDefault();
+      const form = document.getElementById('demoForm');
+      const keyword = document.getElementById('keyword').value.trim();
+      const affiliate = document.getElementById('affiliate').value.trim() || 'demo123-20';
+      const ytapi = document.getElementById('ytapi').value.trim();
+      const output = document.getElementById('demoOutput');
+
+      const demoASIN = 'B0XYZ123';
+      const demoProductName = 'Robot Vacuum X20+';
+      const productLink = `https://www.amazon.com/dp/${demoASIN}?tag=${encodeURIComponent(affiliate)}`;
+
+      const scriptText = `
+Hi everyone! Today we're reviewing the ${demoProductName}, your smart cleaning assistant. It features AI navigation, long battery life, and quiet operation.
+
+Grab yours here: ${productLink}
+
+Thank you for watching! Make sure to like and subscribe.
+      `;
+
+      output.innerHTML = `
+✅ <strong>Keyword:</strong> "${keyword}"<br>
+✅ <strong>Amazon Affiliate Tag:</strong> ${affiliate}<br>
+✅ <strong>YouTube API Key:</strong> ${ytapi.substring(0,8)}... (hidden)<br><br>
+
+🛒 <strong>Demo Product Link:</strong> <a href="${productLink}" target="_blank" rel="noopener">${demoProductName}</a><br><br>
+
+📝 <strong>Video Script Preview:</strong><pre style="white-space: pre-wrap; background: #000; color: #0f0; padding: 10px; border-radius: 5px;">${scriptText}</pre>
+
+🎬 Your video script is ready to upload!
+      `;
+
+      [...form.elements].forEach(el => el.disabled = true);
+    }
+  </script>
+
+<script>
+  const contactBtn = document.createElement('a');
+  contactBtn.href = '#contact';
+  contactBtn.textContent = '✉️ Contact';
+  contactBtn.style.cssText = `
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#00ff88;
+    color:#000;
+    padding:12px 18px;
+    border-radius:30px;
+    font-weight:bold;
+    text-decoration:none;
+    box-shadow:0 0 12px #00ff88;
+    z-index:1000;
+    transition:background 0.3s ease;
+  `;
+  contactBtn.onmouseenter = () => contactBtn.style.background = '#00cc66';
+  contactBtn.onmouseleave = () => contactBtn.style.background = '#00ff88';
+  document.body.appendChild(contactBtn);
+</script>
+
 <!-- 👇 Contact Form Section (Add before </body>) -->
 <div id="contact" style="margin-top: 4rem; padding: 2rem; background: #1a1a1a; border-radius: 10px;">
   <h2 style="color: #00ffaa;">📬 Contact the Creator</h2>
@@ -18,3 +189,6 @@
     <button type="submit" style="margin-top: 1rem;">📨 Send Message</button>
   </form>
 </div>
+
+</body>
+</html>
