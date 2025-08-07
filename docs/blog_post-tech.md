@@ -6,7 +6,7 @@
 
 ## [Samsung Galaxy Buds FE (Fan Edition)](https://amzn.to/4m6BhIh)
 - **Price:** $99.99
-- **Description:** Offers reliable active noise cancellation, auto device switching, and balanced audio at a mid-tier priceâideal for Android users.
+- **Description:** Offers reliable active noise cancellation, auto device switching, and balanced audio at a mid-tier price—ideal for Android users.
 
 ## [Anker Soundcore P20i](https://amzn.to/4mqytoV)
 - **Price:** $29.99
@@ -24,7 +24,7 @@
 - **Price:** $348.00
 - **Description:** Industry-leading noise cancelling headphones.
 
-## [Kindle Paperwhite â Now Waterproof with 2x the Storage](https://amzn.to/4ftSYyW)
+## [Kindle Paperwhite – Now Waterproof with 2x the Storage](https://amzn.to/4ftSYyW)
 - **Price:** $139.99
 - **Description:** Waterproof e-reader with high-resolution display.
 

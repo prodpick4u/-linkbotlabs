@@ -20,3 +20,15 @@
 - **Price:** $149.95
 - **Description:** Powerful food processor for chopping and slicing.
 
+## [Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer](https://amzn.to/3H8Olh3)
+- **Price:** $199.99
+- **Description:** Multi-cooker with air frying and pressure cooking features.
+
+## [NutriBullet Pro High-Speed Blender/Mixer System](https://amzn.to/47eVzKT)
+- **Price:** $89.99
+- **Description:** Compact blender for smoothies and shakes.
+
+## [Hydro Flask Stainless Steel Water Bottle](https://amzn.to/4myBCTZ)
+- **Price:** $39.95
+- **Description:** Vacuum insulated bottle keeps drinks cold or hot.
+
