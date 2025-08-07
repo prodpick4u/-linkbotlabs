@@ -58,12 +58,28 @@
     a {
       color: #00ffaa;
     }
+    iframe {
+      width: 100%;
+      max-width: 640px;
+      height: 360px;
+      border: none;
+      margin: 2rem auto;
+      display: block;
+    }
   </style>
 </head>
 <body>
 
   <h1>🧪 Try Our AI Blog + Video Generator</h1>
   <p>Enter your own Amazon affiliate ID and YouTube API key to test how the tool works. This demo simulates a full blog/video generation.</p>
+
+  <!-- Embedded YouTube Shorts Video -->
+  <iframe 
+    src="https://www.youtube.com/embed/1JLdbOGsOzk"
+    title="Prodpick4U Demo"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
 
   <div class="try-demo">
     <form id="demoForm" onsubmit="runDemo(event)">
