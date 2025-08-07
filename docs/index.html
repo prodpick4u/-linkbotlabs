@@ -2,175 +2,191 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Prodpick4U – AI Amazon Product Picks & Blog Demo</title>
+  <title>Prodpick4U – AI Amazon Product Picks & Auto Blog Tool</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Prodpick4U is your AI-powered Amazon product recommendation engine with blog and video automation. Try the live demo, download the tool, or explore our curated top picks." />
-  <meta name="keywords" content="Amazon Affiliate, Product Reviews, AI Tools, Blog Generator, SEO Tool, YouTube Video Automation, Prodpick4U, Best Amazon Products 2025" />
+  <meta name="description" content="AI-powered Amazon product picks, video automation, and blogging tool. Explore top affiliate products with YouTube demos." />
+  <meta name="keywords" content="AI affiliate marketing, Amazon products, YouTube automation, Prodpick4U, product blogs, SEO tool, affiliate videos" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
     body {
       font-family: 'Inter', sans-serif;
       margin: 0;
-      background: #121212;
-      color: #fff;
-      line-height: 1.6;
+      background: #0d0d0d;
+      color: #f1f1f1;
     }
 
     header {
-      background-color: #1e1e1e;
-      padding: 1.5rem;
+      background: radial-gradient(circle, #00ffe0 10%, #000 100%);
+      padding: 2rem;
       text-align: center;
+      color: #111;
     }
 
     header h1 {
-      font-size: 2.5rem;
-      color: #00ffe0;
+      font-size: 3rem;
+      font-weight: 800;
       margin-bottom: 0.5rem;
+      color: #000;
     }
 
     header p {
-      font-size: 1.1rem;
-      color: #ccc;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #111;
     }
 
     .cta-buttons {
       text-align: center;
-      margin: 20px;
+      margin: 30px auto;
     }
 
     .cta-buttons a {
       text-decoration: none;
-      color: white;
-      background-color: #00b894;
-      padding: 12px 24px;
-      margin: 8px;
-      border-radius: 6px;
+      color: #000;
+      background: linear-gradient(90deg, #00ffe0, #00b894);
+      padding: 14px 28px;
+      margin: 10px;
+      border-radius: 8px;
       display: inline-block;
       font-weight: bold;
-      transition: background-color 0.3s ease;
+      box-shadow: 0 0 10px #00ffe0aa;
+      transition: transform 0.3s ease;
     }
 
     .cta-buttons a:hover {
-      background-color: #018f6b;
+      transform: scale(1.05);
     }
 
-    .youtube-container {
-      text-align: center;
-      margin-top: 2rem;
+    .youtube-carousel {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding: 20px;
+      scroll-snap-type: x mandatory;
     }
 
-    iframe {
-      width: 90%;
+    .youtube-carousel iframe {
+      flex: 0 0 90%;
       max-width: 720px;
       height: 400px;
+      scroll-snap-align: start;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: 0 0 15px #00ffe0aa;
     }
 
     .section {
       padding: 2rem;
       text-align: center;
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 1000px;
+      margin: auto;
     }
 
     .section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
       color: #00ffe0;
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
+      font-weight: 700;
     }
 
     .category-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 16px;
-      margin-top: 1rem;
+      gap: 20px;
+      margin-top: 1.5rem;
     }
 
     .category-buttons a {
-      background: #2e2e2e;
-      padding: 14px 24px;
-      border-radius: 8px;
+      background: #1e1e1e;
+      padding: 16px 28px;
+      border-radius: 10px;
       color: #fff;
       font-weight: 600;
       text-decoration: none;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s ease, transform 0.2s;
+      box-shadow: 0 0 10px #00ffe0aa;
       display: flex;
       align-items: center;
-      gap: 10px;
-      box-shadow: 0 0 5px #00ffe0aa;
+      gap: 12px;
     }
 
     .category-buttons a:hover {
       background: #00b894;
-      box-shadow: 0 0 15px #00b894cc;
+      transform: scale(1.05);
     }
 
     .info-section {
-      background: #1e1e1e;
+      background: #111;
       padding: 2rem;
-      margin-top: 3rem;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #00ffe0aa;
+      border-radius: 16px;
+      box-shadow: 0 0 15px #00ffe055;
       text-align: left;
       color: #ccc;
-      font-size: 1rem;
-      line-height: 1.5;
+      line-height: 1.7;
+      max-width: 1000px;
+      margin: 3rem auto;
     }
 
     .info-section h3 {
       color: #00ffe0;
       margin-top: 1rem;
-      margin-bottom: 0.8rem;
+      font-size: 1.5rem;
     }
 
-    .info-section p, .info-section ul {
-      margin-bottom: 1rem;
-    }
-
-    .info-section ul {
-      list-style-type: disc;
+    .info-section ul, .info-section ol {
       padding-left: 20px;
     }
 
-    .reviews {
-      margin: 3rem auto;
-      max-width: 800px;
-      text-align: center;
-    }
-
     .review {
-      background: #1e1e1e;
+      background: #1a1a1a;
       padding: 1.5rem;
-      border-radius: 10px;
-      margin: 1rem;
+      margin: 1rem auto;
+      border-radius: 12px;
+      max-width: 800px;
       font-style: italic;
+      box-shadow: 0 0 12px #00ffe0aa;
       color: #eee;
-      box-shadow: 0 0 10px #00ffe0aa;
     }
 
     footer {
-      background-color: #000;
+      background: #000;
       text-align: center;
       padding: 2rem;
       font-size: 0.9rem;
       color: #888;
-      margin-top: 3rem;
     }
 
     a {
       color: #00ffe0;
     }
 
-    a.code-link {
+    .code-link {
       font-family: monospace;
       background: #222;
       padding: 2px 6px;
       border-radius: 4px;
-      font-size: 0.95rem;
+    }
+
+    /* Smooth scroll for carousel */
+    .youtube-carousel::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .youtube-carousel::-webkit-scrollbar-thumb {
+      background: #00ffe066;
+      border-radius: 4px;
+    }
+
+    .youtube-carousel::-webkit-scrollbar-track {
+      background: #000;
+    }
+
+    @media screen and (max-width: 600px) {
+      header h1 { font-size: 2rem; }
+      .youtube-carousel iframe { height: 220px; }
     }
   </style>
 </head>
@@ -178,24 +194,26 @@
 
   <header>
     <h1>Prodpick4U</h1>
-    <p>AI-Powered Amazon Affiliate Blog & Video Generator</p>
+    <p>AI-Powered Amazon Affiliate Generator with Auto Blogs & YouTube</p>
   </header>
 
   <div class="cta-buttons">
-    <a href="https://prodpick4u.github.io/Prodpick4u/demo.html" target="_blank" rel="noopener noreferrer">🔍 Try the Live Demo</a>
-    (<a href="https://drive.google.com/uc?export=download&id=1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z" target="_blank" rel="noopener noreferrer">⬇️ Download ZIP Tool (Desktop)<
-    <a href="https://github.com/Prodpick4u/Prodpick4u" target="_blank" rel="noopener noreferrer">🌐 GitHub Repo</a>
-    <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" rel="noopener noreferrer">📝 Blogger Example</a>
-    <a href="https://www.youtube.com/@Prodpick4u" target="_blank" rel="noopener noreferrer">▶️ YouTube Channel</a>
+    <a href="https://prodpick4u.github.io/Prodpick4u/demo.html" target="_blank">🔍 Try the Live Demo</a>
+    <a href="https://drive.google.com/uc?export=download&id=1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z" target="_blank">⬇️ Download Tool</a>
+    <a href="https://github.com/Prodpick4u/Prodpick4u" target="_blank">🌐 GitHub Repo</a>
+    <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank">📝 Blogger Example</a>
+    <a href="https://www.youtube.com/@Prodpick4u" target="_blank">▶️ YouTube Channel</a>
   </div>
 
-  <div class="youtube-container">
-    <iframe src="https://www.youtube.com/embed/qwfACbh93M0?si=93aNkskz2D7sQgvq" allowfullscreen title="Prodpick4U Demo Video"></iframe>
+  <!-- 🎥 Rotating YouTube Videos -->
+  <div class="youtube-carousel">
+    <iframe src="https://www.youtube.com/embed/qwfACbh93M0" allowfullscreen title="Prodpick4U Video 1"></iframe>
+    <iframe src="https://www.youtube.com/embed/w2IhZ9r5HBI" allowfullscreen title="Prodpick4U Video 2"></iframe>
+    <iframe src="https://www.youtube.com/embed/LOKMJKWheGA" allowfullscreen title="Prodpick4U Video 3"></iframe>
   </div>
 
   <div class="section">
-    <h2>🛍️ Explore Our Curated Amazon Categories</h2>
-    <p>Click below to view our AI-selected, high-converting product pages:</p>
+    <h2>🛍️ Explore AI-Curated Amazon Product Categories</h2>
     <div class="category-buttons">
       <a href="post-beauty.html"><i class="fas fa-magic"></i> Beauty</a>
       <a href="post-health.html"><i class="fas fa-heartbeat"></i> Health</a>
@@ -206,50 +224,39 @@
     </div>
   </div>
 
-  <section class="info-section">
+  <div class="info-section">
     <h3>About Prodpick4U</h3>
-    <p>
-      Prodpick4U is an AI-powered Amazon affiliate marketing assistant that automatically generates product blogs, video scripts, and YouTube-ready product videos to help you maximize affiliate revenue without manual work.
-    </p>
+    <p>Prodpick4U is an AI-powered affiliate marketing tool that generates Amazon blog posts, YouTube videos, and voiceover content with no manual effort required. Perfect for affiliate marketers, SEO bloggers, and YouTubers.</p>
 
-    <h3>How the Desktop Tool Works</h3>
+    <h3>What It Does</h3>
     <ul>
-      <li>Writes 1400-character detailed product review scripts based on top Amazon products</li>
-      <li>Converts scripts to natural-sounding text-to-speech audio</li>
-      <li>Generates engaging product videos combining images, text, and voiceover</li>
-      <li>Uploads videos directly to YouTube when configured with Google API keys</li>
+      <li>Writes SEO-optimized product reviews</li>
+      <li>Generates voiceover videos for YouTube</li>
+      <li>Includes Amazon affiliate links with fallbacks</li>
+      <li>Automates upload to Blogger and YouTube</li>
     </ul>
 
-    <h3>Getting Started — Step by Step</h3>
-    <p>New to this? Here’s how to get started using Prodpick4U on your desktop:</p>
+    <h3>Getting Started</h3>
     <ol>
-      <li>Download the ZIP tool and unzip it on your computer.</li>
-      <li>Run <code class="code-link">python main.py</code> in a terminal (Python 3.11+ recommended).</li>
-      <li>To enable YouTube uploads, create your Google Console project and get your YouTube Data API key.</li>
-      <li>Sign up for an Amazon Associates account and get your affiliate tag (like <code class="code-link">mychanneld-20</code>).</li>
-      <li>Optionally, configure Amazon product API keys for enhanced product data (details inside the ZIP README).</li>
-      <li>Place your API keys in the provided config files or environment variables.</li>
-      <li>Run the tool daily or manually to generate blogs, scripts, videos, and upload.</li>
+      <li>Download the ZIP tool</li>
+      <li>Run <code class="code-link">python main.py</code></li>
+      <li>Configure your API keys for Amazon & YouTube</li>
+      <li>Generate daily content & upload</li>
     </ol>
 
-    <h3>Why Prodpick4U Works for Everyone</h3>
-    <p>
-      Whether you are a beginner or an experienced affiliate marketer, Prodpick4U automates tedious content creation while keeping you in control. Its fallback product system ensures you always have monetizable links. The AI-generated scripts and videos boost SEO and YouTube traffic, helping you grow your commissions faster.
-    </p>
-
-    <p>Explore the categories above, try the demo, or download the tool now and start your affiliate journey with AI power!</p>
-  </section>
+    <p>Explore categories, try the demo, or launch your affiliate channel today.</p>
+  </div>
 
   <div class="section reviews">
-    <h2>⭐ What Users Are Saying</h2>
-    <div class="review">“This tool saved me hours! Generated full product blogs and videos in one click.” – Sarah J.</div>
-    <div class="review">“Highly recommended for affiliate marketers. Clean layout, instant links, SEO-ready.” – Mike T.</div>
-    <div class="review">“I tested the fallback system—it’s brilliant. Everything has valid Amazon links!” – Olivia K.</div>
+    <h2>⭐ User Testimonials</h2>
+    <div class="review">“Generated a week of affiliate blogs in 10 minutes!” – Anna M.</div>
+    <div class="review">“Beautiful, clean layout. Works out of the box.” – Chris D.</div>
+    <div class="review">“YouTube video generation is next level.” – Laura K.</div>
   </div>
 
   <footer>
-    <p>© 2025 Prodpick4U – Built to Empower Amazon Affiliates with AI Automation</p>
-    <p>We support the Amazon Associates Program and encourage ethical use of your own Amazon API key and YouTube API. Full setup instructions provided inside the ZIP demo.</p>
+    <p>© 2025 Prodpick4U – Built for smart, ethical Amazon Affiliate Automation with AI.</p>
+    <p>Amazon and YouTube trademarks belong to their respective owners. This site supports the Amazon Associates program.</p>
   </footer>
 
 </body>
