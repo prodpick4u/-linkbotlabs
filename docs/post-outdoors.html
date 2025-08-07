@@ -3,112 +3,138 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Top Outdoors Products</title>
+  <title>Top Outdoors Products – Prodpick4U</title>
+  <meta name="description" content="Top Top Outdoors Products picks powered by AI. Explore the best Amazon products reviewed and curated for smart shopping.">
+  <meta name="robots" content="index, follow">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #fdf6f9;
-      color: #222;
       margin: 0;
+      background-color: #0d1117;
+      color: #f0f6fc;
       padding: 20px;
     }
 
     h1 {
-      color: #e91e63;
+      text-align: center;
+      color: #58a6ff;
+      font-size: 2em;
+      margin-bottom: 40px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
     }
 
     .product {
-      border-bottom: 1px solid #ddd;
-      padding: 20px 0;
+      background-color: #161b22;
+      padding: 20px;
+      border-radius: 10px;
+      transition: transform 0.2s;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
     }
 
     .product img {
-      max-width: 200px;
+      max-width: 100%;
       height: auto;
-      display: block;
+      border-radius: 6px;
       margin-bottom: 10px;
     }
 
     .product h2 {
-      font-size: 1.2em;
-      margin: 10px 0 5px;
+      font-size: 1.1em;
+      margin: 10px 0;
+      color: #f0f6fc;
     }
 
     .product p {
-      margin: 5px 0;
+      font-size: 0.95em;
+      margin: 8px 0;
+      color: #c9d1d9;
     }
 
     .product a {
       display: inline-block;
-      margin-top: 8px;
-      padding: 10px 15px;
-      background-color: #e91e63;
+      margin-top: 10px;
+      background-color: #238636;
       color: #fff;
+      padding: 10px 15px;
       text-decoration: none;
-      border-radius: 4px;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: background-color 0.2s;
     }
 
     .product a:hover {
-      background-color: #c2185b;
+      background-color: #2ea043;
     }
 
     footer {
       text-align: center;
-      margin-top: 50px;
-      font-size: 0.9em;
-      color: #666;
+      font-size: 0.85em;
+      color: #8b949e;
+      margin-top: 60px;
     }
   </style>
 </head>
 <body>
   <h1>Top 3 Top Outdoors Products Products</h1>
 
-  
-    <div class="product">
-      <img src="" alt="Coleman Sundome Tent" />
-      <h2>Coleman Sundome Tent</h2>
-      <p><strong>Price:</strong> $99.99</p>
-      <p>Easy setup tent for camping.</p>
-      <a href="https://amzn.to/4myC9oX" target="_blank" rel="nofollow noopener noreferrer">Buy on Amazon</a>
-    </div>
-  
-    <div class="product">
-      <img src="" alt="LifeStraw Personal Water Filter" />
-      <h2>LifeStraw Personal Water Filter</h2>
-      <p><strong>Price:</strong> $19.97</p>
-      <p>Portable water purifier for outdoor use.</p>
-      <a href="https://amzn.to/4m3CoIw" target="_blank" rel="nofollow noopener noreferrer">Buy on Amazon</a>
-    </div>
-  
-    <div class="product">
-      <img src="" alt="Etekcity Lantern Camping Lantern" />
-      <h2>Etekcity Lantern Camping Lantern</h2>
-      <p><strong>Price:</strong> $23.99</p>
-      <p>LED lantern with adjustable brightness.</p>
-      <a href="https://amzn.to/41tkYwL" target="_blank" rel="nofollow noopener noreferrer">Buy on Amazon</a>
-    </div>
-  
-    <div class="product">
-      <img src="" alt="Osprey Atmos AG Backpack" />
-      <h2>Osprey Atmos AG Backpack</h2>
-      <p><strong>Price:</strong> $260.00</p>
-      <p>Comfortable hiking backpack with ventilation.</p>
-      <a href="https://amzn.to/40RUG7h" target="_blank" rel="nofollow noopener noreferrer">Buy on Amazon</a>
-    </div>
-  
-    <div class="product">
-      <img src="" alt="Garmin GPSMAP Handheld GPS Navigator" />
-      <h2>Garmin GPSMAP Handheld GPS Navigator</h2>
-      <p><strong>Price:</strong> $399.99</p>
-      <p>Rugged GPS device for outdoor navigation.</p>
-      <a href="https://amzn.to/45BCoJX" target="_blank" rel="nofollow noopener noreferrer">Buy on Amazon</a>
-    </div>
-  
+  <div class="product-grid">
+    
+      <div class="product" itemscope itemtype="https://schema.org/Product">
+        <img src="" alt="Coleman Sundome Tent" itemprop="image" />
+        <h2 itemprop="name">Coleman Sundome Tent</h2>
+        <p><strong>Price:</strong> <span itemprop="price">$99.99</span></p>
+        <p itemprop="description">Easy setup tent for camping.</p>
+        <a href="https://amzn.to/4myC9oX" target="_blank" rel="nofollow noopener noreferrer" itemprop="offers" itemscope itemtype="https://schema.org/Offer">Buy on Amazon</a>
+      </div>
+    
+      <div class="product" itemscope itemtype="https://schema.org/Product">
+        <img src="" alt="LifeStraw Personal Water Filter" itemprop="image" />
+        <h2 itemprop="name">LifeStraw Personal Water Filter</h2>
+        <p><strong>Price:</strong> <span itemprop="price">$19.97</span></p>
+        <p itemprop="description">Portable water purifier for outdoor use.</p>
+        <a href="https://amzn.to/4m3CoIw" target="_blank" rel="nofollow noopener noreferrer" itemprop="offers" itemscope itemtype="https://schema.org/Offer">Buy on Amazon</a>
+      </div>
+    
+      <div class="product" itemscope itemtype="https://schema.org/Product">
+        <img src="" alt="Etekcity Lantern Camping Lantern" itemprop="image" />
+        <h2 itemprop="name">Etekcity Lantern Camping Lantern</h2>
+        <p><strong>Price:</strong> <span itemprop="price">$23.99</span></p>
+        <p itemprop="description">LED lantern with adjustable brightness.</p>
+        <a href="https://amzn.to/41tkYwL" target="_blank" rel="nofollow noopener noreferrer" itemprop="offers" itemscope itemtype="https://schema.org/Offer">Buy on Amazon</a>
+      </div>
+    
+      <div class="product" itemscope itemtype="https://schema.org/Product">
+        <img src="" alt="Osprey Atmos AG Backpack" itemprop="image" />
+        <h2 itemprop="name">Osprey Atmos AG Backpack</h2>
+        <p><strong>Price:</strong> <span itemprop="price">$260.00</span></p>
+        <p itemprop="description">Comfortable hiking backpack with ventilation.</p>
+        <a href="https://amzn.to/40RUG7h" target="_blank" rel="nofollow noopener noreferrer" itemprop="offers" itemscope itemtype="https://schema.org/Offer">Buy on Amazon</a>
+      </div>
+    
+      <div class="product" itemscope itemtype="https://schema.org/Product">
+        <img src="" alt="Garmin GPSMAP Handheld GPS Navigator" itemprop="image" />
+        <h2 itemprop="name">Garmin GPSMAP Handheld GPS Navigator</h2>
+        <p><strong>Price:</strong> <span itemprop="price">$399.99</span></p>
+        <p itemprop="description">Rugged GPS device for outdoor navigation.</p>
+        <a href="https://amzn.to/45BCoJX" target="_blank" rel="nofollow noopener noreferrer" itemprop="offers" itemscope itemtype="https://schema.org/Offer">Buy on Amazon</a>
+      </div>
+    
+  </div>
 
   <footer>
     <p>Affiliate Disclosure: As an Amazon Associate, we may earn commissions from qualifying purchases.</p>
+    <p>© 2025 Prodpick4U. Built with AI for smart shopping.</p>
   </footer>
 </body>
 </html>
