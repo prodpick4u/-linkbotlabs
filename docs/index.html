@@ -27,8 +27,9 @@
     .category-buttons a {background:rgba(255,255,255,0.05); padding:16px 28px; border-radius:14px; color:#fff; font-weight:600; text-decoration:none; transition: background 0.3s ease, transform 0.2s; box-shadow:0 0 15px rgba(58,178,255,0.4); backdrop-filter:blur(8px); display:flex; align-items:center; gap:12px;}
     .category-buttons a:hover {background:linear-gradient(90deg,#b96fff,#4ac6ff); transform:scale(1.05);}
     .product-list {display:flex; flex-wrap:wrap; justify-content:center; gap:20px; margin-top:15px;}
-    .product-list div {width:180px; text-align:center;}
-    .product-list img {border-radius:10px;}
+    .product-list div {width:180px; text-align:center; transition: transform 0.3s ease, box-shadow 0.3s ease;}
+    .product-list div:hover {transform:scale(1.05); box-shadow:0 0 20px rgba(58,178,255,0.5);}
+    .product-list img {border-radius:10px; max-width:100%;}
     .info-section {background:rgba(255,255,255,0.05); padding:2rem; border-radius:20px; box-shadow:0 0 20px rgba(137,58,255,0.4); backdrop-filter:blur(12px); text-align:left; color:#ddd; line-height:1.7; max-width:1000px; margin:3rem auto;}
     .info-section h3 {background:linear-gradient(90deg,#b96fff,#4ac6ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-top:1rem; font-size:1.5rem;}
     .review {background:rgba(255,255,255,0.05); padding:1.5rem; margin:1rem auto; border-radius:14px; max-width:800px; font-style:italic; box-shadow:0 0 20px rgba(58,178,255,0.4); color:#eee; backdrop-filter:blur(8px);}
@@ -75,7 +76,6 @@
   </div>
 </div>
 
-<!-- Fallback Products Section -->
 <div id="fallback-products" class="section">
   <h2>🛒 Featured Products</h2>
   <div class="product-list" id="productList"></div>
@@ -117,12 +117,12 @@
 </footer>
 
 <script>
-  // --- Daily rotating YouTube video from your channel ---
+  // --- Daily rotating YouTube video ---
   const videoIDs = ["GL7Rklp4jhM","GVtN9ZgYsQc","T81maTrI-kw","GzAH6IK4aW8","9gNanC4o1BQ","qwfACbh93M0"];
   const randomVideo = videoIDs[Math.floor(Math.random()*videoIDs.length)];
   document.getElementById("ytEmbed").src = `https://www.youtube.com/embed/${randomVideo}?autoplay=1&mute=1`;
 
-  // --- Visitor counter using CountAPI ---
+  // --- Visitor counter ---
   const counterKey = 'prodpick4u/homepage';
   const counterNamespace = 'visitorCounter';
   fetch(`https://api.countapi.xyz/hit/${counterNamespace}/${counterKey}`)
@@ -130,7 +130,7 @@
     .then(data => { document.getElementById('visitorCount').textContent = data.value; })
     .catch(err => console.log('Visitor count error:', err));
 
-  // --- Fallback Products Data ---
+  // --- Fallback products ---
   const fallbackProducts = {
     beauty: [
       {name:"La Roche-Posay Toleriane Moisturizer", asin:"B01N1SE4EP", image:"https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg"},
@@ -171,12 +171,22 @@
     const container = document.getElementById('productList');
     container.innerHTML = products.map(p => `
       <div>
-        <img src="${p.image}" alt="${p.name}" width="150">
+        <img src="${p.image}" alt="${p.name}">
         <p>${p.name}</p>
         <a href="https://www.amazon.com/dp/${p.asin}?tag=mychanneld-20" target="_blank"><button>Buy Now</button></a>
       </div>
     `).join('');
   }
+
+  // --- Populate default featured products ---
+  window.addEventListener('DOMContentLoaded', () => {
+    const defaultProducts = [
+      ...fallbackProducts.beauty,
+      ...fallbackProducts.tech,
+      ...fallbackProducts.kitchen
+    ];
+    showCategory('beauty'); // Load beauty by default
+  });
 </script>
 
 </body>
