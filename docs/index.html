@@ -18,6 +18,7 @@
     .cta-buttons {text-align:center; margin:30px auto;}
     .cta-buttons a {text-decoration:none; color:#fff; background:linear-gradient(90deg, rgba(137,58,255,0.8), rgba(58,178,255,0.8)); padding:14px 28px; margin:10px; border-radius:12px; display:inline-block; font-weight:bold; box-shadow:0 0 15px rgba(137,58,255,0.5); backdrop-filter:blur(8px); transition: transform 0.3s ease, box-shadow 0.3s ease;}
     .cta-buttons a:hover {transform:scale(1.05); box-shadow:0 0 25px rgba(58,178,255,0.7);}
+    .visitor-counter {text-align:center; margin:20px auto; font-size:1.2rem; color:#fff; background:rgba(0,0,0,0.3); padding:12px 20px; border-radius:12px; display:inline-block;}
     .youtube-container {text-align:center; margin:20px auto;}
     .youtube-container iframe {width:90%; max-width:720px; height:400px; border:none; border-radius:16px; box-shadow:0 0 25px rgba(137,58,255,0.5); backdrop-filter:blur(10px);}
     .section {padding:2rem; text-align:center; max-width:1000px; margin:auto;}
@@ -47,6 +48,10 @@
   <a href="https://github.com/Prodpick4u/Prodpick4u" target="_blank">🌐 GitHub Repo</a>
   <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank">📝 Blogger Example</a>
   <a href="https://www.youtube.com/@Prodpick4u" target="_blank">▶️ YouTube Channel</a>
+</div>
+
+<div class="visitor-counter">
+  👁️ Visitors: <span id="visitorCount">0</span>
 </div>
 
 <div class="youtube-container">
@@ -112,9 +117,16 @@
     "9gNanC4o1BQ",
     "qwfACbh93M0"
   ];
-  const day = new Date().getDate();
-  const videoIndex = day % videoIDs.length;
-  document.getElementById("ytEmbed").src = `https://www.youtube.com/embed/${videoIDs[videoIndex]}?autoplay=1&mute=1`;
+  const randomVideo = videoIDs[Math.floor(Math.random() * videoIDs.length)];
+  document.getElementById("ytEmbed").src = `https://www.youtube.com/embed/${randomVideo}?autoplay=1&mute=1`;
+
+  // --- Visitor counter using CountAPI ---
+  const counterKey = 'prodpick4u/homepage';
+  const counterNamespace = 'visitorCounter';
+  fetch(`https://api.countapi.xyz/hit/${counterNamespace}/${counterKey}`)
+    .then(res => res.json())
+    .then(data => { document.getElementById('visitorCount').textContent = data.value; })
+    .catch(err => console.log('Visitor count error:', err));
 </script>
 
 </body>
