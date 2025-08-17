@@ -3,15 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Try the Demo – Prodpick4u</title>
+  <title>Prodpick4u Demo</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
   <style>
-    /* Background gradient animation */
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
     body {
       margin: 0;
       padding: 2rem;
@@ -20,228 +14,182 @@
       animation: gradientShift 15s ease infinite;
       color: #ffffff;
       font-family: 'Inter', sans-serif;
-      line-height: 1.6;
     }
-    h1, h2 {
-      color: #00ffaa;
-      text-shadow: 0 0 8px rgba(0,255,170,0.6);
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    /* Glassmorphism panels */
+    h1, h2 { color: #00ffaa; }
     .glass {
       background: rgba(0,0,0,0.5);
       backdrop-filter: blur(10px);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 1rem;
     }
-    .try-demo {
-      margin-bottom: 2rem;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-    }
-    input, textarea {
+    input {
       display: block;
       width: 100%;
-      margin: 5px 0 15px;
+      margin: 8px 0 12px;
       padding: 10px;
-      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.1);
       background: rgba(20,20,20,0.7);
       color: #fff;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 5px;
-      backdrop-filter: blur(5px);
     }
     button {
       padding: 10px 20px;
       background: #00ffaa;
-      color: #000;
-      font-weight: bold;
       border: none;
       border-radius: 5px;
+      font-weight: bold;
+      color: #000;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
-    button:hover {
-      background: #00cc88;
-    }
-    .demo-output {
+    button:hover { background: #00cc88; }
+    .output {
       background: rgba(0,0,0,0.8);
-      color: #0f0;
-      padding: 10px;
+      padding: 15px;
+      border-radius: 8px;
       margin-top: 15px;
-      white-space: pre-wrap;
       font-family: monospace;
-      border-radius: 5px;
+      color: #0f0;
+      white-space: pre-wrap;
     }
-    a {
+    .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
+    .tab {
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      background: rgba(0,0,0,0.5);
       color: #00ffaa;
     }
-    iframe {
-      width: 100%;
-      max-width: 640px;
-      height: 360px;
-      border: none;
-      margin: 2rem auto;
-      display: block;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
+    .tab.active { background: #00ffaa; color: #000; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
   </style>
 </head>
 <body>
 
-  <h1>🧪 Try Our AI Blog + Video Generator</h1>
-  <p>Enter your own Amazon affiliate ID and YouTube API key to test how the tool works. This demo simulates a full blog/video generation.</p>
+  <h1>🧪 Prodpick4U Demo</h1>
+  <p>Try our product → script → TTS generator. Choose below:</p>
 
-  <!-- Embedded YouTube Shorts Video -->
-  <iframe 
-    src="https://www.youtube.com/embed/1JLdbOGsOzk"
-    title="Prodpick4U Demo"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen>
-  </iframe>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('lite')">⚡ Quick Try (No Keys)</div>
+    <div class="tab" onclick="switchTab('full')">🔑 Full Demo (With Keys)</div>
+  </div>
 
-  <div class="try-demo glass">
-    <form id="demoForm" onsubmit="runDemo(event)">
-      <label for="keyword">🔍 Product Keyword:
-        <input type="text" id="keyword" placeholder="e.g. smart vacuum" required>
+  <!-- Lite Demo -->
+  <div id="lite" class="tab-content active glass">
+    <h2>⚡ Quick Try (No Keys Needed)</h2>
+    <form onsubmit="runLiteDemo(event)">
+      <label>Keyword:
+        <input id="liteKeyword" type="text" placeholder="e.g. headphones" required>
       </label>
-      <label for="affiliate">🛒 Amazon Affiliate Tag:
-        <input type="text" id="affiliate" placeholder="yourtag-20" required>
-      </label>
-      <label for="ytapi">📺 YouTube API Key:
-        <input type="text" id="ytapi" placeholder="AIza..." required>
-      </label>
-      <button type="submit">▶️ Run One-Time Demo</button>
+      <button type="submit">Run Demo</button>
     </form>
-
-    <pre id="demoOutput" class="demo-output"></pre>
+    <div id="liteOutput" class="output"></div>
   </div>
 
-  <h2>📦 Download Full Version (Terminal Tool)</h2>
-  <div class="glass" style="margin-bottom: 2rem;">
-    <p>This version opens a browser window from your terminal and runs the real generator using your affiliate tag and YouTube API key.</p>
-    <p>
-      <a href="https://drive.google.com/file/d/1ByTmpBppFMKjBY7aEBX2VO-3noJGoC_J/view?usp=drivesdk" target="_blank" rel="noopener">📥 Download the ZIP File</a>
-    </p>
-  </div>
-
-  <h2>📺 Watch the Demo Video</h2>
-  <div class="glass" style="margin-bottom: 2rem;">
-    <p>
-      <a href="https://youtu.be/qwfACbh93M0?si=evaIryCHxQz7Or0Q" target="_blank" rel="noopener">▶️ Watch on YouTube</a>
-    </p>
+  <!-- Full Demo -->
+  <div id="full" class="tab-content glass">
+    <h2>🔑 Full Demo (With Keys)</h2>
+    <form onsubmit="runFullDemo(event)">
+      <label>Keyword:
+        <input id="fullKeyword" type="text" placeholder="e.g. headphones" required>
+      </label>
+      <label>Amazon Affiliate Tag:
+        <input id="affiliate" type="text" placeholder="yourtag-20" required>
+      </label>
+      <label>Amazon API Key:
+        <input id="amazonKey" type="text" placeholder="AKIA..." required>
+      </label>
+      <label>YouTube API Key:
+        <input id="ytapi" type="text" placeholder="AIza..." required>
+      </label>
+      <button type="submit">Run Full Demo</button>
+    </form>
+    <div id="fullOutput" class="output"></div>
   </div>
 
   <script>
-    function runDemo(event) {
-      event.preventDefault();
-      const form = document.getElementById('demoForm');
-      const keyword = document.getElementById('keyword').value.trim();
-      const affiliate = document.getElementById('affiliate').value.trim() || 'demo123-20';
-      const ytapi = document.getElementById('ytapi').value.trim();
-      const output = document.getElementById('demoOutput');
-
-      const demoASIN = 'B0XYZ123';
-      const demoProductName = 'Robot Vacuum X20+';
-      const productLink = `https://www.amazon.com/dp/${demoASIN}?tag=${encodeURIComponent(affiliate)}`;
-
-      const scriptText = `
-Hi everyone! Today we're reviewing the ${demoProductName}, your smart cleaning assistant. It features AI navigation, long battery life, and quiet operation.
-
-Grab yours here: ${productLink}
-
-Thank you for watching! Make sure to like and subscribe.
-      `;
-
-      output.innerHTML = `
-✅ <strong>Keyword:</strong> "${keyword}"<br>
-✅ <strong>Amazon Affiliate Tag:</strong> ${affiliate}<br>
-✅ <strong>YouTube API Key:</strong> ${ytapi.substring(0,8)}... (hidden)<br><br>
-
-🛒 <strong>Demo Product Link:</strong> <a href="${productLink}" target="_blank" rel="noopener">${demoProductName}</a><br><br>
-
-📝 <strong>Video Script Preview:</strong><pre style="white-space: pre-wrap; background: rgba(0,0,0,0.8); color: #0f0; padding: 10px; border-radius: 5px;">${scriptText}</pre>
-
-🎬 Your video script is ready to upload!
-      `;
-
-      [...form.elements].forEach(el => el.disabled = true);
+    // --- Tab Switcher ---
+    function switchTab(tab) {
+      document.querySelectorAll(".tab").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelector(".tab[onclick*='" + tab + "']").classList.add("active");
+      document.getElementById(tab).classList.add("active");
     }
 
-    // Floating Contact Button
-    const contactBtn = document.createElement('a');
-    contactBtn.href = '#contact';
-    contactBtn.textContent = '✉️ Contact';
-    contactBtn.style.cssText = `
-      position:fixed;
-      bottom:20px;
-      right:20px;
-      background:#00ff88;
-      color:#000;
-      padding:12px 18px;
-      border-radius:30px;
-      font-weight:bold;
-      text-decoration:none;
-      box-shadow:0 0 12px #00ff88;
-      z-index:1000;
-      transition:background 0.3s ease;
-    `;
-    contactBtn.onmouseenter = () => contactBtn.style.background = '#00cc66';
-    contactBtn.onmouseleave = () => contactBtn.style.background = '#00ff88';
-    document.body.appendChild(contactBtn);
+    // --- Fake Product DB for Demo ---
+    const demoProducts = [
+      { keywords:["headphones","earphones"], asin:"B09JQZ5T4S", name:"Sony WH-1000XM5 Noise Cancelling Headphones" },
+      { keywords:["vacuum","robot","hoover"], asin:"B0XYZ123", name:"Robot Vacuum X20+" },
+      { keywords:["moisturizer","skincare"], asin:"B01N1SE4EP", name:"La Roche-Posay Toleriane Double Repair Face Moisturizer" }
+    ];
+    const fallback = [
+      { asin:"B07FZ8S74R", name:"Echo Dot (4th Gen)" },
+      { asin:"B08KTZ8249", name:"Kindle Paperwhite" }
+    ];
+
+    function findProduct(keyword) {
+      keyword = keyword.toLowerCase();
+      for (let p of demoProducts) {
+        if (p.keywords.some(k => keyword.includes(k))) return p;
+      }
+      return fallback[Math.floor(Math.random()*fallback.length)];
+    }
+
+    // --- Lite Demo (no keys) ---
+    function runLiteDemo(e) {
+      e.preventDefault();
+      const kw = document.getElementById("liteKeyword").value;
+      const product = findProduct(kw);
+      const description = `The ${product.name} is a popular choice on Amazon. It offers great features and value for money.`;
+      const script = `Hi everyone! Today we're reviewing the ${product.name}.`;
+
+      document.getElementById("liteOutput").innerHTML = `
+🛒 Product: ${product.name}
+📝 Description: ${description}
+🎬 Script: ${script}
+<button onclick="speakText('${description.replace(/'/g,"")}')">🔊 TTS Preview</button>
+      `;
+    }
+
+    // --- Full Demo (with keys, simulated fetch) ---
+    function runFullDemo(e) {
+      e.preventDefault();
+      const kw = document.getElementById("fullKeyword").value;
+      const affiliate = document.getElementById("affiliate").value.trim();
+      const amazonKey = document.getElementById("amazonKey").value.trim();
+      const ytKey = document.getElementById("ytapi").value.trim();
+
+      const product = findProduct(kw);
+      const link = `https://www.amazon.com/dp/${product.asin}?tag=${encodeURIComponent(affiliate)}`;
+      const description = `The ${product.name} is a highly rated product. Normally we’d fetch live details with your Amazon API key (${amazonKey.substring(0,6)}...).`;
+      const script = `Hi everyone! Today we're reviewing the ${product.name}. Grab yours here: ${link}`;
+
+      document.getElementById("fullOutput").innerHTML = `
+✅ Affiliate Tag: ${affiliate}
+✅ Amazon Key: ${amazonKey.substring(0,6)}... (hidden)
+✅ YouTube Key: ${ytKey.substring(0,6)}... (hidden)
+
+🛒 Product: <a href="${link}" target="_blank">${product.name}</a>
+📝 Description: ${description}
+🎬 Script: ${script}
+<button onclick="speakText('${description.replace(/'/g,"")}')">🔊 TTS Preview</button>
+      `;
+    }
+
+    // --- Simple browser TTS ---
+    function speakText(text) {
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en")) || null;
+      speechSynthesis.speak(utter);
+    }
   </script>
-
-  <!-- FAQ block -->
-  <div class="glass" style="max-width: 800px; margin: 2em auto;">
-    <h2>🧠 Prodpick4U – Quick FAQ</h2>
-    <h3>❓ How many Amazon products can I fetch?</h3>
-    <p>
-      <strong>RapidAPI:</strong> 100–1000s/month based on plan.<br>
-      <strong>Amazon PA API:</strong> Up to 8,640/day after activation (needs 3 sales).
-    </p>
-    <h3>🎙️ How many TTS videos can I generate?</h3>
-    <p>
-      <strong>Google TTS Free Tier:</strong> ~300/month (4M chars).<br>
-      <strong>Offline TTS:</strong> Unlimited, lower quality.
-    </p>
-    <h3>🚀 What do I need to start?</h3>
-    <ul>
-      <li>✅ Amazon API keys (or RapidAPI)</li>
-      <li>✅ Amazon affiliate tag</li>
-      <li>✅ Google Cloud key (for voice)</li>
-      <li>✅ YouTube API key (optional uploads)</li>
-    </ul>
-    <h3>📅 Can I generate new content daily?</h3>
-    <p>Yes! Just run the tool to:</p>
-    <ul>
-      <li>🔁 Fetch trending products</li>
-      <li>📝 Auto-write 1400-char product scripts</li>
-      <li>🗣️ Narrate with AI voice</li>
-      <li>🎥 Make a YouTube-ready video</li>
-      <li>⬆️ Upload it (optional)</li>
-    </ul>
-  </div>
-
-  <!-- Contact Form -->
-  <div id="contact" class="glass" style="margin-top: 4rem;">
-    <h2>📬 Contact the Creator</h2>
-    <form action="https://formsubmit.co/omnistall70@gmail.com" method="POST">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="box">
-      <label for="name">Your Name:</label>
-      <input type="text" name="name" id="name" placeholder="John Doe" required>
-      <label for="email">Your Email:</label>
-      <input type="email" name="email" id="email" placeholder="you@example.com" required>
-      <label for="message">Message:</label>
-      <textarea name="message" rows="6" placeholder="How can I help you?" required></textarea>
-      <button type="submit">📨 Send Message</button>
-    </form>
-  </div>
 
 </body>
 </html>
