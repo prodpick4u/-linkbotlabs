@@ -10,253 +10,108 @@
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
-
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      background: linear-gradient(-45deg, #0b0014, #1a005c, #001f4d, #05081a);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: #f1f1f1;
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    header {
-      background: radial-gradient(circle at center, rgba(120,0,255,0.5) 0%, rgba(0,140,255,0.5) 100%);
-      backdrop-filter: blur(12px);
-      padding: 2rem;
-      text-align: center;
-      color: #fff;
-      box-shadow: 0 0 30px rgba(0,0,0,0.4);
-    }
-
-    header h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-      background: linear-gradient(90deg, #b96fff, #4ac6ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    header p {
-      font-size: 1.2rem;
-      font-weight: 500;
-      color: rgba(255,255,255,0.85);
-    }
-
-    .cta-buttons {
-      text-align: center;
-      margin: 30px auto;
-    }
-
-    .cta-buttons a {
-      text-decoration: none;
-      color: #fff;
-      background: linear-gradient(90deg, rgba(137,58,255,0.8), rgba(58,178,255,0.8));
-      padding: 14px 28px;
-      margin: 10px;
-      border-radius: 12px;
-      display: inline-block;
-      font-weight: bold;
-      box-shadow: 0 0 15px rgba(137,58,255,0.5);
-      backdrop-filter: blur(8px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .cta-buttons a:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(58,178,255,0.7);
-    }
-
-    .youtube-container {
-      text-align: center;
-      margin: 20px auto;
-    }
-
-    .youtube-container iframe {
-      width: 90%;
-      max-width: 720px;
-      height: 400px;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 0 25px rgba(137,58,255,0.5);
-      backdrop-filter: blur(10px);
-    }
-
-    .section {
-      padding: 2rem;
-      text-align: center;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .section h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      background: linear-gradient(90deg, #b96fff, #4ac6ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: 700;
-    }
-
-    .category-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 1.5rem;
-    }
-
-    .category-buttons a {
-      background: rgba(255,255,255,0.05);
-      padding: 16px 28px;
-      border-radius: 14px;
-      color: #fff;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.3s ease, transform 0.2s;
-      box-shadow: 0 0 15px rgba(58,178,255,0.4);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .category-buttons a:hover {
-      background: linear-gradient(90deg, #b96fff, #4ac6ff);
-      transform: scale(1.05);
-    }
-
-    .info-section {
-      background: rgba(255,255,255,0.05);
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(137,58,255,0.4);
-      backdrop-filter: blur(12px);
-      text-align: left;
-      color: #ddd;
-      line-height: 1.7;
-      max-width: 1000px;
-      margin: 3rem auto;
-    }
-
-    .info-section h3 {
-      background: linear-gradient(90deg, #b96fff, #4ac6ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-top: 1rem;
-      font-size: 1.5rem;
-    }
-
-    .review {
-      background: rgba(255,255,255,0.05);
-      padding: 1.5rem;
-      margin: 1rem auto;
-      border-radius: 14px;
-      max-width: 800px;
-      font-style: italic;
-      box-shadow: 0 0 20px rgba(58,178,255,0.4);
-      color: #eee;
-      backdrop-filter: blur(8px);
-    }
-
-    footer {
-      background: rgba(255,255,255,0.02);
-      text-align: center;
-      padding: 2rem;
-      font-size: 0.9rem;
-      color: #aaa;
-      backdrop-filter: blur(8px);
-    }
-
-    a {
-      color: #9acbff;
-    }
-
-    .code-link {
-      font-family: monospace;
-      background: rgba(255,255,255,0.08);
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-
-    @media screen and (max-width: 600px) {
-      header h1 { font-size: 2rem; }
-      .youtube-container iframe { height: 220px; }
-    }
+    body { font-family:'Inter',sans-serif; margin:0; background:linear-gradient(-45deg,#0b0014,#1a005c,#001f4d,#05081a); background-size:400% 400%; animation:gradientBG 15s ease infinite; color:#f1f1f1;}
+    @keyframes gradientBG {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+    header {background:radial-gradient(circle at center, rgba(120,0,255,0.5) 0%, rgba(0,140,255,0.5) 100%); backdrop-filter:blur(12px); padding:2rem; text-align:center; color:#fff; box-shadow:0 0 30px rgba(0,0,0,0.4);}
+    header h1 {font-size:3rem; font-weight:800; margin-bottom:0.5rem; background:linear-gradient(90deg,#b96fff,#4ac6ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
+    header p {font-size:1.2rem; font-weight:500; color: rgba(255,255,255,0.85);}
+    .cta-buttons {text-align:center; margin:30px auto;}
+    .cta-buttons a {text-decoration:none; color:#fff; background:linear-gradient(90deg, rgba(137,58,255,0.8), rgba(58,178,255,0.8)); padding:14px 28px; margin:10px; border-radius:12px; display:inline-block; font-weight:bold; box-shadow:0 0 15px rgba(137,58,255,0.5); backdrop-filter:blur(8px); transition: transform 0.3s ease, box-shadow 0.3s ease;}
+    .cta-buttons a:hover {transform:scale(1.05); box-shadow:0 0 25px rgba(58,178,255,0.7);}
+    .youtube-container {text-align:center; margin:20px auto;}
+    .youtube-container iframe {width:90%; max-width:720px; height:400px; border:none; border-radius:16px; box-shadow:0 0 25px rgba(137,58,255,0.5); backdrop-filter:blur(10px);}
+    .section {padding:2rem; text-align:center; max-width:1000px; margin:auto;}
+    .section h2 {font-size:2rem; margin-bottom:1rem; background:linear-gradient(90deg,#b96fff,#4ac6ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:700;}
+    .category-buttons {display:flex; flex-wrap:wrap; justify-content:center; gap:20px; margin-top:1.5rem;}
+    .category-buttons a {background:rgba(255,255,255,0.05); padding:16px 28px; border-radius:14px; color:#fff; font-weight:600; text-decoration:none; transition: background 0.3s ease, transform 0.2s; box-shadow:0 0 15px rgba(58,178,255,0.4); backdrop-filter:blur(8px); display:flex; align-items:center; gap:12px;}
+    .category-buttons a:hover {background:linear-gradient(90deg,#b96fff,#4ac6ff); transform:scale(1.05);}
+    .info-section {background:rgba(255,255,255,0.05); padding:2rem; border-radius:20px; box-shadow:0 0 20px rgba(137,58,255,0.4); backdrop-filter:blur(12px); text-align:left; color:#ddd; line-height:1.7; max-width:1000px; margin:3rem auto;}
+    .info-section h3 {background:linear-gradient(90deg,#b96fff,#4ac6ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-top:1rem; font-size:1.5rem;}
+    .review {background:rgba(255,255,255,0.05); padding:1.5rem; margin:1rem auto; border-radius:14px; max-width:800px; font-style:italic; box-shadow:0 0 20px rgba(58,178,255,0.4); color:#eee; backdrop-filter:blur(8px);}
+    footer {background:rgba(255,255,255,0.02); text-align:center; padding:2rem; font-size:0.9rem; color:#aaa; backdrop-filter:blur(8px);}
+    a {color:#9acbff;}
+    .code-link {font-family:monospace; background:rgba(255,255,255,0.08); padding:2px 6px; border-radius:4px;}
+    @media screen and (max-width:600px){ header h1{font-size:2rem;} .youtube-container iframe{height:220px;}}
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Prodpick4U</h1>
-    <p>AI-Powered Amazon Affiliate Generator with Auto Blogs & YouTube</p>
-  </header>
+<header>
+  <h1>Prodpick4U</h1>
+  <p>AI-Powered Amazon Affiliate Generator with Auto Blogs & YouTube</p>
+</header>
 
-  <div class="cta-buttons">
-    <a href="https://prodpick4u.github.io/Prodpick4u/demo.html" target="_blank">🔍 Try the Live Demo</a>
-    <a href="https://drive.google.com/uc?export=download&id=1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z" target="_blank">⬇️ Download Tool</a>
-    <a href="https://github.com/Prodpick4u/Prodpick4u" target="_blank">🌐 GitHub Repo</a>
-    <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank">📝 Blogger Example</a>
-    <a href="https://www.youtube.com/@Prodpick4u" target="_blank">▶️ YouTube Channel</a>
+<div class="cta-buttons">
+  <a href="https://prodpick4u.github.io/Prodpick4u/demo.html" target="_blank">🔍 Try the Live Demo</a>
+  <a href="https://drive.google.com/uc?export=download&id=1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z" target="_blank">⬇️ Download Tool</a>
+  <a href="https://github.com/Prodpick4u/Prodpick4u" target="_blank">🌐 GitHub Repo</a>
+  <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank">📝 Blogger Example</a>
+  <a href="https://www.youtube.com/@Prodpick4u" target="_blank">▶️ YouTube Channel</a>
+</div>
+
+<div class="youtube-container">
+  <iframe id="ytEmbed" src="" allow="autoplay; encrypted-media" allowfullscreen title="Prodpick4U Featured Video"></iframe>
+</div>
+
+<div class="section">
+  <h2>🛍️ Explore AI-Curated Amazon Product Categories</h2>
+  <div class="category-buttons">
+    <a href="https://www.amazon.com/s?k=beauty&tag=mychanneld-20" target="_blank"><i class="fas fa-magic"></i> Beauty</a>
+    <a href="https://www.amazon.com/s?k=health&tag=mychanneld-20" target="_blank"><i class="fas fa-heartbeat"></i> Health</a>
+    <a href="https://www.amazon.com/s?k=home+decor&tag=mychanneld-20" target="_blank"><i class="fas fa-couch"></i> Home Decor</a>
+    <a href="https://www.amazon.com/s?k=kitchen&tag=mychanneld-20" target="_blank"><i class="fas fa-blender"></i> Kitchen</a>
+    <a href="https://www.amazon.com/s?k=outdoors&tag=mychanneld-20" target="_blank"><i class="fas fa-tree"></i> Outdoors</a>
+    <a href="https://www.amazon.com/s?k=tech&tag=mychanneld-20" target="_blank"><i class="fas fa-microchip"></i> Tech</a>
+    <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20" target="_blank"><i class="fas fa-capsules"></i> Supplements</a>
+    <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20" target="_blank"><i class="fas fa-spa"></i> Face Cream</a>
   </div>
+</div>
 
-  <div class="youtube-container">
-    <iframe src="https://www.youtube.com/embed/T81maTrI-kw?autoplay=1&mute=1" allow="autoplay; encrypted-media" allowfullscreen title="Prodpick4U Featured Video"></iframe>
-  </div>
+<div class="info-section">
+  <h3>About Prodpick4U</h3>
+  <p>Prodpick4U is an AI-powered affiliate marketing tool that generates Amazon blog posts, YouTube videos, and voiceover content with no manual effort required. Perfect for affiliate marketers, SEO bloggers, and YouTubers.</p>
 
-  <div class="section">
-    <h2>🛍️ Explore AI-Curated Amazon Product Categories</h2>
-    <div class="category-buttons">
-      <a href="post-beauty.html"><i class="fas fa-magic"></i> Beauty</a>
-      <a href="post-health.html"><i class="fas fa-heartbeat"></i> Health</a>
-      <a href="post-home-decor.html"><i class="fas fa-couch"></i> Home Decor</a>
-      <a href="post-kitchen.html"><i class="fas fa-blender"></i> Kitchen</a>
-      <a href="post-outdoors.html"><i class="fas fa-tree"></i> Outdoors</a>
-      <a href="post-tech.html"><i class="fas fa-microchip"></i> Tech</a>
-    </div>
-  </div>
+  <h3>What It Does</h3>
+  <ul>
+    <li>Writes SEO-optimized product reviews</li>
+    <li>Generates voiceover videos for YouTube</li>
+    <li>Includes Amazon affiliate links with fallbacks</li>
+    <li>Automates upload to Blogger and YouTube</li>
+  </ul>
 
-  <div class="info-section">
-    <h3>About Prodpick4U</h3>
-    <p>Prodpick4U is an AI-powered affiliate marketing tool that generates Amazon blog posts, YouTube videos, and voiceover content with no manual effort required. Perfect for affiliate marketers, SEO bloggers, and YouTubers.</p>
+  <h3>Getting Started</h3>
+  <ol>
+    <li>Download the ZIP tool</li>
+    <li>Run <code class="code-link">python main.py</code></li>
+    <li>Configure your API keys for Amazon & YouTube</li>
+    <li>Generate daily content & upload</li>
+  </ol>
 
-    <h3>What It Does</h3>
-    <ul>
-      <li>Writes SEO-optimized product reviews</li>
-      <li>Generates voiceover videos for YouTube</li>
-      <li>Includes Amazon affiliate links with fallbacks</li>
-      <li>Automates upload to Blogger and YouTube</li>
-    </ul>
+  <p>Explore categories, try the demo, or launch your affiliate channel today.</p>
+</div>
 
-    <h3>Getting Started</h3>
-    <ol>
-      <li>Download the ZIP tool</li>
-      <li>Run <code class="code-link">python main.py</code></li>
-      <li>Configure your API keys for Amazon & YouTube</li>
-      <li>Generate daily content & upload</li>
-    </ol>
+<div class="section reviews">
+  <h2>⭐ User Testimonials</h2>
+  <div class="review">“Generated a week of affiliate blogs in 10 minutes!” – Anna M.</div>
+  <div class="review">“Beautiful, clean layout. Works out of the box.” – Chris D.</div>
+  <div class="review">“YouTube video generation is next level.” – Laura K.</div>
+</div>
 
-    <p>Explore categories, try the demo, or launch your affiliate channel today.</p>
-  </div>
+<footer>
+  <p>© 2025 Prodpick4U – Built for smart, ethical Amazon Affiliate Automation with AI.</p>
+  <p>Amazon and YouTube trademarks belong to their respective owners. This site supports the Amazon Associates program.</p>
+</footer>
 
-  <div class="section reviews">
-    <h2>⭐ User Testimonials</h2>
-    <div class="review">“Generated a week of affiliate blogs in 10 minutes!” – Anna M.</div>
-    <div class="review">“Beautiful, clean layout. Works out of the box.” – Chris D.</div>
-    <div class="review">“YouTube video generation is next level.” – Laura K.</div>
-  </div>
-
-  <footer>
-    <p>© 2025 Prodpick4U – Built for smart, ethical Amazon Affiliate Automation with AI.</p>
-    <p>Amazon and YouTube trademarks belong to their respective owners. This site supports the Amazon Associates program.</p>
-  </footer>
+<script>
+  // --- Daily rotating YouTube video from your channel ---
+  const videoIDs = [
+    "T81maTrI-kw",  // example video 1
+    "dQw4w9WgXcQ",  // example video 2
+    "3JZ_D3ELwOQ"   // example video 3
+  ];
+  const randomVideo = videoIDs[Math.floor(Math.random() * videoIDs.length)];
+  document.getElementById("ytEmbed").src = `https://www.youtube.com/embed/${randomVideo}?autoplay=1&mute=1`;
+</script>
 
 </body>
 </html>
