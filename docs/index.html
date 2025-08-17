@@ -26,6 +26,9 @@
     .category-buttons {display:flex; flex-wrap:wrap; justify-content:center; gap:20px; margin-top:1.5rem;}
     .category-buttons a {background:rgba(255,255,255,0.05); padding:16px 28px; border-radius:14px; color:#fff; font-weight:600; text-decoration:none; transition: background 0.3s ease, transform 0.2s; box-shadow:0 0 15px rgba(58,178,255,0.4); backdrop-filter:blur(8px); display:flex; align-items:center; gap:12px;}
     .category-buttons a:hover {background:linear-gradient(90deg,#b96fff,#4ac6ff); transform:scale(1.05);}
+    .product-list {display:flex; flex-wrap:wrap; justify-content:center; gap:20px; margin-top:15px;}
+    .product-list div {width:180px; text-align:center;}
+    .product-list img {border-radius:10px;}
     .info-section {background:rgba(255,255,255,0.05); padding:2rem; border-radius:20px; box-shadow:0 0 20px rgba(137,58,255,0.4); backdrop-filter:blur(12px); text-align:left; color:#ddd; line-height:1.7; max-width:1000px; margin:3rem auto;}
     .info-section h3 {background:linear-gradient(90deg,#b96fff,#4ac6ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-top:1rem; font-size:1.5rem;}
     .review {background:rgba(255,255,255,0.05); padding:1.5rem; margin:1rem auto; border-radius:14px; max-width:800px; font-style:italic; box-shadow:0 0 20px rgba(58,178,255,0.4); color:#eee; backdrop-filter:blur(8px);}
@@ -61,15 +64,21 @@
 <div class="section">
   <h2>🛍️ Explore AI-Curated Amazon Product Categories</h2>
   <div class="category-buttons">
-    <a href="https://www.amazon.com/s?k=beauty&tag=mychanneld-20" target="_blank"><i class="fas fa-magic"></i> Beauty</a>
-    <a href="https://www.amazon.com/s?k=health&tag=mychanneld-20" target="_blank"><i class="fas fa-heartbeat"></i> Health</a>
-    <a href="https://www.amazon.com/s?k=home+decor&tag=mychanneld-20" target="_blank"><i class="fas fa-couch"></i> Home Decor</a>
-    <a href="https://www.amazon.com/s?k=kitchen&tag=mychanneld-20" target="_blank"><i class="fas fa-blender"></i> Kitchen</a>
-    <a href="https://www.amazon.com/s?k=outdoors&tag=mychanneld-20" target="_blank"><i class="fas fa-tree"></i> Outdoors</a>
-    <a href="https://www.amazon.com/s?k=tech&tag=mychanneld-20" target="_blank"><i class="fas fa-microchip"></i> Tech</a>
-    <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20" target="_blank"><i class="fas fa-capsules"></i> Supplements</a>
-    <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20" target="_blank"><i class="fas fa-spa"></i> Face Cream</a>
+    <a href="https://www.amazon.com/s?k=beauty&tag=mychanneld-20" target="_blank" onclick="showCategory('beauty')"><i class="fas fa-magic"></i> Beauty</a>
+    <a href="https://www.amazon.com/s?k=health&tag=mychanneld-20" target="_blank" onclick="showCategory('health')"><i class="fas fa-heartbeat"></i> Health</a>
+    <a href="https://www.amazon.com/s?k=home+decor&tag=mychanneld-20" target="_blank" onclick="showCategory('home')"><i class="fas fa-couch"></i> Home Decor</a>
+    <a href="https://www.amazon.com/s?k=kitchen&tag=mychanneld-20" target="_blank" onclick="showCategory('kitchen')"><i class="fas fa-blender"></i> Kitchen</a>
+    <a href="https://www.amazon.com/s?k=outdoors&tag=mychanneld-20" target="_blank" onclick="showCategory('outdoors')"><i class="fas fa-tree"></i> Outdoors</a>
+    <a href="https://www.amazon.com/s?k=tech&tag=mychanneld-20" target="_blank" onclick="showCategory('tech')"><i class="fas fa-microchip"></i> Tech</a>
+    <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20" target="_blank" onclick="showCategory('supplements')"><i class="fas fa-capsules"></i> Supplements</a>
+    <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20" target="_blank" onclick="showCategory('face')"><i class="fas fa-spa"></i> Face Cream</a>
   </div>
+</div>
+
+<!-- Fallback Products Section -->
+<div id="fallback-products" class="section">
+  <h2>🛒 Featured Products</h2>
+  <div class="product-list" id="productList"></div>
 </div>
 
 <div class="info-section">
@@ -109,15 +118,8 @@
 
 <script>
   // --- Daily rotating YouTube video from your channel ---
-  const videoIDs = [
-    "GL7Rklp4jhM",
-    "GVtN9ZgYsQc",
-    "T81maTrI-kw",
-    "GzAH6IK4aW8",
-    "9gNanC4o1BQ",
-    "qwfACbh93M0"
-  ];
-  const randomVideo = videoIDs[Math.floor(Math.random() * videoIDs.length)];
+  const videoIDs = ["GL7Rklp4jhM","GVtN9ZgYsQc","T81maTrI-kw","GzAH6IK4aW8","9gNanC4o1BQ","qwfACbh93M0"];
+  const randomVideo = videoIDs[Math.floor(Math.random()*videoIDs.length)];
   document.getElementById("ytEmbed").src = `https://www.youtube.com/embed/${randomVideo}?autoplay=1&mute=1`;
 
   // --- Visitor counter using CountAPI ---
@@ -127,6 +129,54 @@
     .then(res => res.json())
     .then(data => { document.getElementById('visitorCount').textContent = data.value; })
     .catch(err => console.log('Visitor count error:', err));
+
+  // --- Fallback Products Data ---
+  const fallbackProducts = {
+    beauty: [
+      {name:"La Roche-Posay Toleriane Moisturizer", asin:"B01N1SE4EP", image:"https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg"},
+      {name:"Olay Regenerist Face Cream", asin:"B003YC4J1C", image:"https://images-na.ssl-images-amazon.com/images/I/61xwQoc1a3L._AC_SL1500_.jpg"}
+    ],
+    health: [
+      {name:"Vitamin C 1000mg", asin:"B01N6V8I8S", image:"https://images-na.ssl-images-amazon.com/images/I/71YZbLgqW6L._AC_SL1500_.jpg"},
+      {name:"Omega 3 Fish Oil", asin:"B01M1EX4N1", image:"https://images-na.ssl-images-amazon.com/images/I/71JvC2y3WJL._AC_SL1500_.jpg"}
+    ],
+    home: [
+      {name:"Smart LED Lamp", asin:"B08L5TG8Z6", image:"https://images-na.ssl-images-amazon.com/images/I/71LZh9Oq-PL._AC_SL1500_.jpg"},
+      {name:"Decorative Wall Art", asin:"B07QJY5Z2V", image:"https://images-na.ssl-images-amazon.com/images/I/71b+45J0r0L._AC_SL1500_.jpg"}
+    ],
+    kitchen: [
+      {name:"Ninja Professional Blender", asin:"B07T7H3Z7H", image:"https://images-na.ssl-images-amazon.com/images/I/71RkGkEj8fL._AC_SL1500_.jpg"},
+      {name:"Instant Pot Duo", asin:"B08PQ2KWHS", image:"https://images-na.ssl-images-amazon.com/images/I/71e0kVGAYwL._AC_SL1500_.jpg"}
+    ],
+    outdoors: [
+      {name:"Camping Tent 4-Person", asin:"B07XY5G9R3", image:"https://images-na.ssl-images-amazon.com/images/I/71Z+1u5fE5L._AC_SL1500_.jpg"},
+      {name:"Hiking Backpack", asin:"B08ZD8FP6K", image:"https://images-na.ssl-images-amazon.com/images/I/71a8E5BVO7L._AC_SL1500_.jpg"}
+    ],
+    tech: [
+      {name:"Apple AirPods Pro", asin:"B07ZPC9QD4", image:"https://images-na.ssl-images-amazon.com/images/I/71zny7BTRlL._AC_SL1500_.jpg"},
+      {name:"Logitech MX Master 3 Mouse", asin:"B07S395RWD", image:"https://images-na.ssl-images-amazon.com/images/I/71L+XJG4-XL._AC_SL1500_.jpg"}
+    ],
+    supplements: [
+      {name:"Protein Powder", asin:"B07Q2C7Z5C", image:"https://images-na.ssl-images-amazon.com/images/I/71Wyok6z7kL._AC_SL1500_.jpg"},
+      {name:"Multivitamins", asin:"B07P9L5Y6H", image:"https://images-na.ssl-images-amazon.com/images/I/71Y5IuV1+dL._AC_SL1500_.jpg"}
+    ],
+    face: [
+      {name:"CeraVe Face Cream", asin:"B00R4LX9M2", image:"https://images-na.ssl-images-amazon.com/images/I/71XjLz71QAL._AC_SL1500_.jpg"},
+      {name:"Neutrogena Hydro Boost", asin:"B00NR1YQ5G", image:"https://images-na.ssl-images-amazon.com/images/I/71nUpl+PRDL._AC_SL1500_.jpg"}
+    ]
+  };
+
+  function showCategory(category) {
+    const products = fallbackProducts[category] || [];
+    const container = document.getElementById('productList');
+    container.innerHTML = products.map(p => `
+      <div>
+        <img src="${p.image}" alt="${p.name}" width="150">
+        <p>${p.name}</p>
+        <a href="https://www.amazon.com/dp/${p.asin}?tag=mychanneld-20" target="_blank"><button>Buy Now</button></a>
+      </div>
+    `).join('');
+  }
 </script>
 
 </body>
