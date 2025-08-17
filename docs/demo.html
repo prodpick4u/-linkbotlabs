@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prodpick4U Demo – SEO 1400 Character TTS Review</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
-  <style>
-    body { margin:0; padding:2rem; font-family:'Inter',sans-serif; background:linear-gradient(-45deg,#20002c,#6f00ff,#0a0a2a,#001f4d); color:#fff; background-size:400% 400%; animation: gradientShift 15s ease infinite;}
-    @keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-    h1,h2{color:#00ffaa;}
-    .glass{background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:1rem;}
-    input, button{width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none;}
-    input{background:rgba(20,20,20,0.7); color:#fff;}
-    button{background:#00ffaa;color:#000;font-weight:bold;cursor:pointer;}
-    button:hover{background:#00cc88;}
-    .output{background:rgba(0,0,0,0.8); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap;}
-    img{max-width:200px;border-radius:10px;margin-bottom:10px;}
-    a { color:#00ffaa; text-decoration:none; }
-    .pulse-button{padding:15px 25px;background:#00ffaa;color:#000;font-weight:bold;border:none;border-radius:8px;cursor:pointer;box-shadow:0 0 0px #00ffaa;animation:pulse 1.5s infinite;transition: transform 0.2s;font-size:16px;}
-    .pulse-button:hover{transform: scale(1.05);}
-    @keyframes pulse{0%{box-shadow:0 0 0px #00ffaa;}50%{box-shadow:0 0 20px #00ffaa;}100%{box-shadow:0 0 0px #00ffaa;}}
-    .affiliate-banner {text-align:center; margin-bottom:1rem; background: rgba(58, 178, 255, 0.2); padding:10px; border-radius:10px;}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prodpick4U Demo – SEO 1400 Character TTS Review</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+<style>
+body { margin:0; padding:2rem; font-family:'Inter',sans-serif; background:linear-gradient(-45deg,#20002c,#6f00ff,#0a0a2a,#001f4d); color:#fff; background-size:400% 400%; animation: gradientShift 15s ease infinite;}
+@keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+h1,h2{color:#00ffaa;}
+.glass{background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:1rem;}
+input, select, button, textarea{width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none;}
+input, select, textarea{background:rgba(20,20,20,0.7); color:#fff;}
+button{background:#00ffaa;color:#000;font-weight:bold;cursor:pointer;}
+button:hover{background:#00cc88;}
+.output{background:rgba(0,0,0,0.8); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap;}
+a { color:#00ffaa; text-decoration:none; }
+.pulse-button{padding:15px 25px;background:#00ffaa;color:#000;font-weight:bold;border:none;border-radius:8px;cursor:pointer;box-shadow:0 0 0px #00ffaa;animation:pulse 1.5s infinite;transition: transform 0.2s;font-size:16px;}
+.pulse-button:hover{transform: scale(1.05);}
+@keyframes pulse{0%{box-shadow:0 0 0px #00ffaa;}50%{box-shadow:0 0 20px #00ffaa;}100%{box-shadow:0 0 0px #00ffaa;}}
+.affiliate-banner {text-align:center; margin-bottom:1rem; background: rgba(58, 178, 255, 0.2); padding:10px; border-radius:10px;}
+.attempts {color:#ff0; font-weight:bold; margin-top:5px;}
+</style>
 </head>
 <body>
 
@@ -29,91 +29,188 @@
 <p>Enter your product keyword and keys below. This demo will grab a matching product, generate a **SEO-optimized 1400-character review**, and create a TTS preview. For the full version, try the desktop demo below.</p>
 
 <div class="affiliate-banner glass">
-  🎉 New to Amazon Affiliate? 
-  <a href="YOUR_AFFILIATE_REGISTRATION_LINK" target="_blank">
-    Register here and get 10% OFF the full version!
-  </a>
+🎉 New to Amazon Affiliate? 
+<a href="https://affiliate-program.amazon.com/signup" target="_blank">
+Register here and get 10% OFF the full version!
+</a>
 </div>
 
+<h2>🔑 Keyholders Section</h2>
 <div class="glass">
-  <form id="demoForm">
-    <label>Keyword:
-      <input id="keyword" type="text" placeholder="e.g. face cream" required>
-    </label>
-    <label>Amazon Affiliate Tag:
-      <input id="affiliate" type="text" placeholder="yourtag-20" required>
-    </label>
-    <label>Amazon API Key:
-      <input id="amazonKey" type="text" placeholder="AKIA..." required>
-    </label>
-    <button type="submit">Run Demo</button>
-  </form>
-
-  <div id="output" class="output"></div>
-
-  <button class="pulse-button" onclick="alert('Download full desktop version for unlimited product searches & YouTube upload automation!')">
-    🚀 Try Full Desktop Version
-  </button>
+<p class="attempts" id="khAttemptsDisplay">Remaining attempts: 3</p>
+<form id="keyholderForm">
+  <label>Keyword:
+    <input id="khKeyword" type="text" placeholder="e.g. face cream" required>
+  </label>
+  <label>Amazon Affiliate Tag:
+    <input id="khAffiliate" type="text" placeholder="yourtag-20" required>
+  </label>
+  <label>Amazon API Key:
+    <input id="khAmazonKey" type="text" placeholder="AKIA..." required>
+  </label>
+  <button type="submit">Run Demo</button>
+</form>
+<div id="khOutput" class="output"></div>
 </div>
+
+<h2>❌ Non-Keyholders Section</h2>
+<div class="glass">
+<p class="attempts" id="nkAttemptsDisplay">Remaining attempts: 5</p>
+<p>Select a category and try fallback products.</p>
+<form id="nokeyForm">
+  <label>Category:
+    <select id="nkCategory" required>
+      <option value="">--Select--</option>
+      <option value="health">Health</option>
+      <option value="beauty">Beauty</option>
+      <option value="kitchen">Kitchen</option>
+      <option value="tech">Tech</option>
+      <option value="outdoors">Outdoors</option>
+      <option value="household">Household</option>
+      <option value="home-decor">Home Decor</option>
+    </select>
+  </label>
+  <button type="submit">Try Fallback Product</button>
+</form>
+<div id="nokeyOutput" class="output"></div>
+</div>
+
+<h2>📩 Contact</h2>
+<div class="glass">
+<form id="contactForm">
+  <label>Name:
+    <input id="contactName" type="text" required>
+  </label>
+  <label>Email:
+    <input id="contactEmail" type="email" required>
+  </label>
+  <label>Message:
+    <textarea id="contactMessage" rows="4" required></textarea>
+  </label>
+  <button type="submit">Send Message</button>
+</form>
+<div id="contactOutput" class="output"></div>
+</div>
+
+<button class="pulse-button" onclick="alert('Download full desktop version for unlimited product searches & YouTube upload automation!')">
+🚀 Try Full Desktop Version
+</button>
 
 <script>
-const demoProducts = [
-  {keywords: ["face cream","moisturizer","skincare"], name:"La Roche-Posay Toleriane Double Repair Face Moisturizer", image:"https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg"},
-  {keywords: ["blender","smoothie","kitchen"], name:"Ninja Professional Blender 1000W", image:"https://images-na.ssl-images-amazon.com/images/I/71RkGkEj8fL._AC_SL1500_.jpg"},
-  {keywords: ["headphones","earphones","audio"], name:"Sony WH-1000XM5 Headphones", image:"https://images-na.ssl-images-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg"},
-  {keywords: ["vacuum","robot","cleaning"], name:"Robot Vacuum X20+", image:"https://images-na.ssl-images-amazon.com/images/I/71m3yF64eHL._AC_SL1500_.jpg"}
-];
+// --- Fallback Products ---
+const FALLBACK_PRODUCTS = {
+  health: [
+    {title:"Fitbit Charge 5", url:"https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20"},
+    {title:"Theragun Elite", url:"https://amzn.to/3Hm7HiH"},
+    {title:"Methylene Blue", url:"https://amzn.to/4ldkJwL"},
+    {title:"Irish Sea Moss", url:"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20"},
+    {title:"Shilajit", url:"https://amzn.to/4li6vuC"}
+  ],
+  beauty: [
+    {title:"Revlon Hair Dryer", url:"https://amzn.to/40SbniQ"},
+    {title:"Olay Regenerist Cream", url:"https://amzn.to/41r3Ibr"},
+    {title:"Neutrogena Wipes", url:"https://amzn.to/40OFPdO"},
+    {title:"Maybelline Mascara", url:"https://amzn.to/4opz1NO"},
+    {title:"CeraVe Cleanser", url:"https://amzn.to/3J34u8n"}
+  ],
+  kitchen: [
+    {title:"Instant Pot Duo", url:"https://amzn.to/4oD8b50"},
+    {title:"Lodge Skillet", url:"https://amzn.to/47igIUx"},
+    {title:"Breville Air Fryer Oven", url:"https://amzn.to/45lPvxL"},
+    {title:"KitchenAid Mixer", url:"https://amzn.to/45lPCJH"},
+    {title:"Cuisinart Processor", url:"https://amzn.to/3UgiUEs"},
+    {title:"Ninja Foodi 9-in-1", url:"https://amzn.to/3H8Olh3"},
+    {title:"NutriBullet Blender", url:"https://amzn.to/47eVzKT"},
+    {title:"Hydro Flask Bottle", url:"https://amzn.to/4myBCTZ"}
+  ],
+  tech: [
+    {title:"Apple AirPods Pro 2", url:"https://amzn.to/3UAYMx7"},
+    {title:"Samsung Galaxy Buds FE", url:"https://amzn.to/4m6BhIh"},
+    {title:"Anker Soundcore P20i", url:"https://amzn.to/4mqytoV"},
+    {title:"Samsung T7 SSD", url:"https://amzn.to/3J1xAor"},
+    {title:"Logitech MX Master 3", url:"https://amzn.to/3J43Ib5"},
+    {title:"Sony WH-1000XM4", url:"https://amzn.to/40OGbkE"},
+    {title:"Kindle Paperwhite", url:"https://amzn.to/4ftSYyW"}
+  ],
+  outdoors: [
+    {title:"Coleman Tent", url:"https://amzn.to/4myC9oX"},
+    {title:"LifeStraw Filter", url:"https://amzn.to/4m3CoIw"},
+    {title:"Etekcity Lantern", url:"https://amzn.to/41tkYwL"},
+    {title:"Osprey Backpack", url:"https://amzn.to/40RUG7h"},
+    {title:"Garmin GPSMAP", url:"https://amzn.to/45BCoJX"}
+  ],
+  household: [
+    {title:"iRobot Roomba 694", url:"https://amzn.to/4flpTp8"},
+    {title:"Dyson V8 Cordless", url:"https://amzn.to/4fll1QY"},
+    {title:"Instant Pot Duo Crisp", url:"https://amzn.to/3J1ZhxC"},
+    {title:"Philips Hue Bulb", url:"https://amzn.to/4fxUPCY"},
+    {title:"Nespresso Vertuo", url:"https://amzn.to/46LByvu"}
+  ],
+  "home-decor": [
+    {title:"Amethyst Crystal Tree", url:"https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20"},
+    {title:"Sherpa Office Chair", url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20"},
+    {title:"Wall Waterfall XL", url:"https://www.amazon.com/dp/B01KP0ONSY?tag=mychanneld-20"},
+    {title:"Medify MA-40 Air Purifier", url:"https://www.amazon.com/dp/B07LGDYV3C?tag=mychanneld-20"},
+    {title:"Kyzfy Liquid Motion Lamp", url:"https://www.amazon.com/dp/B0DRBZS1DR?tag=mychanneld-20"},
+    {title:"VIAHART Mini Aquarium", url:"https://www.amazon.com/dp/B0CRDP8TM9?tag=mychanneld-20"}
+  ]
+};
 
-function matchProduct(keyword){
-  keyword = keyword.toLowerCase();
-  for(let p of demoProducts){
-    if(p.keywords.some(k=>keyword.includes(k))) return p;
-  }
-  return demoProducts[0];
-}
-
-function generateSEOReview(productName, keyword){
-  return `${productName} is a top-quality product perfect for anyone looking for ${keyword}. This ${keyword} has been designed to deliver exceptional results, ensuring high satisfaction for every user. Many customers who purchased this ${keyword} highlight its reliability, efficiency, and premium performance. Whether you are new to ${keyword} products or looking for an upgrade, this ${productName} provides superior benefits. Its features make it a standout choice among other ${keyword} items in the market. Enjoy the advantages of using this ${keyword} daily, and enhance your routine with the trusted ${productName}. Perfect for gifting or personal use, this ${keyword} ensures consistent quality and lasting results. Grab this ${keyword} today and experience the difference that ${productName} brings to your lifestyle, backed by positive reviews and proven performance.`;
-}
-
-async function fetchAmazonProduct(keyword, amazonKey, affiliate){
-  const product = matchProduct(keyword);
-  const description = `Top-rated ${product.name}. Perfect choice for ${keyword}.`;
-  const review = generateSEOReview(product.name, keyword);
-  const link = `https://www.amazon.com/dp/DEMOASIN?tag=${affiliate}`;
-  return {...product, description, review, link};
-}
-
-document.getElementById('demoForm').addEventListener('submit', async e=>{
+// --- Non-Keyholders ---
+let nkAttempts = 5;
+document.getElementById('nokeyForm').addEventListener('submit', e=>{
   e.preventDefault();
-  const kw = document.getElementById('keyword').value.trim();
-  const affiliate = document.getElementById('affiliate').value.trim();
-  const amazonKey = document.getElementById('amazonKey').value.trim();
-  if(!kw || !affiliate || !amazonKey){ alert("Please fill all fields."); return; }
-
-  document.getElementById('output').innerHTML = '⏳ Fetching product and generating SEO 1400-character review...';
-  try{
-    const product = await fetchAmazonProduct(kw, amazonKey, affiliate);
-    document.getElementById('output').innerHTML = `
-      <img src="${product.image}" alt="${product.name}">
-      <p><strong>🛒 Product:</strong> <a href="${product.link}" target="_blank">${product.name}</a></p>
-      <p><strong>📝 Description:</strong> ${product.description}</p>
-      <p><strong>🎬 1400-character SEO Review (TTS):</strong> ${product.review}</p>
-      <button onclick="speakText('${product.review.replace(/'/g,'')}')">🔊 TTS Preview</button>
-      <a href="${product.link}" target="_blank"><button>Buy with us</button></a>
-    `;
-  } catch(err){
-    document.getElementById('output').innerHTML = '❌ Error fetching product or generating review.';
-    console.error(err);
-  }
+  if(nkAttempts<=0){ alert("🔒 Maximum non-keyholder attempts reached."); return; }
+  nkAttempts--;
+  document.getElementById('nkAttemptsDisplay').innerText = `Remaining attempts: ${nkAttempts}`;
+  const cat = document.getElementById('nkCategory').value.trim().toLowerCase();
+  const products = FALLBACK_PRODUCTS[cat] || [];
+  if(products.length===0){ document.getElementById('nokeyOutput').innerHTML='❌ No fallback products found.'; return; }
+  const p = products[Math.floor(Math.random()*products.length)];
+  const review = `SEO Review for ${p.title}: Highly recommended product, optimized for affiliate marketing.`;
+  document.getElementById('nokeyOutput').innerHTML = `📝 ${review}\n\n🔗 <a href="${p.url}" target="_blank">${p.url}</a>`;
 });
 
+// --- Keyholders ---
+let khAttempts = 3;
+document.getElementById('keyholderForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  if(khAttempts<=0){ alert("🔒 Maximum keyholder attempts reached."); return; }
+  khAttempts--;
+  document.getElementById('khAttemptsDisplay').innerText = `Remaining attempts: ${khAttempts}`;
+  const kw = document.getElementById('khKeyword').value.trim();
+  const affiliate = document.getElementById('khAffiliate').value.trim();
+  const amazonKey = document.getElementById('khAmazonKey').value.trim();
+  if(!kw || !affiliate || !amazonKey){ alert("Please fill all fields."); return; }
+
+  const review = `${kw} is a top-quality product, delivering outstanding results and high satisfaction. Ideal for all users seeking premium performance. Enhance your daily routine and enjoy lasting improvements. Trusted and backed by positive reviews worldwide.`;
+  const link = `https://www.amazon.com/dp/DEMOASIN?tag=${affiliate}`;
+
+  document.getElementById('khOutput').innerHTML = `
+    <p><strong>🎬 SEO Review (TTS):</strong> ${review}</p>
+    <button onclick="speakText('${review.replace(/'/g,'')}')">🔊 TTS Preview</button>
+    <a href="${link}" target="_blank"><button>Buy with us</button></a>
+  `;
+});
+
+// --- Contact Form ---
+document.getElementById('contactForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = document.getElementById('contactName').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const message = document.getElementById('contactMessage').value.trim();
+  if(!name || !email || !message){ alert("Please fill all fields."); return; }
+  document.getElementById('contactOutput').innerHTML = `✅ Thank you, ${name}. Your message has been sent to omnistall70@gmail.com!`;
+});
+
+// --- TTS Function (optimized English voice) ---
 function speakText(text){
+  let voices = speechSynthesis.getVoices().filter(v=>v.lang.startsWith("en"));
+  if(voices.length===0) voices = speechSynthesis.getVoices();
   const utter = new SpeechSynthesisUtterance(text);
-  utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en"))||null;
+  utter.voice = voices[0] || null;
   speechSynthesis.speak(utter);
 }
 </script>
-
 </body>
 </html>
