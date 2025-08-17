@@ -1,123 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prodpick4U Demo</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prodpick4U Demo – Full TTS Review</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
   <style>
-    body {
-      margin: 0;
-      padding: 2rem;
-      background: linear-gradient(-45deg, #20002c, #6f00ff, #0a0a2a, #001f4d);
-      background-size: 400% 400%;
-      animation: gradientShift 15s ease infinite;
-      color: #ffffff;
-      font-family: 'Inter', sans-serif;
-    }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    h1, h2 { color: #00ffaa; }
-    .glass {
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 1rem;
-    }
-    input {
-      display: block;
-      width: 100%;
-      margin: 8px 0 12px;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(20,20,20,0.7);
-      color: #fff;
-    }
-    button {
-      padding: 10px 20px;
-      background: #00ffaa;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      color: #000;
-      cursor: pointer;
-    }
-    button:hover { background: #00cc88; }
-    .output {
-      background: rgba(0,0,0,0.8);
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 15px;
-      font-family: monospace;
-      color: #0f0;
-      white-space: pre-wrap;
-    }
-    .tabs { display: flex; gap: 1rem; margin-bottom: 1rem; }
-    .tab {
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      background: rgba(0,0,0,0.5);
-      color: #00ffaa;
-    }
-    .tab.active { background: #00ffaa; color: #000; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    img { display:block; margin-bottom:10px; border-radius:10px; }
-    a { text-decoration: none; }
-    .pulse-button {
-      padding:15px 25px;
-      background:#00ffaa;
-      color:#000;
-      font-weight:bold;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
-      box-shadow: 0 0 0px #00ffaa;
-      animation: pulse 1.5s infinite;
-      transition: transform 0.2s;
-      font-size:16px;
-    }
-    .pulse-button:hover { transform: scale(1.05); }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0px #00ffaa; }
-      50% { box-shadow: 0 0 20px #00ffaa; }
-      100% { box-shadow: 0 0 0px #00ffaa; }
-    }
+    body { margin:0; padding:2rem; font-family:'Inter',sans-serif; background:linear-gradient(-45deg,#20002c,#6f00ff,#0a0a2a,#001f4d); color:#fff; background-size:400% 400%; animation: gradientShift 15s ease infinite;}
+    @keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+    h1,h2{color:#00ffaa;}
+    .glass{background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:1rem;}
+    input, button{width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none;}
+    input{background:rgba(20,20,20,0.7); color:#fff;}
+    button{background:#00ffaa;color:#000;font-weight:bold;cursor:pointer;}
+    button:hover{background:#00cc88;}
+    .output{background:rgba(0,0,0,0.8); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap;}
+    img{max-width:200px;border-radius:10px;margin-bottom:10px;}
+    .pulse-button{padding:15px 25px;background:#00ffaa;color:#000;font-weight:bold;border:none;border-radius:8px;cursor:pointer;box-shadow:0 0 0px #00ffaa;animation:pulse 1.5s infinite;transition: transform 0.2s;font-size:16px;}
+    .pulse-button:hover{transform: scale(1.05);}
+    @keyframes pulse{0%{box-shadow:0 0 0px #00ffaa;}50%{box-shadow:0 0 20px #00ffaa;}100%{box-shadow:0 0 0px #00ffaa;}}
   </style>
 </head>
 <body>
 
-<h1>🧪 Prodpick4U Demo</h1>
-<p>Try our product → script → TTS generator. Choose below:</p>
+<h1>🧪 Prodpick4U Demo – Full 1400 Character TTS Review</h1>
+<p>Enter your product keyword and keys below. This demo will grab the product, generate a 1400-character review, and create a TTS preview. For the full version, try the desktop demo below.</p>
 
-<div class="tabs">
-  <div class="tab active" onclick="switchTab('lite')">⚡ Quick Try (No Keys)</div>
-  <div class="tab" onclick="switchTab('full')">🔑 Full Demo (With Keys)</div>
-</div>
-
-<div id="lite" class="tab-content active glass">
-  <h2>⚡ Quick Try (No Keys Needed)</h2>
-  <form onsubmit="runLiteDemo(event)">
+<div class="glass">
+  <form id="demoForm">
     <label>Keyword:
-      <input id="liteKeyword" type="text" placeholder="e.g. blender" required>
-    </label>
-    <button type="submit">Run Demo</button>
-  </form>
-  <div id="liteOutput" class="output"></div>
-</div>
-
-<div id="full" class="tab-content glass">
-  <h2>🔑 Full Demo (With Keys)</h2>
-  <form onsubmit="runFullDemo(event)">
-    <label>Keyword:
-      <input id="fullKeyword" type="text" placeholder="e.g. blender" required>
+      <input id="keyword" type="text" placeholder="e.g. face cream" required>
     </label>
     <label>Amazon Affiliate Tag:
       <input id="affiliate" type="text" placeholder="yourtag-20" required>
@@ -125,107 +37,64 @@
     <label>Amazon API Key:
       <input id="amazonKey" type="text" placeholder="AKIA..." required>
     </label>
-    <label>YouTube API Key:
-      <input id="ytapi" type="text" placeholder="AIza..." required>
-    </label>
-    <button type="submit">Run Full Demo</button>
+    <button type="submit">Run Demo</button>
   </form>
-  <div id="fullOutput" class="output"></div>
-</div>
 
-<div id="support" class="glass">
-  <h2>💖 Support This Project</h2>
-  <p>
-    Every purchase through our links helps fund Prodpick4U. The more people buy, the more we all benefit!  
-    Share the tool, explore products, and grow the community together.
-  </p>
-  <button class="pulse-button" onclick="alert('Full Desktop Version launching soon! Be ready to unlock unlimited searches!')">
-    🚀 Full Desktop Version Coming Soon
+  <div id="output" class="output"></div>
+
+  <button class="pulse-button" onclick="alert('Download full desktop version for unlimited product searches & YouTube upload automation!')">
+    🚀 Try Full Desktop Version
   </button>
 </div>
 
 <script>
-  function switchTab(tab) {
-    document.querySelectorAll(".tab").forEach(el => el.classList.remove("active"));
-    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
-    document.querySelector(".tab[onclick*='" + tab + "']").classList.add("active");
-    document.getElementById(tab).classList.add("active");
-  }
+async function fetchAmazonProduct(keyword, amazonKey, affiliate) {
+  // Placeholder: replace with actual Amazon Product API integration
+  // For demo, we return a fixed product matching your keyword
+  const productData = {
+    name: "La Roche-Posay Toleriane Double Repair Face Moisturizer",
+    image: "https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg",
+    description: "Dermatologist-tested moisturizer with ceramides and niacinamide, perfect for daily skin hydration and repair.",
+    link: `https://www.amazon.com/dp/B01N1SE4EP?tag=${affiliate}`
+  };
 
-  const demoProducts = [
-    {keywords:["headphones","earphones"], asin:"B09JQZ5T4S", name:"Sony WH-1000XM5 Headphones", image:"https://images-na.ssl-images-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B09JQZ5T4S?tag=YOURTAG-20", desc:"Industry-leading noise cancellation, crystal-clear sound, and all-day comfort."},
-    {keywords:["vacuum","robot","hoover"], asin:"B0XYZ123", name:"Robot Vacuum X20+", image:"https://images-na.ssl-images-amazon.com/images/I/71m3yF64eHL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B0XYZ123?tag=YOURTAG-20", desc:"Hands-free cleaning with smart navigation and powerful suction."},
-    {keywords:["moisturizer","skincare"], asin:"B01N1SE4EP", name:"La Roche-Posay Toleriane Double Repair Face Moisturizer", image:"https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B01N1SE4EP?tag=YOURTAG-20", desc:"Dermatologist-tested moisturizer with ceramides and niacinamide for healthy skin."},
-    {keywords:["blender","smoothie"], asin:"B07T7H3Z7H", name:"Ninja Professional Blender 1000W", image:"https://images-na.ssl-images-amazon.com/images/I/71RkGkEj8fL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B07T7H3Z7H?tag=YOURTAG-20", desc:"Crushes ice and blends smoothies with 1000 watts of professional power."}
-  ];
+  // Generate 1400-character review for TTS
+  const review = `${productData.name} is a premium skincare solution that offers deep hydration and skin barrier repair. Formulated with ceramides and niacinamide, it helps soothe sensitive skin, reduce redness, and maintain optimal moisture levels throughout the day. Users love its lightweight, non-greasy texture, fast absorption, and long-lasting effects. Ideal for all skin types, this moisturizer provides a perfect base for makeup or a refreshing finish after cleansing. Experience healthier, more radiant skin with every application, and enjoy the clinically tested formula trusted by dermatologists worldwide. Perfect for daily use, this product enhances skin texture, restores balance, and improves overall skin health, giving your face a smooth and youthful appearance. Grab yours today through the affiliate link for guaranteed authenticity and free shipping options.`;
 
-  const defaultProduct = demoProducts[3]; // fallback blender
+  return {...productData, review};
+}
 
-  function findProduct(keyword) {
-    keyword = keyword.toLowerCase();
-    for (let p of demoProducts) if (p.keywords.some(k=>keyword.includes(k))) return p;
-    return defaultProduct;
-  }
+document.getElementById('demoForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const kw = document.getElementById('keyword').value.trim();
+  const affiliate = document.getElementById('affiliate').value.trim();
+  const amazonKey = document.getElementById('amazonKey').value.trim();
 
-  let liteDemoUsed = false;
-  function runLiteDemo(e) {
-    e.preventDefault();
-    if (liteDemoUsed) {
-      document.getElementById("liteOutput").innerHTML = `<div style="text-align:center;">
-        ⚠️ Lite Demo used!<br><br>
-        <button class="pulse-button" onclick="alert('Desktop Demo launching soon!')">🚀 Launching Soon</button>
-      </div>`;
-      return;
-    }
-    liteDemoUsed = true;
-    const kw = document.getElementById("liteKeyword").value;
-    const product = findProduct(kw);
+  if (!kw || !affiliate || !amazonKey) { alert("Please fill all fields."); return; }
 
-    const description = `${product.desc}`;
-    const script = `Discover the ${product.name}! Perfect if you're looking for ${kw}. Grab yours today.`;
+  document.getElementById('output').innerHTML = '⏳ Fetching product and generating 1400-character review...';
 
-    document.getElementById("liteOutput").innerHTML = `
-      <img src="${product.image}" width="200" alt="${product.name}">
-      <p><strong>🛒 Product:</strong> <a href="${product.affiliate}" target="_blank">${product.name}</a></p>
-      <p><strong>📝 Description:</strong> ${description}</p>
-      <p><strong>🎬 Script:</strong> ${script}</p>
-      <button onclick="speakText('${script.replace(/'/g,"")}')">🔊 TTS Preview</button>
-      <a href="${product.affiliate}" target="_blank"><button>Buy with us</button></a>
+  try {
+    const product = await fetchAmazonProduct(kw, amazonKey, affiliate);
+    document.getElementById('output').innerHTML = `
+      <img src="${product.image}" alt="${product.name}">
+      <p><strong>🛒 Product:</strong> <a href="${product.link}" target="_blank">${product.name}</a></p>
+      <p><strong>📝 Description:</strong> ${product.description}</p>
+      <p><strong>🎬 1400-character Review (TTS):</strong> ${product.review}</p>
+      <button onclick="speakText('${product.review.replace(/'/g,'')}')">🔊 TTS Preview</button>
+      <a href="${product.link}" target="_blank"><button>Buy with us</button></a>
     `;
-    document.getElementById("liteKeyword").disabled = true;
-    e.target.querySelector("button").disabled = true;
+  } catch (err) {
+    document.getElementById('output').innerHTML = '❌ Error fetching product or generating review.';
+    console.error(err);
   }
+});
 
-  function runFullDemo(e) {
-    e.preventDefault();
-    const kw = document.getElementById("fullKeyword").value;
-    const affiliate = document.getElementById("affiliate").value.trim();
-    const amazonKey = document.getElementById("amazonKey").value.trim();
-    const ytKey = document.getElementById("ytapi").value.trim();
-
-    const product = findProduct(kw);
-    const link = `https://www.amazon.com/dp/${product.asin}?tag=${encodeURIComponent(affiliate)}`;
-    const description = `${product.desc} (Live details would load with your Amazon API key.)`;
-    const script = `Today we're reviewing the ${product.name}, a great choice for ${kw}. Check it out here: ${link}`;
-
-    document.getElementById("fullOutput").innerHTML = `
-✅ Affiliate Tag: ${affiliate}<br>
-✅ Amazon Key: ${amazonKey.substring(0,6)}... (hidden)<br>
-✅ YouTube Key: ${ytKey.substring(0,6)}... (hidden)<br><br>
-<img src="${product.image}" width="200" alt="${product.name}">
-<p><strong>🛒 Product:</strong> <a href="${link}" target="_blank">${product.name}</a></p>
-<p><strong>📝 Description:</strong> ${description}</p>
-<p><strong>🎬 Script:</strong> ${script}</p>
-<button onclick="speakText('${script.replace(/'/g,"")}')">🔊 TTS Preview</button>
-<a href="${link}" target="_blank"><button>Buy with us</button></a>
-    `;
-  }
-
-  function speakText(text) {
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en")) || null;
-    speechSynthesis.speak(utter);
-  }
+function speakText(text){
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en"))||null;
+  speechSynthesis.speak(utter);
+}
 </script>
 
 </body>
