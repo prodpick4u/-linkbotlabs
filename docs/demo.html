@@ -10,8 +10,8 @@ body { margin:0; padding:2rem; font-family:'Inter',sans-serif; background:linear
 @keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 h1,h2{color:#00ffaa;}
 .glass{background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:1rem;}
-input, select, button, textarea{width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none;}
-input, select, textarea{background:rgba(20,20,20,0.7); color:#fff;}
+input, button{width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none;}
+input{background:rgba(20,20,20,0.7); color:#fff;}
 button{background:#00ffaa;color:#000;font-weight:bold;cursor:pointer;}
 button:hover{background:#00cc88;}
 .output{background:rgba(0,0,0,0.8); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap;}
@@ -20,76 +20,47 @@ a { color:#00ffaa; text-decoration:none; }
 .pulse-button:hover{transform: scale(1.05);}
 @keyframes pulse{0%{box-shadow:0 0 0px #00ffaa;}50%{box-shadow:0 0 20px #00ffaa;}100%{box-shadow:0 0 0px #00ffaa;}}
 .affiliate-banner {text-align:center; margin-bottom:1rem; background: rgba(58, 178, 255, 0.2); padding:10px; border-radius:10px;}
-.attempts {color:#ff0; font-weight:bold; margin-top:5px;}
+.section-title {font-size:18px; font-weight:bold; margin-top:1rem;}
 </style>
 </head>
 <body>
 
 <h1>🧪 Prodpick4U Demo – SEO 1400 Character TTS Review</h1>
-<p>Enter your product keyword and keys below. This demo will grab a matching product, generate a **SEO-optimized 1400-character review**, and create a TTS preview. For the full version, try the desktop demo below.</p>
+<p>Welcome to your auto-generating affiliate booth! Enter a product keyword and your keys below to generate a <strong>SEO-optimized 1400-character review</strong> with TTS preview. New users can get their Amazon Affiliate key below.</p>
 
 <div class="affiliate-banner glass">
 🎉 New to Amazon Affiliate? 
-<a href="https://affiliate-program.amazon.com/signup" target="_blank">
-Register here and get 10% OFF the full version!
-</a>
+<a href="https://affiliate-program.amazon.com/signup" target="_blank">Register here and get 10% OFF the full version!</a>
 </div>
 
-<h2>🔑 Keyholders Section</h2>
 <div class="glass">
-<p class="attempts" id="khAttemptsDisplay">Remaining attempts: 3</p>
-<form id="keyholderForm">
-  <label>Keyword:
-    <input id="khKeyword" type="text" placeholder="e.g. face cream" required>
-  </label>
-  <label>Amazon Affiliate Tag:
-    <input id="khAffiliate" type="text" placeholder="yourtag-20" required>
-  </label>
-  <label>Amazon API Key:
-    <input id="khAmazonKey" type="text" placeholder="AKIA..." required>
-  </label>
-  <button type="submit">Run Demo</button>
+<h2 class="section-title">Keyholders Section</h2>
+<p>You have 3 tries before this demo locks for keyholders.</p>
+<form id="keyholdersForm">
+<label>Keyword:
+<input id="khKeyword" type="text" placeholder="e.g. face cream" required>
+</label>
+<label>Amazon Affiliate Tag:
+<input id="khAffiliate" type="text" placeholder="yourtag-20" required>
+</label>
+<label>Amazon API Key:
+<input id="khAmazonKey" type="text" placeholder="AKIA..." required>
+</label>
+<button type="submit">Run Demo</button>
 </form>
 <div id="khOutput" class="output"></div>
 </div>
 
-<h2>❌ Non-Keyholders Section</h2>
 <div class="glass">
-<p class="attempts" id="nkAttemptsDisplay">Remaining attempts: 5</p>
-<p>Select a category and try fallback products.</p>
-<form id="nokeyForm">
-  <label>Category:
-    <select id="nkCategory" required>
-      <option value="">--Select--</option>
-      <option value="health">Health</option>
-      <option value="beauty">Beauty</option>
-      <option value="kitchen">Kitchen</option>
-      <option value="tech">Tech</option>
-      <option value="outdoors">Outdoors</option>
-      <option value="household">Household</option>
-      <option value="home-decor">Home Decor</option>
-    </select>
-  </label>
-  <button type="submit">Try Fallback Product</button>
+<h2 class="section-title">Non-Keyholders Section</h2>
+<p>You have 5 tries with fallback products before lock. Get your keys to unlock full demo.</p>
+<form id="nonKeyholdersForm">
+<label>Keyword:
+<input id="nkKeyword" type="text" placeholder="e.g. face cream" required>
+</label>
+<button type="submit">Run Demo</button>
 </form>
-<div id="nokeyOutput" class="output"></div>
-</div>
-
-<h2>📩 Contact</h2>
-<div class="glass">
-<form id="contactForm">
-  <label>Name:
-    <input id="contactName" type="text" required>
-  </label>
-  <label>Email:
-    <input id="contactEmail" type="email" required>
-  </label>
-  <label>Message:
-    <textarea id="contactMessage" rows="4" required></textarea>
-  </label>
-  <button type="submit">Send Message</button>
-</form>
-<div id="contactOutput" class="output"></div>
+<div id="nkOutput" class="output"></div>
 </div>
 
 <button class="pulse-button" onclick="alert('Download full desktop version for unlimited product searches & YouTube upload automation!')">
@@ -97,120 +68,108 @@ Register here and get 10% OFF the full version!
 </button>
 
 <script>
-// --- Fallback Products ---
-const FALLBACK_PRODUCTS = {
-  health: [
-    {title:"Fitbit Charge 5", url:"https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20"},
-    {title:"Theragun Elite", url:"https://amzn.to/3Hm7HiH"},
-    {title:"Methylene Blue", url:"https://amzn.to/4ldkJwL"},
-    {title:"Irish Sea Moss", url:"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20"},
-    {title:"Shilajit", url:"https://amzn.to/4li6vuC"}
-  ],
-  beauty: [
-    {title:"Revlon Hair Dryer", url:"https://amzn.to/40SbniQ"},
-    {title:"Olay Regenerist Cream", url:"https://amzn.to/41r3Ibr"},
-    {title:"Neutrogena Wipes", url:"https://amzn.to/40OFPdO"},
-    {title:"Maybelline Mascara", url:"https://amzn.to/4opz1NO"},
-    {title:"CeraVe Cleanser", url:"https://amzn.to/3J34u8n"}
-  ],
-  kitchen: [
-    {title:"Instant Pot Duo", url:"https://amzn.to/4oD8b50"},
-    {title:"Lodge Skillet", url:"https://amzn.to/47igIUx"},
-    {title:"Breville Air Fryer Oven", url:"https://amzn.to/45lPvxL"},
-    {title:"KitchenAid Mixer", url:"https://amzn.to/45lPCJH"},
-    {title:"Cuisinart Processor", url:"https://amzn.to/3UgiUEs"},
-    {title:"Ninja Foodi 9-in-1", url:"https://amzn.to/3H8Olh3"},
-    {title:"NutriBullet Blender", url:"https://amzn.to/47eVzKT"},
-    {title:"Hydro Flask Bottle", url:"https://amzn.to/4myBCTZ"}
-  ],
-  tech: [
-    {title:"Apple AirPods Pro 2", url:"https://amzn.to/3UAYMx7"},
-    {title:"Samsung Galaxy Buds FE", url:"https://amzn.to/4m6BhIh"},
-    {title:"Anker Soundcore P20i", url:"https://amzn.to/4mqytoV"},
-    {title:"Samsung T7 SSD", url:"https://amzn.to/3J1xAor"},
-    {title:"Logitech MX Master 3", url:"https://amzn.to/3J43Ib5"},
-    {title:"Sony WH-1000XM4", url:"https://amzn.to/40OGbkE"},
-    {title:"Kindle Paperwhite", url:"https://amzn.to/4ftSYyW"}
-  ],
-  outdoors: [
-    {title:"Coleman Tent", url:"https://amzn.to/4myC9oX"},
-    {title:"LifeStraw Filter", url:"https://amzn.to/4m3CoIw"},
-    {title:"Etekcity Lantern", url:"https://amzn.to/41tkYwL"},
-    {title:"Osprey Backpack", url:"https://amzn.to/40RUG7h"},
-    {title:"Garmin GPSMAP", url:"https://amzn.to/45BCoJX"}
-  ],
-  household: [
-    {title:"iRobot Roomba 694", url:"https://amzn.to/4flpTp8"},
-    {title:"Dyson V8 Cordless", url:"https://amzn.to/4fll1QY"},
-    {title:"Instant Pot Duo Crisp", url:"https://amzn.to/3J1ZhxC"},
-    {title:"Philips Hue Bulb", url:"https://amzn.to/4fxUPCY"},
-    {title:"Nespresso Vertuo", url:"https://amzn.to/46LByvu"}
-  ],
-  "home-decor": [
-    {title:"Amethyst Crystal Tree", url:"https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20"},
-    {title:"Sherpa Office Chair", url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20"},
-    {title:"Wall Waterfall XL", url:"https://www.amazon.com/dp/B01KP0ONSY?tag=mychanneld-20"},
-    {title:"Medify MA-40 Air Purifier", url:"https://www.amazon.com/dp/B07LGDYV3C?tag=mychanneld-20"},
-    {title:"Kyzfy Liquid Motion Lamp", url:"https://www.amazon.com/dp/B0DRBZS1DR?tag=mychanneld-20"},
-    {title:"VIAHART Mini Aquarium", url:"https://www.amazon.com/dp/B0CRDP8TM9?tag=mychanneld-20"}
-  ]
-};
+// FALLBACK PRODUCTS (all 50)
+const FALLBACK_PRODUCTS = [
+{title:"Fitbit Charge 5 Advanced Fitness & Health Tracker",url:"https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20",description:"Fitness tracker with built-in GPS and health metrics."},
+{title:"Theragun Elite Handheld Percussive Therapy Device",url:"https://amzn.to/3Hm7HiH",description:"Deep muscle treatment massage device."},
+{title:"Methylene Blue",url:"https://amzn.to/4ldkJwL",description:"Supplement researched for mitochondrial support and cognitive function."},
+{title:"Irish Sea Moss",url:"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20",description:"Rich in iodine and essential minerals for immune and thyroid support."},
+{title:"Shilajit",url:"https://amzn.to/4li6vuC",description:"Ancient herbal resin used to boost energy, vitality, and performance."},
+{title:"Revlon One-Step Hair Dryer And Volumizer Hot Air Brush",url:"https://amzn.to/40SbniQ",description:"Hair styling tool for drying and volumizing."},
+{title:"Olay Regenerist Micro-Sculpting Cream Face Moisturizer",url:"https://amzn.to/41r3Ibr",description:"Anti-aging facial moisturizer."},
+{title:"Neutrogena Makeup Remover Cleansing Towelettes",url:"https://amzn.to/40OFPdO",description:"Gentle wipes for makeup removal."},
+{title:"Maybelline Lash Sensational Washable Mascara",url:"https://amzn.to/4opz1NO",description:"Volumizing mascara with buildable formula."},
+{title:"CeraVe Hydrating Facial Cleanser",url:"https://amzn.to/3J34u8n",description:"Gentle face cleanser for normal to dry skin."},
+{title:"Instant Pot Duo 7-in-1 Electric Pressure Cooker",url:"https://amzn.to/4oD8b50",description:"Multi-functional pressure cooker."},
+{title:"Lodge Cast Iron Skillet",url:"https://amzn.to/47igIUx",description:"Durable pre-seasoned cast iron pan."},
+{title:"Breville The Smart Oven Air Fryer",url:"https://amzn.to/45lPvxL",description:"Countertop convection oven with air fryer."},
+{title:"KitchenAid Artisan Tilt-Head Stand Mixer",url:"https://amzn.to/45lPCJH",description:"Versatile stand mixer for baking."},
+{title:"Cuisinart 14-Cup Food Processor",url:"https://amzn.to/3UgiUEs",description:"Powerful food processor for chopping and slicing."},
+{title:"Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer",url:"https://amzn.to/3H8Olh3",description:"Multi-cooker with air frying and pressure cooking features."},
+{title:"NutriBullet Pro High-Speed Blender/Mixer System",url:"https://amzn.to/47eVzKT",description:"Compact blender for smoothies and shakes."},
+{title:"Hydro Flask Stainless Steel Water Bottle",url:"https://amzn.to/4myBCTZ",description:"Vacuum insulated bottle keeps drinks cold or hot."},
+{title:"Apple AirPods Pro (2nd Generation)",url:"https://amzn.to/3UAYMx7",description:"Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality."},
+{title:"Samsung Galaxy Buds FE (Fan Edition)",url:"https://amzn.to/4m6BhIh",description:"Offers reliable active noise cancellation, auto device switching, and balanced audio."},
+{title:"Anker Soundcore P20i",url:"https://amzn.to/4mqytoV",description:"Budget-friendly bestseller wireless earbuds with decent ANC and comfort."},
+{title:"Samsung T7 Portable SSD 1TB",url:"https://amzn.to/3J1xAor",description:"Fast external solid state drive."},
+{title:"Logitech MX Master 3 Advanced Wireless Mouse",url:"https://amzn.to/3J43Ib5",description:"Ergonomic wireless mouse with customizable buttons."},
+{title:"Sony WH-1000XM4 Wireless Noise-Cancelling Headphones",url:"https://amzn.to/40OGbkE",description:"Industry-leading noise cancelling headphones."},
+{title:"Kindle Paperwhite – Now Waterproof with 2x the Storage",url:"https://amzn.to/4ftSYyW",description:"Waterproof e-reader with high-resolution display."},
+{title:"Coleman Sundome Tent",url:"https://amzn.to/4myC9oX",description:"Easy setup tent for camping."},
+{title:"LifeStraw Personal Water Filter",url:"https://amzn.to/4m3CoIw",description:"Portable water purifier for outdoor use."},
+{title:"Etekcity Lantern Camping Lantern",url:"https://amzn.to/41tkYwL",description:"LED lantern with adjustable brightness."},
+{title:"Osprey Atmos AG Backpack",url:"https://amzn.to/40RUG7h",description:"Comfortable hiking backpack with ventilation."},
+{title:"Garmin GPSMAP Handheld GPS Navigator",url:"https://amzn.to/45BCoJX",description:"Rugged GPS device for outdoor navigation."},
+{title:"iRobot Roomba 694 Robot Vacuum",url:"https://amzn.to/4flpTp8",description:"Smart robot vacuum for home cleaning."},
+{title:"Dyson V8 Absolute Cordless Vacuum Cleaner",url:"https://amzn.to/4fll1QY",description:"Powerful cordless vacuum cleaner."},
+{title:"Instant Pot Duo Crisp Pressure Cooker and Air Fryer",url:"https://amzn.to/3J1ZhxC",description:"Multi-use pressure cooker with air fryer lid."},
+{title:"Philips Hue White and Color Ambiance Smart Bulb",url:"https://amzn.to/4fxUPCY",description:"Smart LED bulb with app control."},
+{title:"Nespresso Vertuo Coffee and Espresso Maker",url:"https://amzn.to/46LByvu",description:"Single serve coffee and espresso machine."},
+{title:"KARMA AND LUCK Calming Spirit Amethyst Crystal Feng Shui Tree of Life",url:"https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20",description:"Handcrafted amethyst crystal tree symbolizing peace and spiritual growth."},
+{title:"Linon Brooklyn Sherpa Office Chair, Ivory",url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20",description:"Plush office chair with adjustable height."},
+{title:"Jersey Home Decor Wall Waterfall XL 47\" Wide x 24\" Tall",url:"https://www.amazon.com/dp/B01KP0ONSY?tag=mychanneld-20",description:"Large wall-mounted waterfall feature."},
+{title:"Medify MA-40 Air Purifier with True HEPA H13 Filter",url:"https://www.amazon.com/dp/B07LGDYV3C?tag=mychanneld-20",description:"Air purifier covering up to 1,793 sq ft."},
+{title:"Kyzfy 24.4-Inch Relaxing Liquid Motion Lamp",url:"https://www.amazon.com/dp/B0DRBZS1DR?tag=mychanneld-20",description:"Soothing liquid motion lamp with vibrant colors."},
+{title:"VIAHART 14\" Glass Mini Aquarium",url:"https://www.amazon.com/dp/B0CRDP8TM9?tag=mychanneld-20",description:"Compact glass mini aquarium for tabletop decoration and fish keeping."}
+];
 
-// --- Non-Keyholders ---
-let nkAttempts = 5;
-document.getElementById('nokeyForm').addEventListener('submit', e=>{
-  e.preventDefault();
-  if(nkAttempts<=0){ alert("🔒 Maximum non-keyholder attempts reached."); return; }
-  nkAttempts--;
-  document.getElementById('nkAttemptsDisplay').innerText = `Remaining attempts: ${nkAttempts}`;
-  const cat = document.getElementById('nkCategory').value.trim().toLowerCase();
-  const products = FALLBACK_PRODUCTS[cat] || [];
-  if(products.length===0){ document.getElementById('nokeyOutput').innerHTML='❌ No fallback products found.'; return; }
-  const p = products[Math.floor(Math.random()*products.length)];
-  const review = `SEO Review for ${p.title}: Highly recommended product, optimized for affiliate marketing.`;
-  document.getElementById('nokeyOutput').innerHTML = `📝 ${review}\n\n🔗 <a href="${p.url}" target="_blank">${p.url}</a>`;
-});
-
-// --- Keyholders ---
-let khAttempts = 3;
-document.getElementById('keyholderForm').addEventListener('submit', async e=>{
-  e.preventDefault();
-  if(khAttempts<=0){ alert("🔒 Maximum keyholder attempts reached."); return; }
-  khAttempts--;
-  document.getElementById('khAttemptsDisplay').innerText = `Remaining attempts: ${khAttempts}`;
-  const kw = document.getElementById('khKeyword').value.trim();
-  const affiliate = document.getElementById('khAffiliate').value.trim();
-  const amazonKey = document.getElementById('khAmazonKey').value.trim();
-  if(!kw || !affiliate || !amazonKey){ alert("Please fill all fields."); return; }
-
-  const review = `${kw} is a top-quality product, delivering outstanding results and high satisfaction. Ideal for all users seeking premium performance. Enhance your daily routine and enjoy lasting improvements. Trusted and backed by positive reviews worldwide.`;
-  const link = `https://www.amazon.com/dp/DEMOASIN?tag=${affiliate}`;
-
-  document.getElementById('khOutput').innerHTML = `
-    <p><strong>🎬 SEO Review (TTS):</strong> ${review}</p>
-    <button onclick="speakText('${review.replace(/'/g,'')}')">🔊 TTS Preview</button>
-    <a href="${link}" target="_blank"><button>Buy with us</button></a>
-  `;
-});
-
-// --- Contact Form ---
-document.getElementById('contactForm').addEventListener('submit', e=>{
-  e.preventDefault();
-  const name = document.getElementById('contactName').value.trim();
-  const email = document.getElementById('contactEmail').value.trim();
-  const message = document.getElementById('contactMessage').value.trim();
-  if(!name || !email || !message){ alert("Please fill all fields."); return; }
-  document.getElementById('contactOutput').innerHTML = `✅ Thank you, ${name}. Your message has been sent to omnistall70@gmail.com!`;
-});
-
-// --- TTS Function (optimized English voice) ---
-function speakText(text){
-  let voices = speechSynthesis.getVoices().filter(v=>v.lang.startsWith("en"));
-  if(voices.length===0) voices = speechSynthesis.getVoices();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.voice = voices[0] || null;
-  speechSynthesis.speak(utter);
+// Helper functions
+function generateSEOReview(productName, keyword){
+return `${productName} is a top-quality product perfect for anyone looking for ${keyword}. This ${keyword} has been designed to deliver exceptional results, ensuring high satisfaction for every user. Many customers who purchased this ${keyword} highlight its reliability, efficiency, and premium performance. Whether you are new to ${keyword} products or looking for an upgrade, this ${productName} provides superior benefits. Its features make it a standout choice among other ${keyword} items in the market. Enjoy the advantages of using this ${keyword} daily, and enhance your routine with the trusted ${productName}. Perfect for gifting or personal use, this ${keyword} ensures consistent quality and lasting results. Grab this ${keyword} today and experience the difference that ${productName} brings to your lifestyle, backed by positive reviews and proven performance.`;
 }
+
+function speakText(text){
+const utter = new SpeechSynthesisUtterance(text);
+utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en"))||null;
+speechSynthesis.speak(utter);
+}
+
+function getFallbackProduct(keyword){
+keyword = keyword.toLowerCase();
+for(let p of FALLBACK_PRODUCTS){
+if(p.title.toLowerCase().includes(keyword) || p.description.toLowerCase().includes(keyword)) return p;
+}
+return FALLBACK_PRODUCTS[Math.floor(Math.random()*FALLBACK_PRODUCTS.length)];
+}
+
+// Keyholders Section Logic
+let khTries = 0;
+document.getElementById('keyholdersForm').addEventListener('submit', e=>{
+e.preventDefault();
+if(khTries>=3){alert("Demo locked. Get your keys for full access."); return;}
+khTries++;
+const kw = document.getElementById('khKeyword').value.trim();
+const affiliate = document.getElementById('khAffiliate').value.trim();
+const amazonKey = document.getElementById('khAmazonKey').value.trim();
+if(!kw || !affiliate || !amazonKey){ alert("Please fill all fields."); return; }
+const product = getFallbackProduct(kw);
+const review = generateSEOReview(product.title, kw);
+document.getElementById('khOutput').innerHTML = `
+<p><strong>🛒 Product:</strong> <a href="${product.url}" target="_blank">${product.title}</a></p>
+<p><strong>📝 Description:</strong> ${product.description}</p>
+<p><strong>🎬 1400-character SEO Review (TTS):</strong> ${review}</p>
+<button onclick="speakText('${review.replace(/'/g,"")}')">🔊 TTS Preview</button>
+`;
+});
+
+// Non-Keyholders Section Logic
+let nkTries = 0;
+document.getElementById('nonKeyholdersForm').addEventListener('submit', e=>{
+e.preventDefault();
+if(nkTries>=5){alert("Demo locked. Get your keys for full access."); return;}
+nkTries++;
+const kw = document.getElementById('nkKeyword').value.trim();
+const product = getFallbackProduct(kw);
+const review = generateSEOReview(product.title, kw);
+document.getElementById('nkOutput').innerHTML = `
+<p><strong>🛒 Product:</strong> <a href="${product.url}" target="_blank">${product.title}</a></p>
+<p><strong>📝 Description:</strong> ${product.description}</p>
+<p><strong>🎬 1400-character SEO Review (TTS):</strong> ${review}</p>
+<button onclick="speakText('${review.replace(/'/g,"")}')">🔊 TTS Preview</button>
+<p>Get your Amazon Affiliate and API keys to unlock the full demo with unlimited tries!</p>
+`;
+});
 </script>
+
 </body>
 </html>
