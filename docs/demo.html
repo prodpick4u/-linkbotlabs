@@ -69,6 +69,31 @@
     .tab.active { background: #00ffaa; color: #000; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
+    img { display:block; margin-bottom:10px; border-radius:10px; }
+    a { text-decoration: none; }
+
+    /* Pulsing CTA Button */
+    .pulse-button {
+      padding:15px 25px;
+      background:#00ffaa;
+      color:#000;
+      font-weight:bold;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      box-shadow: 0 0 0px #00ffaa;
+      animation: pulse 1.5s infinite;
+      transition: transform 0.2s;
+      font-size:16px;
+    }
+    .pulse-button:hover {
+      transform: scale(1.05);
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0px #00ffaa; }
+      50% { box-shadow: 0 0 20px #00ffaa; }
+      100% { box-shadow: 0 0 0px #00ffaa; }
+    }
   </style>
 </head>
 <body>
@@ -86,7 +111,7 @@
     <h2>⚡ Quick Try (No Keys Needed)</h2>
     <form onsubmit="runLiteDemo(event)">
       <label>Keyword:
-        <input id="liteKeyword" type="text" placeholder="e.g. headphones" required>
+        <input id="liteKeyword" type="text" placeholder="e.g. blender" required>
       </label>
       <button type="submit">Run Demo</button>
     </form>
@@ -98,7 +123,7 @@
     <h2>🔑 Full Demo (With Keys)</h2>
     <form onsubmit="runFullDemo(event)">
       <label>Keyword:
-        <input id="fullKeyword" type="text" placeholder="e.g. headphones" required>
+        <input id="fullKeyword" type="text" placeholder="e.g. blender" required>
       </label>
       <label>Amazon Affiliate Tag:
         <input id="affiliate" type="text" placeholder="yourtag-20" required>
@@ -123,67 +148,94 @@
       document.getElementById(tab).classList.add("active");
     }
 
-    // --- Fake Product DB for Demo ---
+    // --- Demo Product DB ---
     const demoProducts = [
-      { keywords:["headphones","earphones"], asin:"B09JQZ5T4S", name:"Sony WH-1000XM5 Noise Cancelling Headphones" },
-      { keywords:["vacuum","robot","hoover"], asin:"B0XYZ123", name:"Robot Vacuum X20+" },
-      { keywords:["moisturizer","skincare"], asin:"B01N1SE4EP", name:"La Roche-Posay Toleriane Double Repair Face Moisturizer" }
+      { keywords:["headphones","earphones"], asin:"B09JQZ5T4S", name:"Sony WH-1000XM5 Noise Cancelling Headphones", image:"https://images-na.ssl-images-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg" },
+      { keywords:["vacuum","robot","hoover"], asin:"B0XYZ123", name:"Robot Vacuum X20+", image:"https://images-na.ssl-images-amazon.com/images/I/71m3yF64eHL._AC_SL1500_.jpg" },
+      { keywords:["moisturizer","skincare"], asin:"B01N1SE4EP", name:"La Roche-Posay Toleriane Double Repair Face Moisturizer", image:"https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg" },
+      { keywords:["blender","smoothie"], asin:"B07T7H3Z7H", name:"Ninja Professional Blender 1000W", image:"https://images-na.ssl-images-amazon.com/images/I/71RkGkEj8fL._AC_SL1500_.jpg" }
     ];
-    const fallback = [
-      { asin:"B07FZ8S74R", name:"Echo Dot (4th Gen)" },
-      { asin:"B08KTZ8249", name:"Kindle Paperwhite" }
-    ];
+
+    const defaultProduct = {
+      asin: "B07T7H3Z7H",
+      name: "Ninja Professional Blender 1000W",
+      description: "A top-rated kitchen blender loved by thousands of users for smoothies, soups, and sauces!",
+      image: "https://images-na.ssl-images-amazon.com/images/I/71RkGkEj8fL._AC_SL1500_.jpg"
+    };
 
     function findProduct(keyword) {
       keyword = keyword.toLowerCase();
       for (let p of demoProducts) {
         if (p.keywords.some(k => keyword.includes(k))) return p;
       }
-      return fallback[Math.floor(Math.random()*fallback.length)];
+      return defaultProduct;
     }
 
-    // --- Lite Demo (no keys) ---
+    // --- Lite Demo One-Time Use with Pulsing Launching Soon CTA ---
+    let liteDemoUsed = false;
+
     function runLiteDemo(e) {
       e.preventDefault();
+
+      if (liteDemoUsed) {
+        document.getElementById("liteOutput").innerHTML = `
+⚠️ You’ve already tried the Lite Demo!<br><br>
+<div style="margin-top:10px; text-align:center;">
+  <button class="pulse-button" onclick="alert('Desktop Demo and Full Paid Version launching soon! Stay tuned!')">
+    🚀 Launching Soon
+  </button>
+</div>
+        `;
+        return;
+      }
+
+      liteDemoUsed = true;
+
       const kw = document.getElementById("liteKeyword").value;
       const product = findProduct(kw);
-      const description = `The ${product.name} is a popular choice on Amazon. It offers great features and value for money.`;
-      const script = `Hi everyone! Today we're reviewing the ${product.name}.`;
+
+      const description = `${product.name} is a top choice for anyone interested in ${kw}! Fast, powerful, and highly rated.`;
+      const script = `Hi everyone! Check out the ${product.name}, perfect for ${kw}. Grab yours now!`;
 
       document.getElementById("liteOutput").innerHTML = `
+<img src="${product.image}" alt="${product.name}" width="200">
 🛒 Product: ${product.name}
 📝 Description: ${description}
 🎬 Script: ${script}
-<button onclick="speakText('${description.replace(/'/g,"")}')">🔊 TTS Preview</button>
+<button onclick="speakText('${script.replace(/'/g,"")}')">🔊 TTS Preview</button>
       `;
+
+      document.getElementById("liteKeyword").disabled = true;
+      e.target.querySelector("button").disabled = true;
     }
 
-    // --- Full Demo (with keys, simulated fetch) ---
+    // --- Full Demo ---
     function runFullDemo(e) {
       e.preventDefault();
       const kw = document.getElementById("fullKeyword").value;
       const affiliate = document.getElementById("affiliate").value.trim();
       const amazonKey = document.getElementById("amazonKey").value.trim();
       const ytKey = document.getElementById("ytapi").value.trim();
-
       const product = findProduct(kw);
       const link = `https://www.amazon.com/dp/${product.asin}?tag=${encodeURIComponent(affiliate)}`;
-      const description = `The ${product.name} is a highly rated product. Normally we’d fetch live details with your Amazon API key (${amazonKey.substring(0,6)}...).`;
-      const script = `Hi everyone! Today we're reviewing the ${product.name}. Grab yours here: ${link}`;
+
+      const description = `${product.name} is a top-rated product. Normally we’d fetch live details with your Amazon API key (${amazonKey.substring(0,6)}...).`;
+      const script = `Hi everyone! Today we're reviewing the ${product.name}, perfect for ${kw}. Grab yours here: ${link}`;
 
       document.getElementById("fullOutput").innerHTML = `
 ✅ Affiliate Tag: ${affiliate}
 ✅ Amazon Key: ${amazonKey.substring(0,6)}... (hidden)
 ✅ YouTube Key: ${ytKey.substring(0,6)}... (hidden)
 
+<img src="${product.image}" alt="${product.name}" width="200">
 🛒 Product: <a href="${link}" target="_blank">${product.name}</a>
 📝 Description: ${description}
 🎬 Script: ${script}
-<button onclick="speakText('${description.replace(/'/g,"")}')">🔊 TTS Preview</button>
+<button onclick="speakText('${script.replace(/'/g,"")}')">🔊 TTS Preview</button>
       `;
     }
 
-    // --- Simple browser TTS ---
+    // --- TTS ---
     function speakText(text) {
       const utter = new SpeechSynthesisUtterance(text);
       utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en")) || null;
