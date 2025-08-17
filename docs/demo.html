@@ -71,8 +71,6 @@
     .tab-content.active { display: block; }
     img { display:block; margin-bottom:10px; border-radius:10px; }
     a { text-decoration: none; }
-    .product-list { display:flex; flex-wrap:wrap; gap:20px; margin-top:15px; }
-    .product-list div { width:180px; text-align:center; }
     .pulse-button {
       padding:15px 25px;
       background:#00ffaa;
@@ -135,11 +133,6 @@
   <div id="fullOutput" class="output"></div>
 </div>
 
-<div id="homepage-products" class="glass">
-  <h2>🏠 Featured Products</h2>
-  <div class="product-list" id="homepage-product-list"></div>
-</div>
-
 <div id="support" class="glass">
   <h2>💖 Support This Project</h2>
   <p>
@@ -160,13 +153,13 @@
   }
 
   const demoProducts = [
-    {keywords:["headphones","earphones"], asin:"B09JQZ5T4S", name:"Sony WH-1000XM5 Headphones", image:"https://images-na.ssl-images-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B09JQZ5T4S?tag=YOURTAG-20"},
-    {keywords:["vacuum","robot","hoover"], asin:"B0XYZ123", name:"Robot Vacuum X20+", image:"https://images-na.ssl-images-amazon.com/images/I/71m3yF64eHL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B0XYZ123?tag=YOURTAG-20"},
-    {keywords:["moisturizer","skincare"], asin:"B01N1SE4EP", name:"La Roche-Posay Toleriane Double Repair Face Moisturizer", image:"https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B01N1SE4EP?tag=YOURTAG-20"},
-    {keywords:["blender","smoothie"], asin:"B07T7H3Z7H", name:"Ninja Professional Blender 1000W", image:"https://images-na.ssl-images-amazon.com/images/I/71RkGkEj8fL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B07T7H3Z7H?tag=YOURTAG-20"}
+    {keywords:["headphones","earphones"], asin:"B09JQZ5T4S", name:"Sony WH-1000XM5 Headphones", image:"https://images-na.ssl-images-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B09JQZ5T4S?tag=YOURTAG-20", desc:"Industry-leading noise cancellation, crystal-clear sound, and all-day comfort."},
+    {keywords:["vacuum","robot","hoover"], asin:"B0XYZ123", name:"Robot Vacuum X20+", image:"https://images-na.ssl-images-amazon.com/images/I/71m3yF64eHL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B0XYZ123?tag=YOURTAG-20", desc:"Hands-free cleaning with smart navigation and powerful suction."},
+    {keywords:["moisturizer","skincare"], asin:"B01N1SE4EP", name:"La Roche-Posay Toleriane Double Repair Face Moisturizer", image:"https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B01N1SE4EP?tag=YOURTAG-20", desc:"Dermatologist-tested moisturizer with ceramides and niacinamide for healthy skin."},
+    {keywords:["blender","smoothie"], asin:"B07T7H3Z7H", name:"Ninja Professional Blender 1000W", image:"https://images-na.ssl-images-amazon.com/images/I/71RkGkEj8fL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B07T7H3Z7H?tag=YOURTAG-20", desc:"Crushes ice and blends smoothies with 1000 watts of professional power."}
   ];
 
-  const defaultProduct = {name:"Ninja Professional Blender 1000W", image:"https://images-na.ssl-images-amazon.com/images/I/71RkGkEj8fL._AC_SL1500_.jpg", affiliate:"https://www.amazon.com/dp/B07T7H3Z7H?tag=YOURTAG-20"};
+  const defaultProduct = demoProducts[3]; // fallback blender
 
   function findProduct(keyword) {
     keyword = keyword.toLowerCase();
@@ -187,14 +180,15 @@
     liteDemoUsed = true;
     const kw = document.getElementById("liteKeyword").value;
     const product = findProduct(kw);
-    const description = `${product.name} is perfect for anyone interested in ${kw}! Highly rated and loved by users.`;
-    const script = `Check out the ${product.name}, perfect for ${kw}. Grab yours now!`;
+
+    const description = `${product.desc}`;
+    const script = `Discover the ${product.name}! Perfect if you're looking for ${kw}. Grab yours today.`;
 
     document.getElementById("liteOutput").innerHTML = `
       <img src="${product.image}" width="200" alt="${product.name}">
-      🛒 Product: <a href="${product.affiliate}" target="_blank">${product.name}</a>
-      📝 Description: ${description}
-      🎬 Script: ${script}
+      <p><strong>🛒 Product:</strong> <a href="${product.affiliate}" target="_blank">${product.name}</a></p>
+      <p><strong>📝 Description:</strong> ${description}</p>
+      <p><strong>🎬 Script:</strong> ${script}</p>
       <button onclick="speakText('${script.replace(/'/g,"")}')">🔊 TTS Preview</button>
       <a href="${product.affiliate}" target="_blank"><button>Buy with us</button></a>
     `;
@@ -208,18 +202,20 @@
     const affiliate = document.getElementById("affiliate").value.trim();
     const amazonKey = document.getElementById("amazonKey").value.trim();
     const ytKey = document.getElementById("ytapi").value.trim();
+
     const product = findProduct(kw);
     const link = `https://www.amazon.com/dp/${product.asin}?tag=${encodeURIComponent(affiliate)}`;
-    const description = `${product.name} is a top-rated product. Normally we’d fetch live details with your Amazon API key.`;
-    const script = `Today we're reviewing ${product.name}, perfect for ${kw}. Grab yours here: ${link}`;
+    const description = `${product.desc} (Live details would load with your Amazon API key.)`;
+    const script = `Today we're reviewing the ${product.name}, a great choice for ${kw}. Check it out here: ${link}`;
+
     document.getElementById("fullOutput").innerHTML = `
 ✅ Affiliate Tag: ${affiliate}<br>
 ✅ Amazon Key: ${amazonKey.substring(0,6)}... (hidden)<br>
 ✅ YouTube Key: ${ytKey.substring(0,6)}... (hidden)<br><br>
 <img src="${product.image}" width="200" alt="${product.name}">
-🛒 Product: <a href="${link}" target="_blank">${product.name}</a>
-📝 Description: ${description}
-🎬 Script: ${script}
+<p><strong>🛒 Product:</strong> <a href="${link}" target="_blank">${product.name}</a></p>
+<p><strong>📝 Description:</strong> ${description}</p>
+<p><strong>🎬 Script:</strong> ${script}</p>
 <button onclick="speakText('${script.replace(/'/g,"")}')">🔊 TTS Preview</button>
 <a href="${link}" target="_blank"><button>Buy with us</button></a>
     `;
@@ -230,17 +226,6 @@
     utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en")) || null;
     speechSynthesis.speak(utter);
   }
-
-  const homepageList = document.getElementById("homepage-product-list");
-  demoProducts.forEach(p=>{
-    homepageList.innerHTML += `
-      <div>
-        <img src="${p.image}" width="150" alt="${p.name}">
-        <p>${p.name}</p>
-        <a href="${p.affiliate}" target="_blank"><button>Buy with us</button></a>
-      </div>
-    `;
-  });
 </script>
 
 </body>
