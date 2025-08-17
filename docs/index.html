@@ -105,12 +105,16 @@
 <script>
   // --- Daily rotating YouTube video from your channel ---
   const videoIDs = [
-    "T81maTrI-kw",  // example video 1
-    "dQw4w9WgXcQ",  // example video 2
-    "3JZ_D3ELwOQ"   // example video 3
+    "GL7Rklp4jhM",
+    "GVtN9ZgYsQc",
+    "T81maTrI-kw",
+    "GzAH6IK4aW8",
+    "9gNanC4o1BQ",
+    "qwfACbh93M0"
   ];
-  const randomVideo = videoIDs[Math.floor(Math.random() * videoIDs.length)];
-  document.getElementById("ytEmbed").src = `https://www.youtube.com/embed/${randomVideo}?autoplay=1&mute=1`;
+  const day = new Date().getDate();
+  const videoIndex = day % videoIDs.length;
+  document.getElementById("ytEmbed").src = `https://www.youtube.com/embed/${videoIDs[videoIndex]}?autoplay=1&mute=1`;
 </script>
 
 </body>
