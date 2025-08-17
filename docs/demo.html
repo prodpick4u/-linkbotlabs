@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prodpick4U Demo – Full TTS Review</title>
+  <title>Prodpick4U Demo – SEO 1400 Character TTS Review</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
   <style>
     body { margin:0; padding:2rem; font-family:'Inter',sans-serif; background:linear-gradient(-45deg,#20002c,#6f00ff,#0a0a2a,#001f4d); color:#fff; background-size:400% 400%; animation: gradientShift 15s ease infinite;}
@@ -16,15 +16,24 @@
     button:hover{background:#00cc88;}
     .output{background:rgba(0,0,0,0.8); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap;}
     img{max-width:200px;border-radius:10px;margin-bottom:10px;}
+    a { color:#00ffaa; text-decoration:none; }
     .pulse-button{padding:15px 25px;background:#00ffaa;color:#000;font-weight:bold;border:none;border-radius:8px;cursor:pointer;box-shadow:0 0 0px #00ffaa;animation:pulse 1.5s infinite;transition: transform 0.2s;font-size:16px;}
     .pulse-button:hover{transform: scale(1.05);}
     @keyframes pulse{0%{box-shadow:0 0 0px #00ffaa;}50%{box-shadow:0 0 20px #00ffaa;}100%{box-shadow:0 0 0px #00ffaa;}}
+    .affiliate-banner {text-align:center; margin-bottom:1rem; background: rgba(58, 178, 255, 0.2); padding:10px; border-radius:10px;}
   </style>
 </head>
 <body>
 
-<h1>🧪 Prodpick4U Demo – Full 1400 Character TTS Review</h1>
-<p>Enter your product keyword and keys below. This demo will grab the product, generate a 1400-character review, and create a TTS preview. For the full version, try the desktop demo below.</p>
+<h1>🧪 Prodpick4U Demo – SEO 1400 Character TTS Review</h1>
+<p>Enter your product keyword and keys below. This demo will grab a matching product, generate a **SEO-optimized 1400-character review**, and create a TTS preview. For the full version, try the desktop demo below.</p>
+
+<div class="affiliate-banner glass">
+  🎉 New to Amazon Affiliate? 
+  <a href="YOUR_AFFILIATE_REGISTRATION_LINK" target="_blank">
+    Register here and get 10% OFF the full version!
+  </a>
+</div>
 
 <div class="glass">
   <form id="demoForm">
@@ -48,43 +57,52 @@
 </div>
 
 <script>
-async function fetchAmazonProduct(keyword, amazonKey, affiliate) {
-  // Placeholder: replace with actual Amazon Product API integration
-  // For demo, we return a fixed product matching your keyword
-  const productData = {
-    name: "La Roche-Posay Toleriane Double Repair Face Moisturizer",
-    image: "https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg",
-    description: "Dermatologist-tested moisturizer with ceramides and niacinamide, perfect for daily skin hydration and repair.",
-    link: `https://www.amazon.com/dp/B01N1SE4EP?tag=${affiliate}`
-  };
+const demoProducts = [
+  {keywords: ["face cream","moisturizer","skincare"], name:"La Roche-Posay Toleriane Double Repair Face Moisturizer", image:"https://images-na.ssl-images-amazon.com/images/I/71a3e5ZgGgL._AC_SL1500_.jpg"},
+  {keywords: ["blender","smoothie","kitchen"], name:"Ninja Professional Blender 1000W", image:"https://images-na.ssl-images-amazon.com/images/I/71RkGkEj8fL._AC_SL1500_.jpg"},
+  {keywords: ["headphones","earphones","audio"], name:"Sony WH-1000XM5 Headphones", image:"https://images-na.ssl-images-amazon.com/images/I/71o8Q5XJS5L._AC_SL1500_.jpg"},
+  {keywords: ["vacuum","robot","cleaning"], name:"Robot Vacuum X20+", image:"https://images-na.ssl-images-amazon.com/images/I/71m3yF64eHL._AC_SL1500_.jpg"}
+];
 
-  // Generate 1400-character review for TTS
-  const review = `${productData.name} is a premium skincare solution that offers deep hydration and skin barrier repair. Formulated with ceramides and niacinamide, it helps soothe sensitive skin, reduce redness, and maintain optimal moisture levels throughout the day. Users love its lightweight, non-greasy texture, fast absorption, and long-lasting effects. Ideal for all skin types, this moisturizer provides a perfect base for makeup or a refreshing finish after cleansing. Experience healthier, more radiant skin with every application, and enjoy the clinically tested formula trusted by dermatologists worldwide. Perfect for daily use, this product enhances skin texture, restores balance, and improves overall skin health, giving your face a smooth and youthful appearance. Grab yours today through the affiliate link for guaranteed authenticity and free shipping options.`;
-
-  return {...productData, review};
+function matchProduct(keyword){
+  keyword = keyword.toLowerCase();
+  for(let p of demoProducts){
+    if(p.keywords.some(k=>keyword.includes(k))) return p;
+  }
+  return demoProducts[0];
 }
 
-document.getElementById('demoForm').addEventListener('submit', async e => {
+function generateSEOReview(productName, keyword){
+  return `${productName} is a top-quality product perfect for anyone looking for ${keyword}. This ${keyword} has been designed to deliver exceptional results, ensuring high satisfaction for every user. Many customers who purchased this ${keyword} highlight its reliability, efficiency, and premium performance. Whether you are new to ${keyword} products or looking for an upgrade, this ${productName} provides superior benefits. Its features make it a standout choice among other ${keyword} items in the market. Enjoy the advantages of using this ${keyword} daily, and enhance your routine with the trusted ${productName}. Perfect for gifting or personal use, this ${keyword} ensures consistent quality and lasting results. Grab this ${keyword} today and experience the difference that ${productName} brings to your lifestyle, backed by positive reviews and proven performance.`;
+}
+
+async function fetchAmazonProduct(keyword, amazonKey, affiliate){
+  const product = matchProduct(keyword);
+  const description = `Top-rated ${product.name}. Perfect choice for ${keyword}.`;
+  const review = generateSEOReview(product.name, keyword);
+  const link = `https://www.amazon.com/dp/DEMOASIN?tag=${affiliate}`;
+  return {...product, description, review, link};
+}
+
+document.getElementById('demoForm').addEventListener('submit', async e=>{
   e.preventDefault();
   const kw = document.getElementById('keyword').value.trim();
   const affiliate = document.getElementById('affiliate').value.trim();
   const amazonKey = document.getElementById('amazonKey').value.trim();
+  if(!kw || !affiliate || !amazonKey){ alert("Please fill all fields."); return; }
 
-  if (!kw || !affiliate || !amazonKey) { alert("Please fill all fields."); return; }
-
-  document.getElementById('output').innerHTML = '⏳ Fetching product and generating 1400-character review...';
-
-  try {
+  document.getElementById('output').innerHTML = '⏳ Fetching product and generating SEO 1400-character review...';
+  try{
     const product = await fetchAmazonProduct(kw, amazonKey, affiliate);
     document.getElementById('output').innerHTML = `
       <img src="${product.image}" alt="${product.name}">
       <p><strong>🛒 Product:</strong> <a href="${product.link}" target="_blank">${product.name}</a></p>
       <p><strong>📝 Description:</strong> ${product.description}</p>
-      <p><strong>🎬 1400-character Review (TTS):</strong> ${product.review}</p>
+      <p><strong>🎬 1400-character SEO Review (TTS):</strong> ${product.review}</p>
       <button onclick="speakText('${product.review.replace(/'/g,'')}')">🔊 TTS Preview</button>
       <a href="${product.link}" target="_blank"><button>Buy with us</button></a>
     `;
-  } catch (err) {
+  } catch(err){
     document.getElementById('output').innerHTML = '❌ Error fetching product or generating review.';
     console.error(err);
   }
