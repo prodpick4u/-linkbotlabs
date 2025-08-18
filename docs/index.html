@@ -1,158 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prodpick4U – Smart Shopping Assistant</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      background: linear-gradient(135deg, #1a0033, #4a00e0, #0a0a2a, #001f4d);
-      color: white;
-      line-height: 1.6;
-    }
-    header {
-      text-align: center;
-      padding: 3rem 1rem;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(10px);
-    }
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      color: #9cf;
-    }
-    header p {
-      font-size: 1.2rem;
-      opacity: 0.9;
-      margin-bottom: 2rem;
-    }
-    .btn {
-      display: inline-block;
-      margin: 0.5rem;
-      padding: 0.8rem 1.5rem;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: 0.3s;
-    }
-    .btn:hover {
-      opacity: 0.85;
-    }
-    section {
-      padding: 3rem 1rem;
-      text-align: center;
-      max-width: 1100px;
-      margin: auto;
-    }
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-      color: #9cf;
-    }
-    h3 {
-      color: #b0d4ff;
-    }
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1rem;
-    }
-    .categories a {
-      flex: 1 1 150px;
-      max-width: 200px;
-      background: rgba(255,255,255,0.1);
-      padding: 1rem;
-      border-radius: 10px;
-      color: white;
-      font-weight: 600;
-      text-decoration: none;
-      transition: transform 0.2s, background 0.3s;
-    }
-    .categories a:hover {
-      transform: scale(1.05);
-      background: rgba(255,255,255,0.2);
-    }
-    iframe {
-      border-radius: 10px;
-      margin-top: 1rem;
-    }
-    footer {
-      background: rgba(0,0,0,0.4);
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-      color: #9cf;
-    }
-    .testimonials p {
-      font-style: italic;
-      margin-bottom: 1rem;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prodpick4u Mobile Demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+<style>
+body {
+  font-family: 'Inter', sans-serif;
+  margin:0; padding:1rem;
+  background: linear-gradient(-45deg,#20002c,#6f00ff,#0a0a2a,#001f4d);
+  background-size:400% 400%;
+  animation: gradientShift 15s ease infinite;
+  color:#fff;
+}
+@keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+h1,h2,h3{color:#9cf;}
+.glass{background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:1rem;}
+input,select,button{width:100%;padding:10px;margin:6px 0;border-radius:5px;border:none;}
+input,select{background:rgba(20,20,20,0.7);color:#fff;}
+button{background:linear-gradient(135deg,#6a11cb,#2575fc);color:#fff;font-weight:bold;cursor:pointer;transition:0.3s;}
+button:hover{opacity:0.85;}
+.output{background:rgba(0,0,0,0.8);padding:15px;border-radius:8px;margin-top:10px;white-space:pre-wrap;color:#0f0;}
+h3{margin-top:1rem;}
+.category-product{margin:8px 0;padding:8px;background:rgba(255,255,255,0.1);border-radius:6px;}
+a{color:#9cf;text-decoration:none;}
+a:hover{text-decoration:underline;}
+.banner{background:rgba(0,0,0,0.6);padding:12px;border-radius:8px;margin-bottom:1rem;text-align:center;font-weight:bold;}
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>🚀 Welcome to Prodpick4U</h1>
-    <p>Your AI-powered shopping tool to generate SEO-optimized reviews, TTS previews, and clickable affiliate links.</p>
+<h1>🚀 Prodpick4u Mobile Demo</h1>
+<div class="banner">
+⚠️ This is a short mobile demo only. Video generation and upload do NOT run here. Use the Desktop Demo (keyholders) for full features. Full release launching soon!
+</div>
 
-    <!-- Top Featured Video -->
-    <div style="max-width:800px;margin:2rem auto;">
-      <iframe width="100%" height="400" src="https://www.youtube.com/embed/GVtN9ZgYsQc" 
-        title="Prodpick4U Overview Video" frameborder="0" allowfullscreen></iframe>
-    </div>
+<div class="glass">
+<h2>🔑 Keyholders Demo</h2>
+<p>Enter your API keys in the full desktop version to unlock unlimited product searches, TTS video generation, and YouTube upload.</p>
+<button onclick="alert('Desktop Keyholders app required for full demo')">Try Full Version</button>
+</div>
 
-    <a href="demo.html" class="btn">Try Demo</a>
-    <a href="https://drive.google.com/" class="btn">Download Desktop Demo</a>
-    <a href="https://fiverr.com/" class="btn">Get Full Version on Fiverr</a>
-    <a href="https://github.com/prodpick4u/Prodpick4u" class="btn">View on GitHub</a>
-    <a href="https://prodpick4u.blogspot.com" class="btn">Read Our Blog</a>
-  </header>
+<div class="glass">
+<h2>🛒 Keyless Demo (Trial)</h2>
+<p>Select a category to see clickable products and generate a demo TTS review (1400 characters).</p>
+<label>Category:
+<select id="categorySelect">
+  <option value="">-- Select Category --</option>
+  <option value="blender">Blender</option>
+  <option value="supplement">Supplement</option>
+  <option value="ricecooker">Rice Cooker</option>
+  <option value="facecream">Face Cream</option>
+  <option value="headphones">Headphones</option>
+  <option value="kitchen">Kitchen</option>
+  <option value="tech">Tech</option>
+</select>
+</label>
 
-  <section>
-    <h2>📂 Shop by Category</h2>
-    <div class="categories">
-      <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
-      <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
-      <a href="https://www.amazon.com/s?k=blender&tag=mychanneld-20">🥤 Blenders</a>
-      <a href="https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20">🍚 Rice Cookers</a>
-      <a href="https://www.amazon.com/s?k=headphones&tag=mychanneld-20">🎧 Headphones</a>
-      <a href="https://www.amazon.com/s?k=kitchen+gadgets&tag=mychanneld-20">🍴 Kitchen Tools</a>
-      <a href="https://www.amazon.com/s?k=tech+gadgets&tag=mychanneld-20">📱 Tech Gadgets</a>
-    </div>
+<div id="productList"></div>
+<div id="reviewOutput" class="output"></div>
+</div>
 
-    <!-- Demo Tool Video after categories -->
-    <div style="max-width:800px;margin:3rem auto;">
-      <h3>🎬 See How Reviews Are Generated With Prodpick4U</h3>
-      <iframe width="100%" height="400" src="https://www.youtube.com/embed/qwfACbh93M0" 
-        title="Demo Tool Video" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </section>
+<script>
+// Fallback products by category
+const FALLBACK_PRODUCTS = {
+  blender:[{name:"Ninja Professional Blender 1000W",url:"https://www.amazon.com/s?k=blender&tag=mychanneld-20",desc:"Powerful blender for smoothies and shakes."}],
+  supplement:[{name:"Methylene Blue",url:"https://www.amazon.com/dp/B08XXXX?tag=mychanneld-20",desc:"Supports mitochondrial function and cognition."}],
+  ricecooker:[{name:"Instant Pot Duo 7-in-1",url:"https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20",desc:"Multi-functional pressure cooker."}],
+  facecream:[{name:"La Roche-Posay Toleriane Double Repair",url:"https://www.amazon.com/s?k=face+cream&tag=mychanneld-20",desc:"Hydrating facial moisturizer."}],
+  headphones:[{name:"Sony WH-1000XM5",url:"https://www.amazon.com/s?k=headphones&tag=mychanneld-20",desc:"Noise-cancelling over-ear headphones."}],
+  kitchen:[{name:"Cuisinart 14-Cup Food Processor",url:"https://www.amazon.com/s?k=food+processor&tag=mychanneld-20",desc:"Chop and slice efficiently."}],
+  tech:[{name:"Apple AirPods Pro 2nd Gen",url:"https://www.amazon.com/s?k=airpods&tag=mychanneld-20",desc:"Premium wireless earbuds."}],
+};
 
-  <section>
-    <h2>ℹ️ About Prodpick4U</h2>
-    <p>
-      Prodpick4U makes smart shopping easier and faster. Try the free demo to generate SEO-compliant reviews and TTS previews.  
-      Every purchase through our Amazon links supports the project, and signing up for Amazon Central allows you 10% off the full desktop tool.  
-      <a href="https://affiliate-program.amazon.com/signup" class="btn" target="_blank">Sign Up for Amazon Central Affiliate</a>
-    </p>
-  </section>
+// Generate TTS 1400-character review
+function generateSEOReview(productName, category){
+  return `${productName} is an excellent choice for anyone seeking top-quality ${category} products. Designed for reliability and performance, this ${category} provides remarkable benefits. Customers appreciate its efficiency, convenience, and lasting results. Perfect for daily use or gifting, it enhances your lifestyle. Experience superior performance and satisfaction with ${productName}, and enjoy the positive reviews that confirm its trusted quality and premium design. Upgrade your routine and discover why ${productName} is a standout ${category} option in the market.`;
+}
 
-  <section class="testimonials">
-    <h2>💬 What People Are Saying</h2>
-    <p>“This tool saves me so much time when picking products. Love it!” – Early Tester</p>
-    <p>“Clean, simple, and it actually works. Excited for the full version.” – Beta User</p>
-  </section>
+function speakText(text){
+  if(window.synthPlaying){
+    speechSynthesis.cancel();
+    window.synthPlaying=false;
+    return;
+  }
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en"))||null;
+  speechSynthesis.speak(utter);
+  window.synthPlaying=true;
+  utter.onend=()=>{window.synthPlaying=false;};
+}
 
-  <footer>
-    <p>© 2025 Prodpick4U – Powered by Affiliate Shopping</p>
-    <p>Support the project by shopping with our Amazon links: <a href="https://www.amazon.com/?tag=mychanneld-20" style="color:#9cf;">Amazon Affiliate Link</a></p>
-  </footer>
+document.getElementById('categorySelect').addEventListener('change',function(){
+  const cat=this.value;
+  const listDiv=document.getElementById('productList');
+  listDiv.innerHTML="";
+  document.getElementById('reviewOutput').innerHTML="";
+  if(cat && FALLBACK_PRODUCTS[cat]){
+    FALLBACK_PRODUCTS[cat].forEach(p=>{
+      const div=document.createElement('div');
+      div.className='category-product';
+      div.innerHTML=`<strong><a href="${p.url}" target="_blank">${p.name}</a></strong><br>${p.desc}<br>
+      <button onclick="document.getElementById('reviewOutput').innerText=generateSEOReview('${p.name}','${cat}'); speakText(document.getElementById('reviewOutput').innerText)">Generate TTS 1400-character Review</button>`;
+      listDiv.appendChild(div);
+    });
+  }
+});
+</script>
+
+<div class="glass" style="margin-top:2rem;">
+<p>💡 Want to join the full experience? Sign up at <a href="https://affiliate-program.amazon.com/signup" target="_blank">Amazon Central Affiliate</a> and get 10% off the full desktop version!</p>
+</div>
 
 </body>
 </html>
