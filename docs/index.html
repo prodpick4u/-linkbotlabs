@@ -4,8 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Prodpick4u – Smart Shopping Assistant</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
 <style>
+  /* Body & Background */
   body {
     font-family: 'Inter', sans-serif;
     margin:0; padding:0;
@@ -13,7 +14,7 @@
     background-size: 400% 400%;
     animation: gradientShift 20s ease infinite;
     color:white;
-    line-height:1.6;
+    line-height:1.4;
   }
   @keyframes gradientShift {
     0%{background-position:0% 50%;}
@@ -22,38 +23,54 @@
     75%{background-position:50% 50%;}
     100%{background-position:0% 50%;}
   }
+
+  /* Header */
   header {
     text-align:center;
-    padding:3rem 1rem;
-    background: rgba(0,0,0,0.4);
+    padding:2.5rem 1rem;
+    background: rgba(0,0,0,0.35);
     backdrop-filter: blur(10px);
   }
-  header h1 { font-size:2.8rem; margin-bottom:1rem; }
-  header p { font-size:1.2rem; opacity:0.9; margin-bottom:1rem; }
+  header h1 { font-size:2.6rem; margin-bottom:0.4rem; font-weight:700; }
+  header p { font-size:1.05rem; opacity:0.9; margin-bottom:0.3rem; }
+
+  /* Buttons */
   .btn {
-    display:inline-block; margin:0.5rem; padding:0.8rem 1.5rem;
+    display:inline-block; margin:0.25rem; padding:0.65rem 1.2rem;
     background: linear-gradient(135deg,#6a11cb,#2575fc);
-    color:white; text-decoration:none; border-radius:8px;
-    font-weight:600; transition:0.3s;
+    color:white; text-decoration:none; border-radius:7px;
+    font-weight:600; transition:0.25s; font-size:0.92rem;
   }
   .btn:hover { opacity:0.85; }
-  section { padding:3rem 1rem; text-align:center; max-width:1100px; margin:auto; }
-  h2 { font-size:2rem; margin-bottom:1.5rem; color:#9cf; }
-  .categories { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+
+  /* Sections */
+  section { padding:2rem 1rem; text-align:center; max-width:1100px; margin:auto; }
+  h2 { font-size:1.85rem; margin-bottom:1rem; color:#9cf; font-weight:600; }
+  p { margin-bottom:0.8rem; }
+
+  /* Categories */
+  .categories { display:flex; flex-wrap:wrap; justify-content:center; gap:0.7rem; }
   .categories a {
-    flex:1 1 150px; max-width:200px; background: rgba(0,0,0,0.5);
-    padding:1rem; border-radius:10px; color:white; font-weight:600;
+    flex:1 1 140px; max-width:180px; background: rgba(0,0,0,0.55);
+    padding:0.8rem; border-radius:8px; color:white; font-weight:600;
     text-decoration:none; transition: transform 0.2s, background 0.3s;
+    font-size:0.9rem;
   }
   .categories a:hover {
     transform: scale(1.05);
-    background: rgba(75,0,150,0.7);
+    background: rgba(75,0,150,0.75);
   }
-  iframe { border-radius:10px; margin-bottom:1rem; }
-  footer { background: rgba(0,0,0,0.4); text-align:center; padding:2rem 1rem; font-size:0.9rem; }
+
+  /* Link Box (Shop With Us) */
   .link-box {
-    display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:2rem;
+    display:flex; flex-wrap:wrap; justify-content:center; gap:0.7rem; margin-bottom:1rem;
   }
+
+  /* Iframes */
+  iframe { border-radius:8px; margin-bottom:0.7rem; }
+
+  /* Footer */
+  footer { background: rgba(0,0,0,0.35); text-align:center; padding:1.8rem 1rem; font-size:0.88rem; }
 </style>
 </head>
 <body>
@@ -68,22 +85,22 @@
 
 <section>
   <h2>📺 How It Works</h2>
-  <iframe width="100%" height="400" src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
+  <iframe width="100%" height="330" src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
   <p>This video shows how Prodpick4u generates automated product content and reviews using our tool.</p>
 </section>
 
 <section>
-  <h2>💙 Shop With Us & Support Each Other</h2>
+  <h2>📂 Categories & Support</h2>
+
+  <!-- Shop With Us links above categories -->
   <div class="link-box">
     <a href="https://www.blogger.com/blog/posts/8639219398218448839" class="btn">Read Our Blog</a>
     <a href="https://www.youtube.com/@Prodpick4u" class="btn">Visit YouTube Channel</a>
     <a href="https://drive.google.com/file/d/1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z/view?usp=drivesdk" class="btn">Desktop Demo</a>
     <a href="https://affiliate-program.amazon.com/signup" class="btn">Amazon Central Affiliate – 10% Off</a>
   </div>
-</section>
 
-<section>
-  <h2>📂 Categories</h2>
+  <!-- Categories -->
   <div class="categories">
     <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
     <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
@@ -97,7 +114,7 @@
 
 <section>
   <h2>📺 Product to Video Automation</h2>
-  <iframe width="100%" height="400" src="https://www.youtube.com/embed/qwfACbh93M0?si=uofVyp2kyYV7EU-H" allowfullscreen></iframe>
+  <iframe width="100%" height="330" src="https://www.youtube.com/embed/qwfACbh93M0?si=uofVyp2kyYV7EU-H" allowfullscreen></iframe>
   <p>This video demonstrates how a product is automatically converted into a full video using Prodpick4u.</p>
 </section>
 
@@ -111,7 +128,7 @@
   <h2>📧 Contact Us</h2>
   <p>Have questions or feedback? Reach out to us:</p>
   <form onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
-    <input type="email" placeholder="Your email" required style="padding:10px; width:300px; border-radius:5px; border:none; margin-right:10px;">
+    <input type="email" placeholder="Your email" required style="padding:10px; width:280px; border-radius:5px; border:none; margin-right:8px;">
     <button type="submit" class="btn">Send</button>
   </form>
   <p>📧 omnistall70@gmail.com</p>
