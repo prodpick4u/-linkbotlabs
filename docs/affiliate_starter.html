@@ -85,16 +85,13 @@ button:hover { opacity:0.85; }
 <h1>🚀 Prodpick4U Affiliate Starter Page</h1>
 <p style="text-align:center;">Try the demo with our default affiliate links. Once you register, your own Amazon Affiliate tag will be used for all products for 1 week.</p>
 
-<!-- Rent This Space / Purchase Info -->
 <div class="glass">
 <h2 class="section-title">💡 Rent This Space</h2>
 <p>Rent this space with your own affiliate tag automatically included, or purchase the full product and get a 1-week free demo.</p>
 </div>
 
-<!-- Timer -->
 <div id="demoTimer" class="timer"></div>
 
-<!-- Registration Form -->
 <div class="glass">
 <h2 class="section-title">📝 Register Your Affiliate Tag</h2>
 <p>Enter your Amazon Affiliate Tag to replace our links with yours and run your 1-week free demo.</p>
@@ -107,13 +104,11 @@ button:hover { opacity:0.85; }
 <div id="regOutput" class="output"></div>
 </div>
 
-<!-- Product Categories -->
 <div class="glass">
 <h2 class="section-title">🗝️ Products & Blogs – Default Fallback</h2>
 <div id="productOutput" class="output"></div>
 </div>
 
-<!-- AI Q&A Bot -->
 <div class="glass">
 <h2 class="section-title">🤖 Ask the Bot</h2>
 <div id="chatBox" class="chat-box"></div>
@@ -133,38 +128,38 @@ const FALLBACK_PRODUCTS = {
     {title:"Theragun Elite Handheld Percussive Therapy Device", url:"https://amzn.to/3Hm7HiH", price:"$299.00", description:"Deep muscle treatment massage device."},
     {title:"Methylene Blue", url:"https://amzn.to/4ldkJwL", price:"Varies", description:"Supplement researched for mitochondrial support and cognitive function."},
     {title:"Irish Sea Moss", url:"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20", price:"Varies", description:"Rich in iodine and essential minerals for immune and thyroid support."},
-    {title:"Shilajit", url:"https://amzn.to/4li6vuC", price:"Varies", description:"Ancient herbal resin used to boost energy, vitality, and performance."},
+    {title:"Shilajit", url:"https://amzn.to/4li6vuC", price:"Varies", description:"Ancient herbal resin used to boost energy, vitality, and performance."}
   ],
   "beauty":[
     {title:"Revlon One-Step Hair Dryer And Volumizer Hot Air Brush", url:"https://amzn.to/40SbniQ", price:"$59.99", description:"Hair styling tool for drying and volumizing."},
     {title:"Olay Regenerist Micro-Sculpting Cream Face Moisturizer", url:"https://amzn.to/41r3Ibr", price:"$25.99", description:"Anti-aging facial moisturizer."},
     {title:"Neutrogena Makeup Remover Cleansing Towelettes", url:"https://amzn.to/40OFPdO", price:"$9.99", description:"Gentle wipes for makeup removal."},
     {title:"Maybelline Lash Sensational Washable Mascara", url:"https://amzn.to/4opz1NO", price:"$7.99", description:"Volumizing mascara with buildable formula."},
-    {title:"CeraVe Hydrating Facial Cleanser", url:"https://amzn.to/3J34u8n", price:"$14.99", description:"Gentle face cleanser for normal to dry skin."},
+    {title:"CeraVe Hydrating Facial Cleanser", url:"https://amzn.to/3J34u8n", price:"$14.99", description:"Gentle face cleanser for normal to dry skin."}
   ],
   "kitchen":[
     {title:"Instant Pot Duo 7-in-1 Electric Pressure Cooker", url:"https://amzn.to/4oD8b50", price:"$89.00", description:"Multi-functional pressure cooker."},
     {title:"Lodge Cast Iron Skillet", url:"https://amzn.to/47igIUx", price:"$24.99", description:"Durable pre-seasoned cast iron pan."},
     {title:"Breville The Smart Oven Air Fryer", url:"https://amzn.to/45lPvxL", price:"$279.95", description:"Countertop convection oven with air fryer."},
     {title:"KitchenAid Artisan Tilt-Head Stand Mixer", url:"https://amzn.to/45lPCJH", price:"$379.99", description:"Versatile stand mixer for baking."},
-    {title:"Cuisinart 14-Cup Food Processor", url:"https://amzn.to/3UgiUEs", price:"$149.95", description:"Powerful food processor for chopping and slicing."},
+    {title:"Cuisinart 14-Cup Food Processor", url:"https://amzn.to/3UgiUEs", price:"$149.95", description:"Powerful food processor for chopping and slicing."}
   ],
   "tech":[
     {title:"Apple AirPods Pro (2nd Generation)", url:"https://amzn.to/3UAYMx7", price:"$249.00", description:"Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality."},
     {title:"Samsung Galaxy Buds FE (Fan Edition)", url:"https://amzn.to/4m6BhIh", price:"$99.99", description:"Reliable ANC, auto device switching, balanced audio."},
-    {title:"Anker Soundcore P20i", url:"https://amzn.to/4mqytoV", price:"$29.99", description:"Budget-friendly wireless earbuds with decent ANC."},
+    {title:"Anker Soundcore P20i", url:"https://amzn.to/4mqytoV", price:"$29.99", description:"Budget-friendly wireless earbuds with decent ANC."}
   ],
   "outdoors":[
     {title:"Coleman Sundome Tent", url:"https://amzn.to/4myC9oX", price:"$99.99", description:"Easy setup tent for camping."},
-    {title:"LifeStraw Personal Water Filter", url:"https://amzn.to/4m3CoIw", price:"$19.97", description:"Portable water purifier for outdoor use."},
+    {title:"LifeStraw Personal Water Filter", url:"https://amzn.to/4m3CoIw", price:"$19.97", description:"Portable water purifier for outdoor use."}
   ],
   "household":[
     {title:"iRobot Roomba 694 Robot Vacuum", url:"https://amzn.to/4flpTp8", price:"$249.99", description:"Smart robot vacuum for home cleaning."},
-    {title:"Dyson V8 Absolute Cordless Vacuum Cleaner", url:"https://amzn.to/4fll1QY", price:"$399.99", description:"Powerful cordless vacuum cleaner."},
+    {title:"Dyson V8 Absolute Cordless Vacuum Cleaner", url:"https://amzn.to/4fll1QY", price:"$399.99", description:"Powerful cordless vacuum cleaner."}
   ],
   "home-decor":[
     {title:"KARMA AND LUCK Amethyst Crystal Tree of Life", url:"https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20", price:"$39.95", description:"Handcrafted amethyst crystal tree."},
-    {title:"Linon Brooklyn Sherpa Office Chair", url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20", price:"$129.99", description:"Plush ivory sherpa office chair."},
+    {title:"Linon Brooklyn Sherpa Office Chair", url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20", price:"$129.99", description:"Plush ivory sherpa office chair."}
   ]
 };
 
@@ -178,7 +173,7 @@ const BLOG_POSTS = {
   "tech": `<h4>Latest Tech Gadgets</h4><p>Apple AirPods Pro, Samsung Galaxy Buds FE, and other top tech gadgets for seamless connectivity and entertainment.</p>`,
   "outdoors": `<h4>Outdoor Adventures Made Easy</h4><p>Stay prepared with Coleman tents, LifeStraw filters, and gear that makes your outdoor trips safe and enjoyable.</p>`,
   "household": `<h4>Smart Home & Cleaning Solutions</h4><p>Keep your home spotless with Roombas, Dyson vacuum cleaners, and other innovative household gadgets.</p>`,
-  "home-decor": `<h4>Home Decor Ideas</h4><p>Add elegance and tranquility to your space with amethyst trees, cozy chairs, and stylish home decor items.</p>`,
+  "home-decor": `<h4>Home Decor Ideas</h4><p>Add elegance and tranquility to your space with amethyst trees, cozy chairs, and stylish home decor items.</p>`
 };
 
 // ==========================
@@ -193,8 +188,8 @@ function generateSEOReview(name, keyword){
 
 function playTTS(text, spanId){
   stopTTS();
-  utter=new SpeechSynthesisUtterance(text);
-  const voices=synth.getVoices();
+  utter = new SpeechSynthesisUtterance(text);
+  const voices = synth.getVoices();
   utter.voice = voices.find(v=>v.name.includes("Samantha"))||voices[0];
   synth.speak(utter);
   startTyping(text, spanId);
@@ -205,18 +200,19 @@ function stopTTS(){ if(synth.speaking) synth.cancel(); clearInterval(typingInter
 function startTyping(text, spanId){ clearInterval(typingInterval); const span=document.getElementById(spanId); let i=0; span.textContent=''; typingInterval=setInterval(()=>{ if(i<text.length){ span.textContent+=text.charAt(i); i++; } else clearInterval(typingInterval); },25); }
 
 // ==========================
-// Render Categories
+// Render Categories with Play All
 // ==========================
 let userAffiliateTag = "";
 
 function renderCategories(){
   let html = "";
-  Object.keys(FALLBACK_PRODUCTS).forEach((cat) => {
+  Object.keys(FALLBACK_PRODUCTS).forEach(cat => {
     let blogHTML = BLOG_POSTS[cat] || "<i>No blog content available</i>";
     html += `
       <button class="collapsible">📂 ${cat.charAt(0).toUpperCase() + cat.slice(1)}</button>
       <div class="content">
-        ${FALLBACK_PRODUCTS[cat].map((p,i) => {
+        <button onclick="playAllTTS('${cat}')">🔊 Play All TTS</button>
+        ${FALLBACK_PRODUCTS[cat].map((p,i)=>{
           let url = userAffiliateTag ? p.url.replace(/tag=[^&]+/, `tag=${userAffiliateTag}`) : p.url;
           const review = generateSEOReview(p.title, cat);
           return `
@@ -244,7 +240,33 @@ function renderCategories(){
   });
 }
 
-window.addEventListener('DOMContentLoaded', renderCategories);
+// ==========================
+// Play All TTS sequentially
+// ==========================
+async function playAllTTS(cat){
+  stopTTS();
+  const products = FALLBACK_PRODUCTS[cat];
+  for(let i=0; i<products.length; i++){
+    const review = generateSEOReview(products[i].title, cat);
+    const spanId = `review_${cat}_${i}`;
+    document.getElementById(spanId).parentElement.parentElement.style.maxHeight = document.getElementById(spanId).parentElement.parentElement.scrollHeight + "px";
+    await speakAsync(review, spanId);
+    await delay(500); // small delay between products
+  }
+}
+
+function speakAsync(text, spanId){
+  return new Promise(resolve=>{
+    const utterThis = new SpeechSynthesisUtterance(text);
+    const voices = synth.getVoices();
+    utterThis.voice = voices.find(v=>v.name.includes("Samantha"))||voices[0];
+    utterThis.onend = resolve;
+    synth.speak(utterThis);
+    startTyping(text, spanId);
+  });
+}
+
+function delay(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 
 // ==========================
 // Registration Form
@@ -288,11 +310,4 @@ function askBot(){
   if(!input) return;
   const chatBox = document.getElementById('chatBox');
   chatBox.innerHTML += `<p><b>You:</b> ${input}</p>`;
-  chatBox.innerHTML += `<p><b>Bot:</b> This is a demo. In the full version, you'll get answers about your Amazon products & affiliate workflow.</p>`;
-  chatBox.scrollTop = chatBox.scrollHeight;
-  document.getElementById('chatInput').value = '';
-}
-</script>
-
-</body>
-</html>
+  chatBox.innerHTML += `<p
