@@ -3,123 +3,185 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prodpick4U Mobile Demo – AI Product Review</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<title>Prodpick4U Demo – Smart Shopping & TTS</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
 body {
   font-family:'Inter',sans-serif;
   margin:0; padding:2rem;
   color:#fff;
-  background:linear-gradient(-45deg,#1a0033,#2c0066,#3d00aa,#0070ff);
-  background-size:400% 400%;
+  background: linear-gradient(-45deg,#0a0033,#3b007f,#1a1aff,#6f00ff);
+  background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
 }
 @keyframes gradientShift {
   0%{background-position:0% 50%;}
+  25%{background-position:50% 50%;}
   50%{background-position:100% 50%;}
+  75%{background-position:50% 50%;}
   100%{background-position:0% 50%;}
 }
-h1,h2,h3{color:#9cf;}
+h1,h2 { color:#9cf; }
+h1 { text-align:center; font-size:2.5rem; margin-bottom:1rem; }
+p { line-height:1.5; }
 .glass {
-  background:rgba(0,0,0,0.5);
-  backdrop-filter:blur(10px);
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
   border-radius:12px;
   padding:20px;
-  margin-bottom:1rem;
+  margin-bottom:2rem;
 }
-button,input,select{width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none;}
-input,select{background:rgba(20,20,20,0.7); color:#fff;}
-button{background:linear-gradient(135deg,#6a11cb,#2575fc);color:#fff;font-weight:bold;cursor:pointer;}
-button:hover{opacity:0.85;}
-.output{background:rgba(0,0,0,0.8); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap;}
-.category-select{background:rgba(20,20,20,0.7); padding:10px; color:#fff; margin-bottom:10px;}
-a{color:#9cf; text-decoration:none;}
+input, button, select {
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border-radius:5px;
+  border:none;
+}
+input, select { background: rgba(20,20,20,0.7); color:#fff; }
+button {
+  background: #6a11cb;
+  background: linear-gradient(135deg,#6a11cb,#2575fc);
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:hover { opacity:0.85; }
+.output { background:rgba(0,0,0,0.7); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap; }
+.section-title { font-size:1.5rem; margin-bottom:1rem; text-align:center; }
 </style>
 </head>
 <body>
 
-<h1>🚀 Prodpick4U Mobile Demo</h1>
-<p>This is a **short mobile demo** only. It does not complete video uploads. Full desktop version supports API keys and full TTS upload. Launching soon!</p>
+<h1>🚀 Prodpick4U Demo</h1>
+<p style="text-align:center;">This is a <strong>short mobile demo only</strong>. Full desktop version allows full video generation & YouTube upload. Keyholders and keyless demos below.</p>
 
-<div class="glass">
-<h2>🔑 Keyholders</h2>
-<label>Enter your Amazon API Key:
-<input id="keyholderInput" placeholder="AKIA..." type="text"></label>
-<button id="keyholderDemo">Run Demo</button>
-<div id="keyholderOutput" class="output"></div>
+<!-- Amazon Affiliate Sign Up -->
+<div class="glass" style="text-align:center;">
+  🎁 <a href="https://affiliate-program.amazon.com/signup" style="color:#9cf; font-weight:bold;">Sign up for Amazon Central Affiliate – 10% OFF full version</a>
 </div>
 
+<!-- Keyholders Demo Box -->
 <div class="glass">
-<h2>🔓 Keyless Demo</h2>
-<label>Select Category:
-<select id="categorySelect" class="category-select">
-  <option value="">--Choose--</option>
-  <option value="blender">Blender</option>
-  <option value="supplement">Supplement</option>
-  <option value="ricecooker">Rice Cooker</option>
-  <option value="facecream">Face Cream</option>
-  <option value="headphones">Headphones</option>
-  <option value="kitchen">Kitchen</option>
-  <option value="tech">Tech</option>
-</select></label>
-<div id="keylessOutput" class="output"></div>
+  <h2 class="section-title">🔑 Keyholders Demo</h2>
+  <p>Enter your Amazon Affiliate Key, API Key, and keyword. Max 3 searches per session, then locked.</p>
+  <form id="keyholdersForm">
+    <label>Amazon Affiliate Tag:
+      <input id="khAffiliate" type="text" placeholder="mychanneld-20" required>
+    </label>
+    <label>Amazon API Key:
+      <input id="khApiKey" type="text" placeholder="AKIA..." required>
+    </label>
+    <label>Keyword:
+      <input id="khKeyword" type="text" placeholder="e.g. blender" required>
+    </label>
+    <button type="submit">Generate Demo</button>
+  </form>
+  <div id="khOutput" class="output"></div>
 </div>
 
+<!-- Keyless Demo Box -->
 <div class="glass">
-<h2>🎧 TTS Controls</h2>
-<label>Choose Voice:</label>
-<select id="voiceSelect">
-  <option value="female">American Female</option>
-  <option value="male">Afro-American Male</option>
-</select>
-<button id="startTTS">▶️ Start Voiceover</button>
-<button id="stopTTS">⏹️ Stop Voiceover</button>
+  <h2 class="section-title">🗝️ Keyless Demo</h2>
+  <p>Select a category to see products with clickable links, SEO review, and TTS preview.</p>
+  <label>Category:
+    <select id="categorySelect">
+      <option value="">--Choose a Category--</option>
+      <option value="face cream">Face Cream</option>
+      <option value="supplements">Supplements</option>
+      <option value="blender">Blender</option>
+      <option value="rice cooker">Rice Cooker</option>
+      <option value="headphones">Headphones</option>
+      <option value="kitchen">Kitchen Products</option>
+      <option value="tech">Tech Gadgets</option>
+    </select>
+  </label>
+  <div id="klOutput" class="output"></div>
 </div>
 
 <script>
-const FALLBACK_PRODUCTS = {
-  "blender":[{title:"Ninja Professional Blender 1000W",url:"https://www.amazon.com/s?k=blender&tag=mychanneld-20",description:"Powerful high-speed blender perfect for smoothies.",review:"Ninja Professional Blender 1000W is a top-quality product perfect for anyone looking for blenders. This blender delivers exceptional results, ensuring high satisfaction for every user. Many customers highlight its reliability, efficiency, and premium performance. Whether you are new to blenders or looking for an upgrade, this Ninja Blender provides superior benefits. Its features make it a standout choice among other blenders in the market. Enjoy the advantages daily, and enhance your routine with the trusted Ninja Blender. Perfect for gifting or personal use, ensures consistent quality and lasting results. Grab this blender today and experience the difference."}],
-  "supplement":[{title:"Methylene Blue",url:"https://amzn.to/4ldkJwL",description:"Supplement researched for mitochondrial support.",review:"Methylene Blue is a top-quality product perfect for anyone looking for supplements. This supplement delivers exceptional results, ensuring high satisfaction for every user. Many customers highlight its reliability, efficiency, and premium performance. Whether new to supplements or looking for an upgrade, Methylene Blue provides superior benefits. Its features make it a standout choice among other supplements. Enjoy advantages daily, enhance your routine, perfect for gifting or personal use, ensures consistent quality and lasting results. Grab this supplement today and experience the difference."}],
-  "ricecooker":[{title:"Instant Pot Duo 7-in-1 Electric Pressure Cooker",url:"https://amzn.to/4oD8b50",description:"Multi-functional pressure cooker.",review:"Instant Pot Duo 7-in-1 Electric Pressure Cooker is a top-quality product perfect for anyone looking for rice cookers. This cooker delivers exceptional results, ensuring high satisfaction for every user. Many customers highlight its reliability, efficiency, and premium performance. Perfect for new cooks or experienced chefs, offers superior benefits. Features make it a standout choice among other rice cookers. Enjoy advantages daily, enhance your routine, perfect for gifting or personal use, ensures consistent quality and lasting results. Grab this product today and experience the difference."}],
-  "facecream":[{title:"La Roche-Posay Toleriane Double Repair Face Moisturizer",url:"https://www.amazon.com/s?k=face+cream&tag=mychanneld-20",description:"Hydrating facial cream.",review:"La Roche-Posay Toleriane Double Repair Face Moisturizer is a top-quality product perfect for anyone looking for face creams. Delivers exceptional results, ensuring high satisfaction for every user. Many customers highlight reliability, efficiency, and premium performance. Whether new to face creams or upgrading, this moisturizer provides superior benefits. Features make it a standout choice. Enjoy advantages daily, enhance routine, perfect for gifting or personal use, ensures consistent quality and lasting results. Grab this cream today and experience the difference."}],
-  "headphones":[{title:"Sony WH-1000XM5 Headphones",url:"https://www.amazon.com/s?k=headphones&tag=mychanneld-20",description:"Noise-cancelling premium headphones.",review:"Sony WH-1000XM5 Headphones is a top-quality product perfect for anyone looking for headphones. Delivers exceptional results, high satisfaction for every user. Many highlight reliability, efficiency, and premium performance. Ideal for new users or audio enthusiasts, offers superior benefits. Features make it a standout choice. Enjoy daily advantages, enhance routine, perfect for gifting or personal use, ensures consistent quality and lasting results. Grab this headphones today and experience the difference."}],
-  "kitchen":[{title:"Cuisinart 14-Cup Food Processor",url:"https://amzn.to/3UgiUEs",description:"Powerful food processor.",review:"Cuisinart 14-Cup Food Processor is a top-quality product perfect for anyone looking for kitchen products. Delivers exceptional results, ensuring high satisfaction. Many highlight reliability, efficiency, and premium performance. Perfect for new cooks or experienced chefs, provides superior benefits. Features make it a standout choice. Enjoy advantages daily, enhance routine, perfect for gifting, ensures consistent quality and lasting results. Grab this product today and experience the difference."}],
-  "tech":[{title:"Apple AirPods Pro (2nd Generation)",url:"https://amzn.to/3UAYMx7",description:"Premium ANC wireless earbuds.",review:"Apple AirPods Pro (2nd Generation) is a top-quality product perfect for anyone looking for tech products. Delivers exceptional results, ensuring high satisfaction. Many highlight reliability, efficiency, and premium performance. Ideal for Apple users or tech enthusiasts, offers superior benefits. Features make it a standout choice. Enjoy advantages daily, enhance routine, perfect for gifting, ensures consistent quality and lasting results. Grab this product today and experience the difference."}]
-};
+// Fallback products (simplified 10-12 products example)
+const fallbackProducts = [
+  {category:"face cream", name:"La Roche-Posay Toleriane Face Cream", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"},
+  {category:"supplements", name:"Omega 3 Fish Oil", link:"https://www.amazon.com/dp/DEMOASIN2?tag=mychanneld-20"},
+  {category:"blender", name:"Ninja Professional Blender 1000W", link:"https://www.amazon.com/dp/DEMOASIN3?tag=mychanneld-20"},
+  {category:"rice cooker", name:"Instant Pot Duo 6 Qt", link:"https://www.amazon.com/dp/DEMOASIN4?tag=mychanneld-20"},
+  {category:"headphones", name:"Sony WH-1000XM5 Headphones", link:"https://www.amazon.com/dp/DEMOASIN5?tag=mychanneld-20"},
+  {category:"kitchen", name:"KitchenAid Mixer", link:"https://www.amazon.com/dp/DEMOASIN6?tag=mychanneld-20"},
+  {category:"tech", name:"Echo Dot 5th Gen", link:"https://www.amazon.com/dp/DEMOASIN7?tag=mychanneld-20"}
+];
 
-let currentReview = "";
+// Limit keyholders searches
+let khTries = 0;
+const maxKhTries = 3;
 
-document.getElementById('categorySelect').addEventListener('change', e=>{
-  const cat = e.target.value;
-  const output = document.getElementById('keylessOutput');
-  output.innerHTML = "";
-  if(cat && FALLBACK_PRODUCTS[cat]){
-    FALLBACK_PRODUCTS[cat].forEach(p=>{
-      const div = document.createElement('div');
-      div.innerHTML = `<p><strong>${p.title}</strong> - <a href="${p.url}" target="_blank">Buy Here</a></p><p>${p.description}</p><button onclick="playReview('${p.review.replace(/'/g,"\\'")}')">🔊 Play Review</button>`;
-      output.appendChild(div);
-    });
-  }
-});
-
-function playReview(text){
-  currentReview = text;
-  const voice = document.getElementById('voiceSelect').value;
-  const utter = new SpeechSynthesisUtterance(text);
-  const voices = speechSynthesis.getVoices();
-  if(voice==="female"){
-    utter.voice = voices.find(v=>v.lang.includes("en-US") && v.name.toLowerCase().includes("female")) || voices[0];
-  } else {
-    utter.voice = voices.find(v=>v.lang.includes("en-US") && v.name.toLowerCase().includes("male")) || voices[0];
-  }
-  speechSynthesis.speak(utter);
+// Generate SEO review
+function generateSEOReview(name, keyword){
+  return `${name} is a top-quality product for anyone looking for ${keyword}. Designed to deliver exceptional results, this ${keyword} is reliable, efficient, and premium quality. Perfect for daily use, gifting, or upgrading your routine, ${name} offers consistent satisfaction backed by positive reviews. Experience the difference today with ${name}, enhancing your lifestyle with superior features and proven performance.`;
 }
 
-document.getElementById('startTTS').addEventListener('click', ()=>{
-  if(currentReview){ playReview(currentReview); }
+// Keyholders form submit
+document.getElementById('keyholdersForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  if(khTries>=maxKhTries){
+    alert("Keyholders demo locked. Max tries reached.");
+    return;
+  }
+  khTries++;
+  const kw = document.getElementById('khKeyword').value.trim();
+  const affiliate = document.getElementById('khAffiliate').value.trim();
+  if(!kw || !affiliate){ alert("Fill all fields."); return; }
+  const product = fallbackProducts.find(p=>p.category===kw.toLowerCase())||fallbackProducts[0];
+  const review = generateSEOReview(product.name, kw);
+  document.getElementById('khOutput').innerHTML = `
+    🛒 <a href="${product.link}" target="_blank">${product.name}</a>
+    📝 SEO Review: <span id="khReviewText"></span>
+    <br><button onclick="playTTS('${review}','khReviewText')">🔊 Play TTS</button>
+    <button onclick="stopTTS()">⏹ Stop TTS</button>
+  `;
+  startTyping(review, 'khReviewText');
 });
-document.getElementById('stopTTS').addEventListener('click', ()=>{ speechSynthesis.cancel(); });
 
+// Keyless category select
+document.getElementById('categorySelect').addEventListener('change', e=>{
+  const cat = e.target.value;
+  if(!cat) { document.getElementById('klOutput').innerHTML=''; return; }
+  const product = fallbackProducts.find(p=>p.category===cat.toLowerCase());
+  const review = generateSEOReview(product.name, cat);
+  document.getElementById('klOutput').innerHTML = `
+    🛒 <a href="${product.link}" target="_blank">${product.name}</a>
+    📝 SEO Review: <span id="klReviewText"></span>
+    <br><button onclick="playTTS('${review}','klReviewText')">🔊 Play TTS</button>
+    <button onclick="stopTTS()">⏹ Stop TTS</button>
+  `;
+  startTyping(review,'klReviewText');
+});
+
+// TTS and live typing
+let synth = window.speechSynthesis;
+let utter;
+function playTTS(text, spanId){
+  stopTTS();
+  utter = new SpeechSynthesisUtterance(text);
+  // Choose voice
+  const voices = synth.getVoices();
+  utter.voice = voices.find(v=>v.name.includes("Samantha"))||voices[0];
+  synth.speak(utter);
+  startTyping(text, spanId);
+}
+function stopTTS(){ if(synth.speaking) synth.cancel(); typingInterval&&clearInterval(typingInterval); }
+let typingInterval;
+function startTyping(text, spanId){
+  clearInterval(typingInterval);
+  const span = document.getElementById(spanId);
+  let i=0;
+  span.textContent='';
+  typingInterval=setInterval(()=>{
+    if(i<text.length){ span.textContent+=text.charAt(i); i++; }
+    else clearInterval(typingInterval);
+  },25);
+}
 </script>
+
 </body>
 </html>
