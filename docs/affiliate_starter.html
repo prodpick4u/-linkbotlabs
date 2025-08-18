@@ -83,7 +83,7 @@ button:hover { opacity:0.85; }
 <body>
 
 <h1>🚀 Prodpick4U Affiliate Starter Page</h1>
-<p style="text-align:center;">Try the demo with our default affiliate links. Once you register, your own Amazon Affiliate tag will be used for all products for 1 week.</p>
+<p style="text-align:center;">View all products with our default affiliate links. Authorized users can replace links with their own using a secure code.</p>
 
 <div class="glass">
 <h2 class="section-title">💡 Rent This Space</h2>
@@ -92,9 +92,18 @@ button:hover { opacity:0.85; }
 
 <div id="demoTimer" class="timer"></div>
 
+<!-- Password Section -->
 <div class="glass">
+<h2 class="section-title">🔒 Affiliate Access</h2>
+<p>Enter the password provided to activate your affiliate links.</p>
+<input type="password" id="demoPassword" placeholder="Enter access code">
+<button onclick="checkPassword()">Unlock Affiliate Form</button>
+<div id="passwordOutput" class="output"></div>
+</div>
+
+<!-- Affiliate Form (hidden until password correct) -->
+<div id="affiliateFormSection" style="display:none;" class="glass">
 <h2 class="section-title">📝 Register Your Affiliate Tag</h2>
-<p>Enter your Amazon Affiliate Tag to replace our links with yours and run your 1-week free demo.</p>
 <form id="affiliateForm">
 <label>Your Amazon Affiliate Tag:
   <input id="userAffiliate" type="text" placeholder="mytag-20" required>
@@ -104,11 +113,13 @@ button:hover { opacity:0.85; }
 <div id="regOutput" class="output"></div>
 </div>
 
+<!-- Product Categories -->
 <div class="glass">
 <h2 class="section-title">🗝️ Products & Blogs – Default Fallback</h2>
 <div id="productOutput" class="output"></div>
 </div>
 
+<!-- AI Q&A Bot -->
 <div class="glass">
 <h2 class="section-title">🤖 Ask the Bot</h2>
 <div id="chatBox" class="chat-box"></div>
@@ -120,46 +131,62 @@ button:hover { opacity:0.85; }
 
 <script>
 // ==========================
+// Demo Password
+// ==========================
+const DEMO_PASSWORD = "starter123"; // change to your secret password
+
+function checkPassword() {
+  const input = document.getElementById('demoPassword').value.trim();
+  const output = document.getElementById('passwordOutput');
+  if(input === DEMO_PASSWORD){
+    output.innerHTML = "✅ Access granted! Enter your affiliate tag below.";
+    document.getElementById('affiliateFormSection').style.display = 'block';
+  } else {
+    output.innerHTML = "❌ Incorrect code. Affiliate form is locked.";
+  }
+}
+
+// ==========================
 // Fallback Products Data
 // ==========================
 const FALLBACK_PRODUCTS = {
   "health":[
-    {title:"Fitbit Charge 5 Advanced Fitness & Health Tracker", url:"https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20", price:"$129.95", description:"Fitness tracker with built-in GPS and health metrics."},
-    {title:"Theragun Elite Handheld Percussive Therapy Device", url:"https://amzn.to/3Hm7HiH", price:"$299.00", description:"Deep muscle treatment massage device."},
-    {title:"Methylene Blue", url:"https://amzn.to/4ldkJwL", price:"Varies", description:"Supplement researched for mitochondrial support and cognitive function."},
-    {title:"Irish Sea Moss", url:"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20", price:"Varies", description:"Rich in iodine and essential minerals for immune and thyroid support."},
-    {title:"Shilajit", url:"https://amzn.to/4li6vuC", price:"Varies", description:"Ancient herbal resin used to boost energy, vitality, and performance."}
+    {title:"Fitbit Charge 5", url:"https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20", price:"$129.95", description:"Fitness tracker with built-in GPS."},
+    {title:"Theragun Elite", url:"https://amzn.to/3Hm7HiH", price:"$299.00", description:"Percussive therapy device."},
+    {title:"Methylene Blue", url:"https://amzn.to/4ldkJwL", price:"Varies", description:"Supplement for cognitive function."},
+    {title:"Irish Sea Moss", url:"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20", price:"Varies", description:"Rich in minerals for immune support."},
+    {title:"Shilajit", url:"https://amzn.to/4li6vuC", price:"Varies", description:"Boosts energy and vitality."}
   ],
   "beauty":[
-    {title:"Revlon One-Step Hair Dryer And Volumizer Hot Air Brush", url:"https://amzn.to/40SbniQ", price:"$59.99", description:"Hair styling tool for drying and volumizing."},
-    {title:"Olay Regenerist Micro-Sculpting Cream Face Moisturizer", url:"https://amzn.to/41r3Ibr", price:"$25.99", description:"Anti-aging facial moisturizer."},
-    {title:"Neutrogena Makeup Remover Cleansing Towelettes", url:"https://amzn.to/40OFPdO", price:"$9.99", description:"Gentle wipes for makeup removal."},
-    {title:"Maybelline Lash Sensational Washable Mascara", url:"https://amzn.to/4opz1NO", price:"$7.99", description:"Volumizing mascara with buildable formula."},
-    {title:"CeraVe Hydrating Facial Cleanser", url:"https://amzn.to/3J34u8n", price:"$14.99", description:"Gentle face cleanser for normal to dry skin."}
+    {title:"Revlon One-Step Hair Dryer", url:"https://amzn.to/40SbniQ", price:"$59.99", description:"Hair styling tool."},
+    {title:"Olay Regenerist Cream", url:"https://amzn.to/41r3Ibr", price:"$25.99", description:"Anti-aging moisturizer."},
+    {title:"Neutrogena Makeup Remover", url:"https://amzn.to/40OFPdO", price:"$9.99", description:"Gentle makeup wipes."},
+    {title:"Maybelline Mascara", url:"https://amzn.to/4opz1NO", price:"$7.99", description:"Volumizing mascara."},
+    {title:"CeraVe Facial Cleanser", url:"https://amzn.to/3J34u8n", price:"$14.99", description:"Gentle cleanser for normal to dry skin."}
   ],
   "kitchen":[
-    {title:"Instant Pot Duo 7-in-1 Electric Pressure Cooker", url:"https://amzn.to/4oD8b50", price:"$89.00", description:"Multi-functional pressure cooker."},
-    {title:"Lodge Cast Iron Skillet", url:"https://amzn.to/47igIUx", price:"$24.99", description:"Durable pre-seasoned cast iron pan."},
-    {title:"Breville The Smart Oven Air Fryer", url:"https://amzn.to/45lPvxL", price:"$279.95", description:"Countertop convection oven with air fryer."},
-    {title:"KitchenAid Artisan Tilt-Head Stand Mixer", url:"https://amzn.to/45lPCJH", price:"$379.99", description:"Versatile stand mixer for baking."},
-    {title:"Cuisinart 14-Cup Food Processor", url:"https://amzn.to/3UgiUEs", price:"$149.95", description:"Powerful food processor for chopping and slicing."}
+    {title:"Instant Pot Duo", url:"https://amzn.to/4oD8b50", price:"$89.00", description:"Multi-functional pressure cooker."},
+    {title:"Lodge Cast Iron Skillet", url:"https://amzn.to/47igIUx", price:"$24.99", description:"Durable cast iron pan."},
+    {title:"Breville Smart Oven Air Fryer", url:"https://amzn.to/45lPvxL", price:"$279.95", description:"Countertop convection oven."},
+    {title:"KitchenAid Stand Mixer", url:"https://amzn.to/45lPCJH", price:"$379.99", description:"Versatile mixer."},
+    {title:"Cuisinart Food Processor", url:"https://amzn.to/3UgiUEs", price:"$149.95", description:"Chopping and slicing processor."}
   ],
   "tech":[
-    {title:"Apple AirPods Pro (2nd Generation)", url:"https://amzn.to/3UAYMx7", price:"$249.00", description:"Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality."},
-    {title:"Samsung Galaxy Buds FE (Fan Edition)", url:"https://amzn.to/4m6BhIh", price:"$99.99", description:"Reliable ANC, auto device switching, balanced audio."},
-    {title:"Anker Soundcore P20i", url:"https://amzn.to/4mqytoV", price:"$29.99", description:"Budget-friendly wireless earbuds with decent ANC."}
+    {title:"Apple AirPods Pro", url:"https://amzn.to/3UAYMx7", price:"$249.00", description:"Premium ANC earbuds."},
+    {title:"Samsung Galaxy Buds FE", url:"https://amzn.to/4m6BhIh", price:"$99.99", description:"Balanced audio earbuds."},
+    {title:"Anker Soundcore P20i", url:"https://amzn.to/4mqytoV", price:"$29.99", description:"Budget wireless earbuds."}
   ],
   "outdoors":[
-    {title:"Coleman Sundome Tent", url:"https://amzn.to/4myC9oX", price:"$99.99", description:"Easy setup tent for camping."},
-    {title:"LifeStraw Personal Water Filter", url:"https://amzn.to/4m3CoIw", price:"$19.97", description:"Portable water purifier for outdoor use."}
+    {title:"Coleman Sundome Tent", url:"https://amzn.to/4myC9oX", price:"$99.99", description:"Camping tent."},
+    {title:"LifeStraw Personal Water Filter", url:"https://amzn.to/4m3CoIw", price:"$19.97", description:"Portable water purifier."}
   ],
   "household":[
-    {title:"iRobot Roomba 694 Robot Vacuum", url:"https://amzn.to/4flpTp8", price:"$249.99", description:"Smart robot vacuum for home cleaning."},
-    {title:"Dyson V8 Absolute Cordless Vacuum Cleaner", url:"https://amzn.to/4fll1QY", price:"$399.99", description:"Powerful cordless vacuum cleaner."}
+    {title:"iRobot Roomba 694", url:"https://amzn.to/4flpTp8", price:"$249.99", description:"Smart robot vacuum."},
+    {title:"Dyson V8 Absolute", url:"https://amzn.to/4fll1QY", price:"$399.99", description:"Cordless vacuum cleaner."}
   ],
   "home-decor":[
-    {title:"KARMA AND LUCK Amethyst Crystal Tree of Life", url:"https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20", price:"$39.95", description:"Handcrafted amethyst crystal tree."},
-    {title:"Linon Brooklyn Sherpa Office Chair", url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20", price:"$129.99", description:"Plush ivory sherpa office chair."}
+    {title:"Amethyst Crystal Tree", url:"https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20", price:"$39.95", description:"Handcrafted crystal tree."},
+    {title:"Linon Sherpa Office Chair", url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20", price:"$129.99", description:"Plush office chair."}
   ]
 };
 
@@ -167,13 +194,13 @@ const FALLBACK_PRODUCTS = {
 // Blog Posts
 // ==========================
 const BLOG_POSTS = {
-  "health": `<h4>Top Health Tips for 2025</h4><p>Stay fit with daily routines, supplements, and mindful nutrition. Explore the benefits of Fitbit and Theragun for your health journey.</p>`,
-  "beauty": `<h4>Beauty Essentials for Glowing Skin</h4><p>Discover must-have beauty tools and skincare products for daily care. Olay Regenerist and CeraVe are top picks for hydration and rejuvenation.</p>`,
-  "kitchen": `<h4>Upgrade Your Kitchen in 2025</h4><p>From Instant Pots to Breville Air Fryers, make your kitchen smarter and more efficient with these essential appliances.</p>`,
-  "tech": `<h4>Latest Tech Gadgets</h4><p>Apple AirPods Pro, Samsung Galaxy Buds FE, and other top tech gadgets for seamless connectivity and entertainment.</p>`,
-  "outdoors": `<h4>Outdoor Adventures Made Easy</h4><p>Stay prepared with Coleman tents, LifeStraw filters, and gear that makes your outdoor trips safe and enjoyable.</p>`,
-  "household": `<h4>Smart Home & Cleaning Solutions</h4><p>Keep your home spotless with Roombas, Dyson vacuum cleaners, and other innovative household gadgets.</p>`,
-  "home-decor": `<h4>Home Decor Ideas</h4><p>Add elegance and tranquility to your space with amethyst trees, cozy chairs, and stylish home decor items.</p>`
+  "health": `<h4>Top Health Tips for 2025</h4><p>Stay fit with daily routines, supplements, and mindful nutrition.</p>`,
+  "beauty": `<h4>Beauty Essentials</h4><p>Discover must-have beauty tools and skincare products for daily care.</p>`,
+  "kitchen": `<h4>Upgrade Your Kitchen</h4><p>From Instant Pots to Breville Air Fryers, make your kitchen smarter.</p>`,
+  "tech": `<h4>Latest Tech Gadgets</h4><p>AirPods Pro, Samsung Galaxy Buds FE, and other top gadgets.</p>`,
+  "outdoors": `<h4>Outdoor Adventures</h4><p>Stay prepared with Coleman tents, LifeStraw filters, and gear for your trips.</p>`,
+  "household": `<h4>Smart Home & Cleaning</h4><p>Keep your home spotless with Roombas, Dyson vacuum cleaners, and more.</p>`,
+  "home-decor": `<h4>Home Decor Ideas</h4><p>Add elegance to your space with amethyst trees and stylish chairs.</p>`
 };
 
 // ==========================
@@ -200,7 +227,7 @@ function stopTTS(){ if(synth.speaking) synth.cancel(); clearInterval(typingInter
 function startTyping(text, spanId){ clearInterval(typingInterval); const span=document.getElementById(spanId); let i=0; span.textContent=''; typingInterval=setInterval(()=>{ if(i<text.length){ span.textContent+=text.charAt(i); i++; } else clearInterval(typingInterval); },25); }
 
 // ==========================
-// Render Categories with Play All
+// Render Categories
 // ==========================
 let userAffiliateTag = "";
 
@@ -251,7 +278,7 @@ async function playAllTTS(cat){
     const spanId = `review_${cat}_${i}`;
     document.getElementById(spanId).parentElement.parentElement.style.maxHeight = document.getElementById(spanId).parentElement.parentElement.scrollHeight + "px";
     await speakAsync(review, spanId);
-    await delay(500); // small delay between products
+    await delay(500);
   }
 }
 
@@ -269,7 +296,7 @@ function speakAsync(text, spanId){
 function delay(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 
 // ==========================
-// Registration Form
+// Affiliate Form
 // ==========================
 document.getElementById('affiliateForm').addEventListener('submit', e=>{
   e.preventDefault();
@@ -310,4 +337,4 @@ function askBot(){
   if(!input) return;
   const chatBox = document.getElementById('chatBox');
   chatBox.innerHTML += `<p><b>You:</b> ${input}</p>`;
-  chatBox.innerHTML += `<p
+  chatBox.innerHTML += `<p><b>
