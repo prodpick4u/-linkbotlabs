@@ -3,128 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prodpick4U Demo – AI Product Review & TTS</title>
+<title>Prodpick4u Demo – TTS 1400 Character Reviews</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
 body {
-  font-family:'Inter',sans-serif;
+  font-family: 'Inter', sans-serif;
   margin:0; padding:2rem;
-  background: linear-gradient(-45deg,#0a0033,#3b007f,#1a1aff,#6f00ff);
-  background-size:400% 400%; animation:gradientShift 15s ease infinite; color:#fff;
+  color:#fff;
+  background: linear-gradient(-45deg, #12004d, #4b0082, #1e3a8a, #5b2eb0);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
 }
-@keyframes gradientShift {
+@keyframes gradientShift{
   0%{background-position:0% 50%;}
-  25%{background-position:50% 50%;}
   50%{background-position:100% 50%;}
-  75%{background-position:50% 50%;}
   100%{background-position:0% 50%;}
 }
 h1,h2{color:#9cf;}
-.glass {
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
+.glass{
+  background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(10px);
   border-radius:12px;
-  padding:20px; margin-bottom:1rem;
+  padding:20px;
+  margin-bottom:1rem;
 }
-input, select, button {
-  width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none;
+button,input,select{
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border-radius:5px;
+  border:none;
 }
-input, select { background: rgba(20,20,20,0.7); color:#fff; }
-button { background:#6a11cb; color:#fff; font-weight:bold; cursor:pointer; transition:0.3s; }
-button:hover { background:#2575fc; }
-.output { background: rgba(0,0,0,0.8); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap; }
-.dropdown { margin-top:10px; background: rgba(20,20,20,0.7); color:#fff; padding:10px; border-radius:5px; }
-a.btn { display:inline-block; margin:0.5rem; padding:0.8rem 1.5rem; background: linear-gradient(135deg, #6a11cb, #2575fc); color:#fff; text-decoration:none; border-radius:8px; font-weight:600; transition:0.3s; }
-a.btn:hover { opacity:0.85; }
-header { text-align:center; margin-bottom:2rem; }
+input,select{background:rgba(20,20,20,0.7); color:#fff;}
+button{
+  background:#9cf; color:#000; font-weight:bold; cursor:pointer;
+}
+button:hover{background:#7db;}
+
+/* Output */
+.output{
+  background:rgba(0,0,0,0.8);
+  padding:15px;
+  border-radius:8px;
+  margin-top:15px;
+  color:#0f0;
+  white-space:pre-wrap;
+}
+.section-header{margin-top:1rem;margin-bottom:1rem;font-size:1.2rem;}
+.category-dropdown{margin-bottom:1rem;padding:8px;border-radius:5px;}
 </style>
 </head>
 <body>
 
-<header>
-<h1>🚀 Welcome to Prodpick4U Demo</h1>
-<p><strong>Note:</strong> This is a short mobile demo only. Video creation and upload are not completed here. Full desktop version with keyholders app launching soon!</p>
-<a href="https://drive.google.com/file/d/1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z/view?usp=drivesdk" class="btn">Download Desktop Demo</a>
-<a href="https://www.blogger.com/blog/posts/8639219398218448839" class="btn">Visit Our Blog</a>
-<a href="https://www.youtube.com/@Prodpick4u" class="btn">YouTube Channel</a>
-<a href="https://www.amazon.com/associates" class="btn">Sign Up Amazon Central Affiliate (10% off full version)</a>
-</header>
+<h1>🚀 Prodpick4u Mobile Demo</h1>
+<p>This is a <strong>short mobile demo only</strong>. It does <em>not</em> complete video generation or upload. Full desktop demo available with keys. Full release launching soon!</p>
 
 <div class="glass">
   <h2>🔑 Keyholders Demo</h2>
-  <p>Users with keys can try the full features in the desktop app.</p>
-  <button onclick="alert('Keyholders demo coming soon in full desktop version!')">Try Keyholders Demo</button>
+  <p>Only 3 tries allowed. Full automation available in desktop version.</p>
 </div>
 
 <div class="glass">
   <h2>🛒 Keyless Demo</h2>
-  <p>Select a category to see available products:</p>
-  <select id="categorySelect" class="dropdown">
-    <option value="">--Select Category--</option>
-    <option value="face cream">Face Cream</option>
+  <p>Select a category below to see a fallback product, clickable link, description, and TTS preview.</p>
+  <select id="categorySelect" class="category-dropdown">
+    <option value="">-- Select Category --</option>
+    <option value="kitchen">Kitchen</option>
+    <option value="blender">Blender</option>
     <option value="supplements">Supplements</option>
-    <option value="blender">Blenders</option>
-    <option value="rice cooker">Rice Cookers</option>
+    <option value="face_cream">Face Cream</option>
+    <option value="tech">Tech</option>
     <option value="headphones">Headphones</option>
-    <option value="kitchen">Kitchen Products</option>
-    <option value="tech">Tech Gadgets</option>
   </select>
+  <button id="showProduct">Show Product</button>
 
   <div id="productOutput" class="output"></div>
+  <button id="stopTTS">⏹ Stop TTS</button>
 </div>
 
 <div class="glass">
-  <h2>📺 How This Works</h2>
-  <iframe width="100%" height="400" src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
-  <h3 style="margin-top:1.5rem;">Example Generated Demo</h3>
-  <iframe width="100%" height="200" src="https://www.youtube.com/embed/qwfACbh93M0?si=uofVyp2kyYV7EU-H" allowfullscreen></iframe>
+  <p>Try the full version with <a href="https://drive.google.com/file/d/1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z/view?usp=drivesdk" target="_blank">Desktop Demo Download</a> or sign up for <a href="https://affiliate-program.amazon.com/signup" target="_blank">Amazon Central Affiliate</a> and get 10% off the full purchase!</p>
 </div>
 
 <script>
-// Demo product list
-const demoProducts = {
-  "face cream":[{name:"La Roche-Posay Toleriane Double Repair Face Moisturizer", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"}],
-  "supplements":[{name:"Nature Made Multivitamins", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"}],
-  "blender":[{name:"Ninja Professional Blender 1000W", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"}],
-  "rice cooker":[{name:"Zojirushi 3-Cup Rice Cooker", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"}],
-  "headphones":[{name:"Sony WH-1000XM5 Headphones", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"}],
-  "kitchen":[{name:"Instant Pot Duo 7-in-1", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"}],
-  "tech":[{name:"Amazon Echo Dot (5th Gen)", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"}]
+// Fallback products
+const FALLBACK_PRODUCTS = {
+  kitchen:[{title:"Instant Pot Duo 7-in-1",url:"https://www.amazon.com/s?k=Instant+Pot+duo+7-in-1&tag=mychanneld-20",description:"Multi-functional electric pressure cooker."}],
+  blender:[{title:"Ninja Professional Blender 1000W",url:"https://www.amazon.com/s?k=Ninja+Professional+Blender&tag=mychanneld-20",description:"High-speed blender for smoothies and shakes."}],
+  supplements:[{title:"Methylene Blue",url:"https://amzn.to/4ldkJwL",description:"Mitochondrial support and cognitive supplement."}],
+  face_cream:[{title:"La Roche-Posay Toleriane Double Repair Face Moisturizer",url:"https://www.amazon.com/s?k=La+Roche+Posay+Toleriane&tag=mychanneld-20",description:"Hydrating face cream with ceramides and niacinamide."}],
+  tech:[{title:"Apple AirPods Pro (2nd Gen)",url:"https://amzn.to/3UAYMx7",description:"Premium noise-cancelling earbuds."}],
+  headphones:[{title:"Sony WH-1000XM4 Headphones",url:"https://amzn.to/40OGbkE",description:"Industry-leading noise cancelling headphones."}]
 };
 
-// 1400 character review generator
-function generateReview(productName, category){
-  return `${productName} is a top-quality product perfect for anyone looking for ${category}. This ${category} has been designed to deliver exceptional results, ensuring high satisfaction for every user. Many customers who purchased this ${category} highlight its reliability, efficiency, and premium performance. Whether you are new to ${category} products or looking for an upgrade, this ${productName} provides superior benefits. Its features make it a standout choice among other ${category} items in the market. Enjoy the advantages of using this ${category} daily, and enhance your routine with the trusted ${productName}. Perfect for gifting or personal use, this ${category} ensures consistent quality and lasting results. Grab this ${category} today and experience the difference that ${productName} brings to your lifestyle, backed by positive reviews and proven performance.`;
+// Generate 1400-character SEO review
+function generateSEOReview(title){
+  return `${title} is an excellent product that provides superior performance and reliability. Customers consistently praise its quality, features, and design. Perfect for daily use, it ensures high satisfaction and a trusted experience. Ideal for anyone looking to enhance their lifestyle with a premium choice. This product stands out in its category and offers exceptional value. Available now through our Amazon affiliate links, it’s suitable for gifting or personal use. Don’t miss out on trying ${title} and experience the benefits it brings, supported by glowing reviews and trusted performance.`;
 }
 
-// Handle category selection
-document.getElementById('categorySelect').addEventListener('change', e=>{
-  const cat = e.target.value;
-  const outputDiv = document.getElementById('productOutput');
-  if(!cat){ outputDiv.innerHTML=""; return; }
-  const products = demoProducts[cat];
-  if(!products){ outputDiv.innerHTML="No products in this category."; return; }
+// TTS handling
+let synth=window.speechSynthesis;
+let currentUtter=null;
 
-  outputDiv.innerHTML = "";
-  products.forEach(p=>{
-    const review = generateReview(p.name, cat);
-    const div = document.createElement('div');
-    div.style.marginBottom = "20px";
-    div.innerHTML = `
-      <p><strong>🛒 Product:</strong> <a href="${p.link}" target="_blank">${p.name}</a></p>
-      <p><strong>🎬 1400-character Review:</strong> ${review}</p>
-      <button onclick="speakText('${review.replace(/'/g,'')}')">🔊 TTS Preview</button>
-    `;
-    outputDiv.appendChild(div);
-  });
+document.getElementById('showProduct').addEventListener('click',()=>{
+  let cat=document.getElementById('categorySelect').value;
+  if(!cat){alert("Select a category."); return;}
+  let product=FALLBACK_PRODUCTS[cat][0];
+  let review=generateSEOReview(product.title);
+  let output=`Product: ${product.title}\nDescription: ${product.description}\nAmazon Link: ${product.url}\n\nTTS 1400-character review:\n${review}`;
+  document.getElementById('productOutput').textContent=output;
+
+  // Play TTS
+  if(currentUtter)synth.cancel();
+  currentUtter=new SpeechSynthesisUtterance(review);
+  // Female friendly voice first
+  let voices=synth.getVoices();
+  currentUtter.voice=voices.find(v=>v.name.includes("Samantha"))||voices[0];
+  synth.speak(currentUtter);
 });
 
-// TTS function
-function speakText(text){
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en"))||null;
-  speechSynthesis.speak(utter);
-}
+document.getElementById('stopTTS').addEventListener('click',()=>{
+  if(currentUtter)synth.cancel();
+});
 </script>
 
 </body>
