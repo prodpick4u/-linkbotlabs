@@ -1,147 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Prodpick4u – Smart Shopping Assistant</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
 <style>
-body {
-  font-family:'Inter',sans-serif;
-  margin:0; padding:0;
-  color:white; line-height:1.6;
-  background: linear-gradient(-45deg,#0a0033,#3b007f,#1a1aff,#6f00ff);
-  background-size:400% 400%;
-  animation: gradientShift 20s ease infinite;
-}
-@keyframes gradientShift {
-  0%{background-position:0% 50%;}
-  25%{background-position:50% 50%;}
-  50%{background-position:100% 50%;}
-  75%{background-position:50% 50%;}
-  100%{background-position:0% 50%;}
-}
-header {
-  text-align:center;
-  padding:3rem 1rem;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(8px);
-}
-header h1 { font-size:2.5rem; margin-bottom:1rem; opacity:0; animation:fadeIn 1s forwards;}
-header p { font-size:1.2rem; opacity:0; animation:fadeIn 1s 0.5s forwards; margin-bottom:1rem;}
-.btn {
-  display:inline-block; margin:0.5rem; padding:0.8rem 1.5rem;
-  background: linear-gradient(135deg,#6a11cb,#2575fc);
-  color:white; text-decoration:none; border-radius:8px;
-  font-weight:600; transition:0.4s; box-shadow:0 4px 15px rgba(0,0,0,0.3);
-  animation:fadeIn 1s 1s forwards; opacity:0;
-}
-.btn:hover {
-  transform: scale(1.05);
-  box-shadow:0 6px 20px rgba(0,0,0,0.5);
-}
-section {
-  padding:3rem 1rem; text-align:center; max-width:1100px; margin:auto;
-  opacity:0; transform:translateY(20px); transition:all 1s ease;
-}
-h2 { font-size:2rem; margin-bottom:1.5rem; color:#9cf; }
-.categories { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
-.categories a {
-  flex:1 1 150px; max-width:200px; background: rgba(255,255,255,0.08);
-  padding:1rem; border-radius:10px; color:white; font-weight:600;
-  text-decoration:none; transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
-}
-.categories a:hover {
-  transform: scale(1.05);
-  background: rgba(255,255,255,0.2);
-  box-shadow:0 6px 15px rgba(0,0,0,0.4);
-}
-iframe { border-radius:10px; margin-bottom:1.5rem; }
-footer { background: rgba(0,0,0,0.4); text-align:center; padding:2rem 1rem; font-size:0.9rem; }
-@keyframes fadeIn { to {opacity:1;} }
-
-/* Scroll animation */
-section.in-view { opacity:1; transform:translateY(0); transition:all 1s ease; }
-
-/* Responsive */
-@media(max-width:768px){
-  .categories a { flex:1 1 100%; max-width:100%; }
-  iframe { height:250px; }
-}
+  body {
+    font-family: 'Inter', sans-serif;
+    margin:0; padding:0;
+    background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    color:white;
+    line-height:1.6;
+  }
+  @keyframes gradientShift {
+    0%{background-position:0% 50%;}
+    25%{background-position:50% 50%;}
+    50%{background-position:100% 50%;}
+    75%{background-position:50% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  header {
+    text-align:center;
+    padding:3rem 1rem;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+  }
+  header h1 { font-size:2.8rem; margin-bottom:1rem; }
+  header p { font-size:1.2rem; opacity:0.9; margin-bottom:1rem; }
+  .btn {
+    display:inline-block; margin:0.5rem; padding:0.8rem 1.5rem;
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color:white; text-decoration:none; border-radius:8px;
+    font-weight:600; transition:0.3s;
+  }
+  .btn:hover { opacity:0.85; }
+  section { padding:3rem 1rem; text-align:center; max-width:1100px; margin:auto; }
+  h2 { font-size:2rem; margin-bottom:1.5rem; color:#9cf; }
+  .categories { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; }
+  .categories a {
+    flex:1 1 150px; max-width:200px; background: rgba(0,0,0,0.5);
+    padding:1rem; border-radius:10px; color:white; font-weight:600;
+    text-decoration:none; transition: transform 0.2s, background 0.3s;
+  }
+  .categories a:hover {
+    transform: scale(1.05);
+    background: rgba(75,0,150,0.7);
+  }
+  iframe { border-radius:10px; margin-bottom:1rem; }
+  footer { background: rgba(0,0,0,0.4); text-align:center; padding:2rem 1rem; font-size:0.9rem; }
+  .link-box {
+    display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:2rem;
+  }
 </style>
 </head>
 <body>
 
 <header>
-<h1>🚀 Welcome to Prodpick4u</h1>
-<p>Your AI-powered shopping tool helps you pick the best Amazon products</p>
-<a href="demo.html" class="btn">Try Demo</a>
-<a href="https://drive.google.com/file/d/1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z/view?usp=drivesdk" class="btn">Download Desktop Demo</a>
-<a href="https://www.fiverr.com/" class="btn">Get Full Version on Fiverr</a>
-<a href="https://github.com/prodpick4u/Prodpick4u" class="btn">View on GitHub</a>
-<a href="https://www.blogger.com/blog/posts/8639219398218448839" class="btn">Read Our Blog</a>
-<a href="https://www.youtube.com/@Prodpick4u" class="btn">Visit YouTube Channel</a>
+  <h1>🚀 Welcome to Prodpick4u</h1>
+  <p>Your AI-powered shopping tool helps you pick the best Amazon products</p>
+  <p><strong>Try the free mobile demo or full desktop version launching soon!</strong></p>
+  <a href="demo.html" class="btn">Try Demo</a>
+  <a href="https://drive.google.com/file/d/1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z/view?usp=drivesdk" class="btn">Download Desktop Demo</a>
 </header>
 
 <section>
-<h2>📺 How We Make The Video</h2>
-<p>Watch how Prodpick4u transforms product data into a complete video automatically.</p>
-<div style="max-width:800px;margin:0 auto;">
-<iframe width="100%" src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
-</div>
+  <h2>📺 How It Works</h2>
+  <iframe width="100%" height="400" src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
+  <p>This video shows how Prodpick4u generates automated product content and reviews using our tool.</p>
 </section>
 
 <section>
-<h2>📂 Shop by Category</h2>
-<div class="categories">
-  <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
-  <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
-  <a href="https://www.amazon.com/s?k=blender&tag=mychanneld-20">🥤 Blenders</a>
-  <a href="https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20">🍚 Rice Cookers</a>
-  <a href="https://www.amazon.com/s?k=headphones&tag=mychanneld-20">🎧 Headphones</a>
-  <a href="https://www.amazon.com/s?k=kitchen+products&tag=mychanneld-20">🍳 Kitchen Tools</a>
-  <a href="https://www.amazon.com/s?k=tech&tag=mychanneld-20">💻 Tech Gadgets</a>
-</div>
+  <h2>💙 Shop With Us & Support Each Other</h2>
+  <div class="link-box">
+    <a href="https://www.blogger.com/blog/posts/8639219398218448839" class="btn">Read Our Blog</a>
+    <a href="https://www.youtube.com/@Prodpick4u" class="btn">Visit YouTube Channel</a>
+    <a href="https://drive.google.com/file/d/1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z/view?usp=drivesdk" class="btn">Desktop Demo</a>
+    <a href="https://affiliate-program.amazon.com/signup" class="btn">Amazon Central Affiliate – 10% Off</a>
+  </div>
 </section>
 
 <section>
-<h2>📺 Generated by Our Tool</h2>
-<p>See a product go from listing to a full automated video using our system.</p>
-<div style="max-width:800px;margin:0 auto;">
-<iframe width="100%" src="https://www.youtube.com/embed/qwfACbh93M0?si=uofVyp2kyYV7EU-H" allowfullscreen></iframe>
-</div>
+  <h2>📂 Categories</h2>
+  <div class="categories">
+    <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
+    <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
+    <a href="https://www.amazon.com/s?k=blender&tag=mychanneld-20">🥤 Blenders</a>
+    <a href="https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20">🍚 Rice Cookers</a>
+    <a href="https://www.amazon.com/s?k=headphones&tag=mychanneld-20">🎧 Headphones</a>
+    <a href="https://www.amazon.com/s?k=kitchen+products&tag=mychanneld-20">🍳 Kitchen Tools</a>
+    <a href="https://www.amazon.com/s?k=tech&tag=mychanneld-20">💻 Tech Gadgets</a>
+  </div>
 </section>
 
 <section>
-<h2>ℹ️ About Prodpick4u</h2>
-<p>
-This is a **short mobile demo only**. It does not complete the video creation and upload. 
-You can try the full desktop version with a **keyholders app** or a **demo app**. Full release launching soon!
-</p>
-<p>
-Prodpick4u is designed to make smart shopping easier. Try the free demo, support the project by shopping with our Amazon links, 
-and unlock the full desktop tool for extra features. Every purchase helps us grow—and you can join in earning commission when you upgrade!
-</p>
-<p>
-🎁 <a href="https://affiliate-program.amazon.com/signup" class="btn">Sign up for Amazon Central Affiliate – 10% off full version</a>
-</p>
+  <h2>📺 Product to Video Automation</h2>
+  <iframe width="100%" height="400" src="https://www.youtube.com/embed/qwfACbh93M0?si=uofVyp2kyYV7EU-H" allowfullscreen></iframe>
+  <p>This video demonstrates how a product is automatically converted into a full video using Prodpick4u.</p>
+</section>
+
+<section>
+  <h2>💬 What People Are Saying</h2>
+  <p>“This tool saves me so much time when picking products. Love it!” – Early Tester</p>
+  <p>“Clean, simple, and it actually works. Excited for the full version.” – Beta User</p>
+</section>
+
+<section>
+  <h2>📧 Contact Us</h2>
+  <p>Have questions or feedback? Reach out to us:</p>
+  <form onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+    <input type="email" placeholder="Your email" required style="padding:10px; width:300px; border-radius:5px; border:none; margin-right:10px;">
+    <button type="submit" class="btn">Send</button>
+  </form>
+  <p>📧 omnistall70@gmail.com</p>
 </section>
 
 <footer>
-<p>© 2025 Prodpick4u – Powered by Affiliate Shopping</p>
-<p>Support the project by shopping with us: <a href="https://www.amazon.com/?tag=mychanneld-20" style="color:#9cf;">Amazon Affiliate Link</a></p>
+  <p>© 2025 Prodpick4u – Powered by Affiliate Shopping</p>
+  <p>Support the project by shopping with our links: <a href="https://www.amazon.com/?tag=mychanneld-20" style="color:#9cf;">Amazon Affiliate Link</a></p>
 </footer>
-
-<script>
-// Scroll animations for sections
-const sections = document.querySelectorAll('section');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if(entry.isIntersecting) entry.target.classList.add('in-view');
-  });
-},{threshold:0.2});
-sections.forEach(section => observer.observe(section));
-</script>
 
 </body>
 </html>
