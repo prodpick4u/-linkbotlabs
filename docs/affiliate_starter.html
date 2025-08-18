@@ -95,7 +95,7 @@ button:hover { opacity:0.85; }
 <!-- Password Section -->
 <div class="glass">
 <h2 class="section-title">🔒 Affiliate Access</h2>
-<p>Enter the password provided by the developer to activate your affiliate links.</p>
+<p>Enter the password provided to activate your affiliate links.</p>
 <input type="password" id="demoPassword" placeholder="Enter access code">
 <button onclick="checkPassword()">Unlock Affiliate Form</button>
 <div id="passwordOutput" class="output"></div>
@@ -133,7 +133,7 @@ button:hover { opacity:0.85; }
 // ==========================
 // Demo Password
 // ==========================
-const DEMO_PASSWORD = "starter123"; 
+const DEMO_PASSWORD = "starter123"; // change to your secret password
 
 function checkPassword() {
   const input = document.getElementById('demoPassword').value.trim();
@@ -147,7 +147,7 @@ function checkPassword() {
 }
 
 // ==========================
-// Fallback Products & Blogs
+// Full Fallback Products
 // ==========================
 const FALLBACK_PRODUCTS = {
   "health":[
@@ -190,6 +190,9 @@ const FALLBACK_PRODUCTS = {
   ]
 };
 
+// ==========================
+// Blog Posts
+// ==========================
 const BLOG_POSTS = {
   "health": `<h4>Top Health Tips for 2025</h4><p>Stay fit with daily routines, supplements, and mindful nutrition.</p>`,
   "beauty": `<h4>Beauty Essentials</h4><p>Discover must-have beauty tools and skincare products for daily care.</p>`,
@@ -201,7 +204,7 @@ const BLOG_POSTS = {
 };
 
 // ==========================
-// TTS + SEO
+// TTS + SEO Review
 // ==========================
 let synth = window.speechSynthesis;
 let utter; let typingInterval;
@@ -228,13 +231,13 @@ function startTyping(text, spanId){ clearInterval(typingInterval); const span=do
 // ==========================
 let userAffiliateTag = "";
 
-function renderCategories(expandAll=false){
+function renderCategories(){
   let html = "";
   Object.keys(FALLBACK_PRODUCTS).forEach(cat => {
     let blogHTML = BLOG_POSTS[cat] || "<i>No blog content available</i>";
     html += `
-      <button class="collapsible ${expandAll?'active':''}">📂 ${cat.charAt(0).toUpperCase() + cat.slice(1)}</button>
-      <div class="content" style="max-height:${expandAll?'none':'0'};">
+      <button class="collapsible">📂 ${cat.charAt(0).toUpperCase() + cat.slice(1)}</button>
+      <div class="content">
         <button onclick="playAllTTS('${cat}')">🔊 Play All TTS</button>
         ${FALLBACK_PRODUCTS[cat].map((p,i)=>{
           let url = userAffiliateTag ? p.url.replace(/tag=[^&]+/, `tag=${userAffiliateTag}`) : p.url;
@@ -265,7 +268,7 @@ function renderCategories(expandAll=false){
 }
 
 // ==========================
-// Play All TTS
+// Play All TTS sequentially
 // ==========================
 async function playAllTTS(cat){
   stopTTS();
@@ -300,8 +303,8 @@ document.getElementById('affiliateForm').addEventListener('submit', e=>{
   userAffiliateTag = document.getElementById('userAffiliate').value.trim();
   if(!userAffiliateTag){ alert("Enter a valid tag."); return; }
   document.getElementById('regOutput').innerHTML = `✅ Affiliate tag <b>${userAffiliateTag}</b> activated. All product links updated! Your 1-week demo starts now.`;
-  startDemoTimer(7); 
-  renderCategories(true); 
+  startDemoTimer(7); // 7 days
+  renderCategories();
 });
 
 // ==========================
@@ -332,4 +335,7 @@ function startDemoTimer(days){
 function askBot(){
   const input = document.getElementById('chatInput').value.trim();
   if(!input) return;
-  const chatBox = document.getElementById('
+  const chatBox = document.getElementById('chatBox');
+  chatBox.innerHTML += `<p><b>You:</b> ${input}</p>`;
+  chatBox.innerHTML += `<p><b>Bot:</b> This is a demo bot. Ask about affiliate setup, products, or workflow.</p>`;
+  chatBox.scrollTop =
