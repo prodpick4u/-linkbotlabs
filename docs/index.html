@@ -1,137 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prodpick4u – Smart Shopping Assistant</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" />
-  <style>
-    /* Body & Background */
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(-45deg, #0a0033, #1b004d, #1a1a66, #3b007f);
-      background-size: 400% 400%;
-      animation: gradientShift 20s ease infinite;
-      color: white;
-      line-height: 1.4;
-    }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      25% { background-position: 50% 50%; }
-      50% { background-position: 100% 50%; }
-      75% { background-position: 50% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Header */
-    header {
-      text-align: center;
-      padding: 2.5rem 1rem;
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(10px);
-    }
-    header h1 { font-size: 2.6rem; margin-bottom: 0.4rem; font-weight: 700; }
-    header p { font-size: 1.05rem; opacity: 0.9; margin-bottom: 0.3rem; }
-
-    /* Buttons */
-    .btn {
-      display: inline-block;
-      margin: 0.25rem;
-      padding: 0.65rem 1.2rem;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: white;
-      text-decoration: none;
-      border-radius: 7px;
-      font-weight: 600;
-      transition: 0.25s;
-      font-size: 0.92rem;
-    }
-    .btn:hover { opacity: 0.85; }
-
-    /* Sections */
-    section {
-      padding: 2rem 1rem;
-      text-align: center;
-      max-width: 1100px;
-      margin: auto;
-    }
-    h2 { font-size: 1.85rem; margin-bottom: 1rem; color: #9cf; font-weight: 600; }
-    p { margin-bottom: 0.8rem; }
-
-    /* Categories */
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.7rem;
-    }
-    .categories a {
-      flex: 1 1 140px;
-      max-width: 180px;
-      background: rgba(0, 0, 0, 0.55);
-      padding: 0.8rem;
-      border-radius: 8px;
-      color: white;
-      font-weight: 600;
-      text-decoration: none;
-      transition: transform 0.2s, background 0.3s;
-      font-size: 0.9rem;
-    }
-    .categories a:hover {
-      transform: scale(1.05);
-      background: rgba(75, 0, 150, 0.75);
-    }
-
-    /* Link Box (Shop With Us) */
-    .link-box {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.7rem;
-      margin-bottom: 1rem;
-    }
-
-    /* Iframes */
-    iframe {
-      border-radius: 8px;
-      margin-bottom: 0.7rem;
-      width: 100%;
-      height: 560px;
-    }
-
-    /* Footer */
-    footer {
-      background: rgba(0, 0, 0, 0.35);
-      text-align: center;
-      padding: 1.8rem 1rem;
-      font-size: 0.88rem;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prodpick4u – Smart Shopping Assistant</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    margin:0; padding:0;
+    background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    color:white;
+    line-height:1.5;
+  }
+  @keyframes gradientShift {
+    0%{background-position:0% 50%;}
+    25%{background-position:50% 50%;}
+    50%{background-position:100% 50%;}
+    75%{background-position:50% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  header {
+    text-align:center;
+    padding:3rem 1rem;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+  }
+  header h1 { font-size:2.8rem; margin-bottom:1rem; }
+  header p { font-size:1.15rem; opacity:0.9; margin-bottom:0.7rem; }
+  .btn {
+    display:inline-block; margin:0.4rem; padding:0.7rem 1.3rem;
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color:white; text-decoration:none; border-radius:6px;
+    font-weight:600; transition:0.3s;
+    font-size:0.95rem;
+  }
+  .btn:hover { opacity:0.85; }
+  section { padding:2.5rem 1rem; text-align:center; max-width:1100px; margin:auto; }
+  h2 { font-size:1.9rem; margin-bottom:1.3rem; color:#9cf; }
+  .categories { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem; }
+  .categories a {
+    flex:1 1 140px; max-width:180px; background: rgba(0,0,0,0.55);
+    padding:0.8rem; border-radius:8px; color:white; font-weight:600;
+    text-decoration:none; transition: transform 0.2s, background 0.3s;
+    font-size:0.9rem;
+  }
+  .categories a:hover {
+    transform: scale(1.05);
+    background: rgba(75,0,150,0.7);
+  }
+  .video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    margin-bottom:1rem;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius:8px;
+  }
+  .link-box {
+    display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem; margin-bottom:1.5rem;
+  }
+  footer {
+    background: rgba(0,0,0,0.4);
+    text-align:center; padding:1.5rem 1rem; font-size:0.9rem;
+  }
+  .contact-form input[type="email"] {
+    padding:8px; width:250px; border-radius:5px; border:none; margin-right:8px;
+  }
+  .contact-form button { padding:8px 14px; }
+  .comments p {
+    background: rgba(0,0,0,0.5); padding:0.8rem 1rem; border-radius:6px;
+    margin-bottom:0.7rem;
+    text-align:left;
+    max-width:700px;
+    margin-left:auto; margin-right:auto;
+  }
+</style>
 </head>
 <body>
 
 <header>
   <h1>🚀 Welcome to Prodpick4u</h1>
-  <p>Your AI-powered shopping tool helps you pick the best Amazon products</p>
-  <p><strong>Try the free mobile demo or full desktop version launching soon!</strong></p>
+  <p><strong>AI-powered tool to pick the best Amazon products & generate automated reviews and videos</strong></p>
+  <p>Save time, boost sales, and explore full automation when desktop version launches soon!</p>
   <a href="demo.html" class="btn">Try Demo</a>
   <a href="https://drive.google.com/file/d/1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z/view?usp=drivesdk" class="btn">Download Desktop Demo</a>
 </header>
 
 <section>
-  <h2>📂 Categories & Support</h2>
+  <h2>📖 About the Tool</h2>
+  <p>Prodpick4u simplifies your Amazon shopping and affiliate revenue creation.  
+     Input your product keyword, get optimized reviews, TTS scripts, and automated video outputs.  
+     Benefits include faster product selection, professional content generation, and the ability to earn commission by sharing products.</p>
+</section>
 
-  <!-- Shop With Us links above categories -->
+<section>
+  <h2>📺 How It Works</h2>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
+  </div>
+  <p>Watch how Prodpick4u generates content and videos from a product in seconds.</p>
+</section>
+
+<section>
+  <h2>🔗 Useful Links</h2>
   <div class="link-box">
     <a href="https://www.blogger.com/blog/posts/8639219398218448839" class="btn">Read Our Blog</a>
     <a href="https://www.youtube.com/@Prodpick4u" class="btn">Visit YouTube Channel</a>
-    <a href="https://drive.google.com/file/d/1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z/view?usp=drivesdk" class="btn">Desktop Demo</a>
-    <a href="https://affiliate-program.amazon.com/signup" class="btn">Amazon Central Affiliate – 10% Off</a>
+    <a href="demo.html" class="btn">Mobile Demo</a>
+    <a href="https://affiliate-program.amazon.com/signup" class="btn">Amazon Affiliate – 10% Off</a>
   </div>
+</section>
 
-  <!-- Categories -->
+<section>
+  <h2>📂 Categories – Shop & Support</h2>
+  <p>Support the developer and earn credit for the full launch. Click a category to shop via Amazon with our affiliate links:</p>
   <div class="categories">
     <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
     <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
@@ -144,36 +135,32 @@
 </section>
 
 <section>
-  <h2>📺 How It Works</h2>
-  <iframe src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
-  <p>This video shows how Prodpick4u generates automated product content and reviews using our tool.</p>
-</section>
-
-<section>
   <h2>📺 Product to Video Automation</h2>
-  <iframe src="https://www.youtube.com/embed/qwfACbh93M0?si=uofVyp2kyYV7EU-H" allowfullscreen></iframe>
-  <p>This video demonstrates how a product is automatically converted into a full video using Prodpick4u.</p>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/qwfACbh93M0?si=uofVyp2kyYV7EU-H" allowfullscreen></iframe>
+  </div>
+  <p>See the end-to-end process: product → review script → TTS → fully automated video generation.</p>
 </section>
 
 <section>
-  <h2>💬 What People Are Saying</h2>
-  <p>“This tool saves me so much time when picking products. Love it!” – Early Tester</p>
-  <p>“Clean, simple, and it actually works. Excited for the full version.” – Beta User</p>
+  <h2>💬 Customer Comments</h2>
+  <div class="comments">
+    <p>“This tool saves me hours every week. Truly amazing!” – Early Tester</p>
+    <p>“Automated reviews and video generation is a game-changer. Can’t wait for the full version.” – Beta User</p>
+  </div>
 </section>
 
 <section>
   <h2>📧 Contact Us</h2>
-  <p>Have questions or feedback? Reach out to us:</p>
-  <form action="https://formsubmit.co/your-email@example.com" method="POST">
-    <input type="email" name="email" placeholder="Your email" required style="padding:10px; width:280px; border-radius:5px; border:none; margin-right:8px;">
-    <textarea name="message" placeholder="Your message" required style="padding:10px; width:280px; height:100px; border-radius:5px; border:none; margin-bottom:8px;"></textarea>
+  <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+    <input type="email" placeholder="Your email" required>
     <button type="submit" class="btn">Send</button>
   </form>
 </section>
 
 <footer>
   <p>© 2025 Prodpick4u – Powered by Affiliate Shopping</p>
-  <p>Support the project by shopping with our links: <a href="https://www.amazon.com/?tag=mychanneld-20" style="color:#9cf;">Amazon Affiliate Link</a></p>
+  <p>Support the project by shopping via <a href="https://www.amazon.com/?tag=mychanneld-20" style="color:#9cf;">Amazon Affiliate Link</a></p>
 </footer>
 
 </body>
