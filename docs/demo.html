@@ -49,58 +49,76 @@ button {
 button:hover { opacity:0.85; }
 .output { background:rgba(0,0,0,0.7); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap; }
 .section-title { font-size:1.5rem; margin-bottom:1rem; text-align:center; }
+.chat-box { background: rgba(0,0,0,0.6); padding:15px; border-radius:8px; max-height:300px; overflow-y:auto; margin-bottom:10px; }
+.chat-input { display:flex; gap:5px; }
+.chat-input input { flex:1; }
 </style>
 </head>
 <body>
 
 <h1>🚀 Prodpick4U Demo</h1>
-<p style="text-align:center;">This is a <strong>short mobile demo only</strong>. Full desktop version allows full video generation & YouTube upload. Keyholders and keyless demos below.</p>
+<p style="text-align:center;">Short mobile demo only. Full desktop version enables full video generation & YouTube uploads. Keyholders & keyless demos below.</p>
+
+<!-- Link to For-Dummies Page -->
+<div class="glass" style="text-align:center;">
+📘 <a href="tts_demo.html" style="color:#9cf; font-weight:bold;">Go to Prodpick4U For-Dummies Page</a>
+</div>
 
 <!-- Amazon Affiliate Sign Up -->
 <div class="glass" style="text-align:center;">
-  🎁 <a href="https://affiliate-program.amazon.com/signup" style="color:#9cf; font-weight:bold;">Sign up for Amazon Central Affiliate – 10% OFF full version</a>
+🎁 <a href="https://affiliate-program.amazon.com/signup" style="color:#9cf; font-weight:bold;">Sign up for Amazon Central Affiliate – 10% OFF full version</a>
 </div>
 
 <!-- Keyholders Demo Box -->
 <div class="glass">
-  <h2 class="section-title">🔑 Keyholders Demo</h2>
-  <p>Enter your Amazon Affiliate Key, API Key, and keyword. Max 3 searches per session, then locked.</p>
-  <form id="keyholdersForm">
-    <label>Amazon Affiliate Tag:
-      <input id="khAffiliate" type="text" placeholder="mychanneld-20" required>
-    </label>
-    <label>Amazon API Key:
-      <input id="khApiKey" type="text" placeholder="AKIA..." required>
-    </label>
-    <label>Keyword:
-      <input id="khKeyword" type="text" placeholder="e.g. blender" required>
-    </label>
-    <button type="submit">Generate Demo</button>
-  </form>
-  <div id="khOutput" class="output"></div>
+<h2 class="section-title">🔑 Keyholders Demo</h2>
+<p>Enter your Amazon Affiliate Key, API Key, and keyword. Max 3 searches per session.</p>
+<form id="keyholdersForm">
+<label>Amazon Affiliate Tag:
+  <input id="khAffiliate" type="text" placeholder="mychanneld-20" required>
+</label>
+<label>Amazon API Key:
+  <input id="khApiKey" type="text" placeholder="AKIA..." required>
+</label>
+<label>Keyword:
+  <input id="khKeyword" type="text" placeholder="e.g. blender" required>
+</label>
+<button type="submit">Generate Demo</button>
+</form>
+<div id="khOutput" class="output"></div>
 </div>
 
 <!-- Keyless Demo Box -->
 <div class="glass">
-  <h2 class="section-title">🗝️ Keyless Demo</h2>
-  <p>Select a category to see products with clickable links, SEO review, and TTS preview.</p>
-  <label>Category:
-    <select id="categorySelect">
-      <option value="">--Choose a Category--</option>
-      <option value="face cream">Face Cream</option>
-      <option value="supplements">Supplements</option>
-      <option value="blender">Blender</option>
-      <option value="rice cooker">Rice Cooker</option>
-      <option value="headphones">Headphones</option>
-      <option value="kitchen">Kitchen Products</option>
-      <option value="tech">Tech Gadgets</option>
-    </select>
-  </label>
-  <div id="klOutput" class="output"></div>
+<h2 class="section-title">🗝️ Keyless Demo</h2>
+<p>Select a category to see products with clickable links, SEO review, and TTS preview.</p>
+<label>Category:
+<select id="categorySelect">
+<option value="">--Choose a Category--</option>
+<option value="face cream">Face Cream</option>
+<option value="supplements">Supplements</option>
+<option value="blender">Blender</option>
+<option value="rice cooker">Rice Cooker</option>
+<option value="headphones">Headphones</option>
+<option value="kitchen">Kitchen Products</option>
+<option value="tech">Tech Gadgets</option>
+</select>
+</label>
+<div id="klOutput" class="output"></div>
+</div>
+
+<!-- AI Q&A Bot -->
+<div class="glass">
+<h2 class="section-title">🤖 Ask the Bot</h2>
+<div id="chatBox" class="chat-box"></div>
+<div class="chat-input">
+<input type="text" id="chatInput" placeholder="Ask about the tool, API keys, or workflow...">
+<button onclick="askBot()">Send</button>
+</div>
 </div>
 
 <script>
-// Fallback products (simplified 10-12 products example)
+// Fallback products
 const fallbackProducts = [
   {category:"face cream", name:"La Roche-Posay Toleriane Face Cream", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"},
   {category:"supplements", name:"Omega 3 Fish Oil", link:"https://www.amazon.com/dp/DEMOASIN2?tag=mychanneld-20"},
@@ -110,27 +128,18 @@ const fallbackProducts = [
   {category:"kitchen", name:"KitchenAid Mixer", link:"https://www.amazon.com/dp/DEMOASIN6?tag=mychanneld-20"},
   {category:"tech", name:"Echo Dot 5th Gen", link:"https://www.amazon.com/dp/DEMOASIN7?tag=mychanneld-20"}
 ];
-
-// Limit keyholders searches
 let khTries = 0;
 const maxKhTries = 3;
-
-// Generate SEO review
 function generateSEOReview(name, keyword){
-  return `${name} is a top-quality product for anyone looking for ${keyword}. Designed to deliver exceptional results, this ${keyword} is reliable, efficient, and premium quality. Perfect for daily use, gifting, or upgrading your routine, ${name} offers consistent satisfaction backed by positive reviews. Experience the difference today with ${name}, enhancing your lifestyle with superior features and proven performance.`;
+  return `${name} is a top-quality product for anyone looking for ${keyword}. Reliable, efficient, and premium quality. Perfect for daily use or gifting. Enhance your lifestyle today with ${name}.`;
 }
-
-// Keyholders form submit
+// Keyholders
 document.getElementById('keyholdersForm').addEventListener('submit', e=>{
   e.preventDefault();
-  if(khTries>=maxKhTries){
-    alert("Keyholders demo locked. Max tries reached.");
-    return;
-  }
+  if(khTries>=maxKhTries){ alert("Keyholders demo locked. Max tries reached."); return; }
   khTries++;
   const kw = document.getElementById('khKeyword').value.trim();
   const affiliate = document.getElementById('khAffiliate').value.trim();
-  if(!kw || !affiliate){ alert("Fill all fields."); return; }
   const product = fallbackProducts.find(p=>p.category===kw.toLowerCase())||fallbackProducts[0];
   const review = generateSEOReview(product.name, kw);
   document.getElementById('khOutput').innerHTML = `
@@ -139,13 +148,12 @@ document.getElementById('keyholdersForm').addEventListener('submit', e=>{
     <br><button onclick="playTTS('${review}','khReviewText')">🔊 Play TTS</button>
     <button onclick="stopTTS()">⏹ Stop TTS</button>
   `;
-  startTyping(review, 'khReviewText');
+  startTyping(review,'khReviewText');
 });
-
-// Keyless category select
+// Keyless
 document.getElementById('categorySelect').addEventListener('change', e=>{
   const cat = e.target.value;
-  if(!cat) { document.getElementById('klOutput').innerHTML=''; return; }
+  if(!cat){ document.getElementById('klOutput').innerHTML=''; return; }
   const product = fallbackProducts.find(p=>p.category===cat.toLowerCase());
   const review = generateSEOReview(product.name, cat);
   document.getElementById('klOutput').innerHTML = `
@@ -156,30 +164,36 @@ document.getElementById('categorySelect').addEventListener('change', e=>{
   `;
   startTyping(review,'klReviewText');
 });
-
-// TTS and live typing
+// TTS
 let synth = window.speechSynthesis;
-let utter;
+let utter; let typingInterval;
 function playTTS(text, spanId){
   stopTTS();
-  utter = new SpeechSynthesisUtterance(text);
-  // Choose voice
-  const voices = synth.getVoices();
+  utter=new SpeechSynthesisUtterance(text);
+  const voices=synth.getVoices();
   utter.voice = voices.find(v=>v.name.includes("Samantha"))||voices[0];
   synth.speak(utter);
   startTyping(text, spanId);
 }
-function stopTTS(){ if(synth.speaking) synth.cancel(); typingInterval&&clearInterval(typingInterval); }
-let typingInterval;
-function startTyping(text, spanId){
-  clearInterval(typingInterval);
-  const span = document.getElementById(spanId);
-  let i=0;
-  span.textContent='';
-  typingInterval=setInterval(()=>{
-    if(i<text.length){ span.textContent+=text.charAt(i); i++; }
-    else clearInterval(typingInterval);
-  },25);
+function stopTTS(){ if(synth.speaking) synth.cancel(); clearInterval(typingInterval); }
+function startTyping(text, spanId){ clearInterval(typingInterval); const span=document.getElementById(spanId); let i=0; span.textContent=''; typingInterval=setInterval(()=>{ if(i<text.length){ span.textContent+=text.charAt(i); i++; } else clearInterval(typingInterval); },25); }
+
+// Simple AI Q&A Bot
+const chatBox=document.getElementById('chatBox');
+function askBot(){
+  const input=document.getElementById('chatInput').value.trim();
+  if(!input) return;
+  const p=document.createElement('p'); p.style.color="#0f0"; p.textContent="You: "+input; chatBox.appendChild(p);
+  const answer=document.createElement('p'); answer.style.color="#9cf"; answer.textContent="Bot: "+generateBotAnswer(input); chatBox.appendChild(answer);
+  chatBox.scrollTop=chatBox.scrollHeight; document.getElementById('chatInput').value='';
+}
+function generateBotAnswer(question){
+  question = question.toLowerCase();
+  if(question.includes("amazon")) return "You can get your Amazon API key by signing up as an affiliate and generating your Product Advertising API keys.";
+  if(question.includes("youtube")) return "YouTube API key can be obtained from Google Cloud Console. Enable YouTube Data API v3, then generate the key.";
+  if(question.includes("seo")) return "The tool automatically generates SEO-friendly reviews and content for your product keywords.";
+  if(question.includes("video")) return "Prodpick4U converts product data into automated YouTube videos ready for upload.";
+  return "This tool helps affiliates, bloggers, and side hustlers create automated product content and revenue streams. Check the Dummies page for detailed steps.";
 }
 </script>
 
