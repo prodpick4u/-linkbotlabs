@@ -118,21 +118,24 @@ button:hover { opacity:0.85; }
 </div>
 
 <script>
-// Fallback products
+// Fallback products with real affiliate links
 const fallbackProducts = [
-  {category:"face cream", name:"La Roche-Posay Toleriane Face Cream", link:"https://www.amazon.com/dp/DEMOASIN?tag=mychanneld-20"},
-  {category:"supplements", name:"Omega 3 Fish Oil", link:"https://www.amazon.com/dp/DEMOASIN2?tag=mychanneld-20"},
-  {category:"blender", name:"Ninja Professional Blender 1000W", link:"https://www.amazon.com/dp/DEMOASIN3?tag=mychanneld-20"},
-  {category:"rice cooker", name:"Instant Pot Duo 6 Qt", link:"https://www.amazon.com/dp/DEMOASIN4?tag=mychanneld-20"},
-  {category:"headphones", name:"Sony WH-1000XM5 Headphones", link:"https://www.amazon.com/dp/DEMOASIN5?tag=mychanneld-20"},
-  {category:"kitchen", name:"KitchenAid Mixer", link:"https://www.amazon.com/dp/DEMOASIN6?tag=mychanneld-20"},
-  {category:"tech", name:"Echo Dot 5th Gen", link:"https://www.amazon.com/dp/DEMOASIN7?tag=mychanneld-20"}
+  {category:"face cream", name:"Olay Regenerist Micro-Sculpting Cream Face Moisturizer", link:"https://amzn.to/41r3Ibr?tag=mychanneld-20"},
+  {category:"supplements", name:"Methylene Blue", link:"https://amzn.to/4ldkJwL?tag=mychanneld-20"},
+  {category:"blender", name:"NutriBullet Pro High-Speed Blender/Mixer System", link:"https://amzn.to/47eVzKT?tag=mychanneld-20"},
+  {category:"rice cooker", name:"Instant Pot Duo 7-in-1 Electric Pressure Cooker", link:"https://amzn.to/4oD8b50?tag=mychanneld-20"},
+  {category:"headphones", name:"Sony WH-1000XM4 Wireless Noise-Cancelling Headphones", link:"https://amzn.to/40OGbkE?tag=mychanneld-20"},
+  {category:"kitchen", name:"KitchenAid Artisan Tilt-Head Stand Mixer", link:"https://amzn.to/45lPCJH?tag=mychanneld-20"},
+  {category:"tech", name:"Apple AirPods Pro (2nd Generation)", link:"https://amzn.to/3UAYMx7?tag=mychanneld-20"}
 ];
+
 let khTries = 0;
 const maxKhTries = 3;
+
 function generateSEOReview(name, keyword){
   return `${name} is a top-quality product for anyone looking for ${keyword}. Reliable, efficient, and premium quality. Perfect for daily use or gifting. Enhance your lifestyle today with ${name}.`;
 }
+
 // Keyholders
 document.getElementById('keyholdersForm').addEventListener('submit', e=>{
   e.preventDefault();
@@ -150,6 +153,7 @@ document.getElementById('keyholdersForm').addEventListener('submit', e=>{
   `;
   startTyping(review,'khReviewText');
 });
+
 // Keyless
 document.getElementById('categorySelect').addEventListener('change', e=>{
   const cat = e.target.value;
@@ -164,6 +168,7 @@ document.getElementById('categorySelect').addEventListener('change', e=>{
   `;
   startTyping(review,'klReviewText');
 });
+
 // TTS
 let synth = window.speechSynthesis;
 let utter; let typingInterval;
