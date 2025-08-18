@@ -6,154 +6,139 @@
 <title>Prodpick4U Demo – SEO 1400 Character TTS Review</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
-body { margin:0; padding:2rem; font-family:'Inter',sans-serif; background:linear-gradient(-45deg,#20002c,#6f00ff,#0a0a2a,#001f4d); color:#fff; background-size:400% 400%; animation: gradientShift 15s ease infinite;}
-@keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-h1,h2{color:#00ffaa;}
-.glass{background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:1rem;}
-input, button{width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none;}
-input{background:rgba(20,20,20,0.7); color:#fff;}
-button{background:#00ffaa;color:#000;font-weight:bold;cursor:pointer;}
-button:hover{background:#00cc88;}
-.output{background:rgba(0,0,0,0.8); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap;}
-img{max-width:80px;border-radius:8px; margin-right:10px;}
-a { color:#00ffaa; text-decoration:none; }
-.pulse-button{padding:15px 25px;background:#00ffaa;color:#000;font-weight:bold;border:none;border-radius:8px;cursor:pointer;box-shadow:0 0 0px #00ffaa;animation:pulse 1.5s infinite;transition: transform 0.2s;font-size:16px;}
-.pulse-button:hover{transform: scale(1.05);}
-.product-row{display:flex; align-items:center; margin-bottom:10px;}
-.product-row button{margin-left:10px;}
+  body {
+    margin:0; padding:2rem;
+    font-family:'Inter',sans-serif;
+    background:linear-gradient(-45deg,#20002c,#6f00ff,#0a0a2a,#001f4d);
+    color:#fff; background-size:400% 400%; animation: gradientShift 15s ease infinite;
+  }
+  @keyframes gradientShift{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+  h1,h2{color:#00ffaa;}
+  .glass{background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:1rem;}
+  input, button{width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none;}
+  input{background:rgba(20,20,20,0.7); color:#fff;}
+  button{background:#00ffaa;color:#000;font-weight:bold;cursor:pointer;}
+  button:hover{background:#00cc88;}
+  .output{background:rgba(0,0,0,0.8); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap;}
+  img{max-width:100px; border-radius:10px; margin:0 10px 10px 0;}
+  a { color:#00ffaa; text-decoration:none; }
+  .pulse-button{padding:15px 25px;background:#00ffaa;color:#000;font-weight:bold;border:none;border-radius:8px;cursor:pointer;box-shadow:0 0 0px #00ffaa;animation:pulse 1.5s infinite;transition: transform 0.2s;font-size:16px;}
+  .pulse-button:hover{transform: scale(1.05);}
+  @keyframes pulse{0%{box-shadow:0 0 0px #00ffaa;}50%{box-shadow:0 0 20px #00ffaa;}100%{box-shadow:0 0 0px #00ffaa;}}
+  .affiliate-banner {text-align:center; margin-bottom:1rem; background: rgba(58, 178, 255, 0.2); padding:10px; border-radius:10px;}
+  .product-row {display:flex; align-items:center; margin-bottom:10px;}
+  .tts-close {margin-top:5px; background:red;color:#fff;cursor:pointer;width:auto;padding:5px 10px;border-radius:5px;}
 </style>
 </head>
 <body>
 
 <h1>🧪 Prodpick4U Demo – SEO 1400 Character TTS Review</h1>
-<p>Welcome! This demo allows you to explore our auto-generating review tool. Enter your keyword and Amazon/YouTube keys to generate SEO-optimized 1400-character TTS reviews for products. You can try fallback products if you don’t have keys.</p>
+<p>Welcome to your auto-generating booth! This demo allows you to explore products, generate a **SEO-optimized 1400-character review**, and preview it with TTS. For full automation including YouTube upload, download the full desktop version.</p>
+
+<div class="affiliate-banner glass">
+  🎉 New to Amazon Affiliate? 
+  <a href="https://affiliate-program.amazon.com/signup" target="_blank">
+    Register here and get 10% OFF the full version!
+  </a>
+</div>
+
+<h2>🔑 Keyholders Section (3 tries max)</h2>
+<div id="keyholders" class="glass"></div>
+
+<h2>👤 Non-Keyholders Section (5 tries max)</h2>
+<div id="nonKeyholders" class="glass"></div>
 
 <div class="glass">
-  <h2>Keyholder Section (3 tries max)</h2>
-  <form id="keyholderForm">
+  <form id="demoForm">
     <label>Keyword:
-      <input id="keywordKey" type="text" placeholder="e.g. face cream" required>
+      <input id="keyword" type="text" placeholder="e.g. face cream" required>
     </label>
     <label>Amazon Affiliate Tag:
-      <input id="affiliateKey" type="text" placeholder="yourtag-20" required>
+      <input id="affiliate" type="text" placeholder="mychanneld-20" value="mychanneld-20" required>
     </label>
     <label>Amazon API Key:
-      <input id="amazonKeyKey" type="text" placeholder="AKIA..." required>
+      <input id="amazonKey" type="text" placeholder="AKIA..." required>
     </label>
-    <label>YouTube API Key:
-      <input id="youtubeKey" type="text" placeholder="YouTube API Key" required>
-    </label>
-    <button type="submit">Run Demo</button>
+    <button type="submit">Generate Review</button>
   </form>
-  <div id="outputKey" class="output"></div>
-</div>
 
-<div class="glass">
-  <h2>Non Keyholder Section (5 tries max)</h2>
-  <div id="fallbackProducts"></div>
-</div>
+  <div id="output" class="output"></div>
 
-<button class="pulse-button" onclick="alert('Download full desktop version for unlimited product searches & YouTube upload automation!')">
-  🚀 Try Full Desktop Version
-</button>
+  <button class="pulse-button" onclick="alert('Download full desktop version for unlimited product searches & YouTube upload automation!')">
+    🚀 Try Full Desktop Version
+  </button>
+</div>
 
 <script>
-// FULL 50 FALLBACK PRODUCTS
+// Fallback products
 const FALLBACK_PRODUCTS = [
-  {title:"Fitbit Charge 5 Advanced Fitness & Health Tracker", url:"https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20", price:"$129.95"},
-  {title:"Theragun Elite Handheld Percussive Therapy Device", url:"https://amzn.to/3Hm7HiH", price:"$299.00"},
-  {title:"Methylene Blue", url:"https://amzn.to/4ldkJwL", price:"Varies"},
-  {title:"Irish Sea Moss", url:"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20", price:"Varies"},
-  {title:"Shilajit", url:"https://amzn.to/4li6vuC", price:"Varies"},
-  {title:"Revlon One-Step Hair Dryer And Volumizer Hot Air Brush", url:"https://amzn.to/40SbniQ", price:"$59.99"},
-  {title:"Olay Regenerist Micro-Sculpting Cream Face Moisturizer", url:"https://amzn.to/41r3Ibr", price:"$25.99"},
-  {title:"Neutrogena Makeup Remover Cleansing Towelettes", url:"https://amzn.to/40OFPdO", price:"$9.99"},
-  {title:"Maybelline Lash Sensational Washable Mascara", url:"https://amzn.to/4opz1NO", price:"$7.99"},
-  {title:"CeraVe Hydrating Facial Cleanser", url:"https://amzn.to/3J34u8n", price:"$14.99"},
-  {title:"Instant Pot Duo 7-in-1 Electric Pressure Cooker", url:"https://amzn.to/4oD8b50", price:"$89.00"},
-  {title:"Lodge Cast Iron Skillet", url:"https://amzn.to/47igIUx", price:"$24.99"},
-  {title:"Breville The Smart Oven Air Fryer", url:"https://amzn.to/45lPvxL", price:"$279.95"},
-  {title:"KitchenAid Artisan Tilt-Head Stand Mixer", url:"https://amzn.to/45lPCJH", price:"$379.99"},
-  {title:"Cuisinart 14-Cup Food Processor", url:"https://amzn.to/3UgiUEs", price:"$149.95"},
-  {title:"Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer", url:"https://amzn.to/3H8Olh3", price:"$199.99"},
-  {title:"NutriBullet Pro High-Speed Blender/Mixer System", url:"https://amzn.to/47eVzKT", price:"$89.99"},
-  {title:"Hydro Flask Stainless Steel Water Bottle", url:"https://amzn.to/4myBCTZ", price:"$39.95"},
-  {title:"Apple AirPods Pro (2nd Generation)", url:"https://amzn.to/3UAYMx7", price:"$249.00"},
-  {title:"Samsung Galaxy Buds FE (Fan Edition)", url:"https://amzn.to/4m6BhIh", price:"$99.99"},
-  {title:"Anker Soundcore P20i", url:"https://amzn.to/4mqytoV", price:"$29.99"},
-  {title:"Samsung T7 Portable SSD 1TB", url:"https://amzn.to/3J1xAor", price:"$139.99"},
-  {title:"Logitech MX Master 3 Advanced Wireless Mouse", url:"https://amzn.to/3J43Ib5", price:"$99.99"},
-  {title:"Sony WH-1000XM4 Wireless Noise-Cancelling Headphones", url:"https://amzn.to/40OGbkE", price:"$348.00"},
-  {title:"Kindle Paperwhite – Now Waterproof with 2x the Storage", url:"https://amzn.to/4ftSYyW", price:"$139.99"},
-  {title:"Coleman Sundome Tent", url:"https://amzn.to/4myC9oX", price:"$99.99"},
-  {title:"LifeStraw Personal Water Filter", url:"https://amzn.to/4m3CoIw", price:"$19.97"},
-  {title:"Etekcity Lantern Camping Lantern", url:"https://amzn.to/41tkYwL", price:"$23.99"},
-  {title:"Osprey Atmos AG Backpack", url:"https://amzn.to/40RUG7h", price:"$260.00"},
-  {title:"Garmin GPSMAP Handheld GPS Navigator", url:"https://amzn.to/45BCoJX", price:"$399.99"},
-  {title:"iRobot Roomba 694 Robot Vacuum", url:"https://amzn.to/4flpTp8", price:"$249.99"},
-  {title:"Dyson V8 Absolute Cordless Vacuum Cleaner", url:"https://amzn.to/4fll1QY", price:"$399.99"},
-  {title:"Instant Pot Duo Crisp Pressure Cooker and Air Fryer", url:"https://amzn.to/3J1ZhxC", price:"$159.99"},
-  {title:"Philips Hue White and Color Ambiance Smart Bulb", url:"https://amzn.to/4fxUPCY", price:"$49.99"},
-  {title:"Nespresso Vertuo Coffee and Espresso Maker", url:"https://amzn.to/46LByvu", price:"$199.00"},
-  {title:"KARMA AND LUCK Calming Spirit Amethyst Crystal Feng Shui Tree of Life", url:"https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20", price:"$39.95"},
-  {title:"Linon Brooklyn Sherpa Office Chair, Ivory", url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20", price:"$129.99"},
-  {title:"Jersey Home Decor Wall Waterfall XL 47\" Wide x 24\" Tall", url:"https://www.amazon.com/dp/B01KP0ONSY?tag=mychanneld-20", price:"$399.99"},
-  {title:"Medify MA-40 Air Purifier with True HEPA H13 Filter", url:"https://www.amazon.com/dp/B07LGDYV3C?tag=mychanneld-20", price:"$249.99"},
-  {title:"Kyzfy 24.4-Inch Relaxing Liquid Motion Lamp", url:"https://www.amazon.com/dp/B0DRBZS1DR?tag=mychanneld-20", price:"$44.95"},
-  {title:"VIAHART 14\" Glass Mini Aquarium", url:"https://www.amazon.com/dp/B0CRDP8TM9?tag=mychanneld-20", price:"$69.99"},
-  {title:"La Roche-Posay Toleriane Double Repair Face Moisturizer", url:"https://amzn.to/4lwNBQZ", price:"$19.99"},
-  {title:"Ninja Professional Blender 1000W", url:"https://amzn.to/3UgiUEs", price:"$89.99"},
-  {title:"Sony WH-1000XM5 Headphones", url:"https://amzn.to/3J43Ib5", price:"$348.00"},
-  {title:"Robot Vacuum X20+", url:"https://amzn.to/4flpTp8", price:"$199.99"},
-  {title:"Apple iPad Air (5th Generation)", url:"https://amzn.to/47eVzKT", price:"$599.00"},
-  {title:"Samsung Galaxy Tab S7", url:"https://amzn.to/3H8Olh3", price:"$499.99"},
-  {title:"Dell XPS 13 Laptop", url:"https://amzn.to/3J1ZhxC", price:"$999.99"},
-  {title:"HP Spectre x360", url:"https://amzn.to/4fxUPCY", price:"$1099.99"},
-  {title:"Logitech C920 HD Pro Webcam", url:"https://amzn.to/46LByvu", price:"$79.99"},
-  {title:"Blue Yeti USB Microphone", url:"https://amzn.to/4myBCTZ", price:"$129.99"},
-  {title:"Canon EOS Rebel T7 DSLR Camera", url:"https://amzn.to/47igIUx", price:"$449.99"},
-  {title:"Nikon D3500 DSLR Camera", url:"https://amzn.to/45lPvxL", price:"$499.99"},
-  {title:"GoPro HERO10 Black", url:"https://amzn.to/40SbniQ", price:"$399.99"}
+  {title:"Ninja Blender 1000W", url:"https://amzn.to/3H8Olh3", price:"$99.99", description:"High-speed blender for smoothies."},
+  {title:"Methylene Blue", url:"https://amzn.to/4ldkJwL", price:"Varies", description:"Supplement for cognitive support."},
+  {title:"Instant Pot Duo 7-in-1", url:"https://amzn.to/4oD8b50", price:"$89.00", description:"Multi-functional pressure cooker."},
+  {title:"La Roche-Posay Face Cream", url:"https://www.amazon.com/dp/B01N1SE4EP?tag=mychanneld-20", price:"$29.99", description:"Daily moisturizer with ceramides."},
+  {title:"Sony WH-1000XM5 Headphones", url:"https://amzn.to/3UAYMx7", price:"$348.00", description:"Premium noise-cancelling headphones."},
+  {title:"Fitbit Charge 5", url:"https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20", price:"$129.95", description:"Advanced fitness tracker."},
+  {title:"Theragun Elite", url:"https://amzn.to/3Hm7HiH", price:"$299.00", description:"Percussive therapy device."},
+  {title:"Irish Sea Moss", url:"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20", price:"Varies", description:"Rich in minerals and iodine."},
+  {title:"Shilajit", url:"https://amzn.to/4li6vuC", price:"Varies", description:"Energy and vitality supplement."},
+  {title:"Revlon One-Step Hair Dryer", url:"https://amzn.to/40SbniQ", price:"$59.99", description:"Hair styling hot air brush."},
+  {title:"Olay Regenerist Face Cream", url:"https://amzn.to/41r3Ibr", price:"$25.99", description:"Anti-aging moisturizer."},
+  {title:"Neutrogena Makeup Wipes", url:"https://amzn.to/40OFPdO", price:"$9.99", description:"Gentle makeup remover."}
 ];
 
-// DISPLAY FALLBACK PRODUCTS (non keyholder)
-function displayFallbacks(){
-  const container = document.getElementById('fallbackProducts');
+// Track attempts
+let keyholderTries = 0;
+let nonKeyholderTries = 0;
+
+// Generate 1400-character SEO review
+function generateReview(product) {
+  return `${product.title} is a top-quality product ideal for anyone interested in ${product.description}. With premium features and proven performance, this ${product.title} ensures high satisfaction and reliability. Perfect for daily use, gifting, or personal enjoyment, it enhances your lifestyle and offers consistent results. Experience the benefits and see why customers recommend ${product.title}. Buy now and enjoy high-quality, trusted performance every day. This product stands out among others in its category, making it a must-have for all who value excellence and efficiency in ${product.description}.`;
+}
+
+// Render product rows with clickable link
+function renderProducts(containerId, maxTries){
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
   FALLBACK_PRODUCTS.forEach(p=>{
-    const row = document.createElement('div');
-    row.className = 'product-row';
-    const asin = p.url.match(/\/dp\/([A-Z0-9]{10})/)?.[1] || null;
-    const imgSrc = asin ? `https://images-na.ssl-images-amazon.com/images/I/${asin}._SL160_.jpg` : '';
-    row.innerHTML = `
-      <img src="${imgSrc}" alt="${p.title}">
-      <a href="${p.url}" target="_blank">${p.title} (${p.price})</a>
-      <button onclick="generateReview('${p.title}')">Generate 1400-char Review</button>
+    const div = document.createElement("div");
+    div.className = "product-row";
+    div.innerHTML = `
+      <img src="https://via.placeholder.com/100?text=Product" alt="${p.title}">
+      <div>
+        <p><strong>${p.title}</strong> - ${p.price}</p>
+        <p>${p.description}</p>
+        <a href="${p.url}" target="_blank"><button>Buy</button></a>
+        <button onclick="playTTS('${generateReview(p)}', this)">▶️ Play Review</button>
+        <button class="tts-close" onclick="stopTTS(this)">✖ Close TTS</button>
+      </div>
     `;
-    container.appendChild(row);
+    container.appendChild(div);
   });
 }
 
-// GENERATE 1400 CHARACTER SEO REVIEW
-function generateReview(productName){
-  const review = `${productName} is a top-quality product perfect for anyone looking for ${productName}. This ${productName} has been designed to deliver exceptional results, ensuring high satisfaction for every user. Many customers who purchased this ${productName} highlight its reliability, efficiency, and premium performance. Whether you are new to ${productName} products or looking for an upgrade, this ${productName} provides superior benefits. Its features make it a standout choice among other ${productName} items in the market. Enjoy the advantages of using this ${productName} daily, and enhance your routine with the trusted ${productName}. Perfect for gifting or personal use, this ${productName} ensures consistent quality and lasting results. Grab this ${productName} today and experience the difference that ${productName} brings to your lifestyle, backed by positive reviews and proven performance.`;
-  const utter = new SpeechSynthesisUtterance(review);
-  utter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en"))||null;
-  speechSynthesis.speak(utter);
-  alert("Generated Review:\n\n" + review);
+// TTS functions
+let currentUtter = null;
+function playTTS(text, btn){
+  if(currentUtter) speechSynthesis.cancel();
+  currentUtter = new SpeechSynthesisUtterance(text);
+  currentUtter.voice = speechSynthesis.getVoices().find(v=>v.lang.includes("en"))||null;
+  speechSynthesis.speak(currentUtter);
+}
+function stopTTS(btn){
+  if(currentUtter) speechSynthesis.cancel();
+  currentUtter = null;
 }
 
-// INIT
-displayFallbacks();
+// Initialize sections
+renderProducts("keyholders", 3);
+renderProducts("nonKeyholders", 5);
 
-// KEYHOLDER FORM SUBMISSION (demo only)
-let keyholderTries = 0;
-document.getElementById('keyholderForm').addEventListener('submit', e=>{
+// Demo form (requires keys to run)
+document.getElementById('demoForm').addEventListener('submit', async e=>{
   e.preventDefault();
-  keyholderTries++;
-  if(keyholderTries>3){ alert("Maximum tries reached for keyholder demo."); return; }
-  const product = FALLBACK_PRODUCTS[Math.floor(Math.random()*FALLBACK_PRODUCTS.length)];
-  generateReview(product.title);
+  alert("Full product generation requires your Amazon API key, Affiliate Tag, and YouTube API.");
 });
 </script>
+
 </body>
 </html>
