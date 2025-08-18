@@ -40,7 +40,6 @@ input, button, select {
 }
 input, select { background: rgba(20,20,20,0.7); color:#fff; }
 button {
-  background: #6a11cb;
   background: linear-gradient(135deg,#6a11cb,#2575fc);
   color:#fff;
   font-weight:bold;
@@ -53,6 +52,31 @@ button:hover { opacity:0.85; }
 .chat-input { display:flex; gap:5px; }
 .chat-input input { flex:1; }
 .timer { text-align:center; font-size:1rem; margin-bottom:1rem; color:#ff0; }
+
+/* Collapsible styles */
+.collapsible {
+  background-color: rgba(0,0,0,0.5);
+  color: #fff;
+  cursor: pointer;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.1rem;
+  border-radius:8px;
+  margin-bottom:6px;
+}
+.collapsible.active { background-color: rgba(75,0,150,0.7); }
+.content {
+  padding: 0 15px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
 </style>
 </head>
 <body>
@@ -60,10 +84,10 @@ button:hover { opacity:0.85; }
 <h1>🚀 Prodpick4U Affiliate Starter Page</h1>
 <p style="text-align:center;">Try the demo with our default affiliate links. Once you register, your own Amazon Affiliate tag will be used for all products for 1 week.</p>
 
-<!-- 1️⃣ Timer for User Demo -->
+<!-- Timer -->
 <div id="demoTimer" class="timer"></div>
 
-<!-- 2️⃣ Registration Form -->
+<!-- Registration Form -->
 <div class="glass">
 <h2 class="section-title">📝 Register Your Affiliate Tag</h2>
 <p>Enter your Amazon Affiliate Tag to replace our links with yours and run your 1-week free demo.</p>
@@ -76,25 +100,13 @@ button:hover { opacity:0.85; }
 <div id="regOutput" class="output"></div>
 </div>
 
-<!-- 3️⃣ Product Categories -->
+<!-- Product Categories -->
 <div class="glass">
-<h2 class="section-title">🗝️ Products – Default Fallback (Yours at top)</h2>
-<label>Select a category:
-<select id="categorySelect">
-  <option value="">--Choose a Category--</option>
-  <option value="health">Health</option>
-  <option value="beauty">Beauty</option>
-  <option value="kitchen">Kitchen</option>
-  <option value="tech">Tech</option>
-  <option value="outdoors">Outdoors</option>
-  <option value="household">Household</option>
-  <option value="home-decor">Home Decor</option>
-</select>
-</label>
+<h2 class="section-title">🗝️ Products – Default Fallback</h2>
 <div id="productOutput" class="output"></div>
 </div>
 
-<!-- 4️⃣ AI Q&A Bot -->
+<!-- AI Q&A Bot -->
 <div class="glass">
 <h2 class="section-title">🤖 Ask the Bot</h2>
 <div id="chatBox" class="chat-box"></div>
@@ -129,40 +141,23 @@ const FALLBACK_PRODUCTS = {
     {title:"Breville The Smart Oven Air Fryer", url:"https://amzn.to/45lPvxL", price:"$279.95", description:"Countertop convection oven with air fryer."},
     {title:"KitchenAid Artisan Tilt-Head Stand Mixer", url:"https://amzn.to/45lPCJH", price:"$379.99", description:"Versatile stand mixer for baking."},
     {title:"Cuisinart 14-Cup Food Processor", url:"https://amzn.to/3UgiUEs", price:"$149.95", description:"Powerful food processor for chopping and slicing."},
-    {title:"Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer", url:"https://amzn.to/3H8Olh3", price:"$199.99", description:"Multi-cooker with air frying and pressure cooking features."},
-    {title:"NutriBullet Pro High-Speed Blender/Mixer System", url:"https://amzn.to/47eVzKT", price:"$89.99", description:"Compact blender for smoothies and shakes."},
-    {title:"Hydro Flask Stainless Steel Water Bottle", url:"https://amzn.to/4myBCTZ", price:"$39.95", description:"Vacuum insulated bottle keeps drinks cold or hot."},
   ],
   "tech":[
     {title:"Apple AirPods Pro (2nd Generation)", url:"https://amzn.to/3UAYMx7", price:"$249.00", description:"Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality."},
     {title:"Samsung Galaxy Buds FE (Fan Edition)", url:"https://amzn.to/4m6BhIh", price:"$99.99", description:"Reliable ANC, auto device switching, balanced audio."},
     {title:"Anker Soundcore P20i", url:"https://amzn.to/4mqytoV", price:"$29.99", description:"Budget-friendly wireless earbuds with decent ANC."},
-    {title:"Samsung T7 Portable SSD 1TB", url:"https://amzn.to/3J1xAor", price:"$139.99", description:"Fast external solid state drive."},
-    {title:"Logitech MX Master 3 Advanced Wireless Mouse", url:"https://amzn.to/3J43Ib5", price:"$99.99", description:"Ergonomic wireless mouse with customizable buttons."},
-    {title:"Sony WH-1000XM4 Wireless Noise-Cancelling Headphones", url:"https://amzn.to/40OGbkE", price:"$348.00", description:"Industry-leading noise cancelling headphones."},
-    {title:"Kindle Paperwhite – Now Waterproof", url:"https://amzn.to/4ftSYyW", price:"$139.99", description:"Waterproof e-reader with high-resolution display."},
   ],
   "outdoors":[
     {title:"Coleman Sundome Tent", url:"https://amzn.to/4myC9oX", price:"$99.99", description:"Easy setup tent for camping."},
     {title:"LifeStraw Personal Water Filter", url:"https://amzn.to/4m3CoIw", price:"$19.97", description:"Portable water purifier for outdoor use."},
-    {title:"Etekcity Lantern Camping Lantern", url:"https://amzn.to/41tkYwL", price:"$23.99", description:"LED lantern with adjustable brightness."},
-    {title:"Osprey Atmos AG Backpack", url:"https://amzn.to/40RUG7h", price:"$260.00", description:"Comfortable hiking backpack with ventilation."},
-    {title:"Garmin GPSMAP Handheld GPS Navigator", url:"https://amzn.to/45BCoJX", price:"$399.99", description:"Rugged GPS device for outdoor navigation."},
   ],
   "household":[
     {title:"iRobot Roomba 694 Robot Vacuum", url:"https://amzn.to/4flpTp8", price:"$249.99", description:"Smart robot vacuum for home cleaning."},
-    {title:"Dyson V8 Absolute Cordless Vacuum Cleaner", url:"https://amzn.to/4fll1QY", price:"$399.99", description:"Powerful cordless vacuum cleaner."},
-    {title:"Instant Pot Duo Crisp Pressure Cooker and Air Fryer", url:"https://amzn.to/3J1ZhxC", price:"$159.99", description:"Multi-use pressure cooker with air fryer lid."},
-    {title:"Philips Hue White and Color Ambiance Smart Bulb", url:"https://amzn.to/4fxUPCY", price:"$49.99", description:"Smart LED bulb with app control."},
-    {title:"Nespresso Vertuo Coffee and Espresso Maker", url:"https://amzn.to/46LByvu", price:"$199.00", description:"Single serve coffee and espresso machine."},
+    {title:"Dyson V8 Absolute Cordless Vacuum Cleaner", url:"https://amzn.to/4fll1QY", price:"399.99", description:"Powerful cordless vacuum cleaner."},
   ],
   "home-decor":[
-    {title:"KARMA AND LUCK Calming Spirit Amethyst Crystal Feng Shui Tree of Life", url:"https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20", price:"$39.95", description:"A handcrafted amethyst crystal tree symbolizing peace and spiritual growth."},
-    {title:"Linon Brooklyn Sherpa Office Chair, Ivory", url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20", price:"$129.99", description:"Plush ivory sherpa upholstered office chair with adjustable height."},
-    {title:"Jersey Home Decor Wall Waterfall XL", url:"https://www.amazon.com/dp/B01KP0ONSY?tag=mychanneld-20", price:"$399.99", description:"A large, wall-mounted waterfall feature adding tranquil ambiance."},
-    {title:"Medify MA-40 Air Purifier with True HEPA H13 Filter", url:"https://www.amazon.com/dp/B07LGDYV3C?tag=mychanneld-20", price:"$249.99", description:"Covers up to 1,793 sq ft, removing particles down to 0.1 microns."},
-    {title:"Kyzfy 24.4-Inch Relaxing Liquid Motion Lamp", url:"https://www.amazon.com/dp/B0DRBZS1DR?tag=mychanneld-20", price:"$44.95", description:"Soothing liquid motion lamp with vibrant colors."},
-    {title:"VIAHART 14\" Glass Mini Aquarium", url:"https://www.amazon.com/dp/B0CRDP8TM9?tag=mychanneld-20", price:"$69.99", description:"Compact glass mini aquarium for tabletop decoration."},
+    {title:"KARMA AND LUCK Amethyst Crystal Tree of Life", url:"https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20", price:"$39.95", description:"Handcrafted amethyst crystal tree."},
+    {title:"Linon Brooklyn Sherpa Office Chair", url:"https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20", price:"$129.99", description:"Plush ivory sherpa office chair."},
   ]
 };
 
@@ -190,35 +185,40 @@ function stopTTS(){ if(synth.speaking) synth.cancel(); clearInterval(typingInter
 function startTyping(text, spanId){ clearInterval(typingInterval); const span=document.getElementById(spanId); let i=0; span.textContent=''; typingInterval=setInterval(()=>{ if(i<text.length){ span.textContent+=text.charAt(i); i++; } else clearInterval(typingInterval); },25); }
 
 // ==========================
-// 3️⃣ Product Display
+// 3️⃣ Display Categories as Collapsible Boxes
 // ==========================
-let userAffiliateTag = ""; // default empty until user registers
+let userAffiliateTag = ""; // default empty
 
-document.getElementById('categorySelect').addEventListener('change', e=>{
-  const cat = e.target.value;
-  if(!cat){ document.getElementById('productOutput').innerHTML=''; return; }
-  const products = FALLBACK_PRODUCTS[cat.toLowerCase()];
-  if(!products) return;
-  
-  // Update URLs if user has affiliate tag
-  products.forEach(p=>{
-    if(userAffiliateTag){
-      p.url = p.url.replace(/tag=[^&]+/, `tag=${userAffiliateTag}`);
-    }
-  });
-
+window.addEventListener('DOMContentLoaded', () => {
   let html = "";
-  products.forEach((p,i)=>{
-    const review = generateSEOReview(p.title, cat);
+  Object.keys(FALLBACK_PRODUCTS).forEach((cat) => {
     html += `
-      🛒 <a href="${p.url}" target="_blank">${p.title} (${p.price})</a>
-      📝 SEO Review: <span id="review${i}"></span>
-      <br><button onclick="playTTS('${review}','review${i}')">🔊 Play TTS</button>
-      <button onclick="stopTTS()">⏹ Stop TTS</button>
-      <hr>
+      <button class="collapsible">📂 ${cat.charAt(0).toUpperCase() + cat.slice(1)}</button>
+      <div class="content">
+        ${FALLBACK_PRODUCTS[cat].map((p,i) => {
+          const review = generateSEOReview(p.title, cat);
+          return `
+            🛒 <a href="${p.url}" target="_blank">${p.title} (${p.price})</a><br>
+            📝 SEO Review: <span id="review_${cat}_${i}"></span><br>
+            <button onclick="playTTS('${review}','review_${cat}_${i}')">🔊 Play TTS</button>
+            <button onclick="stopTTS()">⏹ Stop TTS</button>
+            <hr>
+          `;
+        }).join('')}
+      </div>
     `;
   });
   document.getElementById('productOutput').innerHTML = html;
+
+  // Collapsible functionality
+  const collapsibles = document.getElementsByClassName("collapsible");
+  Array.from(collapsibles).forEach(btn => {
+    btn.addEventListener("click", function() {
+      this.classList.toggle("active");
+      const content = this.nextElementSibling;
+      content.style.maxHeight = content.style.maxHeight ? null : content.scrollHeight + "px";
+    });
+  });
 });
 
 // ==========================
@@ -230,7 +230,7 @@ document.getElementById('affiliateForm').addEventListener('submit', e=>{
   if(!userAffiliateTag){ alert("Enter a valid tag."); return; }
   document.getElementById('regOutput').innerHTML = `✅ Affiliate tag <b>${userAffiliateTag}</b> activated. All product links updated! Your 1-week demo starts now.`;
   startDemoTimer(7); // 7 days
-  document.getElementById('categorySelect').dispatchEvent(new Event('change')); // refresh links
+  window.dispatchEvent(new Event('DOMContentLoaded')); // refresh links
 });
 
 // ==========================
@@ -251,4 +251,23 @@ function startDemoTimer(days){
     const h = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
     const m = Math.floor((distance%(1000*60*60))/(1000*60));
     const s = Math.floor((distance%(1000*60))/1000);
-    timerDiv.textContent = `⏳ Your demo expires in ${
+    timerDiv.textContent = `⏳ Your demo expires in ${d}d ${h}h ${m}m ${s}s`;
+  },1000);
+}
+
+// ==========================
+// 6️⃣ Simple AI Bot Placeholder
+// ==========================
+function askBot(){
+  const input = document.getElementById('chatInput').value.trim();
+  if(!input) return;
+  const chatBox = document.getElementById('chatBox');
+  chatBox.innerHTML += `<p><b>You:</b> ${input}</p>`;
+  chatBox.innerHTML += `<p><b>Bot:</b> This is a demo. In the full version, you'll get answers about your Amazon products & affiliate workflow.</p>`;
+  chatBox.scrollTop = chatBox.scrollHeight;
+  document.getElementById('chatInput').value = '';
+}
+</script>
+
+</body>
+</html>
