@@ -23,7 +23,7 @@ button:hover{opacity:0.85;}
 .collapsible.active{background-color: rgba(75,0,150,0.7);}
 .content{padding:10px 5px; max-height:0; overflow:hidden; transition:max-height 0.3s ease; background-color: rgba(0,0,0,0.3); border-radius:6px; margin-bottom:8px;}
 .product-wall{display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
-.product-card{background: rgba(20,20,20,0.6); padding:8px; border-radius:6px; width:45%; text-align:center;}
+.product-card{background: rgba(20,20,20,0.6); padding:8px; border-radius:6px; width:45%; text-align:center; cursor:pointer;}
 .product-card img{max-width:100%; border-radius:6px; margin-bottom:5px;}
 a{color:#9cf; text-decoration:none;}
 a:hover{text-decoration:underline;}
@@ -89,7 +89,7 @@ const FALLBACK_PRODUCTS = {
 {title:"Instant Pot Duo 7-in-1", url:"https://amzn.to/4oD8b50", price:"$89.00", image:"https://m.media-amazon.com/images/I/81kL7YtP+1L._AC_SL1500_.jpg", description:"Multi-functional pressure cooker."},
 {title:"Lodge Cast Iron Skillet", url:"https://amzn.to/47igIUx", price:"$24.99", image:"https://m.media-amazon.com/images/I/91j4X2UKjEL._AC_SL1500_.jpg", description:"Durable pre-seasoned cast iron pan."},
 {title:"Breville Smart Oven Air Fryer", url:"https://amzn.to/45lPvxL", price:"$279.95", image:"https://m.media-amazon.com/images/I/71K3cXx5zJL._AC_SL1500_.jpg", description:"Countertop convection oven with air fryer."},
-{title:"KitchenAid Artisan Stand Mixer", url:"https://amzn.to/45lPCJH", price:"$379.99", image:"https://m.media-amazon.com/images/I/81CJbOlb2SL._AC_SL1500_.jpg", description:"Versatile stand mixer for baking."},
+{title:"KitchenAid Stand Mixer", url:"https://amzn.to/45lPCJH", price:"$379.99", image:"https://m.media-amazon.com/images/I/81CJbOlb2SL._AC_SL1500_.jpg", description:"Versatile stand mixer for baking."},
 {title:"Cuisinart 14-Cup Food Processor", url:"https://amzn.to/3UgiUEs", price:"$149.95", image:"https://m.media-amazon.com/images/I/81X6+GxzTRL._AC_SL1500_.jpg", description:"Powerful food processor for chopping and slicing."}
 ],
 "tech":[
@@ -105,20 +105,6 @@ const FALLBACK_PRODUCTS = {
 {title:"Etekcity Lantern", url:"https://amzn.to/41tkYwL", price:"$23.99", image:"https://m.media-amazon.com/images/I/71jcFblG0AL._AC_SL1500_.jpg", description:"LED camping lantern with adjustable brightness."},
 {title:"Osprey Atmos AG Backpack", url:"https://amzn.to/40RUG7h", price:"$260.00", image:"https://m.media-amazon.com/images/I/81mC+txG6dL._AC_SL1500_.jpg", description:"Comfortable hiking backpack with ventilation."},
 {title:"Garmin GPSMAP Handheld GPS", url:"https://amzn.to/45BCoJX", price:"$399.99", image:"https://m.media-amazon.com/images/I/71YsQ7P4I1L._AC_SL1500_.jpg", description:"Rugged GPS device for outdoor navigation."}
-],
-"household":[
-{title:"iRobot Roomba 694", url:"https://amzn.to/4flpTp8", price:"$249.99", image:"https://m.media-amazon.com/images/I/71Xgtd3nQNL._AC_SL1500_.jpg", description:"Smart robot vacuum for home cleaning."},
-{title:"Dyson V8 Absolute", url:"https://amzn.to/4fll1QY", price:"$399.99", image:"https://m.media-amazon.com/images/I/71f4NErPzvL._AC_SL1500_.jpg", description:"Powerful cordless vacuum cleaner."},
-{title:"Instant Pot Duo Crisp", url:"https://amzn.to/3J1ZhxC", price:"$159.99", image:"https://m.media-amazon.com/images/I/81nHpq2DbWL._AC_SL1500_.jpg", description:"Multi-use pressure cooker with air fryer lid."},
-{title:"Philips Hue Smart Bulb", url:"https://amzn.to/4fxUPCY", price:"$49.99", image:"https://m.media-amazon.com/images/I/61t87MAL-IL._AC_SL1500_.jpg", description:"Smart LED bulb with app control."},
-{title:"Nespresso Vertuo Coffee Maker", url:"https://amzn.to/46LByvu", price:"$199.00", image:"https://m.media-amazon.com/images/I/71QeA5HcLJL._AC_SL1500_.jpg", description:"Single serve coffee and espresso machine."}
-],
-"home-decor":[
-{title:"Amethyst Feng Shui Tree", url:"https://amzn.to/3U6LPwD", price:"$39.95", image:"https://m.media-amazon.com/images/I/71XK9E3bKDL._AC_SL1500_.jpg", description:"Handcrafted amethyst crystal tree symbolizing peace."},
-{title:"Linon Brooklyn Sherpa Chair", url:"https://amzn.to/3U6LPAK", price:"$129.99", image:"https://m.media-amazon.com/images/I/71Qj0Pe9cSL._AC_SL1500_.jpg", description:"Ivory sherpa office chair with adjustable height."},
-{title:"Jersey Wall Waterfall XL", url:"https://amzn.to/3U6LPLM", price:"$399.99", image:"https://m.media-amazon.com/images/I/71xUj6HpkzL._AC_SL1500_.jpg", description:"Large wall-mounted waterfall for tranquil ambiance."},
-{title:"Medify MA-40 Air Purifier", url:"https://amzn.to/3U6LPQR", price:"$249.99", image:"https://m.media-amazon.com/images/I/71q+hlxG3XL._AC_SL1500_.jpg", description:"Covers up to 1,793 sq ft with HEPA H13 filter."},
-{title:"Relaxing Liquid Motion Lamp", url:"https://amzn.to/3U6LPTM", price:"$44.95", image:"https://m.media-amazon.com/images/I/61e5vVZyzFL._AC_SL1500_.jpg", description:"Soothing liquid motion lamp with vibrant colors for relaxation."}
 ]
 };
 
@@ -159,14 +145,11 @@ function renderProductWall() {
 
 // ===== Teleprompter & TTS =====
 function generateTeleprompter(product) {
-  return `🎬 60-Second Teleprompter Script for "${product.title}":\nHello everyone! Today I want to introduce you to the amazing product "${product.title}". This product is perfect for those who want ${product.description.toLowerCase()}. Priced at ${product.price}, it offers excellent value
-  // continuation of generateTeleprompter
-function generateTeleprompter(product) {
-  return `🎬 60-Second Teleprompter Script for "${product.title}":\n
+  return `🎬 60-Second Teleprompter Script for "${product.title}":
+
 Hello everyone! Today I want to introduce you to the amazing product "${product.title}". This product is perfect for those who want ${product.description.toLowerCase()}. Priced at ${product.price}, it offers excellent value. You can check it out and buy it here: ${product.url}?tag=${userAffiliateTag || "demo-20"}. Don’t miss the chance to enhance your daily life with this fantastic item.`;
 }
 
-// ===== Play TTS =====
 function playTTS() {
   const text = document.getElementById("teleprompterText").value;
   if(!text){alert("Please select a product or type text first."); return;}
@@ -203,7 +186,7 @@ function checkAccessCode() {
 }
 
 // ===== Demo Timer =====
-let demoSeconds = 180; // 3 minutes demo
+let demoSeconds = 180;
 function startDemoTimer(){
   const timerEl = document.getElementById("demoTimer");
   demoSeconds = 180;
