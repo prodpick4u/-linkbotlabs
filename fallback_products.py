@@ -4,15 +4,15 @@ FALLBACK_PRODUCTS = {
     "health": [
         {
             "title": "Fitbit Charge 5 Advanced Fitness & Health Tracker",
-            "url": "https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20",
+            "url": "https://amzn.to/45zc4k1",
             "price": "$129.95",
             "description": "Fitness tracker with built-in GPS and health metrics."
         },
         {
             "title": "Theragun Elite Handheld Percussive Therapy Device",
-            "url": "https://amzn.to/3Hm7HiH",
+            "url": "https://amzn.to/463BPYL",
             "price": "$299.00",
-            "description": "Deep muscle treatment massage device."
+            "description": "Professional-grade percussive therapy device for deep muscle treatment and recovery."
         },
         {
             "title": "Methylene Blue",
@@ -37,31 +37,31 @@ FALLBACK_PRODUCTS = {
     "beauty": [
         {
             "title": "Revlon One-Step Hair Dryer And Volumizer Hot Air Brush",
-            "url": "https://amzn.to/40SbniQ",
+            "url": "https://amzn.to/3HIHhrw",
             "price": "$59.99",
             "description": "Hair styling tool for drying and volumizing."
         },
         {
             "title": "Olay Regenerist Micro-Sculpting Cream Face Moisturizer",
-            "url": "https://amzn.to/41r3Ibr",
+            "url": "https://amzn.to/45zc4k1",
             "price": "$25.99",
             "description": "Anti-aging facial moisturizer."
         },
         {
             "title": "Neutrogena Makeup Remover Cleansing Towelettes",
-            "url": "https://amzn.to/40OFPdO",
+            "url": "https://amzn.to/3UAEOSX",
             "price": "$9.99",
             "description": "Gentle wipes for makeup removal."
         },
         {
             "title": "Maybelline Lash Sensational Washable Mascara",
-            "url": "https://amzn.to/4opz1NO",
+            "url": "https://amzn.to/4oHMpgn",
             "price": "$7.99",
             "description": "Volumizing mascara with buildable formula."
         },
         {
             "title": "CeraVe Hydrating Facial Cleanser",
-            "url": "https://amzn.to/3J34u8n",
+            "url": "https://amzn.to/4mI68uu",
             "price": "$14.99",
             "description": "Gentle face cleanser for normal to dry skin."
         },
@@ -144,22 +144,22 @@ FALLBACK_PRODUCTS = {
             "description": "Fast external solid state drive."
         },
         {
-            "title": "Logitech MX Master 3 Advanced Wireless Mouse",
-            "url": "https://amzn.to/3J43Ib5",
+            "title": "Logitech MX Master 3S Wireless Mouse",
+            "url": "https://amzn.to/4oFWA4T",
             "price": "$99.99",
-            "description": "Ergonomic wireless mouse with customizable buttons."
+            "description": "Ergonomic wireless mouse with customizable buttons and high-precision tracking."
         },
         {
-            "title": "Sony WH-1000XM4 Wireless Noise-Cancelling Headphones",
-            "url": "https://amzn.to/40OGbkE",
-            "price": "$348.00",
-            "description": "Industry-leading noise cancelling headphones."
+            "title": "Sony WH-1000XM4 Wireless Noise-Canceling Headphones",
+            "url": "https://amzn.to/3V5ToC2",
+            "price": "$199.99",
+            "description": "Industry-leading noise-canceling headphones with long battery life and touch controls."
         },
         {
-            "title": "Kindle Paperwhite – Now Waterproof with 2x the Storage",
-            "url": "https://amzn.to/4ftSYyW",
-            "price": "$139.99",
-            "description": "Waterproof e-reader with high-resolution display."
+            "title": "Kindle Paperwhite (2024)",
+            "url": "https://amzn.to/4mTKZOd",
+            "price": "$159.99",
+            "description": "Waterproof e-reader with high-resolution 7-inch display and adjustable warm light."
         },
     ],
 
@@ -234,37 +234,37 @@ FALLBACK_PRODUCTS = {
             "title": "KARMA AND LUCK Calming Spirit Amethyst Crystal Feng Shui Tree of Life",
             "url": "https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20",
             "price": "$39.95",
-            "description": "A handcrafted amethyst crystal tree symbolizing peace and spiritual growth, mounted on a crystal base."
+            "description": "A handcrafted amethyst crystal tree symbolizing peace and spiritual growth."
         },
         {
             "title": "Linon Brooklyn Sherpa Office Chair, Ivory",
             "url": "https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20",
             "price": "$129.99",
-            "description": "A plush, ivory sherpa upholstered office chair with a silver base and adjustable height, offering comfort and style."
+            "description": "Ivory sherpa upholstered office chair with adjustable height and silver base."
         },
         {
             "title": "Jersey Home Decor Wall Waterfall XL 47\" Wide x 24\" Tall",
             "url": "https://www.amazon.com/dp/B01KP0ONSY?tag=mychanneld-20",
             "price": "$399.99",
-            "description": "A large, wall-mounted waterfall feature that adds a tranquil ambiance to any room."
+            "description": "Large wall-mounted waterfall feature that adds a tranquil ambiance."
         },
         {
             "title": "Medify MA-40 Air Purifier with True HEPA H13 Filter",
             "url": "https://www.amazon.com/dp/B07LGDYV3C?tag=mychanneld-20",
             "price": "$249.99",
-            "description": "An air purifier covering up to 1,793 sq ft, featuring a HEPA H13 filter to remove particles down to 0.1 microns."
+            "description": "Air purifier covering up to 1,793 sq ft with HEPA H13 filter."
         },
         {
             "title": "Kyzfy 24.4-Inch Relaxing Liquid Motion Lamp",
             "url": "https://www.amazon.com/dp/B0DRBZS1DR?tag=mychanneld-20",
             "price": "$44.95",
-            "description": "A soothing liquid motion lamp with vibrant colors, perfect for relaxation and ambiance."
+            "description": "Soothing liquid motion lamp with vibrant colors for relaxation."
         },
         {
             "title": "VIAHART 14\" Glass Mini Aquarium",
             "url": "https://www.amazon.com/dp/B0CRDP8TM9?tag=mychanneld-20",
             "price": "$69.99",
-            "description": "A compact glass mini aquarium for tabletop decoration and fish keeping."
+            "description": "Compact glass mini aquarium for tabletop decoration and fish keeping."
         },
     ],
 }
