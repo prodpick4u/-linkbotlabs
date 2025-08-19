@@ -1,3 +1,5 @@
+# fallback.py
+
 AFFILIATE_TAG = "mychanneld-20"
 
 FALLBACK_PRODUCTS = {
@@ -22,7 +24,7 @@ FALLBACK_PRODUCTS = {
         },
         {
             "title": "Irish Sea Moss",
-            "url": "https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20",
+            "url": f"https://www.amazon.com/dp/B0CTMJYZ73?tag={AFFILIATE_TAG}",
             "price": "Varies",
             "description": "Rich in iodine and essential minerals for immune and thyroid support."
         },
@@ -43,7 +45,7 @@ FALLBACK_PRODUCTS = {
         },
         {
             "title": "Olay Regenerist Micro-Sculpting Cream Face Moisturizer",
-            "url": "https://amzn.to/45zc4k1",
+            "url": "https://amzn.to/3HwMhQ8",
             "price": "$25.99",
             "description": "Anti-aging facial moisturizer."
         },
@@ -123,19 +125,19 @@ FALLBACK_PRODUCTS = {
             "title": "Apple AirPods Pro (2nd Generation)",
             "url": "https://amzn.to/3UAYMx7",
             "price": "$249.00",
-            "description": "Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality. Perfect for professionals and iPhone users."
+            "description": "Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality."
         },
         {
             "title": "Samsung Galaxy Buds FE (Fan Edition)",
             "url": "https://amzn.to/4m6BhIh",
             "price": "$99.99",
-            "description": "Offers reliable active noise cancellation, auto device switching, and balanced audio at a mid-tier price—ideal for Android users."
+            "description": "Reliable ANC, auto device switching, and balanced audio for Android users."
         },
         {
             "title": "Anker Soundcore P20i",
             "url": "https://amzn.to/4mqytoV",
             "price": "$29.99",
-            "description": "Budget-friendly bestseller wireless earbuds with decent ANC and comfort."
+            "description": "Budget-friendly wireless earbuds with decent ANC and comfort."
         },
         {
             "title": "Samsung T7 Portable SSD 1TB",
@@ -232,37 +234,37 @@ FALLBACK_PRODUCTS = {
     "home-decor": [
         {
             "title": "KARMA AND LUCK Calming Spirit Amethyst Crystal Feng Shui Tree of Life",
-            "url": "https://www.amazon.com/dp/B0B8QWN9NT?tag=mychanneld-20",
+            "url": f"https://www.amazon.com/dp/B0B8QWN9NT?tag={AFFILIATE_TAG}",
             "price": "$39.95",
             "description": "A handcrafted amethyst crystal tree symbolizing peace and spiritual growth."
         },
         {
             "title": "Linon Brooklyn Sherpa Office Chair, Ivory",
-            "url": "https://www.amazon.com/dp/B083TRV28M?tag=mychanneld-20",
+            "url": f"https://www.amazon.com/dp/B083TRV28M?tag={AFFILIATE_TAG}",
             "price": "$129.99",
             "description": "Ivory sherpa upholstered office chair with adjustable height and silver base."
         },
         {
             "title": "Jersey Home Decor Wall Waterfall XL 47\" Wide x 24\" Tall",
-            "url": "https://www.amazon.com/dp/B01KP0ONSY?tag=mychanneld-20",
+            "url": f"https://www.amazon.com/dp/B01KP0ONSY?tag={AFFILIATE_TAG}",
             "price": "$399.99",
             "description": "Large wall-mounted waterfall feature that adds a tranquil ambiance."
         },
         {
             "title": "Medify MA-40 Air Purifier with True HEPA H13 Filter",
-            "url": "https://www.amazon.com/dp/B07LGDYV3C?tag=mychanneld-20",
+            "url": f"https://www.amazon.com/dp/B07LGDYV3C?tag={AFFILIATE_TAG}",
             "price": "$249.99",
             "description": "Air purifier covering up to 1,793 sq ft with HEPA H13 filter."
         },
         {
             "title": "Kyzfy 24.4-Inch Relaxing Liquid Motion Lamp",
-            "url": "https://www.amazon.com/dp/B0DRBZS1DR?tag=mychanneld-20",
+            "url": f"https://www.amazon.com/dp/B0DRBZS1DR?tag={AFFILIATE_TAG}",
             "price": "$44.95",
             "description": "Soothing liquid motion lamp with vibrant colors for relaxation."
         },
         {
             "title": "VIAHART 14\" Glass Mini Aquarium",
-            "url": "https://www.amazon.com/dp/B0CRDP8TM9?tag=mychanneld-20",
+            "url": f"https://www.amazon.com/dp/B0CRDP8TM9?tag={AFFILIATE_TAG}",
             "price": "$69.99",
             "description": "Compact glass mini aquarium for tabletop decoration and fish keeping."
         },
