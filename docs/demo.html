@@ -124,6 +124,7 @@ button:hover { opacity:0.85; }
 </div>
 
 <script>
+// ====== Fallback Products ======
 const fallbackProducts = [
   {category:"face cream", name:"Olay Regenerist Micro-Sculpting Cream Face Moisturizer", link:"https://amzn.to/41r3Ibr?tag=mychanneld-20"},
   {category:"supplements", name:"Methylene Blue", link:"https://amzn.to/4ldkJwL?tag=mychanneld-20"},
@@ -137,9 +138,9 @@ const fallbackProducts = [
 let khTries = 0;
 const maxKhTries = 3;
 
-// Generate longer dynamic review (~60 seconds read)
+// Generate dynamic SEO review
 function generateSEOReview(name, keyword){
-  return `${name} is a premium product for anyone looking for ${keyword}. It offers exceptional quality, reliability, and design that enhances everyday use. With features tailored for modern lifestyles, this product is perfect for gifting or personal use. Experience the benefits today and elevate your routine with ${name}. Additional insights, user experiences, and expert tips make this a top choice for 2025, ensuring your satisfaction and long-term value.`;
+  return `${name} is a premium product for anyone looking for ${keyword}. Exceptional quality, reliability, and design enhance everyday use. Perfect for gifting or personal use. Experience the benefits today and elevate your routine with ${name}.`;
 }
 
 // TTS
@@ -147,7 +148,6 @@ let synth = window.speechSynthesis;
 let utter;
 let typingInterval;
 
-// Populate voice selector with English voices
 function populateVoiceSelects(){
   let voices = synth.getVoices();
   if(!voices.length){ setTimeout(populateVoiceSelects,100); return; }
@@ -164,9 +164,7 @@ function populateVoiceSelects(){
 }
 if (speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = populateVoiceSelects;
-} else {
-    populateVoiceSelects();
-}
+} else { populateVoiceSelects(); }
 
 function playTTS(text, spanId){
   stopTTS();
@@ -214,7 +212,7 @@ document.getElementById('categorySelect').addEventListener('change', e=>{
   startTyping(review,'klReviewText');
 });
 
-// Simple AI Q&A Bot
+// AI Q&A Bot
 const chatBox=document.getElementById('chatBox');
 function askBot(){
   const input=document.getElementById('chatInput').value.trim();
