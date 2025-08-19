@@ -29,6 +29,8 @@ button:hover { opacity:0.85; }
 .collapsible.active { background-color: rgba(75,0,150,0.7); }
 .content { padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background-color: rgba(0,0,0,0.3); border-radius: 8px; margin-bottom: 10px; }
 .blog-post { background: rgba(20,20,20,0.6); padding:10px; border-radius:6px; margin-top:10px; color:#fff; }
+a { color:#9cf; text-decoration:none; }
+a:hover { text-decoration:underline; }
 </style>
 </head>
 <body>
@@ -45,10 +47,11 @@ button:hover { opacity:0.85; }
 
 <!-- Password Section -->
 <div class="glass">
-<h2 class="section-title">🔒 Affiliate Access</h2>
-<p>Enter the password provided to activate your affiliate links.</p>
-<input type="password" id="demoPassword" placeholder="Enter access code">
-<button onclick="checkPassword()">Unlock Affiliate Form</button>
+<h2 class="section-title">🔒 Affiliate Access – Paid Wall</h2>
+<p>This product wall is available only via purchase or rental through <a href="https://www.fiverr.com/YOUR_PROFILE" target="_blank">Fiverr</a>.  
+Once you complete the payment, you will receive a secure access code to unlock the full affiliate product wall.</p>
+<input type="password" id="demoPassword" placeholder="Enter your Fiverr access code">
+<button onclick="checkPassword()">Unlock Paid Wall</button>
 <div id="passwordOutput" class="output"></div>
 </div>
 
@@ -81,17 +84,18 @@ button:hover { opacity:0.85; }
 </div>
 
 <script>
-// ===== Demo Password =====
-const DEMO_PASSWORD = "starter123";
-let userAffiliateTag = "";
+// ===== Paid Wall Password =====
+const PAID_WALL_PASSWORD = "starter123"; // replace with real Fiverr codes dynamically if needed
+let userAffiliateTag="";
+
 function checkPassword(){
   const input = document.getElementById('demoPassword').value.trim();
   const output = document.getElementById('passwordOutput');
-  if(input===DEMO_PASSWORD){
-    output.innerHTML="✅ Access granted! Enter your affiliate tag below.";
+  if(input===PAID_WALL_PASSWORD){
+    output.innerHTML="✅ Paid access granted! Enjoy the product wall.";
     document.getElementById('affiliateFormSection').style.display='block';
   } else {
-    output.innerHTML="❌ Incorrect code. Affiliate form is locked.";
+    output.innerHTML="❌ Invalid code. Please purchase access on Fiverr to get a valid code.";
   }
 }
 
