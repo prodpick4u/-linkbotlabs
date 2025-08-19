@@ -40,6 +40,7 @@ input, button, select {
 }
 input, select { background: rgba(20,20,20,0.7); color:#fff; }
 button {
+  background: #6a11cb;
   background: linear-gradient(135deg,#6a11cb,#2575fc);
   color:#fff;
   font-weight:bold;
@@ -59,17 +60,26 @@ label { display:block; margin-top:10px; }
 <h1>🚀 Prodpick4U Demo</h1>
 <p style="text-align:center;">Short mobile demo only. Full desktop version enables full video generation & YouTube uploads. Keyholders & keyless demos below.</p>
 
+<!-- Voice Selection -->
+<div class="glass">
+<label>Select TTS Voice:</label>
+<select id="voiceSelect"></select>
+</div>
+
+<!-- Link to For-Dummies Page -->
 <div class="glass" style="text-align:center;">
 📘 <a href="tts_demo.html" style="color:#9cf; font-weight:bold;">Go to Prodpick4U For-Dummies Page</a>
 </div>
 
+<!-- Amazon Affiliate Sign Up -->
 <div class="glass" style="text-align:center;">
 🎁 <a href="https://affiliate-program.amazon.com/signup" style="color:#9cf; font-weight:bold;">Sign up for Amazon Central Affiliate – 10% OFF full version</a>
 </div>
 
-<!-- Keyholders Demo -->
+<!-- Keyholders Demo Box -->
 <div class="glass">
 <h2 class="section-title">🔑 Keyholders Demo</h2>
+<p>Enter your Amazon Affiliate Key, API Key, and keyword. Max 3 searches per session.</p>
 <form id="keyholdersForm">
 <label>Amazon Affiliate Tag:
   <input id="khAffiliate" type="text" placeholder="mychanneld-20" required>
@@ -80,17 +90,15 @@ label { display:block; margin-top:10px; }
 <label>Keyword:
   <input id="khKeyword" type="text" placeholder="e.g. blender" required>
 </label>
-<label>Voice:
-  <select id="khVoiceSelect"></select>
-</label>
 <button type="submit">Generate Demo</button>
 </form>
 <div id="khOutput" class="output"></div>
 </div>
 
-<!-- Keyless Demo -->
+<!-- Keyless Demo Box -->
 <div class="glass">
 <h2 class="section-title">🗝️ Keyless Demo</h2>
+<p>Select a category to see products with clickable links, extended SEO review (~60s), and TTS preview.</p>
 <label>Category:
 <select id="categorySelect">
 <option value="">--Choose a Category--</option>
@@ -102,9 +110,6 @@ label { display:block; margin-top:10px; }
 <option value="kitchen">Kitchen Products</option>
 <option value="tech">Tech Gadgets</option>
 </select>
-</label>
-<label>Voice:
-<select id="klVoiceSelect"></select>
 </label>
 <div id="klOutput" class="output"></div>
 </div>
@@ -120,7 +125,7 @@ label { display:block; margin-top:10px; }
 </div>
 
 <script>
-// Fallback products
+// ===== Fallback products =====
 const fallbackProducts = [
   {category:"face cream", name:"Olay Regenerist Micro-Sculpting Cream Face Moisturizer", link:"https://amzn.to/41r3Ibr?tag=mychanneld-20"},
   {category:"supplements", name:"Methylene Blue", link:"https://amzn.to/4ldkJwL?tag=mychanneld-20"},
@@ -131,85 +136,96 @@ const fallbackProducts = [
   {category:"tech", name:"Apple AirPods Pro (2nd Generation)", link:"https://amzn.to/3UAYMx7?tag=mychanneld-20"}
 ];
 
-let khTries = 0; const maxKhTries = 3;
-let synth = window.speechSynthesis; let utter; let typingInterval;
+let khTries = 0;
+const maxKhTries = 3;
 
-// Populate voices
-function populateVoiceSelects(){
-    const voices = synth.getVoices();
-    const khSelect = document.getElementById('khVoiceSelect');
-    const klSelect = document.getElementById('klVoiceSelect');
-    [khSelect, klSelect].forEach(select=>{
-        voices.forEach(v=>{
-            const opt=document.createElement('option');
-            opt.value=v.name; opt.textContent=v.name; select.appendChild(opt);
-        });
-        select.value = voices.find(v=>v.name.includes("Samantha"))?.name || voices[0].name;
-    });
-}
-if(synth.onvoiceschanged!==undefined){ synth.onvoiceschanged = populateVoiceSelects; }
-
-// Generate SEO review (~60 seconds if read at normal speed)
+// ===== Dynamic ~60s SEO review =====
 function generateSEOReview(name, keyword){
-  return `${name} is a premium product designed for anyone looking for ${keyword}. Featuring high-quality materials and advanced functionality, it ensures reliability and excellent performance in everyday use. Customers appreciate its durability, efficiency, and ease of use. Ideal for personal use or gifting to friends and family. Enhance your lifestyle today with ${name}, and enjoy the confidence of using a top-rated product loved by thousands.`;
+  return `${name} is an outstanding choice for anyone searching for ${keyword}. Designed with premium quality and attention to detail, it offers excellent performance, durability, and reliability. Whether used daily or as a thoughtful gift, it enhances your lifestyle and brings convenience, comfort, and satisfaction. Users appreciate its intuitive design, efficiency, and remarkable results. With positive feedback from satisfied customers, it’s perfect for enhancing your home, health, or tech setup. Invest today in ${name} and experience the difference.`;
 }
 
-// Improved TTS
-function playTTS(text, spanId, voiceName){
-    stopTTS();
-    const sentences = text.match(/[^\.!\?]+[\.!\?]+/g) || [text];
-    const voices = synth.getVoices();
-    const selectedVoice = voices.find(v=>v.name===voiceName) || voices[0];
-    let i = 0;
-    function speakNext(){
-        if(i >= sentences.length) return;
-        utter = new SpeechSynthesisUtterance(sentences[i].trim());
-        utter.voice = selectedVoice; utter.rate=1; utter.pitch=1;
-        utter.onend = () => { i++; setTimeout(speakNext, 250); }
-        synth.speak(utter);
-        updateTyping(sentences.slice(0,i+1).join(' '), spanId);
-    }
-    speakNext();
-}
-function stopTTS(){ if(synth.speaking) synth.cancel(); clearInterval(typingInterval); }
-function updateTyping(text, spanId){ clearInterval(typingInterval); const span=document.getElementById(spanId); let i=0; span.textContent=''; typingInterval=setInterval(()=>{ if(i<text.length){ span.textContent+=text.charAt(i); i++; } else clearInterval(typingInterval); },25); }
-
-// Keyholders demo
+// ===== Keyholders =====
 document.getElementById('keyholdersForm').addEventListener('submit', e=>{
   e.preventDefault();
   if(khTries>=maxKhTries){ alert("Keyholders demo locked. Max tries reached."); return; }
   khTries++;
   const kw = document.getElementById('khKeyword').value.trim();
   const affiliate = document.getElementById('khAffiliate').value.trim();
-  const voice = document.getElementById('khVoiceSelect').value;
   const product = fallbackProducts.find(p=>p.category===kw.toLowerCase())||fallbackProducts[0];
   const review = generateSEOReview(product.name, kw);
   document.getElementById('khOutput').innerHTML = `
-    🛒 <a href="${product.link}" target="_blank">${product.name}</a><br>
-    📝 SEO Review: <span id="khReviewText"></span><br>
-    <button onclick="playTTS('${review}','khReviewText','${voice}')">🔊 Play TTS</button>
+    🛒 <a href="${product.link}" target="_blank">${product.name}</a>
+    📝 SEO Review: <span id="khReviewText"></span>
+    <br><button onclick="playTTS('${review}','khReviewText')">🔊 Play TTS</button>
     <button onclick="stopTTS()">⏹ Stop TTS</button>
   `;
-  updateTyping(review,'khReviewText');
+  startTyping(review,'khReviewText');
 });
 
-// Keyless demo
+// ===== Keyless =====
 document.getElementById('categorySelect').addEventListener('change', e=>{
   const cat = e.target.value;
   if(!cat){ document.getElementById('klOutput').innerHTML=''; return; }
   const product = fallbackProducts.find(p=>p.category===cat.toLowerCase());
-  const voice = document.getElementById('klVoiceSelect').value;
   const review = generateSEOReview(product.name, cat);
   document.getElementById('klOutput').innerHTML = `
-    🛒 <a href="${product.link}" target="_blank">${product.name}</a><br>
-    📝 SEO Review: <span id="klReviewText"></span><br>
-    <button onclick="playTTS('${review}','klReviewText','${voice}')">🔊 Play TTS</button>
+    🛒 <a href="${product.link}" target="_blank">${product.name}</a>
+    📝 SEO Review: <span id="klReviewText"></span>
+    <br><button onclick="playTTS('${review}','klReviewText')">🔊 Play TTS</button>
     <button onclick="stopTTS()">⏹ Stop TTS</button>
   `;
-  updateTyping(review,'klReviewText');
+  startTyping(review,'klReviewText');
 });
 
-// Simple AI Bot
+// ===== TTS =====
+let synth = window.speechSynthesis;
+let utter;
+let typingInterval;
+
+// Populate English voices
+function populateVoiceSelects(){
+    const voices = synth.getVoices().filter(v => v.lang.startsWith('en'));
+    const voiceSelect = document.getElementById('voiceSelect');
+    voiceSelect.innerHTML = '';
+    voices.forEach(v=>{
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        opt.textContent = v.name + ' (' + v.lang + ')';
+        voiceSelect.appendChild(opt);
+    });
+    voiceSelect.value = voices.find(v=>v.name.includes('Samantha'))?.name || voices[0].name;
+}
+if(speechSynthesis.onvoiceschanged !== undefined){ speechSynthesis.onvoiceschanged = populateVoiceSelects; }
+
+function playTTS(text, spanId){
+    stopTTS();
+    utter = new SpeechSynthesisUtterance(text);
+    const voices = synth.getVoices().filter(v => v.lang.startsWith('en'));
+    const selectedVoiceName = document.getElementById('voiceSelect').value;
+    utter.voice = voices.find(v => v.name === selectedVoiceName) || voices[0];
+    synth.speak(utter);
+    startTyping(text, spanId);
+}
+
+function stopTTS(){
+    if(synth.speaking) synth.cancel();
+    clearInterval(typingInterval);
+}
+
+function startTyping(text, spanId){
+    clearInterval(typingInterval);
+    const span = document.getElementById(spanId);
+    let i = 0;
+    span.textContent = '';
+    typingInterval = setInterval(()=>{
+        if(i < text.length){
+            span.textContent += text.charAt(i);
+            i++;
+        } else clearInterval(typingInterval);
+    }, 25);
+}
+
+// ===== Simple AI Q&A Bot =====
 const chatBox=document.getElementById('chatBox');
 function askBot(){
   const input=document.getElementById('chatInput').value.trim();
@@ -218,6 +234,7 @@ function askBot(){
   const answer=document.createElement('p'); answer.style.color="#9cf"; answer.textContent="Bot: "+generateBotAnswer(input); chatBox.appendChild(answer);
   chatBox.scrollTop=chatBox.scrollHeight; document.getElementById('chatInput').value='';
 }
+
 function generateBotAnswer(question){
   question = question.toLowerCase();
   if(question.includes("amazon")) return "You can get your Amazon API key by signing up as an affiliate and generating your Product Advertising API keys.";
