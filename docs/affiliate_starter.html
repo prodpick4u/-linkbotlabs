@@ -155,7 +155,6 @@ function stopTTS(){ if(synth.speaking) synth.cancel(); clearInterval(typingInter
 function startTyping(text, spanId){ clearInterval(typingInterval); const span=document.getElementById(spanId); let i=0; span.textContent=''; typingInterval=setInterval(()=>{ if(i<text.length){ span.textContent+=text.charAt(i); i++; } else clearInterval(typingInterval); },25); }
 
 // ===== Render Categories with Dynamic Affiliate Links =====
-let userAffiliateTag="";
 function renderCategories(){
   let html=""; Object.keys(FALLBACK_PRODUCTS).forEach(cat=>{
     let blogHTML=BLOG_POSTS[cat]||"<i>No blog content available</i>";
@@ -164,7 +163,6 @@ function renderCategories(){
       <button onclick="playAllTTS('${cat}')">🔊 Play All TTS</button>
       ${FALLBACK_PRODUCTS[cat].map((p,i)=>{
         let url = p.url;
-        // Replace existing tag if userAffiliateTag exists
         if(userAffiliateTag){
           if(url.includes("tag=")){
             url = url.replace(/tag=[^&]+/,`tag=${userAffiliateTag}`);
@@ -199,15 +197,7 @@ const voices=synth.getVoices(); utterThis.voice=voices.find(v=>v.name.includes("
 utterThis.onend=resolve; synth.speak(utterThis); startTyping(text,spanId); }); }
 function delay(ms){ return new Promise(resolve=>setTimeout(resolve,ms)); }
 
-// ===== Affiliate Form =====
-document.getElementById('affiliateForm').addEventListener('submit',e=>{
-  e.preventDefault(); userAffiliateTag=document.getElementById('userAffiliate').value.trim();
-  if(!userAffiliateTag){ alert("Enter a valid tag."); return; }
-  document.getElementById('regOutput').innerHTML=`✅ Affiliate tag <b>${userAffiliateTag}</b> activated. All product links updated! Your 1-week demo starts now.`;
-  startDemoTimer(7); renderCategories();
-});
-
-// ===== Demo Timer =====
+// ===== Demo Timer Function =====
 function startDemoTimer(days){ const endTime=new Date().getTime()+days*24*60*60*1000; const timerDiv=document.getElementById('demoTimer');
 const interval=setInterval(()=>{ const now=new Date().getTime(); const distance=endTime-now;
 if(distance<=0){ clearInterval(interval); timerDiv.textContent="⏰ Demo expired. Please register again to continue."; return; }
@@ -215,12 +205,21 @@ const d=Math.floor(distance/(1000*60*60*24)); const h=Math.floor((distance%(1000
 const m=Math.floor((distance%(1000*60*60))/(1000*60)); const s=Math.floor((distance%(1000*60))/1000);
 timerDiv.textContent=`⏳ Your demo expires in ${d}d ${h}h ${m}m ${s}s`;},1000); }
 
+// ===== Affiliate Form Submission =====
+document.getElementById('affiliateForm').addEventListener('submit',e=>{
+  e.preventDefault(); userAffiliateTag=document.getElementById('userAffiliate').value.trim();
+  if(!userAffiliateTag){ alert("Enter a valid tag."); return; }
+  document.getElementById('regOutput').innerHTML=`✅ Affiliate tag <b>${userAffiliateTag}</b> activated. All product links updated! Your 1-week demo starts now.`;
+  startDemoTimer(7); renderCategories();
+});
+
 // ===== AI Bot =====
 function askBot(){ const input=document.getElementById('chatInput').value.trim();
 if(!input) return; const chatBox=document.getElementById('chatBox'); chatBox.innerHTML+=`<p><b>You:</b> ${input}</p>`;
 chatBox.innerHTML+=`<p><b>Bot:</b> This is a demo bot. Ask about affiliate setup, products, or workflow.</p>`;
 chatBox.scrollTop=chatBox.scrollHeight;}
 
+// ===== Initialize =====
 renderCategories();
 </script>
 
