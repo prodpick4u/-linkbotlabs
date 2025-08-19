@@ -52,6 +52,9 @@ button:hover { opacity:0.85; }
 .chat-box { background: rgba(0,0,0,0.6); padding:15px; border-radius:8px; max-height:300px; overflow-y:auto; margin-bottom:10px; }
 .chat-input { display:flex; gap:5px; }
 .chat-input input { flex:1; }
+.product-card { background: rgba(255,255,255,0.1); padding:10px; margin:8px 0; border-radius:8px; }
+.product-card a { color:#0ff; font-weight:bold; text-decoration:none; }
+.product-card button { margin-top:5px; }
 </style>
 </head>
 <body>
@@ -63,16 +66,6 @@ button:hover { opacity:0.85; }
 <div class="glass" style="text-align:center;">
 <label>Select TTS Voice:</label>
 <select id="voiceSelect"></select>
-</div>
-
-<!-- Link to For-Dummies Page -->
-<div class="glass" style="text-align:center;">
-📘 <a href="tts_demo.html" style="color:#9cf; font-weight:bold;">Go to Prodpick4U For-Dummies Page</a>
-</div>
-
-<!-- Amazon Affiliate Sign Up -->
-<div class="glass" style="text-align:center;">
-🎁 <a href="https://affiliate-program.amazon.com/signup" style="color:#9cf; font-weight:bold;">Sign up for Amazon Central Affiliate – 10% OFF full version</a>
 </div>
 
 <!-- Keyholders Demo Box -->
@@ -101,13 +94,6 @@ button:hover { opacity:0.85; }
 <label>Category:
 <select id="categorySelect">
 <option value="">--Choose a Category--</option>
-<option value="face cream">Face Cream</option>
-<option value="supplements">Supplements</option>
-<option value="blender">Blender</option>
-<option value="rice cooker">Rice Cooker</option>
-<option value="headphones">Headphones</option>
-<option value="kitchen">Kitchen Products</option>
-<option value="tech">Tech Gadgets</option>
 </select>
 </label>
 <div id="klOutput" class="output"></div>
@@ -125,25 +111,59 @@ button:hover { opacity:0.85; }
 
 <script>
 // ====== Fallback Products ======
-const fallbackProducts = [
-  {category:"face cream", name:"Olay Regenerist Micro-Sculpting Cream Face Moisturizer", link:"https://amzn.to/41r3Ibr?tag=mychanneld-20"},
-  {category:"supplements", name:"Methylene Blue", link:"https://amzn.to/4ldkJwL?tag=mychanneld-20"},
-  {category:"blender", name:"NutriBullet Pro High-Speed Blender/Mixer System", link:"https://amzn.to/47eVzKT?tag=mychanneld-20"},
-  {category:"rice cooker", name:"Instant Pot Duo 7-in-1 Electric Pressure Cooker", link:"https://amzn.to/4oD8b50?tag=mychanneld-20"},
-  {category:"headphones", name:"Sony WH-1000XM4 Wireless Noise-Cancelling Headphones", link:"https://amzn.to/40OGbkE?tag=mychanneld-20"},
-  {category:"kitchen", name:"KitchenAid Artisan Tilt-Head Stand Mixer", link:"https://amzn.to/45lPCJH?tag=mychanneld-20"},
-  {category:"tech", name:"Apple AirPods Pro (2nd Generation)", link:"https://amzn.to/3UAYMx7?tag=mychanneld-20"}
-];
+const AFFILIATE_TAG = "mychanneld-20";
 
-let khTries = 0;
-const maxKhTries = 3;
+const FALLBACK_PRODUCTS = {
+  "health":[
+    {"title":"Fitbit Charge 5 Advanced Fitness & Health Tracker","url":"https://amzn.to/45zc4k1","price":"$129.95","description":"Fitness tracker with built-in GPS and health metrics."},
+    {"title":"Theragun Elite Handheld Percussive Therapy Device","url":"https://amzn.to/463BPYL","price":"$299.00","description":"Professional-grade percussive therapy device for deep muscle treatment and recovery."},
+    {"title":"Methylene Blue","url":"https://amzn.to/4ldkJwL","price":"Varies","description":"Supplement researched for mitochondrial support and cognitive function."},
+    {"title":"Irish Sea Moss","url":"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20","price":"Varies","description":"Rich in iodine and essential minerals for immune and thyroid support."},
+    {"title":"Shilajit","url":"https://amzn.to/4li6vuC","price":"Varies","description":"Ancient herbal resin used to boost energy, vitality, and performance."}
+  ],
+  "beauty":[
+    {"title":"Revlon One-Step Hair Dryer And Volumizer Hot Air Brush","url":"https://amzn.to/3HIHhrw","price":"$59.99","description":"Hair styling tool for drying and volumizing."},
+    {"title":"Olay Regenerist Micro-Sculpting Cream Face Moisturizer","url":"https://amzn.to/45zc4k1","price":"$25.99","description":"Anti-aging facial moisturizer."},
+    {"title":"Neutrogena Makeup Remover Cleansing Towelettes","url":"https://amzn.to/3UAEOSX","price":"$9.99","description":"Gentle wipes for makeup removal."},
+    {"title":"Maybelline Lash Sensational Washable Mascara","url":"https://amzn.to/4oHMpgn","price":"$7.99","description":"Volumizing mascara with buildable formula."},
+    {"title":"CeraVe Hydrating Facial Cleanser","url":"https://amzn.to/4mI68uu","price":"$14.99","description":"Gentle face cleanser for normal to dry skin."}
+  ],
+  "kitchen":[
+    {"title":"Instant Pot Duo 7-in-1 Electric Pressure Cooker","url":"https://amzn.to/4oD8b50","price":"$89.00","description":"Multi-functional pressure cooker."},
+    {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/47igIUx","price":"$24.99","description":"Durable pre-seasoned cast iron pan."},
+    {"title":"Breville The Smart Oven Air Fryer","url":"https://amzn.to/45lPvxL","price":"$279.95","description":"Countertop convection oven with air fryer."},
+    {"title":"KitchenAid Artisan Tilt-Head Stand Mixer","url":"https://amzn.to/45lPCJH","price":"$379.99","description":"Versatile stand mixer for baking."},
+    {"title":"Cuisinart 14-Cup Food Processor","url":"https://amzn.to/3UgiUEs","price":"$149.95","description":"Powerful food processor for chopping and slicing."},
+    {"title":"Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer","url":"https://amzn.to/3H8Olh3","price":"$199.99","description":"Multi-cooker with air frying and pressure cooking features."},
+    {"title":"NutriBullet Pro High-Speed Blender/Mixer System","url":"https://amzn.to/47eVzKT","price":"$89.99","description":"Compact blender for smoothies and shakes."},
+    {"title":"Hydro Flask Stainless Steel Water Bottle","url":"https://amzn.to/4myBCTZ","price":"$39.95","description":"Vacuum insulated bottle keeps drinks cold or hot."}
+  ],
+  "tech":[
+    {"title":"Apple AirPods Pro (2nd Generation)","url":"https://amzn.to/3UAYMx7","price":"$249.00","description":"Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality."},
+    {"title":"Samsung Galaxy Buds FE (Fan Edition)","url":"https://amzn.to/4m6BhIh","price":"$99.99","description":"Reliable ANC earbuds for Android users."},
+    {"title":"Anker Soundcore P20i","url":"https://amzn.to/4mqytoV","price":"$29.99","description":"Budget wireless earbuds."},
+    {"title":"Samsung T7 Portable SSD 1TB","url":"https://amzn.to/3J1xAor","price":"$139.99","description":"Fast external solid state drive."},
+    {"title":"Logitech MX Master 3S Wireless Mouse","url":"https://amzn.to/4oFWA4T","price":"$99.99","description":"Ergonomic wireless mouse with high-precision tracking."},
+    {"title":"Sony WH-1000XM4 Wireless Noise-Canceling Headphones","url":"https://amzn.to/3V5ToC2","price":"$199.99","description":"Industry-leading noise-canceling headphones with long battery life."},
+    {"title":"Kindle Paperwhite (2024)","url":"https://amzn.to/4mTKZOd","price":"$159.99","description":"Waterproof e-reader with high-resolution 7-inch display."}
+  ]
+};
 
-// Generate dynamic SEO review
+// ====== Populate Keyless Category Dropdown ======
+const categorySelect = document.getElementById('categorySelect');
+Object.keys(FALLBACK_PRODUCTS).forEach(cat=>{
+  const opt = document.createElement('option');
+  opt.value = cat;
+  opt.textContent = cat.charAt(0).toUpperCase()+cat.slice(1);
+  categorySelect.appendChild(opt);
+});
+
+// ====== Generate dynamic SEO review ======
 function generateSEOReview(name, keyword){
   return `${name} is a premium product for anyone looking for ${keyword}. Exceptional quality, reliability, and design enhance everyday use. Perfect for gifting or personal use. Experience the benefits today and elevate your routine with ${name}.`;
 }
 
-// TTS
+// ====== TTS ======
 let synth = window.speechSynthesis;
 let utter;
 let typingInterval;
@@ -179,40 +199,57 @@ function playTTS(text, spanId){
 function stopTTS(){ if(synth.speaking) synth.cancel(); clearInterval(typingInterval); }
 function startTyping(text, spanId){ clearInterval(typingInterval); const span=document.getElementById(spanId); let i=0; span.textContent=''; typingInterval=setInterval(()=>{ if(i<text.length){ span.textContent+=text.charAt(i); i++; } else clearInterval(typingInterval); },25); }
 
-// Keyholders Demo
+// ====== Keyholders Demo ======
+let khTries = 0;
+const maxKhTries = 3;
+
 document.getElementById('keyholdersForm').addEventListener('submit', e=>{
   e.preventDefault();
   if(khTries>=maxKhTries){ alert("Keyholders demo locked. Max tries reached."); return; }
   khTries++;
-  const kw = document.getElementById('khKeyword').value.trim();
-  const affiliate = document.getElementById('khAffiliate').value.trim();
-  const product = fallbackProducts.find(p=>p.category===kw.toLowerCase())||fallbackProducts[0];
-  const review = generateSEOReview(product.name, kw);
+  const kw = document.getElementById('khKeyword').value.trim().toLowerCase();
+  const affiliate = document.getElementById('khAffiliate').value.trim() || AFFILIATE_TAG;
+  const categoryProducts = FALLBACK_PRODUCTS[kw] || [].flatMap(Object.values(FALLBACK_PRODUCTS));
+  const product = categoryProducts[0];
+  const review = generateSEOReview(product.title, kw);
   document.getElementById('khOutput').innerHTML = `
-    🛒 <a href="${product.link}" target="_blank">${product.name}</a>
-    📝 SEO Review: <span id="khReviewText"></span>
-    <br><button onclick="playTTS('${review}','khReviewText')">🔊 Play TTS</button>
-    <button onclick="stopTTS()">⏹ Stop TTS</button>
+    <div class="product-card">
+      🛒 <a href="${product.url}?tag=${affiliate}" target="_blank">${product.title}</a>
+      <p>Price: ${product.price}</p>
+      <p>${product.description}</p>
+      📝 SEO Review: <span id="khReviewText"></span><br>
+      <button onclick="playTTS('${review}','khReviewText')">🔊 Play TTS</button>
+      <button onclick="stopTTS()">⏹ Stop TTS</button>
+      <a href="${product.url}?tag=${affiliate}" target="_blank"><button>View Product</button></a>
+    </div>
   `;
   startTyping(review,'khReviewText');
 });
 
-// Keyless Demo
-document.getElementById('categorySelect').addEventListener('change', e=>{
+// ====== Keyless Demo ======
+categorySelect.addEventListener('change', e=>{
   const cat = e.target.value;
   if(!cat){ document.getElementById('klOutput').innerHTML=''; return; }
-  const product = fallbackProducts.find(p=>p.category===cat.toLowerCase());
-  const review = generateSEOReview(product.name, cat);
-  document.getElementById('klOutput').innerHTML = `
-    🛒 <a href="${product.link}" target="_blank">${product.name}</a>
-    📝 SEO Review: <span id="klReviewText"></span>
-    <br><button onclick="playTTS('${review}','klReviewText')">🔊 Play TTS</button>
-    <button onclick="stopTTS()">⏹ Stop TTS</button>
-  `;
-  startTyping(review,'klReviewText');
+  const products = FALLBACK_PRODUCTS[cat] || [];
+  let html = '';
+  products.forEach((p,idx)=>{
+    const review = generateSEOReview(p.title, cat);
+    html += `
+      <div class="product-card">
+        🛒 <a href="${p.url}?tag=${AFFILIATE_TAG}" target="_blank">${p.title}</a>
+        <p>Price: ${p.price}</p>
+        <p>${p.description}</p>
+        📝 SEO Review: <span id="klReviewText${idx}"></span><br>
+        <button onclick="playTTS('${review}','klReviewText${idx}')">🔊 Play TTS</button>
+        <button onclick="stopTTS()">⏹ Stop TTS</button>
+        <a href="${p.url}?tag=${AFFILIATE_TAG}" target="_blank"><button>View Product</button></a>
+      </div>
+    `;
+  });
+  document.getElementById('klOutput').innerHTML = html;
 });
 
-// AI Q&A Bot
+// ====== AI Q&A Bot ======
 const chatBox=document.getElementById('chatBox');
 function askBot(){
   const input=document.getElementById('chatInput').value.trim();
@@ -230,6 +267,5 @@ function generateBotAnswer(question){
   return "This tool helps affiliates, bloggers, and side hustlers create automated product content and revenue streams. Check the Dummies page for detailed steps.";
 }
 </script>
-
 </body>
 </html>
