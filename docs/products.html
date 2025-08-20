@@ -6,7 +6,6 @@
 <title>Prodpick4U - Affiliate Products</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-/* ===== Body & typography ===== */
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
@@ -42,7 +41,6 @@ h2 { font-size:1.8rem; margin-top:40px;}
 .view-btn:hover { background:#ff2a2f; transform: translateY(-2px);}
 @media(max-width:600px){.grid{grid-template-columns:1fr;}}
 
-/* ===== Horizontal Kitchen Wall ===== */
 .kitchen-wall {
   display: flex;
   overflow-x: auto;
@@ -86,58 +84,8 @@ h2 { font-size:1.8rem; margin-top:40px;}
 </div>
 <div class="grid" id="product-container"></div>
 
-<!-- Horizontal Kitchen Wall -->
 <h2>🍳 Shop Kitchen Best Buys on Amazon</h2>
-<div class="kitchen-wall">
-  <div class="kitchen-product">
-    <a href="https://amzn.to/41dlrmI" target="_blank">
-      <img src="https://m.media-amazon.com/images/I/71VtP9+9XlL._AC_SL1500_.jpg" alt="Instant Pot Duo">
-      <p>Instant Pot Duo 7-in-1<br>$89.00</p>
-    </a>
-  </div>
-  <div class="kitchen-product">
-    <a href="https://amzn.to/4oKl7WG" target="_blank">
-      <img src="https://m.media-amazon.com/images/I/71v8J6v6h5L._AC_SL1500_.jpg" alt="Lodge Cast Iron Skillet">
-      <p>Lodge Cast Iron Skillet<br>$24.99</p>
-    </a>
-  </div>
-  <div class="kitchen-product">
-    <a href="https://amzn.to/47BJoYI" target="_blank">
-      <img src="https://m.media-amazon.com/images/I/91Oq0Xq7HQL._AC_SL1500_.jpg" alt="Breville Smart Oven Air Fryer">
-      <p>Breville Smart Oven Air Fryer<br>$279.95</p>
-    </a>
-  </div>
-  <div class="kitchen-product">
-    <a href="https://amzn.to/3HHSZmj" target="_blank">
-      <img src="https://m.media-amazon.com/images/I/91Xzq2X6FzL._AC_SL1500_.jpg" alt="KitchenAid Artisan Stand Mixer">
-      <p>KitchenAid Artisan Mixer<br>$379.99</p>
-    </a>
-  </div>
-  <div class="kitchen-product">
-    <a href="https://amzn.to/4fKXKs0" target="_blank">
-      <img src="https://m.media-amazon.com/images/I/71mY2k5+JzL._AC_SL1500_.jpg" alt="Cuisinart Food Processor">
-      <p>Cuisinart Food Processor<br>$149.95</p>
-    </a>
-  </div>
-  <div class="kitchen-product">
-    <a href="https://amzn.to/3V6wKcS" target="_blank">
-      <img src="https://m.media-amazon.com/images/I/91vW+6T1SJL._AC_SL1500_.jpg" alt="Ninja Foodi 9-in-1">
-      <p>Ninja Foodi 9-in-1<br>$199.99</p>
-    </a>
-  </div>
-  <div class="kitchen-product">
-    <a href="https://amzn.to/4mOUwG5" target="_blank">
-      <img src="https://m.media-amazon.com/images/I/71FZKcWZ3QL._AC_SL1500_.jpg" alt="NutriBullet Pro">
-      <p>NutriBullet Pro<br>$89.99</p>
-    </a>
-  </div>
-  <div class="kitchen-product">
-    <a href="https://amzn.to/475gmRe" target="_blank">
-      <img src="https://m.media-amazon.com/images/I/81n5Iu5D1RL._AC_SL1500_.jpg" alt="Hydro Flask Water Bottle">
-      <p>Hydro Flask Water Bottle<br>$39.95</p>
-    </a>
-  </div>
-</div>
+<div class="kitchen-wall" id="kitchen-wall"></div>
 
 <script>
 // ===== Affiliate tag =====
@@ -152,31 +100,71 @@ if(userAffiliate){
 
 // ===== Fallback products =====
 const PRODUCTS = {
-    "health":[
-        {"title":"Fitbit Charge 5 Advanced Fitness & Health Tracker","url":"https://amzn.to/45zc4k1","price":"$129.95","description":"Fitness tracker with built-in GPS and health metrics."},
-        {"title":"Theragun Elite Handheld Percussive Therapy Device","url":"https://amzn.to/463BPYL","price":"$299.00","description":"Professional-grade percussive therapy device for deep muscle treatment and recovery."},
-        {"title":"Methylene Blue","url":"https://amzn.to/4ldkJwL","price":"Varies","description":"Supplement researched for mitochondrial support and cognitive function."},
-        {"title":"Irish Sea Moss","url":`https://www.amazon.com/dp/B0CTMJYZ73?tag=${AFFILIATE_TAG}`,"price":"Varies","description":"Rich in iodine and essential minerals for immune and thyroid support."},
-        {"title":"Shilajit","url":"https://amzn.to/4li6vuC","price":"Varies","description":"Ancient herbal resin used to boost energy, vitality, and performance."}
-    ],
-    "beauty":[
-        {"title":"Revlon One-Step Hair Dryer And Volumizer Hot Air Brush","url":"https://amzn.to/3HIHhrw","price":"$59.99","description":"Hair styling tool for drying and volumizing."},
-        {"title":"Olay Regenerist Micro-Sculpting Cream Face Moisturizer","url":"https://amzn.to/3HwMhQ8","price":"$25.99","description":"Anti-aging facial moisturizer."},
-        {"title":"Neutrogena Makeup Remover Cleansing Towelettes","url":"https://amzn.to/3UAEOSX","price":"$9.99","description":"Gentle wipes for makeup removal."},
-        {"title":"Maybelline Lash Sensational Washable Mascara","url":"https://amzn.to/4oHMpgn","price":"$7.99","description":"Volumizing mascara with buildable formula."},
-        {"title":"CeraVe Hydrating Facial Cleanser","url":"https://amzn.to/4mI68uu","price":"$14.99","description":"Gentle face cleanser for normal to dry skin."}
-    ],
-    "kitchen":[
-        {"title":"Instant Pot Duo 7-in-1 Electric Pressure Cooker","url":"https://amzn.to/41dlrmI","price":"$89.00","description":"Multi-functional pressure cooker."},
-        {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/4oKl7WG","price":"$24.99","description":"Durable pre-seasoned cast iron pan."},
-        {"title":"Breville The Smart Oven Air Fryer","url":"https://amzn.to/47BJoYI","price":"$279.95","description":"Countertop convection oven with air fryer."},
-        {"title":"KitchenAid Artisan Tilt-Head Stand Mixer","url":"https://amzn.to/3HHSZmj","price":"$379.99","description":"Versatile stand mixer for baking."},
-        {"title":"Cuisinart 14-Cup Food Processor","url":"https://amzn.to/4fKXKs0","price":"$149.95","description":"Powerful food processor for chopping and slicing."},
-        {"title":"Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer","url":"https://amzn.to/3V6wKcS","price":"$199.99","description":"Multi-cooker with air frying and pressure cooking features."},
-        {"title":"NutriBullet Pro High-Speed Blender/Mixer System","url":"https://amzn.to/4mOUwG5","price":"$89.99","description":"Compact blender for smoothies and shakes."},
-        {"title":"Hydro Flask Stainless Steel Water Bottle","url":"https://amzn.to/475gmRe","price":"$39.95","description":"Vacuum insulated bottle keeps drinks cold or hot."}
-    ]
+  "health":[
+    {"title":"Fitbit Charge 5","url":"https://amzn.to/45zc4k1","price":"$129.95","description":"Fitness tracker with GPS and health metrics."},
+    {"title":"Theragun Elite","url":"https://amzn.to/463BPYL","price":"$299.00","description":"Percussive therapy device for deep muscle recovery."},
+    {"title":"Methylene Blue","url":"https://amzn.to/4ldkJwL","price":"Varies","description":"Supplement for mitochondrial support."},
+    {"title":"Irish Sea Moss","url":`https://www.amazon.com/dp/B0CTMJYZ73?tag=${AFFILIATE_TAG}`,"price":"Varies","description":"Rich in iodine and essential minerals."},
+    {"title":"Shilajit","url":"https://amzn.to/4li6vuC","price":"Varies","description":"Ancient herbal resin for energy and vitality."}
+  ],
+  "beauty":[
+    {"title":"Revlon One-Step Hair Dryer","url":"https://amzn.to/3HIHhrw","price":"$59.99","description":"Hair styling tool for drying and volumizing."},
+    {"title":"Olay Regenerist Cream","url":"https://amzn.to/3HwMhQ8","price":"$25.99","description":"Anti-aging facial moisturizer."},
+    {"title":"Neutrogena Wipes","url":"https://amzn.to/3UAEOSX","price":"$9.99","description":"Gentle wipes for makeup removal."},
+    {"title":"Maybelline Mascara","url":"https://amzn.to/4oHMpgn","price":"$7.99","description":"Volumizing mascara with buildable formula."},
+    {"title":"CeraVe Cleanser","url":"https://amzn.to/4mI68uu","price":"$14.99","description":"Gentle face cleanser."}
+  ],
+  "tech":[
+    {"title":"Apple AirPods Pro","url":"https://amzn.to/3UAYMx7","price":"$249.00","description":"Premium ANC wireless earbuds."},
+    {"title":"Samsung Galaxy Buds FE","url":"https://amzn.to/4m6BhIh","price":"$99.99","description":"Reliable ANC earbuds for Android."},
+    {"title":"Anker Soundcore P20i","url":"https://amzn.to/4mqytoV","price":"$29.99","description":"Budget-friendly wireless earbuds."},
+    {"title":"Samsung T7 SSD 1TB","url":"https://amzn.to/3J1xAor","price":"$139.99","description":"Fast portable SSD drive."},
+    {"title":"Logitech MX Master 3S Mouse","url":"https://amzn.to/4oFWA4T","price":"$99.99","description":"Ergonomic wireless mouse."},
+    {"title":"Sony WH-1000XM4 Headphones","url":"https://amzn.to/3V5ToC2","price":"$199.99","description":"Noise-canceling headphones."},
+    {"title":"Kindle Paperwhite 2024","url":"https://amzn.to/4mTKZOd","price":"$159.99","description":"Waterproof e-reader with warm light."}
+  ],
+  "outdoors":[
+    {"title":"Coleman Sundome Tent","url":"https://amzn.to/4myC9oX","price":"$99.99","description":"Easy setup camping tent."},
+    {"title":"LifeStraw Water Filter","url":"https://amzn.to/4m3CoIw","price":"$19.97","description":"Portable water purifier."},
+    {"title":"Etekcity Camping Lantern","url":"https://amzn.to/41JMmqq","price":"$23.99","description":"LED lantern with adjustable brightness."},
+    {"title":"Osprey Atmos AG Backpack","url":"https://amzn.to/3Jngwtq","price":"$260.00","description":"Comfortable hiking backpack."},
+    {"title":"Garmin GPSMAP Navigator","url":"https://amzn.to/45BCoJX","price":"$399.99","description":"Handheld GPS device for outdoors."}
+  ],
+  "household":[
+    {"title":"iRobot Roomba 694","url":"https://amzn.to/4flpTp8","price":"$249.99","description":"Smart robot vacuum."},
+    {"title":"Dyson V8 Vacuum","url":"https://amzn.to/4fll1QY","price":"$399.99","description":"Cordless vacuum cleaner."},
+    {"title":"Instant Pot Duo Crisp","url":"https://amzn.to/3J1ZhxC","price":"$159.99","description":"Pressure cooker with air fryer lid."},
+    {"title":"Philips Hue Bulb","url":"https://amzn.to/3JhsKUq","price":"$49.99","description":"Smart LED bulb with app control."},
+    {"title":"Nespresso Vertuo Maker","url":"https://amzn.to/3HKisLX","price":"$199.00","description":"Single serve coffee machine."}
+  ],
+  "home-decor":[
+    {"title":"Amethyst Crystal Tree","url":`https://www.amazon.com/dp/B0B8QWN9NT?tag=${AFFILIATE_TAG}`,"price":"$39.95","description":"Handcrafted amethyst tree for peace."},
+    {"title":"Linon Sherpa Office Chair","url":`https://www.amazon.com/dp/B083TRV28M?tag=${AFFILIATE_TAG}`,"price":"$129.99","description":"Ivory sherpa office chair."},
+    {"title":"Wall Waterfall XL","url":`https://www.amazon.com/dp/B01KP0ONSY?tag=${AFFILIATE_TAG}`,"price":"$399.99","description":"Large wall-mounted waterfall feature."},
+    {"title":"Medify MA-40 Air Purifier","url":`https://www.amazon.com/dp/B07LGDYV3C?tag=${AFFILIATE_TAG}`,"price":"$249.99","description":"HEPA H13 filter air purifier."},
+    {"title":"Liquid Motion Lamp","url":`https://www.amazon.com/dp/B0DRBZS1DR?tag=${AFFILIATE_TAG}`,"price":"$44.95","description":"Soothing liquid motion lamp."},
+    {"title":"Glass Mini Aquarium","url":`https://www.amazon.com/dp/B0CRDP8TM9?tag=${AFFILIATE_TAG}`,"price":"$69.99","description":"Compact tabletop aquarium."}
+  ],
+  "kitchen":[
+    {"title":"Instant Pot Duo 7-in-1","url":"https://amzn.to/41dlrmI","price":"$89.00","img":"https://m.media-amazon.com/images/I/71VtP9+9XlL._AC_SL1500_.jpg"},
+    {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/4oKl7WG","price":"$24.99","img":"https://m.media-amazon.com/images/I/71v8J6v6h5L._AC_SL1500_.jpg"},
+    {"title":"Breville Smart Oven Air Fryer","url":"https://amzn.to/47BJoYI","price":"$279.95","img":"https://m.media-amazon.com/images/I/91Oq0Xq7HQL._AC_SL1500_.jpg"},
+    {"title":"KitchenAid Mixer","url":"https://amzn.to/3HHSZmj","price":"$379.99","img":"https://m.media-amazon.com/images/I/91Xzq2X6FzL._AC_SL1500_.jpg"},
+    {"title":"Cuisinart Food Processor","url":"https://amzn.to/4fKXKs0","price":"$149.95","img":"https://m.media-amazon.com/images/I/71mY2k5+JzL._AC_SL1500_.jpg"},
+    {"title":"Ninja Foodi 9-in-1","url":"https://amzn.to/3V6wKcS","price":"$199.99","img":"https://m.media-amazon.com/images/I/91vW+6T1SJL._AC_SL1500_.jpg"},
+    {"title":"NutriBullet Pro","url":"https://amzn.to/4mOUwG5","price":"$89.99","img":"https://m.media-amazon.com/images/I/71FZKcWZ3QL._AC_SL1500_.jpg"},
+    {"title":"Hydro Flask Bottle","url":"https://amzn.to/475gmRe","price":"$39.95","img":"https://m.media-amazon.com/images/I/81n5Iu5D1RL._AC_SL1500_.jpg"}
+  ]
 };
+
+// ===== Kitchen wall =====
+const kitchenWall = document.getElementById('kitchen-wall');
+PRODUCTS.kitchen.forEach(p=>{
+  const div = document.createElement('div');
+  div.className='kitchen-product';
+  div.innerHTML=`<a href="${p.url}" target="_blank"><img src="${p.img}" alt="${p.title}"><p>${p.title}<br>${p.price}</p></a>`;
+  kitchenWall.appendChild(div);
+});
 
 // ===== Category icons =====
 const CATEGORY_ICONS = { "all":"📦","health":"🏋️","beauty":"💄","tech":"💻","kitchen":"🍳","outdoors":"🏕️","household":"🏠","home-decor":"🖼️" };
@@ -186,54 +174,44 @@ const productContainer = document.getElementById('product-container');
 const searchBox = document.getElementById('searchBox');
 let currentCategory = 'all';
 
-// ===== Helper: apply affiliate tag =====
-function withTag(url){
-    return url.includes("?") ? `${url}&tag=${AFFILIATE_TAG}` : `${url}?tag=${AFFILIATE_TAG}`;
-}
+// ===== Apply affiliate tag =====
+function withTag(url){return url.includes("?")?`${url}&tag=${AFFILIATE_TAG}`:`${url}?tag=${AFFILIATE_TAG}`;}
 
 // ===== Display products =====
 function displayProducts(filterCategory=currentCategory, searchTerm=''){
-    productContainer.innerHTML='';
-    let allProducts = filterCategory==='all' ? Object.values(PRODUCTS).flat() : PRODUCTS[filterCategory] || [];
-    let filtered = allProducts.filter(p=>p.title.toLowerCase().includes(searchTerm.toLowerCase()));
-    filtered.forEach(p=>{
-        const card = document.createElement('div');
-        card.className="card";
-        card.innerHTML=`
-            <div class="product-title">${p.title}</div>
-            <div class="product-price">${p.price}</div>
-            <div class="product-desc">${p.description}</div>
-            <a href="${withTag(p.url)}" target="_blank" class="view-btn">Click Now</a>
-        `;
-        productContainer.appendChild(card);
-    });
+  productContainer.innerHTML='';
+  let allProducts = filterCategory==='all' ? Object.values(PRODUCTS).flat() : PRODUCTS[filterCategory] || [];
+  let filtered = allProducts.filter(p=>p.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  filtered.forEach(p=>{
+    const card=document.createElement('div');
+    card.className="card";
+    card.innerHTML=`<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.description||''}</div><a href="${withTag(p.url)}" target="_blank" class="view-btn">Click Now</a>`;
+    productContainer.appendChild(card);
+  });
 }
 
 // ===== Populate categories =====
 function populateCategories(){
-    const container = document.getElementById('category-container');
-    const allCats = ['all',...Object.keys(PRODUCTS)];
-    allCats.forEach(cat=>{
-        const card=document.createElement('div');
-        card.className='category-card'+(cat==='all'?' active':'');
-        card.innerHTML=`${CATEGORY_ICONS[cat]||'📦'} ${cat.charAt(0).toUpperCase()+cat.slice(1)}`;
-        card.addEventListener('click',()=>{
-            currentCategory=cat;
-            document.querySelectorAll('.category-card').forEach(c=>c.classList.remove('active'));
-            card.classList.add('active');
-            displayProducts(currentCategory, searchBox.value);
-        });
-        container.appendChild(card);
+  const container=document.getElementById('category-container');
+  const allCats=['all',...Object.keys(PRODUCTS)];
+  allCats.forEach(cat=>{
+    const card=document.createElement('div');
+    card.className='category-card'+(cat==='all'?' active':'');
+    card.innerHTML=`${CATEGORY_ICONS[cat]||'📦'} ${cat.charAt(0).toUpperCase()+cat.slice(1)}`;
+    card.addEventListener('click',()=>{
+      currentCategory=cat;
+      document.querySelectorAll('.category-card').forEach(c=>c.classList.remove('active'));
+      card.classList.add('active');
+      displayProducts(currentCategory, searchBox.value);
     });
+    container.appendChild(card);
+  });
 }
 
-// ===== Search =====
 searchBox.addEventListener('input', ()=>displayProducts(currentCategory, searchBox.value));
 
-// ===== Init =====
 populateCategories();
 displayProducts();
 </script>
-
 </body>
 </html>
