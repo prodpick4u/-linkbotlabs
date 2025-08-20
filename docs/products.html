@@ -22,97 +22,22 @@ body {
     75%{background-position:50% 50%;}
     100%{background-position:0% 50%;}
 }
-h1 {
-    text-align:center;
-    font-size:2rem;
-    margin: 30px 0 10px;
-    font-weight:700;
-    letter-spacing:1px;
-}
-.banner {
-    text-align:center;
-    margin:0 20px 20px;
-    padding:12px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 12px;
-    font-weight:600;
-    display:none;
-}
-
-/* ===== Categories ===== */
-.categories {
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    margin: 10px 0 30px;
-    gap: 10px;
-}
-.category-card {
-    padding:10px 18px;
-    background: rgba(255,255,255,0.1);
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:500;
-    transition: all 0.2s ease;
-    display:flex;
-    align-items:center;
-    gap:6px;
-}
+h1 { text-align:center; font-size:2rem; margin:30px 0 10px; font-weight:700; letter-spacing:1px;}
+.banner { text-align:center; margin:0 20px 20px; padding:12px; background: rgba(255,255,255,0.15); border-radius:12px; font-weight:600; display:none;}
+.categories { display:flex; flex-wrap:wrap; justify-content:center; margin:10px 0 30px; gap:10px;}
+.category-card { padding:10px 18px; background: rgba(255,255,255,0.1); border-radius:8px; cursor:pointer; font-weight:500; transition: all 0.2s ease; display:flex; align-items:center; gap:6px;}
 .category-card:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px);}
 .category-card.active { background:#fff; color:#3b007f; font-weight:600;}
-
-/* ===== Search ===== */
-.controls {
-    display:flex;
-    justify-content:center;
-    margin-bottom:30px;
-}
-#searchBox {
-    padding:12px 16px;
-    border-radius:8px;
-    border:none;
-    width:300px;
-    font-size:14px;
-    outline:none;
-}
-
-/* ===== Product grid ===== */
-.grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-    gap:24px;
-    padding:0 20px 60px;
-}
-.card {
-    background: rgba(255,255,255,0.1);
-    border-radius:16px;
-    padding:20px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+.controls { display:flex; justify-content:center; margin-bottom:30px;}
+#searchBox { padding:12px 16px; border-radius:8px; border:none; width:300px; font-size:14px; outline:none;}
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:24px; padding:0 20px 60px;}
+.card { background: rgba(255,255,255,0.1); border-radius:16px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; box-shadow: 0 6px 20px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s;}
 .card:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,0.4);}
 .product-title { font-weight:700; font-size:18px; margin-bottom:10px; color:#fff;}
 .product-price { color:#ffb347; font-weight:600; margin-bottom:12px;}
 .product-desc { font-size:14px; color:#eee; flex-grow:1; line-height:1.4;}
-.view-btn {
-    margin-top:15px;
-    padding:12px;
-    background: #ff5a5f;
-    color:#fff;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:600;
-    text-align:center;
-    text-decoration:none;
-    transition: all 0.2s;
-}
+.view-btn { margin-top:15px; padding:12px; background: #ff5a5f; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600; text-align:center; text-decoration:none; transition: all 0.2s;}
 .view-btn:hover { background:#ff2a2f; transform: translateY(-2px);}
-
-/* ===== Responsive ===== */
 @media(max-width:600px){.grid{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -153,92 +78,15 @@ const PRODUCTS = {
         {"title":"Maybelline Lash Sensational Washable Mascara","url":"https://amzn.to/4oHMpgn","price":"$7.99","description":"Volumizing mascara with buildable formula."},
         {"title":"CeraVe Hydrating Facial Cleanser","url":"https://amzn.to/4mI68uu","price":"$14.99","description":"Gentle face cleanser for normal to dry skin."}
     ],
-    "kitchen": [
-    {
-        "title": "Instant Pot Duo 7-in-1 Electric Pressure Cooker",
-        "url": "https://amzn.to/41dlrmI",
-        "price": "$89.00",
-        "description": "Multi-functional pressure cooker."
-    },
-    {
-        "title": "Lodge Cast Iron Skillet",
-        "url": "https://amzn.to/4oKl7WG",
-        "price": "$24.99",
-        "description": "Durable pre-seasoned cast iron pan."
-    },
-    {
-        "title": "Breville The Smart Oven Air Fryer",
-        "url": "https://amzn.to/47BJoYI",
-        "price": "$279.95",
-        "description": "Countertop convection oven with air fryer."
-    },
-    {
-        "title": "KitchenAid Artisan Tilt-Head Stand Mixer",
-        "url": "https://amzn.to/3HHSZmj",
-        "price": "$379.99",
-        "description": "Versatile stand mixer for baking."
-    },
-    {
-        "title": "Cuisinart 14-Cup Food Processor",
-        "url": "https://amzn.to/4fKXKs0",
-        "price": "$149.95",
-        "description": "Powerful food processor for chopping and slicing."
-    },
-    {
-        "title": "Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer",
-        "url": "https://amzn.to/4fQ5uJo",
-        "price": "$199.99",
-        "description": "Multi-cooker with air frying and pressure cooking features."
-    },
-    {{
-        "title": "NutriBullet Pro High-Speed Blender/Mixer System",
-        "url": "https://amzn.to/your-blender-link",
-        "price": "$89.99",
-        "description": "Compact blender for smoot
-        ,
-        "description": "Compact blender for smoot": "NutriBullet Pro High-Speed Blender/Mixer System",
-        "url": "https://amzn.to/your-blender-link",
-        "price": "$89.99",
-        "description": "Compact blender for smoothies and shakes."
-    },
-    {
-        "title": "Hydro Flask Stainless Steel Water Bottle",
-        "url": "https://amzn.to/4myBCTZ",
-        "price": "$39.95",
-        "description": "Vacuum insulated bottle keeps drinks cold or hot."
-    }
-]
-    ],
-    "tech":[
-        {"title":"Apple AirPods Pro (2nd Generation)","url":"https://amzn.to/3UAYMx7","price":"$249.00","description":"Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality."},
-        {"title":"Samsung Galaxy Buds FE (Fan Edition)","url":"https://amzn.to/4m6BhIh","price":"$99.99","description":"Reliable ANC, auto device switching, and balanced audio for Android users."},
-        {"title":"Anker Soundcore P20i","url":"https://amzn.to/4mqytoV","price":"$29.99","description":"Budget-friendly wireless earbuds with decent ANC and comfort."},
-        {"title":"Samsung T7 Portable SSD 1TB","url":"https://amzn.to/3J1xAor","price":"$139.99","description":"Fast external solid state drive."},
-        {"title":"Logitech MX Master 3S Wireless Mouse","url":"https://amzn.to/4oFWA4T","price":"$99.99","description":"Ergonomic wireless mouse with customizable buttons and high-precision tracking."},
-        {"title":"Sony WH-1000XM4 Wireless Noise-Canceling Headphones","url":"https://amzn.to/3V5ToC2","price":"$199.99","description":"Industry-leading noise-canceling headphones with long battery life and touch controls."},
-        {"title":"Kindle Paperwhite (2024)","url":"https://amzn.to/4mTKZOd","price":"$159.99","description":"Waterproof e-reader with high-resolution 7-inch display and adjustable warm light."}
-    ],
-    "outdoors":[
-        {"title":"Coleman Sundome Tent","url":"https://amzn.to/4myC9oX","price":"$99.99","description":"Easy setup tent for camping."},
-        {"title":"LifeStraw Personal Water Filter","url":"https://amzn.to/4m3CoIw","price":"$19.97","description":"Portable water purifier for outdoor use."},
-        {"title":"Etekcity Lantern Camping Lantern","url":"https://amzn.to/41tkYwL","price":"$23.99","description":"LED lantern with adjustable brightness."},
-        {"title":"Osprey Atmos AG Backpack","url":"https://amzn.to/40RUG7h","price":"$260.00","description":"Comfortable hiking backpack with ventilation."},
-        {"title":"Garmin GPSMAP Handheld GPS Navigator","url":"https://amzn.to/45BCoJX","price":"$399.99","description":"Rugged GPS device for outdoor navigation."}
-    ],
-    "household":[
-        {"title":"iRobot Roomba 694 Robot Vacuum","url":"https://amzn.to/4flpTp8","price":"$249.99","description":"Smart robot vacuum for home cleaning."},
-        {"title":"Dyson V8 Absolute Cordless Vacuum Cleaner","url":"https://amzn.to/4fll1QY","price":"$399.99","description":"Powerful cordless vacuum cleaner."},
-        {"title":"Instant Pot Duo Crisp Pressure Cooker and Air Fryer","url":"https://amzn.to/3J1ZhxC","price":"$159.99","description":"Multi-use pressure cooker with air fryer lid."},
-        {"title":"Philips Hue White and Color Ambiance Smart Bulb","url":"https://amzn.to/4fxUPCY","price":"$49.99","description":"Smart LED bulb with app control."},
-        {"title":"Nespresso Vertuo Coffee and Espresso Maker","url":"https://amzn.to/46LByvu","price":"$199.00","description":"Single serve coffee and espresso machine."}
-    ],
-    "home-decor":[
-        {"title":"KARMA AND LUCK Calming Spirit Amethyst Crystal Feng Shui Tree of Life","url":`https://www.amazon.com/dp/B0B8QWN9NT?tag=${AFFILIATE_TAG}`,"price":"$39.95","description":"A handcrafted amethyst crystal tree symbolizing peace and spiritual growth."},
-        {"title":"Linon Brooklyn Sherpa Office Chair, Ivory","url":`https://www.amazon.com/dp/B083TRV28M?tag=${AFFILIATE_TAG}`,"price":"$129.99","description":"Ivory sherpa upholstered office chair with adjustable height and silver base."},
-        {"title":"Jersey Home Decor Wall Waterfall XL 47\" Wide x 24\" Tall","url":`https://www.amazon.com/dp/B01KP0ONSY?tag=${AFFILIATE_TAG}`,"price":"$399.99","description":"Large wall-mounted waterfall feature that adds a tranquil ambiance."},
-        {"title":"Medify MA-40 Air Purifier with True HEPA H13 Filter","url":`https://www.amazon.com/dp/B07LGDYV3C?tag=${AFFILIATE_TAG}`,"price":"$249.99","description":"Air purifier covering up to 1,793 sq ft with HEPA H13 filter."},
-        {"title":"Kyzfy 24.4-Inch Relaxing Liquid Motion Lamp","url":`https://www.amazon.com/dp/B0DRBZS1DR?tag=${AFFILIATE_TAG}`,"price":"$44.95","description":"Soothing liquid motion lamp with vibrant colors for relaxation."},
-        {"title":"VIAHART 14\" Glass Mini Aquarium","url":`https://www.amazon.com/dp/B0CRDP8TM9?tag=${AFFILIATE_TAG}`,"price":"$69.99","description":"Compact glass mini aquarium for tabletop decoration and fish keeping."}
+    "kitchen":[
+        {"title":"Instant Pot Duo 7-in-1 Electric Pressure Cooker","url":"https://amzn.to/41dlrmI","price":"$89.00","description":"Multi-functional pressure cooker."},
+        {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/4oKl7WG","price":"$24.99","description":"Durable pre-seasoned cast iron pan."},
+        {"title":"Breville The Smart Oven Air Fryer","url":"https://amzn.to/47BJoYI","price":"$279.95","description":"Countertop convection oven with air fryer."},
+        {"title":"KitchenAid Artisan Tilt-Head Stand Mixer","url":"https://amzn.to/3HHSZmj","price":"$379.99","description":"Versatile stand mixer for baking."},
+        {"title":"Cuisinart 14-Cup Food Processor","url":"https://amzn.to/4fKXKs0","price":"$149.95","description":"Powerful food processor for chopping and slicing."},
+        {"title":"Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer","url":"https://amzn.to/4fQ5uJo","price":"$199.99","description":"Multi-cooker with air frying and pressure cooking features."},
+        {"title":"NutriBullet Pro High-Speed Blender/Mixer System","url":"https://amzn.to/your-blender-link","price":"$89.99","description":"Compact blender for smoothies and shakes."},
+        {"title":"Hydro Flask Stainless Steel Water Bottle","url":"https://amzn.to/4myBCTZ","price":"$39.95","description":"Vacuum insulated bottle keeps drinks cold or hot."}
     ]
 };
 
