@@ -29,7 +29,7 @@ h1, h2 {
 }
 h1 { font-size:2rem; }
 h2 { font-size:1.6rem; margin-top:40px; }
-.banner { text-align:center; margin:0 20px 20px; padding:12px; background: rgba(255,255,255,0.15); border-radius:12px; font-weight:600; display:none; }
+.banner { text-align:center; margin:0 20px 20px; padding:12px; background: rgba(255,255,255,0.15); border-radius:12px; font-weight:600; display:block; }
 .controls { display:flex; justify-content:center; margin-bottom:30px; }
 #searchBox { padding:12px 16px; border-radius:8px; border:none; width:300px; font-size:14px; outline:none; }
 .category { margin-bottom:50px; }
@@ -86,6 +86,17 @@ if(userAffiliate){
 
 // ===== Fallback products (all categories) =====
 const PRODUCTS = {
+  "kitchen":[
+    {"title":"Instant Pot Duo 7-in-1","url":"https://amzn.to/41dlrmI","price":"$89.00","img":"IMG_5369.jpg"},
+    {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/4oKl7WG","price":"$24.99","img":"IMG_5369.jpg"},
+    {"title":"Air Fryer","url":"https://amzn.to/47BJoYI","price":"$279.95","img":"IMG_5370.jpg"},
+    {"title":"Breville Smart Oven Air Fryer","url":"https://amzn.to/47BJoYI","price":"$279.95","img":"IMG_5371.jpg"},
+    {"title":"KitchenAid Artisan Mixer","url":"https://amzn.to/3HHSZmj","price":"$379.99","img":"IMG_5372.jpg"},
+    {"title":"Cuisinart Food Processor","url":"https://amzn.to/4fKXKs0","price":"$149.95","img":"IMG_5373.jpg"},
+    {"title":"Ninja 10-in-1 Air Fryer","url":"https://amzn.to/3V6wKcS","price":"$199.99","img":"IMG_5374.jpg"},
+    {"title":"NutriBullet Pro","url":"https://amzn.to/4mOUwG5","price":"$89.99","img":"IMG_5375.jpg"},
+    {"title":"Hydro Flask Bottle","url":"https://amzn.to/475gmRe","price":"$39.95","img":"IMG_5377.PNG"}
+  ],
   "health":[
     {"title":"Fitbit Charge 5","url":"https://amzn.to/45zc4k1","price":"$129.95","description":"Fitness tracker with GPS and health metrics."},
     {"title":"Theragun Elite","url":"https://amzn.to/463BPYL","price":"$299.00","description":"Percussive therapy device for deep muscle recovery."},
@@ -108,16 +119,6 @@ const PRODUCTS = {
     {"title":"Logitech MX Master 3S Mouse","url":"https://amzn.to/4oFWA4T","price":"$99.99","description":"Ergonomic wireless mouse."},
     {"title":"Sony WH-1000XM4 Headphones","url":"https://amzn.to/3V5ToC2","price":"$199.99","description":"Noise-canceling headphones."},
     {"title":"Kindle Paperwhite 2024","url":"https://amzn.to/4mTKZOd","price":"$159.99","description":"Waterproof e-reader with warm light."}
-  ],
-  "kitchen":[
-    {"title":"Instant Pot Duo 7-in-1","url":"https://amzn.to/41dlrmI","price":"$89.00","img":"IMG_5369.jpg"},
-    {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/4oKl7WG","price":"$24.99","img":"IMG_5369.jpg"},
-    {"title":"Air Fryer","url":"https://amzn.to/47BJoYI","price":"$279.95","img":"IMG_5370.jpg"},
-    {"title":"KitchenAid Artisan Mixer","url":"https://amzn.to/3HHSZmj","price":"$379.99","img":"IMG_5372.jpg"},
-    {"title":"Cuisinart Food Processor","url":"https://amzn.to/4fKXKs0","price":"$149.95","img":"IMG_5373.jpg"},
-    {"title":"Ninja 10-in-1 Air Fryer","url":"https://amzn.to/3V6wKcS","price":"$199.99","img":"IMG_5374.jpg"},
-    {"title":"NutriBullet Pro","url":"https://amzn.to/4mOUwG5","price":"$89.99","img":"IMG_5375.jpg"},
-    {"title":"Hydro Flask Bottle","url":"https://amzn.to/475gmRe","price":"$39.95","img":"IMG_5377.PNG"}
   ],
   "outdoors":[
     {"title":"Coleman Sundome Tent","url":"https://amzn.to/4myC9oX","price":"$99.99","description":"Easy setup camping tent."},
@@ -153,12 +154,26 @@ function withTag(url){return url.includes("?")?`${url}&tag=${AFFILIATE_TAG}`:`${
 // ===== Display all categories and products =====
 function displayProducts(searchTerm=''){
     categoriesContainer.innerHTML = '';
-    Object.entries(PRODUCTS).forEach(([cat, items])=>{
+
+    // Kitchen first
+    const orderedCategories = ["kitchen", "health", "beauty", "tech", "outdoors", "household", "home-decor"];
+
+    orderedCategories.forEach(cat=>{
+        const items = PRODUCTS[cat];
         const filteredItems = items.filter(p=>p.title.toLowerCase().includes(searchTerm.toLowerCase()));
         if(filteredItems.length === 0) return;
 
         const catDiv = document.createElement('div');
         catDiv.className = 'category';
+
+        // Add banner for Kitchen only
+        if(cat === "kitchen"){
+            const kitchenBanner = document.createElement('div');
+            kitchenBanner.className = 'banner';
+            kitchenBanner.innerText = "🔥 Best Selling Kitchen Products – Check Reviews, Purchases & Our YouTube Videos!";
+            catDiv.appendChild(kitchenBanner);
+        }
+
         const catTitle = document.createElement('h2');
         catTitle.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
         catDiv.appendChild(catTitle);
