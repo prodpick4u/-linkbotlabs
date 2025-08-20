@@ -1,5 +1,3 @@
-# fallback.py
-
 AFFILIATE_TAG = "mychanneld-20"
 
 FALLBACK_PRODUCTS = {
@@ -69,63 +67,55 @@ FALLBACK_PRODUCTS = {
         },
     ],
 
-  "kitchen": [
-    {
-        "title": "Instant Pot Duo 7-in-1 Electric Pressure Cooker",
-        "url": "https://amzn.to/41dlrmI",
-        "price": "$89.00",
-        "description": "Multi-functional pressure cooker."
-    },
-    {
-        "title": "Lodge Cast Iron Skillet",
-        "url": "https://amzn.to/4oKl7WG",
-        "price": "$24.99",
-        "description": "Durable pre-seasoned cast iron pan."
-    },
-    {
-        "title": "Breville The Smart Oven Air Fryer",
-        "url": "https://amzn.to/47BJoYI",
-        "price": "$279.95",
-        "description": "Countertop convection oven with air fryer."
-    },
-    {
-        "title": "KitchenAid Artisan Tilt-Head Stand Mixer",
-        "url": "https://amzn.to/3HHSZmj",
-        "price": "$379.99",
-        "description": "Versatile stand mixer for baking."
-    },
-    {
-        "title": "Cuisinart 14-Cup Food Processor",
-        "url": "https://amzn.to/4fKXKs0",
-        "price": "$149.95",
-        "description": "Powerful food processor for chopping and slicing."
-    },
-    {
-        "title": "Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer",
-        "url": "https://amzn.to/4fQ5uJo",
-        "price": "$199.99",
-        "description": "Multi-cooker with air frying and pressure cooking features."
-    },
-    {
-        "title": "NutriBullet Pro High-Speed Blender/Mixer System",
-        "url": "https://amzn.to/your-blender-link",
-        "price": "$89.99",
-        "description": "Compact blender for smoothies and shakes."
-    },
-    {
-        "title": "Hydro Flask Stainless Steel Water Bottle",
-        "url": "https://amzn.to/4myBCTZ",
-        "price": "$39.95",
-        "description": "Vacuum insulated bottle keeps drinks cold or hot."
-    }
-]
+    "kitchen": [
+        {
+            "title": "Instant Pot Duo 7-in-1 Electric Pressure Cooker",
+            "url": "https://amzn.to/41dlrmI",
+            "price": "$89.00",
+            "description": "Multi-functional pressure cooker."
+        },
+        {
+            "title": "Lodge Cast Iron Skillet",
+            "url": "https://amzn.to/4oKl7WG",
+            "price": "$24.99",
+            "description": "Durable pre-seasoned cast iron pan."
+        },
+        {
+            "title": "Breville The Smart Oven Air Fryer",
+            "url": "https://amzn.to/47BJoYI",
+            "price": "$279.95",
+            "description": "Countertop convection oven with air fryer."
+        },
+        {
+            "title": "KitchenAid Artisan Tilt-Head Stand Mixer",
+            "url": "https://amzn.to/3HHSZmj",
+            "price": "$379.99",
+            "description": "Versatile stand mixer for baking."
+        },
+        {
+            "title": "Cuisinart 14-Cup Food Processor",
+            "url": "https://amzn.to/4fKXKs0",
+            "price": "$149.95",
+            "description": "Powerful food processor for chopping and slicing."
+        },
+        {
+            "title": "Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer",
+            "url": "https://amzn.to/3V6wKcS",
+            "price": "$199.99",
+            "description": "Multi-cooker with air frying and pressure cooking features."
+        },
+        {
+            "title": "NutriBullet Pro High-Speed Blender/Mixer System",
+            "url": "https://amzn.to/4mOUwG5",
+            "price": "$89.99",
+            "description": "Compact blender for smoothies and shakes."
         },
         {
             "title": "Hydro Flask Stainless Steel Water Bottle",
-            "url": "https://amzn.to/4myBCTZ",
+            "url": "https://amzn.to/475gmRe",
             "price": "$39.95",
             "description": "Vacuum insulated bottle keeps drinks cold or hot."
-        },
+        }
     ],
 
     "tech": [
@@ -170,7 +160,7 @@ FALLBACK_PRODUCTS = {
             "url": "https://amzn.to/4mTKZOd",
             "price": "$159.99",
             "description": "Waterproof e-reader with high-resolution 7-inch display and adjustable warm light."
-        },
+        }
     ],
 
     "outdoors": [
@@ -203,7 +193,7 @@ FALLBACK_PRODUCTS = {
             "url": "https://amzn.to/45BCoJX",
             "price": "$399.99",
             "description": "Rugged GPS device for outdoor navigation."
-        },
+        }
     ],
 
     "household": [
@@ -236,7 +226,7 @@ FALLBACK_PRODUCTS = {
             "url": "https://amzn.to/46LByvu",
             "price": "$199.00",
             "description": "Single serve coffee and espresso machine."
-        },
+        }
     ],
 
     "home-decor": [
@@ -275,8 +265,8 @@ FALLBACK_PRODUCTS = {
             "url": f"https://www.amazon.com/dp/B0CRDP8TM9?tag={AFFILIATE_TAG}",
             "price": "$69.99",
             "description": "Compact glass mini aquarium for tabletop decoration and fish keeping."
-        },
-    ],
+        }
+    ]
 }
 
 def get_fallback_products(category):
