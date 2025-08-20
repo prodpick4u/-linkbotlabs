@@ -35,10 +35,10 @@ h2 { font-size:1.8rem; margin-top:40px;}
 .card { background: rgba(255,255,255,0.1); border-radius:16px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; box-shadow: 0 6px 20px rgba(0,0,0,0.3); transition: transform 0.2s, box-shadow 0.2s;}
 .card:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,0.4);}
 .product-title { font-weight:700; font-size:18px; margin-bottom:10px; color:#fff;}
-.product-price { color:#ffb347; font-weight:600; margin-bottom:12px;}
+.product-price { color:#a29bfe; font-weight:600; margin-bottom:12px;}
 .product-desc { font-size:14px; color:#eee; flex-grow:1; line-height:1.4;}
-.view-btn { margin-top:15px; padding:12px; background: #ff5a5f; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600; text-align:center; text-decoration:none; transition: all 0.2s;}
-.view-btn:hover { background:#ff2a2f; transform: translateY(-2px);}
+.view-btn { margin-top:15px; padding:12px; background: linear-gradient(135deg,#3b007f,#6f00ff); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600; text-align:center; text-decoration:none; transition: all 0.2s;}
+.view-btn:hover { opacity:0.85; transform: translateY(-2px);}
 @media(max-width:600px){.grid{grid-template-columns:1fr;}}
 
 .kitchen-wall {
@@ -47,6 +47,7 @@ h2 { font-size:1.8rem; margin-top:40px;}
   gap: 16px;
   padding: 10px 20px 40px;
   scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
 }
 .kitchen-product {
   flex: 0 0 auto;
@@ -56,6 +57,7 @@ h2 { font-size:1.8rem; margin-top:40px;}
   text-align: center;
   padding: 10px;
   transition: transform 0.2s, box-shadow 0.2s;
+  scroll-snap-align: start;
 }
 .kitchen-product:hover {
   transform: translateY(-4px);
@@ -77,15 +79,16 @@ h2 { font-size:1.8rem; margin-top:40px;}
 <body>
 
 <div id="affiliateBanner" class="banner"></div>
+
+<h1>🍳 Top Kitchen Products on Amazon 2025</h1>
+<div class="kitchen-wall" id="kitchen-wall"></div>
+
 <h1>All Products</h1>
 <div class="categories" id="category-container"></div>
 <div class="controls">
     <input type="text" id="searchBox" placeholder="Search products...">
 </div>
 <div class="grid" id="product-container"></div>
-
-<h2>🍳 Shop Kitchen Best Buys on Amazon</h2>
-<div class="kitchen-wall" id="kitchen-wall"></div>
 
 <script>
 // ===== Affiliate tag =====
@@ -98,7 +101,7 @@ if(userAffiliate){
     banner.style.display = 'block';
 }
 
-// ===== Fallback products =====
+// ===== All fallback products from fallback.py =====
 const PRODUCTS = {
   "health":[
     {"title":"Fitbit Charge 5","url":"https://amzn.to/45zc4k1","price":"$129.95","description":"Fitness tracker with GPS and health metrics."},
@@ -123,6 +126,16 @@ const PRODUCTS = {
     {"title":"Sony WH-1000XM4 Headphones","url":"https://amzn.to/3V5ToC2","price":"$199.99","description":"Noise-canceling headphones."},
     {"title":"Kindle Paperwhite 2024","url":"https://amzn.to/4mTKZOd","price":"$159.99","description":"Waterproof e-reader with warm light."}
   ],
+  "kitchen":[
+    {"title":"Instant Pot Duo 7-in-1","url":"https://amzn.to/41dlrmI","price":"$89.00","img":"https://m.media-amazon.com/images/I/71VtP9+9XlL._AC_SL1500_.jpg"},
+    {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/4oKl7WG","price":"$24.99","img":"https://m.media-amazon.com/images/I/71v8J6v6h5L._AC_SL1500_.jpg"},
+    {"title":"Breville Smart Oven Air Fryer","url":"https://amzn.to/47BJoYI","price":"$279.95","img":"https://m.media-amazon.com/images/I/91Oq0Xq7HQL._AC_SL1500_.jpg"},
+    {"title":"KitchenAid Mixer","url":"https://amzn.to/3HHSZmj","price":"$379.99","img":"https://m.media-amazon.com/images/I/91Xzq2X6FzL._AC_SL1500_.jpg"},
+    {"title":"Cuisinart Food Processor","url":"https://amzn.to/4fKXKs0","price":"$149.95","img":"https://m.media-amazon.com/images/I/71mY2k5+JzL._AC_SL1500_.jpg"},
+    {"title":"Ninja Foodi 9-in-1","url":"https://amzn.to/3V6wKcS","price":"$199.99","img":"https://m.media-amazon.com/images/I/91vW+6T1SJL._AC_SL1500_.jpg"},
+    {"title":"NutriBullet Pro","url":"https://amzn.to/4mOUwG5","price":"$89.99","img":"https://m.media-amazon.com/images/I/71FZKcWZ3QL._AC_SL1500_.jpg"},
+    {"title":"Hydro Flask Bottle","url":"https://amzn.to/475gmRe","price":"$39.95","img":"https://m.media-amazon.com/images/I/81n5Iu5D1RL._AC_SL1500_.jpg"}
+  ],
   "outdoors":[
     {"title":"Coleman Sundome Tent","url":"https://amzn.to/4myC9oX","price":"$99.99","description":"Easy setup camping tent."},
     {"title":"LifeStraw Water Filter","url":"https://amzn.to/4m3CoIw","price":"$19.97","description":"Portable water purifier."},
@@ -144,16 +157,6 @@ const PRODUCTS = {
     {"title":"Medify MA-40 Air Purifier","url":`https://www.amazon.com/dp/B07LGDYV3C?tag=${AFFILIATE_TAG}`,"price":"$249.99","description":"HEPA H13 filter air purifier."},
     {"title":"Liquid Motion Lamp","url":`https://www.amazon.com/dp/B0DRBZS1DR?tag=${AFFILIATE_TAG}`,"price":"$44.95","description":"Soothing liquid motion lamp."},
     {"title":"Glass Mini Aquarium","url":`https://www.amazon.com/dp/B0CRDP8TM9?tag=${AFFILIATE_TAG}`,"price":"$69.99","description":"Compact tabletop aquarium."}
-  ],
-  "kitchen":[
-    {"title":"Instant Pot Duo 7-in-1","url":"https://amzn.to/41dlrmI","price":"$89.00","img":"https://m.media-amazon.com/images/I/71VtP9+9XlL._AC_SL1500_.jpg"},
-    {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/4oKl7WG","price":"$24.99","img":"https://m.media-amazon.com/images/I/71v8J6v6h5L._AC_SL1500_.jpg"},
-    {"title":"Breville Smart Oven Air Fryer","url":"https://amzn.to/47BJoYI","price":"$279.95","img":"https://m.media-amazon.com/images/I/91Oq0Xq7HQL._AC_SL1500_.jpg"},
-    {"title":"KitchenAid Mixer","url":"https://amzn.to/3HHSZmj","price":"$379.99","img":"https://m.media-amazon.com/images/I/91Xzq2X6FzL._AC_SL1500_.jpg"},
-    {"title":"Cuisinart Food Processor","url":"https://amzn.to/4fKXKs0","price":"$149.95","img":"https://m.media-amazon.com/images/I/71mY2k5+JzL._AC_SL1500_.jpg"},
-    {"title":"Ninja Foodi 9-in-1","url":"https://amzn.to/3V6wKcS","price":"$199.99","img":"https://m.media-amazon.com/images/I/91vW+6T1SJL._AC_SL1500_.jpg"},
-    {"title":"NutriBullet Pro","url":"https://amzn.to/4mOUwG5","price":"$89.99","img":"https://m.media-amazon.com/images/I/71FZKcWZ3QL._AC_SL1500_.jpg"},
-    {"title":"Hydro Flask Bottle","url":"https://amzn.to/475gmRe","price":"$39.95","img":"https://m.media-amazon.com/images/I/81n5Iu5D1RL._AC_SL1500_.jpg"}
   ]
 };
 
