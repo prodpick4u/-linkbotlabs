@@ -178,13 +178,13 @@ FALLBACK_PRODUCTS = {
         },
         {
             "title": "Etekcity Lantern Camping Lantern",
-            "url": "https://amzn.to/41tkYwL",
+            "url": "https://amzn.to/41JMmqq",
             "price": "$23.99",
             "description": "LED lantern with adjustable brightness."
         },
         {
             "title": "Osprey Atmos AG Backpack",
-            "url": "https://amzn.to/40RUG7h",
+            "url": "https://amzn.to/3Jngwtq",
             "price": "$260.00",
             "description": "Comfortable hiking backpack with ventilation."
         },
@@ -217,13 +217,13 @@ FALLBACK_PRODUCTS = {
         },
         {
             "title": "Philips Hue White and Color Ambiance Smart Bulb",
-            "url": "https://amzn.to/4fxUPCY",
+            "url": "https://amzn.to/3JhsKUq,
             "price": "$49.99",
             "description": "Smart LED bulb with app control."
         },
         {
             "title": "Nespresso Vertuo Coffee and Espresso Maker",
-            "url": "https://amzn.to/46LByvu",
+            "url": "https://amzn.to/3HKisLX",
             "price": "$199.00",
             "description": "Single serve coffee and espresso machine."
         }
