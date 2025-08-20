@@ -1,12 +1,12 @@
 # Top Health Products
 
-## [Fitbit Charge 5 Advanced Fitness & Health Tracker](https://www.amazon.com/dp/B0DGPQKF2W?tag=mychanneld-20)
+## [Fitbit Charge 5 Advanced Fitness & Health Tracker](https://amzn.to/45zc4k1)
 - **Price:** $129.95
 - **Description:** Fitness tracker with built-in GPS and health metrics.
 
-## [Theragun Elite Handheld Percussive Therapy Device](https://amzn.to/3Hm7HiH)
+## [Theragun Elite Handheld Percussive Therapy Device](https://amzn.to/463BPYL)
 - **Price:** $299.00
-- **Description:** Deep muscle treatment massage device.
+- **Description:** Professional-grade percussive therapy device for deep muscle treatment and recovery.
 
 ## [Methylene Blue](https://amzn.to/4ldkJwL)
 - **Price:** Varies
