@@ -6,19 +6,59 @@
 <title>Prodpick4U Affiliate Activation</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
-body {font-family:'Inter',sans-serif;margin:0;padding:1rem;color:#fff;
-      background: linear-gradient(-45deg,#0a0033,#3b007f,#1a1aff,#6f00ff);
-      background-size:400% 400%;animation: gradientShift 15s ease infinite;}
-@keyframes gradientShift{0%{background-position:0% 50%;}25%{background-position:50% 50%;}
-50%{background-position:100% 50%;}75%{background-position:50% 50%;}100%{background-position:0% 50%;}}
+body {
+    font-family:'Inter',sans-serif;
+    margin:0;
+    padding:1rem;
+    color:#fff;
+    background: linear-gradient(-45deg,#0a0033,#3b007f,#1a1aff,#6f00ff);
+    background-size:400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+@keyframes gradientShift{
+    0%{background-position:0% 50%;}
+    25%{background-position:50% 50%;}
+    50%{background-position:100% 50%;}
+    75%{background-position:50% 50%;}
+    100%{background-position:0% 50%;}
+}
 h1,h2,h3,h4{color:#9cf;text-align:center;}
-.glass{background: rgba(0,0,0,0.5);backdrop-filter: blur(10px);border-radius:12px;padding:15px;margin-bottom:1rem;}
-input, button{width:100%;padding:10px;margin:5px 0;border-radius:5px;border:none;}
+.glass{
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:1rem;
+}
+input, button{
+    width:100%;
+    padding:10px;
+    margin:5px 0;
+    border-radius:5px;
+    border:none;
+}
 input{background: rgba(20,20,20,0.7); color:#fff;}
-button{background: linear-gradient(135deg,#6a11cb,#2575fc); color:#fff;font-weight:bold;cursor:pointer;}
+button{
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+}
 button:hover{opacity:0.85;}
-.output{background:rgba(0,0,0,0.7);padding:10px;border-radius:8px;margin-top:8px;color:#0f0;white-space:pre-wrap;}
-.timer{text-align:center;font-size:1rem;margin-bottom:0.8rem;color:#ff0;}
+.output{
+    background:rgba(0,0,0,0.7);
+    padding:10px;
+    border-radius:8px;
+    margin-top:8px;
+    color:#0f0;
+    white-space:pre-wrap;
+}
+.timer{
+    text-align:center;
+    font-size:1rem;
+    margin-bottom:0.8rem;
+    color:#ff0;
+}
 </style>
 </head>
 <body>
@@ -31,6 +71,19 @@ button:hover{opacity:0.85;}
 <input type="text" id="accessCode" placeholder="Enter your code">
 <button onclick="checkAccessCode()">Unlock Demo</button>
 <div id="accessOutput" class="output"></div>
+</div>
+
+<!-- ===== Detailed Explanation Section ===== -->
+<div class="glass" id="activationInfo" style="background: rgba(0,0,0,0.6); padding:20px;">
+  <h2 style="color:#ffdd57; text-align:center; margin-bottom:10px;">📢 How You Can Access Our Affiliate Products</h2>
+  <p style="font-size:1rem; line-height:1.5;">We offer <strong>three ways</strong> to get started:</p>
+  <ol style="margin-left:20px; font-size:1rem; line-height:1.6;">
+    <li style="margin-bottom:8px;"><span style="color:#00ffea; font-weight:bold;">Join for 1 Week via Fiverr:</span> Test the tool for 7 days by requesting access through our Fiverr link on the front page.</li>
+    <li style="margin-bottom:8px;"><span style="color:#00ffea; font-weight:bold;">Purchase the Full Tool:</span> Get 1 week free with your full purchase.</li>
+    <li style="margin-bottom:8px;"><span style="color:#00ffea; font-weight:bold;">Special Launch Promotion:</span> If you already have an Amazon affiliate link and can support this project, you are welcome to use it <strong>for 1 month free</strong>.</li>
+  </ol>
+  <p style="font-size:1rem; line-height:1.5; margin-top:10px;">All products will dynamically link to your Amazon affiliate ID, giving you more commission at no cost. The tool is primarily for desktop and provides <strong>full automation</strong>. You can also test the live demo via the ZIP Flask app. Full automation requires keys, but you can explore the demo without keys.</p>
+  <p style="font-size:1rem; font-weight:bold; color:#ff6f91;">👉 All requests for access should be made via the Fiverr link on the front page.</p>
 </div>
 
 <div id="affiliateFormSection" class="glass" style="display:none;">
