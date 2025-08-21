@@ -70,7 +70,7 @@ FALLBACK_PRODUCTS = {
     "kitchen": [
         {
             "title": "Instant Pot Duo 7-in-1 Electric Pressure Cooker",
-            "url": "https://amzn.to/41dlrmI",
+            "url": "https://amzn.to/4oLDhqU",
             "price": "$89.00",
             "description": "Multi-functional pressure cooker."
         },
