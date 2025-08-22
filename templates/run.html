@@ -1,0 +1,18 @@
+<h2>Run Automation</h2>
+<form method="POST">
+    RapidAPI Key: <input type="text" name="rapidapi_key" required><br>
+    Apify Token: <input type="text" name="apify_token" required><br>
+    YouTube API Key: <input type="text" name="youtube_key" required><br>
+    Affiliate Tag: <input type="text" name="affiliate_tag" required><br>
+    <button type="submit">Run Automation</button>
+</form>
+
+{% if output_preview %}
+<hr>
+<h3>Sample Blog Post Preview:</h3>
+<div style="border:1px solid #ccc; padding:10px; max-height:400px; overflow:auto;">
+  {{ output_preview | safe }}
+</div>
+{% endif %}
+
+<p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
