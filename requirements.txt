@@ -15,4 +15,3 @@ openai
 gTTS
 flask
 playwright
-moviepy
