@@ -8,54 +8,72 @@
     body {
         font-family: 'Inter', sans-serif;
         margin: 0;
-        background-color: #f0f2f5;
+        background-color: #f4f6f8;
         color: #333;
     }
     header {
         background-color: #4CAF50;
         color: white;
-        padding: 20px;
+        padding: 20px 0;
         text-align: center;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
     main {
-        max-width: 800px;
+        max-width: 1000px;
         margin: 30px auto;
         padding: 20px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    h1 {
+        margin: 0;
     }
     h2 {
         text-align: center;
-        color: #4CAF50;
+        color: #333;
+        margin-bottom: 30px;
     }
-    .dashboard-links {
+    .cards {
         display: flex;
-        flex-direction: column;
-        gap: 15px;
-        margin-top: 30px;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
     }
-    .dashboard-links a {
-        display: block;
-        padding: 15px;
-        background-color: #4CAF50;
-        color: white;
-        text-decoration: none;
-        font-weight: 600;
+    .card {
+        flex: 1 1 250px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        padding: 30px 20px;
         text-align: center;
-        border-radius: 8px;
-        transition: background 0.3s;
+        transition: transform 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+        color: #333;
     }
-    .dashboard-links a:hover {
-        background-color: #45a049;
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .card-icon {
+        font-size: 48px;
+        color: #4CAF50;
+        margin-bottom: 15px;
+    }
+    .card-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    .card-desc {
+        font-size: 14px;
+        color: #666;
     }
     .logout {
         display: block;
-        margin: 40px auto 0;
+        margin: 50px auto 0;
         text-align: center;
         color: #ff4d4f;
         text-decoration: none;
         font-weight: bold;
+        font-size: 16px;
     }
     .logout:hover {
         text-decoration: underline;
@@ -68,9 +86,17 @@
 </header>
 <main>
     <h2>Welcome, {{ user }}!</h2>
-    <div class="dashboard-links">
-        <a href="/run">Run Automation (Blog/Video Scripts)</a>
-        <a href="/generate_video">Generate TikTok Video from URLs</a>
+    <div class="cards">
+        <a href="/run" class="card">
+            <div class="card-icon">📄</div>
+            <div class="card-title">Run Automation</div>
+            <div class="card-desc">Generate blog or video scripts automatically.</div>
+        </a>
+        <a href="/generate_video" class="card">
+            <div class="card-icon">🎬</div>
+            <div class="card-title">Generate TikTok Video</div>
+            <div class="card-desc">Create a TikTok-style video from product/image URLs with voiceover.</div>
+        </a>
     </div>
     <a href="/logout" class="logout">Logout</a>
 </main>
