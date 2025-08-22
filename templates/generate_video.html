@@ -16,10 +16,10 @@ label { font-weight: bold; display: block; margin-top: 15px; }
 
 <form method="POST">
     <label>Paste Product or Image URLs (comma-separated):</label>
-    <textarea name="urls" rows="5" placeholder="Enter URLs separated by commas"></textarea>
+    <textarea name="urls" rows="5" placeholder="Enter URLs separated by commas">{{ request.form.urls or '' }}</textarea>
 
     <label>Optional Voiceover Script:</label>
-    <textarea name="script" rows="4" placeholder="Enter the text to convert into voiceover"></textarea>
+    <textarea name="script" rows="4" placeholder="Enter the text to convert into voiceover">{{ script_text }}</textarea>
 
     <button type="submit">Generate Video</button>
 </form>
