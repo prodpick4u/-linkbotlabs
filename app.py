@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory
 import os
 from video_creator_dynamic import generate_video_from_urls  # your video generator
+import openai  # for AI-generated scripts
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # replace with env variable in production
@@ -43,6 +44,23 @@ def logout():
     return redirect(url_for("login"))
 
 # ----------------------------
+# Helper: Generate AI script
+# ----------------------------
+def generate_ai_script(product_title, product_description, style="TikTok promotional"):
+    prompt = f"""
+    Write a short, catchy, TikTok-style promotional script for this product:
+    Title: {product_title}
+    Description: {product_description}
+    The script should be engaging, persuasive, and around 30-45 seconds spoken length.
+    """
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=200
+    )
+    return response.choices[0].message.content.strip()
+
+# ----------------------------
 # TikTok Video Generator with optional script
 # ----------------------------
 @app.route("/generate_video", methods=["GET", "POST"])
@@ -55,15 +73,23 @@ def generate_video_page():
 
     if request.method == "POST":
         urls_input = request.form.get("urls")
-        script_text = request.form.get("script")  # optional voiceover text
+        user_script = request.form.get("script")  # optional voiceover text
 
         urls = [u.strip() for u in urls_input.split(",") if u.strip()]
         if not urls:
             error = "❌ Please enter at least one URL."
         else:
             try:
-                # Generate video using your dynamic video creator
-                video_path = generate_video_from_urls(urls, script_text=script_text)
+                # If user did not provide a script, generate one automatically
+                if not user_script:
+                    # Here you could fetch product info from the first URL
+                    # Example placeholder
+                    product_title = "Example Product"
+                    product_description = "This is an amazing product with great features."
+                    user_script = generate_ai_script(product_title, product_description)
+
+                # Generate video
+                video_path = generate_video_from_urls(urls, script_text=user_script)
                 video_file = os.path.basename(video_path)
             except Exception as e:
                 error = f"❌ Video generation failed: {str(e)}"
