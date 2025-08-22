@@ -1,0 +1,16 @@
+<h2>Paste Product URLs (comma-separated)</h2>
+<form method="POST">
+    <textarea name="urls" rows="5" cols="40"></textarea><br>
+    <button type="submit">Generate Video</button>
+</form>
+
+{% if video_file %}
+<hr>
+<h2>✅ Video Generated!</h2>
+<video width="100%" controls>
+    <source src="{{ url_for('static', filename='output/' ~ video_file) }}" type="video/mp4">
+</video>
+<p><a href="{{ url_for('static', filename='output/' ~ video_file) }}" download>Download Video</a></p>
+{% endif %}
+
+<p><a href="{{ url_for('dashboard') }}">Back to Dashboard</a></p>
