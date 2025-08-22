@@ -1,40 +1,86 @@
-# video_creator_dynamic.py
 import os
-from video_creator_ios import create_video_with_audio
-from tts_module import generate_tts  # if you want to generate audio from text
+import requests
+from moviepy.editor import ImageClip, AudioFileClip, CompositeVideoClip, TextClip
+from io import BytesIO
+from PIL import Image
 
-def generate_video_from_urls(urls, output_dir="static/output"):
+def download_image(url, save_dir="static/output"):
+    """Download an image from a URL and return local path."""
+    os.makedirs(save_dir, exist_ok=True)
+    try:
+        response = requests.get(url, stream=True, timeout=10)
+        response.raise_for_status()
+        ext = url.split(".")[-1].split("?")[0]
+        filename = f"image_{os.urandom(4).hex()}.{ext}"
+        path = os.path.join(save_dir, filename)
+        with open(path, "wb") as f:
+            f.write(response.content)
+        return path
+    except Exception as e:
+        print(f"⚠️ Failed to download image: {e}")
+        return None
+
+def generate_video_from_urls(urls, audio_path=None, output_path="static/output/video.mp4", watermark=None):
     """
-    Simple wrapper that takes a list of URLs (or file paths for now),
-    generates audio for each if needed, and creates a video using the iOS video creator.
+    Generate a video from image URLs and optional audio.
+    - urls: list of image URLs
+    - audio_path: optional audio file path
+    - watermark: optional text watermark
     """
-    os.makedirs(output_dir, exist_ok=True)
+    if not urls:
+        raise ValueError("No URLs provided for video creation.")
 
-    videos = []
+    # Download the first image
+    image_path = download_image(urls[0])
+    if not image_path:
+        raise RuntimeError("Failed to download any image.")
 
-    for i, url_or_path in enumerate(urls, start=1):
-        # Assume url_or_path is local image path for now
-        image_path = url_or_path  # later you can extend to download from URL
+    # Use provided audio or silent placeholder
+    if audio_path is None:
+        from moviepy.editor import ColorClip
+        audio_clip = None
+        duration = 5  # default 5 seconds
+    else:
+        audio_clip = AudioFileClip(audio_path)
+        duration = audio_clip.duration
 
-        # Example: generate TTS audio for each video
-        audio_text = f"This is demo audio for video {i}"  # replace with actual text input
-        audio_path = os.path.join(output_dir, f"audio_{i}.mp3")
-        generate_tts(audio_text, output_file=audio_path)
+    # Create image clip
+    image_clip = ImageClip(image_path).set_duration(duration)
+    if audio_clip:
+        image_clip = image_clip.set_audio(audio_clip)
 
-        video_path = os.path.join(output_dir, f"video_{i}.mp4")
+    # Resize and background
+    resolution = (1280, 720)
+    image_clip = image_clip.resize(height=resolution[1])
+    if image_clip.w > resolution[0]:
+        image_clip = image_clip.resize(width=resolution[0])
 
-        # Create video using iOS creator
-        create_video_with_audio(
-            image_path=image_path,
-            audio_path=audio_path,
-            output_path=video_path,
-            resolution=(1280, 720),
-            watermark_text="MyBrand",
-            watermark_pos=("right", "bottom"),
-            watermark_margin=10
-        )
+    background = ImageClip(color=(0, 0, 0), size=resolution).set_duration(duration)
+    video = CompositeVideoClip([background, image_clip.set_position("center")])
 
-        videos.append(video_path)
+    # Add watermark if provided
+    if watermark:
+        watermark_clip = TextClip(
+            watermark,
+            fontsize=24,
+            color="white",
+            font="Arial-Bold",
+            stroke_color="black",
+            stroke_width=2,
+            method="caption"
+        ).set_duration(duration).set_position(("right", "bottom"))
+        video = CompositeVideoClip([video, watermark_clip])
 
-    # Return the first video for simplicity
-    return videos[0] if videos else None
+    # Write final video
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    video.write_videofile(
+        output_path,
+        codec="libx264",
+        audio_codec="aac",
+        fps=24,
+        threads=4,
+        verbose=True,
+        logger=None,
+    )
+
+    return output_path
