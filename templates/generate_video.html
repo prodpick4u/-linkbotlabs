@@ -3,20 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>Generate TikTok Video</title>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
+textarea { width: 100%; max-width: 600px; }
+button { padding: 10px 20px; margin-top: 10px; font-size: 16px; cursor: pointer; }
+video { max-width: 400px; display: block; margin: 10px 0; border: 1px solid #ccc; }
+</style>
 </head>
 <body>
 <h2>Paste Product URLs (comma-separated)</h2>
 <form method="POST">
-    <textarea name="urls" rows="5" cols="40"></textarea><br>
+    <textarea name="urls" rows="5" placeholder="Enter image URLs, separated by commas"></textarea><br>
     <button type="submit">Generate Video</button>
 </form>
 
 {% if video_file %}
 <h3>✅ Video Generated!</h3>
-<video width="100%" controls>
+<video width="360" height="640" controls>
     <source src="/static/output/{{ video_file }}" type="video/mp4">
 </video>
-<p><a href="/static/output/{{ video_file }}" download>Download Video</a></p>
+<p><a href="/download/{{ video_file }}">Download Video</a></p>
 {% endif %}
 
 <p><a href="/dashboard">Back to Dashboard</a></p>
