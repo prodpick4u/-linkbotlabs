@@ -4,28 +4,106 @@
 <meta charset="UTF-8">
 <title>Generate TikTok Video</title>
 <style>
-body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
-textarea { width: 100%; max-width: 600px; padding: 10px; font-size: 14px; }
-button { padding: 10px 20px; margin-top: 10px; font-size: 16px; cursor: pointer; }
-video { max-width: 400px; display: block; margin: 10px 0; border: 1px solid #ccc; }
-label { font-weight: bold; display: block; margin-top: 15px; }
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fa;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+    header {
+        background-color: #4a90e2;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    main {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    form {
+        background-color: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 600px;
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #4a90e2;
+    }
+    label {
+        font-weight: bold;
+        margin-top: 15px;
+        display: block;
+    }
+    textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        resize: vertical;
+    }
+    button {
+        margin-top: 20px;
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4a90e2;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    button:hover {
+        background-color: #357ab8;
+    }
+    video {
+        max-width: 360px;
+        display: block;
+        margin: 20px auto;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+    }
+    p {
+        text-align: center;
+        margin-top: 10px;
+    }
+    a {
+        color: #4a90e2;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    .error {
+        color: red;
+        text-align: center;
+        margin-top: 10px;
+    }
 </style>
 </head>
 <body>
-<h2>Generate TikTok Video</h2>
-
+<header>
+    <h1>Generate TikTok Video</h1>
+</header>
+<main>
 <form method="POST">
     <label>Paste Product or Image URLs (comma-separated):</label>
     <textarea name="urls" rows="5" placeholder="Enter URLs separated by commas">{{ request.form.urls or '' }}</textarea>
 
     <label>Optional Voiceover Script:</label>
-    <textarea name="script" rows="4" placeholder="Enter the text to convert into voiceover">{{ script_text }}</textarea>
+    <textarea name="script" rows="4" placeholder="Enter the text to convert into voiceover">{{ script_text or '' }}</textarea>
 
     <button type="submit">Generate Video</button>
 </form>
 
 {% if error %}
-<p style="color:red;">{{ error }}</p>
+<p class="error">{{ error }}</p>
 {% endif %}
 
 {% if video_file %}
@@ -37,5 +115,6 @@ label { font-weight: bold; display: block; margin-top: 15px; }
 {% endif %}
 
 <p><a href="/dashboard">Back to Dashboard</a></p>
+</main>
 </body>
 </html>
