@@ -5,15 +5,20 @@
 <title>Generate TikTok Video</title>
 <style>
 body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
-textarea { width: 100%; max-width: 600px; }
-button { padding: 10px 20px; margin-top: 10px; font-size: 16px; cursor: pointer; }
+textarea { width: 100%; max-width: 600px; margin-bottom: 10px; }
+button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
 video { max-width: 400px; display: block; margin: 10px 0; border: 1px solid #ccc; }
 </style>
 </head>
 <body>
-<h2>Paste Product URLs (comma-separated)</h2>
+<h2>Paste URLs (comma-separated)</h2>
 <form method="POST">
-    <textarea name="urls" rows="5" placeholder="Enter image URLs, separated by commas"></textarea><br>
+    <label for="urls">URLs:</label><br>
+    <textarea name="urls" rows="4" placeholder="Enter image or product URLs, separated by commas"></textarea><br>
+
+    <label for="script">Optional Script (for voiceover):</label><br>
+    <textarea name="script" rows="4" placeholder="Enter custom voiceover script"></textarea><br>
+
     <button type="submit">Generate Video</button>
 </form>
 
