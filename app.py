@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory
 import os
-from video_creator_dynamic import generate_video_from_urls  # your dynamic video generator
+from video_creator_dynamic import generate_video_from_urls  # your video generator
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # replace with env variable in production
@@ -52,17 +52,17 @@ def generate_video_page():
 
     video_file = None
     error = None
+
     if request.method == "POST":
         urls_input = request.form.get("urls")
-        script_text = request.form.get("script")  # optional voiceover script
+        script_text = request.form.get("script")  # optional voiceover text
 
         urls = [u.strip() for u in urls_input.split(",") if u.strip()]
-
         if not urls:
             error = "❌ Please enter at least one URL."
         else:
             try:
-                # Generate video (with optional script)
+                # Generate video using your dynamic video creator
                 video_path = generate_video_from_urls(urls, script_text=script_text)
                 video_file = os.path.basename(video_path)
             except Exception as e:
