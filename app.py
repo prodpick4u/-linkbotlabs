@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory
 import os
 from video_creator_dynamic import generate_video_from_urls  # your video generator
-import openai  # for AI-generated scripts
+from openai import OpenAI
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # replace with env variable in production
@@ -10,6 +10,11 @@ app.secret_key = "supersecretkey"  # replace with env variable in production
 # Simple subscription simulation
 # ----------------------------
 SUBSCRIBERS = {"user@example.com": "password123"}  # demo subscribers
+
+# ----------------------------
+# OpenAI Client
+# ----------------------------
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 # ----------------------------
 # Login route
@@ -44,24 +49,7 @@ def logout():
     return redirect(url_for("login"))
 
 # ----------------------------
-# Helper: Generate AI script
-# ----------------------------
-def generate_ai_script(product_title, product_description, style="TikTok promotional"):
-    prompt = f"""
-    Write a short, catchy, TikTok-style promotional script for this product:
-    Title: {product_title}
-    Description: {product_description}
-    The script should be engaging, persuasive, and around 30-45 seconds spoken length.
-    """
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=200
-    )
-    return response.choices[0].message.content.strip()
-
-# ----------------------------
-# TikTok Video Generator with optional script
+# TikTok Video Generator with optional AI script
 # ----------------------------
 @app.route("/generate_video", methods=["GET", "POST"])
 def generate_video_page():
@@ -70,31 +58,43 @@ def generate_video_page():
 
     video_file = None
     error = None
+    ai_generated_script = None
 
     if request.method == "POST":
         urls_input = request.form.get("urls")
-        user_script = request.form.get("script")  # optional voiceover text
+        script_text = request.form.get("script")  # optional voiceover text
 
         urls = [u.strip() for u in urls_input.split(",") if u.strip()]
         if not urls:
             error = "❌ Please enter at least one URL."
         else:
             try:
-                # If user did not provide a script, generate one automatically
-                if not user_script:
-                    # Here you could fetch product info from the first URL
-                    # Example placeholder
-                    product_title = "Example Product"
-                    product_description = "This is an amazing product with great features."
-                    user_script = generate_ai_script(product_title, product_description)
+                # If user did not provide a script, generate one using AI
+                if not script_text:
+                    prompt = (
+                        f"Write a short TikTok voiceover script for these product URLs: {urls}. "
+                        "Keep it fun, engaging, and suitable for a short video."
+                    )
+                    response = client.chat.completions.create(
+                        model="gpt-5-mini",
+                        messages=[{"role": "user", "content": prompt}],
+                        max_tokens=150
+                    )
+                    script_text = response.choices[0].message.content
+                    ai_generated_script = script_text  # Show in textarea for review
 
-                # Generate video
-                video_path = generate_video_from_urls(urls, script_text=user_script)
+                # Generate video using dynamic video creator
+                video_path = generate_video_from_urls(urls, script_text=script_text)
                 video_file = os.path.basename(video_path)
             except Exception as e:
                 error = f"❌ Video generation failed: {str(e)}"
 
-    return render_template("generate_video.html", video_file=video_file, error=error)
+    return render_template(
+        "generate_video.html",
+        video_file=video_file,
+        error=error,
+        script_text=ai_generated_script or script_text or ""
+    )
 
 # ----------------------------
 # Download generated video
