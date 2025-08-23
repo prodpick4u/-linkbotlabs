@@ -1,36 +1,39 @@
-# ---------- Base Image ----------
+# Use Python 3.11 slim
 FROM python:3.11-slim
 
-# ---------- Environment Variables ----------
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV PORT=3000
 
-# ---------- System Dependencies ----------
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies for MoviePy, Pillow, ffmpeg
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     build-essential \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
-    wget \
-    git \
     && rm -rf /var/lib/apt/lists/*
 
-# ---------- Upgrade pip, setuptools, wheel ----------
+# Upgrade pip, setuptools, wheel
 RUN pip install --upgrade pip setuptools wheel
 
-# ---------- Copy App ----------
-WORKDIR /app
-COPY . /app
+# Copy requirements first (cacheable)
+COPY requirements.txt .
 
-# ---------- Install Python Dependencies ----------
+# Install Python dependencies
 RUN pip install --no-cache-dir --prefer-binary -r requirements.txt
 
-# ---------- Create Output Directory ----------
-RUN mkdir -p /app/static/output
+# Copy app code
+COPY . .
 
-# ---------- Expose Port ----------
+# Create output directory
+RUN mkdir -p static/output
+
+# Expose port
 EXPOSE 3000
 
-# ---------- Run Flask App ----------
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000", "--workers", "1"]
+# Command to run Flask app
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000"]
