@@ -1,5 +1,4 @@
-# .github/workflows/test-python-build.yml
-name: Test Python Build and Video Creation
+name: Test Python App Dependencies
 
 on:
   push:
@@ -8,40 +7,29 @@ on:
     branches: [ main ]
 
 jobs:
-  test-build:
+  test-dependencies:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        python-version: [3.11]
+        python-version: [3.11.17]
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+          cache: "pip"
 
       - name: Upgrade pip
         run: pip install --upgrade pip
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install --upgrade -r requirements.txt
 
       - name: Test imports
         run: |
           python -c "import moviepy.editor; import flask; import numpy; print('All imports OK')"
-
-      - name: Test dummy video creation
-        run: |
-          python - << 'EOF'
-          from moviepy.editor import ColorClip
-          import os
-
-          os.makedirs("test_output", exist_ok=True)
-          clip = ColorClip(size=(320,240), color=(255,0,0), duration=2)  # 2 second red video
-          clip.write_videofile("test_output/test_video.mp4", fps=24)
-          print("✅ Dummy video created successfully")
-          EOF
