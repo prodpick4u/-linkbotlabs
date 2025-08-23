@@ -1,25 +1,25 @@
 # Use a stable Python version compatible with MoviePy and NumPy
 FROM python:3.10-slim
 
-# Install system dependencies needed by MoviePy and ffmpeg
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     imagemagick \
     libx11-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /app
 
 # Copy project files
 COPY . /app
 
-# Upgrade pip and install Python dependencies
+# Upgrade pip and install dependencies
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
-# Expose port for Flask (optional)
+# Expose Flask port
 EXPOSE 3000
 
-# Run your main app by default
+# Default command
 CMD ["python", "app.py"]
