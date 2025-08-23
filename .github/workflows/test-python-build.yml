@@ -1,21 +1,17 @@
-name: Python Dependency Test
+name: Python CI - MoviePy Project
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   test-dependencies:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        python-version: [3.11]
-
+        python-version: [3.11]  # Python 3.11 for compatibility with moviepy
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -24,18 +20,32 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
-        cache: 'pip'
 
-    - name: Upgrade pip
-      run: python -m pip install --upgrade pip
-
-    - name: Install dependencies
+    - name: Upgrade pip, setuptools, wheel
       run: |
-        # Force reinstall numpy and moviepy to avoid build issues
-        pip install --force-reinstall --no-cache-dir numpy==1.26.4 moviepy==2.1.2
-        # Install the rest of the dependencies
-        pip install --no-cache-dir -r requirements.txt
+        python -m pip install --upgrade pip setuptools wheel
 
-    - name: Test imports
+    - name: Install numpy first (fix randbits issue)
       run: |
-        python -c "import flask; import moviepy.editor; import numpy; import requests; import gtts; import openai; print('All imports OK')"
+        pip install --force-reinstall --no-cache-dir numpy==1.26.4
+
+    - name: Install remaining dependencies
+      run: |
+        pip install --no-cache-dir \
+          flask==2.3.3 \
+          gunicorn==20.1.0 \
+          moviepy==2.1.2 \
+          Pillow==10.1.0 \
+          gTTS==2.3.1 \
+          requests==2.31.0 \
+          openai==1.29.0 \
+          python-dotenv==1.0.0 \
+          imageio==2.31.1 \
+          imageio-ffmpeg==0.6.0 \
+          beautifulsoup4 \
+          lxml \
+          jinja2
+
+    - name: Verify imports
+      run: |
+        python -c "import flask; import moviepy.editor; import numpy; import requests; import gtts; import openai; import imageio; import imageio_ffmpeg; import PIL; import bs4; import lxml; import jinja2; print('All imports OK')"
