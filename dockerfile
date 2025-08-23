@@ -1,10 +1,10 @@
-# Use a slim Python image
+# Use official Python base image
 FROM python:3.13-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies needed for building packages and running ffmpeg / Playwright
+# Install system dependencies for ffmpeg, Playwright, GTK, etc.
 RUN apt-get update && apt-get install -y \
     build-essential \
     ffmpeg \
@@ -22,27 +22,19 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     libgbm1 \
-    libpango1.0-0 \
+    libpango-1.0-0 \
     libgtk-3-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for caching
-COPY requirements.txt .
+# Copy project files
+COPY . /app
 
-# Upgrade pip separately
-RUN python -m pip install --upgrade pip
+# Upgrade pip and install Python dependencies without cache
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Install Playwright browsers
-RUN playwright install
-
-# Copy app code
-COPY . .
-
-# Expose Flask port
+# Expose the port your app runs on
 EXPOSE 3000
 
-# Start the app using Gunicorn
+# Start the app with Gunicorn
 CMD ["gunicorn", "-k", "gthread", "-w", "2", "-b", "0.0.0.0:3000", "app:app"]
