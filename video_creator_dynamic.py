@@ -1,17 +1,22 @@
 import os
 import requests
-from io import BytesIO
-from PIL import Image
 from gtts import gTTS
-from moviepy.editor import ImageClip, AudioFileClip, CompositeVideoClip, TextClip, concatenate_videoclips
+from moviepy.editor import (
+    ImageClip, AudioFileClip, CompositeVideoClip,
+    concatenate_videoclips, ColorClip
+)
 
-def download_image(url, save_dir="static/output"):
+SAFE_TMP = "/tmp"  # always safe on Render
+
+def download_image(url, save_dir=SAFE_TMP):
     """Download an image from a URL and return local path."""
     os.makedirs(save_dir, exist_ok=True)
     try:
         response = requests.get(url, stream=True, timeout=10)
         response.raise_for_status()
         ext = url.split(".")[-1].split("?")[0]
+        if len(ext) > 4:  # fallback if extension looks wrong
+            ext = "jpg"
         filename = f"image_{os.urandom(4).hex()}.{ext}"
         path = os.path.join(save_dir, filename)
         with open(path, "wb") as f:
@@ -21,20 +26,21 @@ def download_image(url, save_dir="static/output"):
         print(f"⚠️ Failed to download image {url}: {e}")
         return None
 
-def generate_tts(script_text, save_dir="static/output"):
+def generate_tts(script_text, save_dir=SAFE_TMP):
     """Generate a TTS audio file from the script text."""
     os.makedirs(save_dir, exist_ok=True)
     tts_path = os.path.join(save_dir, f"audio_{os.urandom(4).hex()}.mp3")
-    tts = gTTS(script_text)
+    tts = gTTS(script_text[:5000])  # gTTS safe limit
     tts.save(tts_path)
     return tts_path
 
-def generate_video_from_urls(urls, script_text=None, output_path="static/output/video.mp4", resolution=(1080, 1920)):
+def generate_video_from_urls(
+    urls, script_text=None,
+    output_path=os.path.join(SAFE_TMP, "video.mp4"),
+    resolution=(720, 1280)  # optimized for TikTok + Render free plan
+):
     """
     Generate a TikTok-format video from image URLs with optional voiceover script.
-    - urls: list of image URLs
-    - script_text: optional text for voiceover
-    - resolution: output video size (width, height)
     """
     if not urls:
         raise ValueError("No URLs provided for video creation.")
@@ -48,7 +54,7 @@ def generate_video_from_urls(urls, script_text=None, output_path="static/output/
         audio_clip = AudioFileClip(audio_path)
         total_duration = audio_clip.duration
     else:
-        total_duration = len(urls) * 5  # default 5 seconds per image
+        total_duration = len(urls) * 5  # default 5s per image
 
     # Download images and create clips
     for url in urls:
@@ -58,14 +64,14 @@ def generate_video_from_urls(urls, script_text=None, output_path="static/output/
 
         clip_duration = total_duration / len(urls) if audio_clip else 5
         img_clip = ImageClip(image_path).set_duration(clip_duration)
-        
-        # Resize and maintain aspect ratio
+
+        # Resize while maintaining ratio
         img_clip = img_clip.resize(height=resolution[1])
         if img_clip.w > resolution[0]:
             img_clip = img_clip.resize(width=resolution[0])
 
-        # Add black background to fit TikTok resolution
-        background = ImageClip(color=(0,0,0), size=resolution).set_duration(clip_duration)
+        # Black background to fit TikTok resolution
+        background = ColorClip(size=resolution, color=(0, 0, 0)).set_duration(clip_duration)
         clip = CompositeVideoClip([background, img_clip.set_position("center")])
         clips.append(clip)
 
@@ -78,13 +84,19 @@ def generate_video_from_urls(urls, script_text=None, output_path="static/output/
         video = video.set_audio(audio_clip)
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    # Write video with Render-friendly settings
     video.write_videofile(
         output_path,
         codec="libx264",
         audio_codec="aac",
         fps=24,
-        threads=4,
-        verbose=True,
+        threads=1,  # low to avoid Render free-plan crash
+        preset="veryfast",
+        bitrate="3000k",
+        temp_audiofile=os.path.join(SAFE_TMP, "temp-audio.m4a"),
+        remove_temp=True,
+        verbose=False,
         logger=None
     )
 
