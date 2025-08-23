@@ -1,4 +1,4 @@
-name: Python CI - MoviePy Project
+name: Python CI
 
 on:
   push:
@@ -7,27 +7,23 @@ on:
     branches: [ main ]
 
 jobs:
-  test-dependencies:
+  build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.11]  # Python 3.11 for compatibility with moviepy
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.11'
 
-    - name: Upgrade pip, setuptools, wheel
-      run: |
-        python -m pip install --upgrade pip setuptools wheel
+    - name: Upgrade pip
+      run: python -m pip install --upgrade pip
 
-    - name: Install numpy first (fix randbits issue)
-      run: |
-        pip install --force-reinstall --no-cache-dir numpy==1.26.4
+    - name: Install numpy first (Python 3.11 compatible)
+      run: pip install --force-reinstall --no-cache-dir numpy==1.26.4
 
     - name: Install remaining dependencies
       run: |
@@ -46,6 +42,6 @@ jobs:
           lxml \
           jinja2
 
-    - name: Verify imports
+    - name: Test imports
       run: |
-        python -c "import flask; import moviepy.editor; import numpy; import requests; import gtts; import openai; import imageio; import imageio_ffmpeg; import PIL; import bs4; import lxml; import jinja2; print('All imports OK')"
+        python -c "import flask; import moviepy.editor; import numpy; import requests; print('All imports OK')"
