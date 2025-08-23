@@ -2,7 +2,8 @@ from flask import Flask, request, render_template, session, redirect, url_for, s
 import os
 import requests
 from bs4 import BeautifulSoup
-from video_creator_dynamic import generate_video_from_urls  # your FFmpeg-based video generator
+from video_creator_dynamic import generate_video_from_urls  # FFmpeg-based video generator
+import openai
 
 # ----------------------------
 # Flask Setup
@@ -17,58 +18,25 @@ os.makedirs("/tmp", exist_ok=True)
 SUBSCRIBERS = {"user@example.com": "password123"}  # demo subscribers
 
 # ----------------------------
-# OpenAI Setup (optional)
+# OpenAI Setup for script generation
 # ----------------------------
-USE_OPENAI = False
-try:
-    import openai
-    if os.getenv("OPENAI_API_KEY"):
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-        USE_OPENAI = True
-except ImportError:
-    pass  # No OpenAI installed, fallback to template
+openai.api_key = os.getenv("OPENAI_API_KEY")  # store securely
 
-
-# ----------------------------
-# Script Generator
-# ----------------------------
 def generate_script(product_url, max_chars=1600):
     """
-    Generates a TikTok-style product narration script.
-    Uses OpenAI if available, otherwise falls back to a template generator.
+    Generates a 1600-character TikTok-style product narration script from a URL.
     """
-    if USE_OPENAI:
-        try:
-            prompt = (
-                f"Write an engaging TikTok-style narration for the product page: {product_url}. "
-                f"Highlight benefits, visuals, and call-to-action. Max {max_chars} characters."
-            )
-            response = openai.Completion.create(
-                model="text-davinci-003",
-                prompt=prompt,
-                max_tokens=600  # ~1600 characters
-            )
-            text = response.choices[0].text.strip()
-            return text[:max_chars]
-        except Exception as e:
-            print(f"⚠️ OpenAI failed, falling back to template: {e}")
-
-    # --- Template fallback (no AI required) ---
-    return (
-        f"Discover this amazing product we found online: {product_url}! "
-        f"It’s designed to make your life easier, more fun, and totally stress-free. "
-        f"Imagine unboxing it, feeling the sleek design, and instantly realizing how useful it is. "
-        f"From the very first use, you’ll see why so many people are talking about it. "
-        f"It saves time, delivers outstanding results, and fits perfectly into your daily routine. "
-        f"Whether you’re at home, at work, or on the go, this product is built to impress. "
-        f"Don’t just take our word for it—thousands of happy customers have already made the switch. "
-        f"Picture showing this off to friends, family, or even on TikTok—it’s a real conversation starter! "
-        f"And the best part? It’s affordable, durable, and packed with features you’ll love. "
-        f"Click the link, check it out, and grab yours today before it sells out. "
-        f"Trust us, you won’t want to miss this! "
-        f"#trending #musthave #lifestyle #shopping #tiktokfinds"
-    )[:max_chars]
-
+    prompt = (
+        f"Write an engaging TikTok-style narration for the product page: {product_url}. "
+        f"Highlight benefits, visuals, and call-to-action. Max {max_chars} characters."
+    )
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=prompt,
+        max_tokens=600  # ~1600 characters
+    )
+    text = response.choices[0].text.strip()
+    return text[:max_chars]
 
 # ----------------------------
 # Helper: Extract first image from product page
@@ -82,18 +50,13 @@ def extract_image_url(url):
         r = requests.get(url, headers=headers, timeout=10)
         r.raise_for_status()
         soup = BeautifulSoup(r.text, "html.parser")
-        # Try to find OpenGraph image
-        og_img = soup.find("meta", property="og:image")
-        if og_img and og_img.get("content"):
-            return og_img["content"]
-        # Fallback: first <img> tag
+        # Try common tags for product images
         img = soup.find("img")
         if img and img.get("src"):
             return img["src"]
     except Exception as e:
         print(f"⚠️ Failed to extract image from {url}: {e}")
     return None
-
 
 # ----------------------------
 # Routes
@@ -110,20 +73,20 @@ def login():
             return render_template("login.html", error="Invalid credentials")
     return render_template("login.html")
 
-
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
         return redirect(url_for("login"))
     return render_template("dashboard.html", user=session["user"])
 
-
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
 
-
+# ----------------------------
+# Generate TikTok Video
+# ----------------------------
 @app.route("/generate_video", methods=["GET", "POST"])
 def generate_video_page():
     if "user" not in session:
@@ -161,11 +124,34 @@ def generate_video_page():
 
     return render_template("generate_video.html", video_file=video_file, error=error)
 
+# ----------------------------
+# Generate Text / Blog / Script
+# ----------------------------
+@app.route("/generate_text", methods=["GET", "POST"])
+def generate_text_page():
+    if "user" not in session:
+        return redirect(url_for("login"))
 
+    output_text = None
+    error = None
+    if request.method == "POST":
+        product_url = request.form.get("product_url")
+        if not product_url:
+            error = "❌ Please enter a product URL."
+        else:
+            try:
+                output_text = generate_script(product_url)
+            except Exception as e:
+                error = f"❌ Script generation failed: {str(e)}"
+
+    return render_template("generate_text.html", output_text=output_text, error=error)
+
+# ----------------------------
+# Download generated video
+# ----------------------------
 @app.route("/download/<filename>")
 def download_video(filename):
     return send_from_directory("/tmp", filename, as_attachment=True)
-
 
 # ----------------------------
 # Run Flask App
