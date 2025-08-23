@@ -30,12 +30,17 @@ def generate_script(product_url, max_chars=1600):
         f"Write an engaging TikTok-style narration for the product page: {product_url}. "
         f"Highlight benefits, visuals, and call-to-action. Max {max_chars} characters."
     )
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=prompt,
-        max_tokens=600  # ~1600 characters
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a creative TikTok script writer."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=600
     )
-    text = response.choices[0].text.strip()
+
+    text = response.choices[0].message.content.strip()
     return text[:max_chars]
 
 # ----------------------------
@@ -50,7 +55,6 @@ def extract_image_url(url):
         r = requests.get(url, headers=headers, timeout=10)
         r.raise_for_status()
         soup = BeautifulSoup(r.text, "html.parser")
-        # Try common tags for product images
         img = soup.find("img")
         if img and img.get("src"):
             return img["src"]
