@@ -1,7 +1,9 @@
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory
 import os, uuid, time
+import asyncio
 from video_creator_dynamic import generate_video_from_urls
 from openai import OpenAI
+from concurrent.futures import ThreadPoolExecutor
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -15,6 +17,11 @@ SUBSCRIBERS = {"user@example.com": "password123"}
 # OpenAI Client
 # ----------------------------
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+# ----------------------------
+# Executor for blocking tasks
+# ----------------------------
+executor = ThreadPoolExecutor(max_workers=2)
 
 # ----------------------------
 # Cleanup helper
@@ -32,10 +39,17 @@ def cleanup_old_videos(folder="static/output", max_age_seconds=3600):
                     print(f"⚠️ Could not delete {filename}: {e}")
 
 # ----------------------------
+# Async wrapper for video generation
+# ----------------------------
+async def generate_video_async(urls, script_text, output_path):
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(executor, generate_video_from_urls, urls, script_text, output_path)
+
+# ----------------------------
 # Generate Video Route
 # ----------------------------
 @app.route("/generate_video", methods=["GET", "POST"])
-def generate_video_page():
+async def generate_video_page():
     if "user" not in session:
         return redirect(url_for("login"))
 
@@ -47,23 +61,20 @@ def generate_video_page():
     if request.method == "POST":
         urls_input = request.form.get("urls")
         script_text = request.form.get("script")
-
         urls = [u.strip() for u in urls_input.split(",") if u.strip()]
+
         if not urls:
             error = "❌ Please enter at least one URL."
         else:
             try:
-                # Cleanup old videos first
                 os.makedirs("static/output", exist_ok=True)
                 cleanup_old_videos(folder="static/output", max_age_seconds=3600)
 
                 # Generate AI script if blank
                 if not script_text:
-                    prompt = (
-                        f"Write a short TikTok voiceover script for these product URLs: {urls}. "
-                        "Keep it fun, engaging, and suitable for a short video."
-                    )
-                    response = client.chat.completions.create(
+                    prompt = f"Write a short TikTok voiceover script for these product URLs: {urls}. Keep it fun, engaging, and suitable for a short video."
+                    response = await asyncio.to_thread(
+                        client.chat.completions.create,
                         model="gpt-5-mini",
                         messages=[{"role": "user", "content": prompt}],
                         max_tokens=150
@@ -75,10 +86,8 @@ def generate_video_page():
                 filename = f"video_{uuid.uuid4().hex}.mp4"
                 output_path = os.path.join("static/output", filename)
 
-                # Generate video
-                video_path = generate_video_from_urls(
-                    urls, script_text=script_text, output_path=output_path
-                )
+                # Generate video asynchronously
+                video_path = await generate_video_async(urls, script_text, output_path)
                 video_file = os.path.basename(video_path)
 
             except Exception as e:
