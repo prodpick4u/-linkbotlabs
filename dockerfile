@@ -1,10 +1,11 @@
-# Use Python 3.12 slim base image
+# Use Python 3.12 slim image
 FROM python:3.12-slim
 
-# Set working directory
-WORKDIR /app
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
 
-# Install system dependencies for ffmpeg, Playwright, image processing
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     ffmpeg \
@@ -26,18 +27,18 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy Python requirements
-COPY requirements.txt .
+# Set working directory
+WORKDIR /app
 
-# Upgrade pip and install Python packages
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+# Copy project files
+COPY . /app
 
-# Copy app source
-COPY . .
+# Upgrade pip and install Python dependencies
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
-# Expose the port your Flask app runs on
-EXPOSE 5000
+# Expose port
+EXPOSE 8000
 
-# Start the app with gunicorn
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
+# Start Flask app with Gunicorn
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app:app"]
