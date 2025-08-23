@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory
 import os
-from video_creator_dynamic import generate_video_from_urls  # your dynamic video generator
+from video_generator_ffmpeg import generate_video_from_urls  # the FFmpeg version
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # replace with env variable in production
@@ -55,7 +55,6 @@ def generate_video_page():
     if request.method == "POST":
         urls_input = request.form.get("urls")
         script_text = request.form.get("script")  # optional voiceover script
-
         urls = [u.strip() for u in urls_input.split(",") if u.strip()]
 
         if not urls:
@@ -75,11 +74,11 @@ def generate_video_page():
 # ----------------------------
 @app.route("/download/<filename>")
 def download_video(filename):
-    return send_from_directory("static/output", filename, as_attachment=True)
+    return send_from_directory("/tmp", filename, as_attachment=True)
 
 # ----------------------------
 # Run Flask App
 # ----------------------------
 if __name__ == '__main__':
-    os.makedirs("static/output", exist_ok=True)
+    os.makedirs("/tmp", exist_ok=True)
     app.run(host='0.0.0.0', port=3000, debug=True)
