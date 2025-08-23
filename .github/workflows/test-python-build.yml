@@ -2,38 +2,45 @@ name: Python Build & Test
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
 
-      - name: Clear pip cache
-        run: pip cache purge || true
+    - name: Upgrade pip, setuptools, wheel
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
 
-      - name: Upgrade pip, setuptools, wheel
-        run: python -m pip install --upgrade pip setuptools wheel
+    - name: Clear pip cache
+      run: pip cache purge
 
-      - name: Install requirements
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install moviepy==2.2.1 numpy==1.26.2 pillow gtts openai requests beautifulsoup4 playwright imageio imageio-ffmpeg flask
+    - name: Install dependencies
+      run: |
+        pip install --no-cache-dir \
+          moviepy==2.2.1 \
+          numpy==1.26.2 \
+          pillow \
+          gtts \
+          openai \
+          requests \
+          beautifulsoup4 \
+          playwright \
+          imageio \
+          imageio-ffmpeg \
+          flask
 
-      - name: Test imports
-        run: |
-          python -c "import flask; import moviepy.editor; import numpy; import requests; import gtts; import openai; print('✅ All imports OK')"
-
-      - name: Playwright install browsers
-        run: |
-          npx playwright install --with-deps
+    - name: Test imports
+      run: |
+        python -c "import flask; import moviepy.editor; import numpy; import requests; import gtts; import openai; import imageio; import imageio_ffmpeg; import beautifulsoup4; import playwright; print('✅ All imports OK')"
