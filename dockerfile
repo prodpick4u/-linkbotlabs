@@ -21,5 +21,5 @@ RUN pip install --no-cache-dir --upgrade pip \
 # Expose Flask port
 EXPOSE 3000
 
-# Default command
-CMD ["python", "app.py"]
+# Run Flask with Gunicorn
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000", "--workers", "2"]
