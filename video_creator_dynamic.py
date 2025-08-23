@@ -9,7 +9,7 @@ TMP_DIR = "/tmp"
 os.makedirs(TMP_DIR, exist_ok=True)
 
 # ----------------------------
-# Download + Fix Image
+# Download + Prepare Image
 # ----------------------------
 def download_and_prepare_image(url, filename):
     """
@@ -51,14 +51,13 @@ def generate_video_from_urls(image_urls, script_text=None, output_filename="outp
         for img in image_files:
             f.write(f"file '{img}'\n")
             f.write("duration 3\n")  # each image 3s
-
-    # Ensure last frame holds
-    f.write(f"file '{image_files[-1]}'\n")
+        # Ensure last frame holds
+        f.write(f"file '{image_files[-1]}'\n")
 
     # Output video path
     video_path = os.path.join(TMP_DIR, output_filename)
 
-    # Build FFmpeg command (slideshow with fade between images)
+    # Build FFmpeg command (slideshow)
     cmd = [
         "ffmpeg",
         "-y",
@@ -69,10 +68,9 @@ def generate_video_from_urls(image_urls, script_text=None, output_filename="outp
         "-pix_fmt", "yuv420p",
         video_path
     ]
-
     subprocess.run(cmd, check=True)
 
-    # If script is provided, add subtitles as burned text
+    # Add subtitles if provided
     if script_text:
         wrapped = textwrap.fill(script_text, width=40)
         subtitle_file = os.path.join(TMP_DIR, "subtitles.srt")
