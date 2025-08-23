@@ -1,29 +1,11 @@
-# Core scientific + compatibility
-numpy==1.26.4
-scipy==1.11.4
-
-# Web framework
-flask==2.3.3
-gunicorn==20.1.0
-
-# Video / Image
-moviepy==1.0.3
-Pillow==10.1.0
-imageio[ffmpeg]==2.31.1
-
-# Audio & speech
-gTTS==2.3.1
-pydub==0.25.1
-
-# Web scraping / automation
-beautifulsoup4==4.12.2
-playwright==1.39.0
-requests==2.31.0
-
-# AI / OpenAI
-openai==1.29.0
-python-dotenv==1.0.0
-
-# Packaging tools
-setuptools>=67.0.0
-wheel>=0.40.0
+flask
+moviepy
+pillow
+gtts
+openai
+requests
+beautifulsoup4
+playwright
+imageio
+imageio-ffmpeg
+numpy
