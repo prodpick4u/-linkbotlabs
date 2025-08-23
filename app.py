@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory
 import os
-from video_generator_ffmpeg import generate_video_from_urls  # the FFmpeg version
+from video_creator_dynamic import generate_video_from_urls  # the FFmpeg version
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # replace with env variable in production
