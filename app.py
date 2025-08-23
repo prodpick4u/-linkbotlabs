@@ -2,9 +2,10 @@ from flask import Flask, request, render_template, session, redirect, url_for, s
 import os
 import requests
 from bs4 import BeautifulSoup
-from video_creator_dynamic import generate_video_from_urls  # your FFmpeg-based generator
-import openai
+from video_creator_dynamic import generate_video_from_urls  # your FFmpeg+TTS video generator
 from utils import extract_image_urls
+from openai import OpenAI
+
 # ----------------------------
 # Flask Setup
 # ----------------------------
@@ -18,21 +19,21 @@ os.makedirs("/tmp", exist_ok=True)
 SUBSCRIBERS = {"user@example.com": "password123"}  # demo subscribers
 
 # ----------------------------
-# OpenAI Setup for script generation
+# OpenAI Setup
 # ----------------------------
-openai.api_key = os.getenv("OPENAI_API_KEY")  # store securely
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # secure key
 
 def generate_script(product_url, max_chars=1600):
     """
-    Generates a 1600-character TikTok-style product narration script from a URL.
-    Compatible with OpenAI Python SDK >=1.0.0.
+    Generates a TikTok-style product narration script from a URL.
+    Uses OpenAI SDK >=1.0.0.
     """
     prompt = (
         f"Write an engaging TikTok-style narration for the product page: {product_url}. "
         f"Highlight benefits, visuals, and call-to-action. Max {max_chars} characters."
     )
 
-    response = openai.chat.completions.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a creative TikTok script writer."},
@@ -101,7 +102,7 @@ def generate_video_page():
     error = None
     if request.method == "POST":
         urls_input = request.form.get("urls")
-        script_text = request.form.get("script")  # optional voiceover
+        script_text = request.form.get("script")  # optional user-supplied script
         urls = [u.strip() for u in urls_input.split(",") if u.strip()]
 
         if not urls:
@@ -121,9 +122,10 @@ def generate_video_page():
                 if not script_text:
                     script_text = generate_script(urls[0])
 
-                # Generate video
+                # Generate video (with subtitles + TTS voiceover)
                 video_path = generate_video_from_urls(image_urls, script_text=script_text)
                 video_file = os.path.basename(video_path)
+
             except Exception as e:
                 error = f"❌ Video generation failed: {str(e)}"
 
