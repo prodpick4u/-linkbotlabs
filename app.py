@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, session, redirect, url_for, s
 import os
 import requests
 from bs4 import BeautifulSoup
-from video_creator_dynamic import generate_video_from_urls  # FFmpeg-based video generator
+from video_creator_dynamic import generate_video_from_urls  # your FFmpeg-based generator
 import openai
 
 # ----------------------------
@@ -25,13 +25,14 @@ openai.api_key = os.getenv("OPENAI_API_KEY")  # store securely
 def generate_script(product_url, max_chars=1600):
     """
     Generates a 1600-character TikTok-style product narration script from a URL.
+    Compatible with OpenAI Python SDK >=1.0.0.
     """
     prompt = (
         f"Write an engaging TikTok-style narration for the product page: {product_url}. "
         f"Highlight benefits, visuals, and call-to-action. Max {max_chars} characters."
     )
 
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a creative TikTok script writer."},
@@ -40,7 +41,7 @@ def generate_script(product_url, max_chars=1600):
         max_tokens=600
     )
 
-    text = response.choices[0].message.content.strip()
+    text = response.choices[0].message.content
     return text[:max_chars]
 
 # ----------------------------
