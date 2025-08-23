@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from video_creator_dynamic import generate_video_from_urls  # your FFmpeg-based generator
 import openai
-
+from utils import extract_image_urls
 # ----------------------------
 # Flask Setup
 # ----------------------------
