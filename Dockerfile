@@ -1,11 +1,11 @@
-# Use Python 3.12 slim
-FROM python:3.12-slim
+# ---------- Base Image ----------
+FROM python:3.11-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
+# ---------- Environment Variables ----------
 ENV PYTHONUNBUFFERED=1
 ENV PORT=3000
 
-# Install system dependencies
+# ---------- System Dependencies ----------
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     build-essential \
@@ -13,22 +13,24 @@ RUN apt-get update && apt-get install -y \
     libsm6 \
     libxext6 \
     wget \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
-
-# Copy requirements first
-COPY requirements.txt .
-
-# Upgrade pip, setuptools, wheel
+# ---------- Upgrade pip, setuptools, wheel ----------
 RUN pip install --upgrade pip setuptools wheel
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# ---------- Copy App ----------
+WORKDIR /app
+COPY . /app
 
-# Copy rest of the app
-COPY . .
+# ---------- Install Python Dependencies ----------
+RUN pip install --no-cache-dir --prefer-binary -r requirements.txt
 
-EXPOSE $PORT
+# ---------- Create Output Directory ----------
+RUN mkdir -p /app/static/output
 
+# ---------- Expose Port ----------
+EXPOSE 3000
+
+# ---------- Run Flask App ----------
 CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000", "--workers", "1"]
