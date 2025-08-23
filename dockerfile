@@ -1,37 +1,52 @@
-# -------------------------------
-# Base image with Python 3.10
-# -------------------------------
+# ----------------------------
+# Base Image
+# ----------------------------
 FROM python:3.10-slim
 
-# -------------------------------
-# Set working directory
-# -------------------------------
-WORKDIR /app
+# ----------------------------
+# Environment Variables
+# ----------------------------
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PIP_NO_CACHE_DIR=1
 
-# -------------------------------
-# Install system dependencies
-# -------------------------------
+# ----------------------------
+# System Dependencies
+# ----------------------------
 RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    imagemagick \
-    libx11-dev \
     build-essential \
-    gfortran \
+    ffmpeg \
+    git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# -------------------------------
-# Copy project files
-# -------------------------------
-COPY . /app
+# ----------------------------
+# Set Working Directory
+# ----------------------------
+WORKDIR /app
 
-# -------------------------------
-# Upgrade pip and install Python packages
-# -------------------------------
-RUN pip install --no-cache-dir --upgrade pip \
+# ----------------------------
+# Copy Requirements
+# ----------------------------
+COPY requirements.txt .
+
+# ----------------------------
+# Install Python Dependencies
+# ----------------------------
+RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
-# -------------------------------
-# Expose port and start server
-# -------------------------------
+# ----------------------------
+# Copy Application Code
+# ----------------------------
+COPY . .
+
+# ----------------------------
+# Expose Port
+# ----------------------------
 EXPOSE 3000
+
+# ----------------------------
+# Start Command
+# ----------------------------
 CMD ["gunicorn", "-k", "gthread", "-w", "2", "-b", "0.0.0.0:3000", "app:app"]
