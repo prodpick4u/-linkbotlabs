@@ -1,34 +1,41 @@
-name: Test Python App
+name: Python Dependency Test
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  test:
+  test-dependencies:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        python-version: [3.11.13]
+        python-version: [3.11]
 
     steps:
-    - name: Checkout repo
+    - name: Checkout repository
       uses: actions/checkout@v3
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
 
     - name: Upgrade pip
-      run: pip install --upgrade pip
+      run: python -m pip install --upgrade pip
 
     - name: Install dependencies
-      run: pip install -r requirements.txt
-
-    - name: Verify imports
       run: |
-        python -c "import flask; import moviepy.editor; import numpy; import requests; print('All imports OK')"
+        # Force reinstall numpy and moviepy to avoid build issues
+        pip install --force-reinstall --no-cache-dir numpy==1.26.4 moviepy==2.1.2
+        # Install the rest of the dependencies
+        pip install --no-cache-dir -r requirements.txt
+
+    - name: Test imports
+      run: |
+        python -c "import flask; import moviepy.editor; import numpy; import requests; import gtts; import openai; print('All imports OK')"
