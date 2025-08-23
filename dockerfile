@@ -1,7 +1,7 @@
-# Use a stable Python version compatible with MoviePy & NumPy
-FROM python:3.11-slim
+# Use Python 3.10 slim image (compatible with MoviePy + NumPy)
+FROM python:3.10-slim
 
-# Install system dependencies needed by MoviePy & ffmpeg
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     imagemagick \
@@ -14,12 +14,12 @@ WORKDIR /app
 # Copy project files
 COPY . /app
 
-# Upgrade pip & install dependencies
+# Upgrade pip and install dependencies
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
 # Expose Flask port
 EXPOSE 3000
 
-# Default command for Render
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000", "--workers", "2"]
+# Run Gunicorn with 2 workers and gthread worker type
+CMD ["gunicorn", "-k", "gthread", "-w", "2", "-b", "0.0.0.0:3000", "app:app"]
