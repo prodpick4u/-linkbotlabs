@@ -1,7 +1,6 @@
-# Use an official Python runtime as a parent image
+# Use Python 3.12 slim
 FROM python:3.12-slim
 
-# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PORT=3000
@@ -16,21 +15,20 @@ RUN apt-get update && apt-get install -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
 WORKDIR /app
 
-# Copy requirements first for caching
+# Copy requirements first
 COPY requirements.txt .
 
+# Upgrade pip, setuptools, wheel
+RUN pip install --upgrade pip setuptools wheel
+
 # Install Python dependencies
-RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the app
+# Copy rest of the app
 COPY . .
 
-# Expose port
 EXPOSE $PORT
 
-# Start the app using gunicorn
 CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000", "--workers", "1"]
