@@ -1,30 +1,25 @@
-# Use Python 3.11 slim base
+# Use official Python base image
 FROM python:3.11-slim
 
-# Set working directory
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set work directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    curl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements first
-COPY requirements.txt .
-
-# Upgrade pip, setuptools, wheel first
+# Upgrade pip, setuptools, wheel
 RUN pip install --upgrade pip setuptools wheel
 
-# Install Python dependencies
+# Copy requirements and install
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app code
+# Copy the rest of the app
 COPY . .
 
-# Expose port (Render uses $PORT env variable)
+# Expose port 3000
 EXPOSE 3000
 
-# Run Gunicorn
+# Run the app with Gunicorn
 CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:3000"]
