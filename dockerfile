@@ -1,7 +1,7 @@
-# Use a lightweight Python base image
-FROM python:3.12-slim
+# Use a stable Python version compatible with MoviePy and NumPy
+FROM python:3.10-slim
 
-# Install system dependencies needed by moviepy
+# Install system dependencies needed by MoviePy and ffmpeg
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     imagemagick \
@@ -11,12 +11,15 @@ RUN apt-get update && apt-get install -y \
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy all project files into the container
+# Copy project files
 COPY . /app
 
 # Upgrade pip and install Python dependencies
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
-# Optional: default command (can be overridden in GitHub Actions)
-CMD ["python", "video_creator_save_only.py"]
+# Expose port for Flask (optional)
+EXPOSE 3000
+
+# Run your main app by default
+CMD ["python", "app.py"]
