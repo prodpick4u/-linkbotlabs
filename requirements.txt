@@ -1,5 +1,5 @@
 flask
-moviepy
+moviepy==2.2.1
 pillow
 gtts
 openai
@@ -8,6 +8,5 @@ beautifulsoup4
 playwright
 imageio
 imageio-ffmpeg
-numpy
 numpy==1.26.2
-moviepy==2.2.1
+
