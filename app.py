@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory
 import os
-from video_creator_dynamic import generate_video_from_urls  # the FFmpeg version
+import requests
+from bs4 import BeautifulSoup
+from video_creator_dynamic import generate_video_from_urls  # your FFmpeg video generator
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # replace with env variable in production
@@ -9,6 +11,49 @@ app.secret_key = "supersecretkey"  # replace with env variable in production
 # Simple subscription simulation
 # ----------------------------
 SUBSCRIBERS = {"user@example.com": "password123"}  # demo subscribers
+
+# ----------------------------
+# Helper: extract main image from any URL
+# ----------------------------
+def extract_image_url(page_url):
+    """
+    Tries to extract the main image from any web page.
+    Returns the first valid image URL or None.
+    """
+    try:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+        }
+        response = requests.get(page_url, headers=headers, timeout=10)
+        response.raise_for_status()
+        html = response.text
+
+        soup = BeautifulSoup(html, "html.parser")
+
+        # 1️⃣ Open Graph image
+        og_image = soup.find("meta", property="og:image")
+        if og_image and og_image.get("content"):
+            return og_image["content"]
+
+        # 2️⃣ Twitter card image
+        twitter_image = soup.find("meta", property="twitter:image")
+        if twitter_image and twitter_image.get("content"):
+            return twitter_image["content"]
+
+        # 3️⃣ Fallback: first <img>
+        imgs = soup.find_all("img", src=True)
+        if imgs:
+            src = imgs[0]["src"]
+            if src.startswith("//"):
+                src = "https:" + src
+            elif src.startswith("/"):
+                src = page_url.rstrip("/") + src
+            return src
+
+        return None
+    except Exception as e:
+        print(f"⚠️ Could not extract image from {page_url}: {e}")
+        return None
 
 # ----------------------------
 # Login route
@@ -43,7 +88,7 @@ def logout():
     return redirect(url_for("login"))
 
 # ----------------------------
-# TikTok Video Generator with optional script
+# TikTok Video Generator with automatic image extraction
 # ----------------------------
 @app.route("/generate_video", methods=["GET", "POST"])
 def generate_video_page():
@@ -61,8 +106,18 @@ def generate_video_page():
             error = "❌ Please enter at least one URL."
         else:
             try:
-                # Generate video (with optional script)
-                video_path = generate_video_from_urls(urls, script_text=script_text)
+                # Extract image URLs from each page
+                image_urls = []
+                for url in urls:
+                    img_url = extract_image_url(url)
+                    if img_url:
+                        image_urls.append(img_url)
+
+                if not image_urls:
+                    raise ValueError("No images could be extracted from the URLs provided.")
+
+                # Generate video
+                video_path = generate_video_from_urls(image_urls, script_text=script_text)
                 video_file = os.path.basename(video_path)
             except Exception as e:
                 error = f"❌ Video generation failed: {str(e)}"
