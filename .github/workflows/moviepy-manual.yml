@@ -1,6 +1,5 @@
 name: 🐍 Manual Flask + MoviePy Test
 
-# Manual trigger only
 on:
   workflow_dispatch:
 
@@ -39,3 +38,11 @@ jobs:
 
       - name: 📝 Print Python Version
         run: python --version
+
+      - name: 🚀 Run Flask App for 10 Seconds
+        run: |
+          nohup python app.py &
+          echo "Flask app started"
+          sleep 10
+          pkill -f app.py
+          echo "Flask app test complete"
