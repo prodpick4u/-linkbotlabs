@@ -3,7 +3,6 @@ import os
 import requests
 from bs4 import BeautifulSoup
 from video_creator_dynamic import generate_video_from_urls  # your FFmpeg-based video generator
-import openai
 
 # ----------------------------
 # Flask Setup
@@ -18,25 +17,45 @@ os.makedirs("/tmp", exist_ok=True)
 SUBSCRIBERS = {"user@example.com": "password123"}  # demo subscribers
 
 # ----------------------------
-# OpenAI Setup for script generation
+# OpenAI Setup (optional)
 # ----------------------------
-openai.api_key = os.getenv("OPENAI_API_KEY")  # store securely
+try:
+    import openai
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+except ImportError:
+    openai = None
 
 def generate_script(product_url, max_chars=1600):
     """
     Generates a 1600-character TikTok-style product narration script from a URL.
+    If OpenAI API key is missing, fallback to a dummy script.
     """
-    prompt = (
-        f"Write an engaging TikTok-style narration for the product page: {product_url}. "
-        f"Highlight benefits, visuals, and call-to-action. Max {max_chars} characters."
+    if openai and openai.api_key:
+        try:
+            prompt = (
+                f"Write an engaging TikTok-style narration for the product page: {product_url}. "
+                f"Highlight benefits, visuals, and call-to-action. Max {max_chars} characters."
+            )
+            response = openai.Completion.create(
+                model="text-davinci-003",
+                prompt=prompt,
+                max_tokens=600
+            )
+            text = response.choices[0].text.strip()
+            return text[:max_chars]
+        except Exception as e:
+            print(f"⚠️ OpenAI script generation failed: {e}")
+
+    # --------- Fallback (no API key or error) ---------
+    demo_text = (
+        f"This is a demo narration script for {product_url}. Imagine upbeat TikTok-style energy, "
+        f"highlighting the product’s top features, benefits, and a call-to-action to buy now! "
+        f"Since no AI key is available, this is placeholder text repeated until we reach length. "
     )
-    response = openai.Completion.create(
-        model="text-davinci-003",
-        prompt=prompt,
-        max_tokens=600  # ~1600 characters
-    )
-    text = response.choices[0].text.strip()
-    return text[:max_chars]
+    # pad to ~1600 chars
+    while len(demo_text) < max_chars:
+        demo_text += " Great visuals, fast cuts, and engaging voiceover keep the viewer hooked!"
+    return demo_text[:max_chars]
 
 # ----------------------------
 # Helper: Extract first image from product page
