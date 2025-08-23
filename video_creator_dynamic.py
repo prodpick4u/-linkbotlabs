@@ -1,22 +1,18 @@
 import os
 import requests
+from PIL import Image
 from gtts import gTTS
-from moviepy.editor import (
-    ImageClip, AudioFileClip, CompositeVideoClip,
-    concatenate_videoclips, ColorClip
-)
+import subprocess
 
-SAFE_TMP = "/tmp"  # always safe on Render
+SAFE_TMP = "/tmp"  # safe for Render, Replit, etc.
 
 def download_image(url, save_dir=SAFE_TMP):
-    """Download an image from a URL and return local path."""
     os.makedirs(save_dir, exist_ok=True)
     try:
         response = requests.get(url, stream=True, timeout=10)
         response.raise_for_status()
         ext = url.split(".")[-1].split("?")[0]
-        if len(ext) > 4:  # fallback if extension looks wrong
-            ext = "jpg"
+        if len(ext) > 4: ext = "jpg"
         filename = f"image_{os.urandom(4).hex()}.{ext}"
         path = os.path.join(save_dir, filename)
         with open(path, "wb") as f:
@@ -27,77 +23,69 @@ def download_image(url, save_dir=SAFE_TMP):
         return None
 
 def generate_tts(script_text, save_dir=SAFE_TMP):
-    """Generate a TTS audio file from the script text."""
     os.makedirs(save_dir, exist_ok=True)
     tts_path = os.path.join(save_dir, f"audio_{os.urandom(4).hex()}.mp3")
     tts = gTTS(script_text[:5000])  # gTTS safe limit
     tts.save(tts_path)
     return tts_path
 
-def generate_video_from_urls(
-    urls, script_text=None,
-    output_path=os.path.join(SAFE_TMP, "video.mp4"),
-    resolution=(720, 1280)  # optimized for TikTok + Render free plan
-):
+def generate_video_from_urls(urls, script_text=None, output_path=os.path.join(SAFE_TMP, "video.mp4"), resolution=(720, 1280)):
     """
-    Generate a TikTok-format video from image URLs with optional voiceover script.
+    Generate a TikTok-style video from image URLs and optional voiceover script.
     """
     if not urls:
         raise ValueError("No URLs provided for video creation.")
 
-    clips = []
-    audio_clip = None
-
-    # Generate audio if script is provided
+    # Generate TTS audio if script is provided
     if script_text:
         audio_path = generate_tts(script_text)
-        audio_clip = AudioFileClip(audio_path)
-        total_duration = audio_clip.duration
     else:
-        total_duration = len(urls) * 5  # default 5s per image
+        audio_path = None
 
-    # Download images and create clips
+    # Prepare images
+    image_files = []
     for url in urls:
-        image_path = download_image(url)
-        if not image_path:
-            continue
+        path = download_image(url)
+        if path:
+            # Resize to fit resolution
+            img = Image.open(path)
+            img.thumbnail(resolution, Image.LANCZOS)
+            resized_path = os.path.join(SAFE_TMP, f"resized_{os.path.basename(path)}")
+            img.save(resized_path)
+            image_files.append(resized_path)
 
-        clip_duration = total_duration / len(urls) if audio_clip else 5
-        img_clip = ImageClip(image_path).set_duration(clip_duration)
-
-        # Resize while maintaining ratio
-        img_clip = img_clip.resize(height=resolution[1])
-        if img_clip.w > resolution[0]:
-            img_clip = img_clip.resize(width=resolution[0])
-
-        # Black background to fit TikTok resolution
-        background = ColorClip(size=resolution, color=(0, 0, 0)).set_duration(clip_duration)
-        clip = CompositeVideoClip([background, img_clip.set_position("center")])
-        clips.append(clip)
-
-    if not clips:
+    if not image_files:
         raise RuntimeError("No valid images downloaded.")
 
-    video = concatenate_videoclips(clips, method="compose")
+    # Create a temporary file list for ffmpeg
+    list_file = os.path.join(SAFE_TMP, "images.txt")
+    with open(list_file, "w") as f:
+        for img_file in image_files:
+            f.write(f"file '{img_file}'\n")
+            f.write(f"duration 5\n")  # 5 seconds per image
+        f.write(f"file '{image_files[-1]}'\n")  # last image stays
 
-    if audio_clip:
-        video = video.set_audio(audio_clip)
+    # FFmpeg command to create video
+    cmd = [
+        "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", list_file,
+        "-vf", f"scale={resolution[0]}:{resolution[1]}:force_original_aspect_ratio=decrease,pad={resolution[0]}:{resolution[1]}:(ow-iw)/2:(oh-ih)/2:black",
+    ]
 
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    if audio_path:
+        cmd += ["-i", audio_path, "-shortest"]
 
-    # Write video with Render-friendly settings
-    video.write_videofile(
-        output_path,
-        codec="libx264",
-        audio_codec="aac",
-        fps=24,
-        threads=1,  # low to avoid Render free-plan crash
-        preset="veryfast",
-        bitrate="3000k",
-        temp_audiofile=os.path.join(SAFE_TMP, "temp-audio.m4a"),
-        remove_temp=True,
-        verbose=False,
-        logger=None
-    )
+    cmd += ["-c:v", "libx264", "-c:a", "aac", "-pix_fmt", "yuv420p", output_path]
 
+    subprocess.run(cmd, check=True)
     return output_path
+
+# ----------------------
+# Example usage
+# ----------------------
+if __name__ == "__main__":
+    urls = [
+        "https://via.placeholder.com/720x1280.png?text=Slide+1",
+        "https://via.placeholder.com/720x1280.png?text=Slide+2"
+    ]
+    video = generate_video_from_urls(urls, script_text="Hello world from TTS!")
+    print("✅ Video created at:", video)
