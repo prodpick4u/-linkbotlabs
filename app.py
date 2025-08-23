@@ -2,10 +2,15 @@ from flask import Flask, request, render_template, session, redirect, url_for, s
 import os
 import requests
 from bs4 import BeautifulSoup
-from video_creator_dynamic import generate_video_from_urls  # your FFmpeg video generator
+from video_creator_dynamic import generate_video_from_urls  # your FFmpeg-based video generator
+import openai
 
+# ----------------------------
+# Flask Setup
+# ----------------------------
 app = Flask(__name__)
-app.secret_key = "supersecretkey"  # replace with env variable in production
+app.secret_key = os.getenv("FLASK_SECRET", "supersecretkey")  # use env variable in production
+os.makedirs("/tmp", exist_ok=True)
 
 # ----------------------------
 # Simple subscription simulation
@@ -13,50 +18,48 @@ app.secret_key = "supersecretkey"  # replace with env variable in production
 SUBSCRIBERS = {"user@example.com": "password123"}  # demo subscribers
 
 # ----------------------------
-# Helper: extract main image from any URL
+# OpenAI Setup for script generation
 # ----------------------------
-def extract_image_url(page_url):
+openai.api_key = os.getenv("OPENAI_API_KEY")  # store securely
+
+def generate_script(product_url, max_chars=1600):
     """
-    Tries to extract the main image from any web page.
-    Returns the first valid image URL or None.
+    Generates a 1600-character TikTok-style product narration script from a URL.
+    """
+    prompt = (
+        f"Write an engaging TikTok-style narration for the product page: {product_url}. "
+        f"Highlight benefits, visuals, and call-to-action. Max {max_chars} characters."
+    )
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        prompt=prompt,
+        max_tokens=600  # ~1600 characters
+    )
+    text = response.choices[0].text.strip()
+    return text[:max_chars]
+
+# ----------------------------
+# Helper: Extract first image from product page
+# ----------------------------
+def extract_image_url(url):
+    """
+    Attempt to get the first main image from a webpage.
     """
     try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
-        }
-        response = requests.get(page_url, headers=headers, timeout=10)
-        response.raise_for_status()
-        html = response.text
-
-        soup = BeautifulSoup(html, "html.parser")
-
-        # 1️⃣ Open Graph image
-        og_image = soup.find("meta", property="og:image")
-        if og_image and og_image.get("content"):
-            return og_image["content"]
-
-        # 2️⃣ Twitter card image
-        twitter_image = soup.find("meta", property="twitter:image")
-        if twitter_image and twitter_image.get("content"):
-            return twitter_image["content"]
-
-        # 3️⃣ Fallback: first <img>
-        imgs = soup.find_all("img", src=True)
-        if imgs:
-            src = imgs[0]["src"]
-            if src.startswith("//"):
-                src = "https:" + src
-            elif src.startswith("/"):
-                src = page_url.rstrip("/") + src
-            return src
-
-        return None
+        headers = {"User-Agent": "Mozilla/5.0"}
+        r = requests.get(url, headers=headers, timeout=10)
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "html.parser")
+        # Try common tags for product images
+        img = soup.find("img")
+        if img and img.get("src"):
+            return img["src"]
     except Exception as e:
-        print(f"⚠️ Could not extract image from {page_url}: {e}")
-        return None
+        print(f"⚠️ Failed to extract image from {url}: {e}")
+    return None
 
 # ----------------------------
-# Login route
+# Routes
 # ----------------------------
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -70,26 +73,17 @@ def login():
             return render_template("login.html", error="Invalid credentials")
     return render_template("login.html")
 
-# ----------------------------
-# Dashboard / options
-# ----------------------------
 @app.route("/dashboard")
 def dashboard():
     if "user" not in session:
         return redirect(url_for("login"))
     return render_template("dashboard.html", user=session["user"])
 
-# ----------------------------
-# Logout
-# ----------------------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
 
-# ----------------------------
-# TikTok Video Generator with automatic image extraction
-# ----------------------------
 @app.route("/generate_video", methods=["GET", "POST"])
 def generate_video_page():
     if "user" not in session:
@@ -99,22 +93,25 @@ def generate_video_page():
     error = None
     if request.method == "POST":
         urls_input = request.form.get("urls")
-        script_text = request.form.get("script")  # optional voiceover script
+        script_text = request.form.get("script")  # optional voiceover
         urls = [u.strip() for u in urls_input.split(",") if u.strip()]
 
         if not urls:
             error = "❌ Please enter at least one URL."
         else:
             try:
-                # Extract image URLs from each page
+                # Extract first image from each URL
                 image_urls = []
                 for url in urls:
                     img_url = extract_image_url(url)
                     if img_url:
                         image_urls.append(img_url)
-
                 if not image_urls:
                     raise ValueError("No images could be extracted from the URLs provided.")
+
+                # Generate script if not provided
+                if not script_text:
+                    script_text = generate_script(urls[0])
 
                 # Generate video
                 video_path = generate_video_from_urls(image_urls, script_text=script_text)
@@ -124,9 +121,6 @@ def generate_video_page():
 
     return render_template("generate_video.html", video_file=video_file, error=error)
 
-# ----------------------------
-# Download generated video
-# ----------------------------
 @app.route("/download/<filename>")
 def download_video(filename):
     return send_from_directory("/tmp", filename, as_attachment=True)
@@ -134,6 +128,5 @@ def download_video(filename):
 # ----------------------------
 # Run Flask App
 # ----------------------------
-if __name__ == '__main__':
-    os.makedirs("/tmp", exist_ok=True)
-    app.run(host='0.0.0.0', port=3000, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=3000, debug=True)
