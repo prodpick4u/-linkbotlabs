@@ -59,6 +59,7 @@ def generate_video_page():
     video_file = None
     error = None
     ai_generated_script = None
+    script_text = None
 
     if request.method == "POST":
         urls_input = request.form.get("urls")
@@ -83,9 +84,18 @@ def generate_video_page():
                     script_text = response.choices[0].message.content
                     ai_generated_script = script_text  # Show in textarea for review
 
+                # Ensure static/output exists
+                os.makedirs("static/output", exist_ok=True)
+
                 # Generate video using dynamic video creator
-                video_path = generate_video_from_urls(urls, script_text=script_text)
+                video_path = generate_video_from_urls(
+                    urls,
+                    script_text=script_text,
+                    output_path=None  # generate_video_from_urls will create a file in static/output
+                )
+
                 video_file = os.path.basename(video_path)
+
             except Exception as e:
                 error = f"❌ Video generation failed: {str(e)}"
 
