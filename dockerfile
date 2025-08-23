@@ -1,10 +1,10 @@
-# Use official Python base image
-FROM python:3.13-slim
+# Use Python 3.12 slim base image
+FROM python:3.12-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies for ffmpeg, Playwright, GTK, etc.
+# Install system dependencies for ffmpeg, Playwright, image processing
 RUN apt-get update && apt-get install -y \
     build-essential \
     ffmpeg \
@@ -26,15 +26,18 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy project files
-COPY . /app
+# Copy Python requirements
+COPY requirements.txt .
 
-# Upgrade pip and install Python dependencies without cache
+# Upgrade pip and install Python packages
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
-# Expose the port your app runs on
-EXPOSE 3000
+# Copy app source
+COPY . .
 
-# Start the app with Gunicorn
-CMD ["gunicorn", "-k", "gthread", "-w", "2", "-b", "0.0.0.0:3000", "app:app"]
+# Expose the port your Flask app runs on
+EXPOSE 5000
+
+# Start the app with gunicorn
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
