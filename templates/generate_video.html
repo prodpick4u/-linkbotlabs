@@ -24,17 +24,17 @@
 
     {% if video_file %}
         <div class="success">
-            Video generated successfully!<br>
+            ✅ Video generated successfully!<br>
             <a href="{{ url_for('download_video', filename=video_file) }}">Download Video</a>
         </div>
     {% endif %}
 
     <form method="post">
-        <label for="urls">Image URLs (comma separated):</label>
-        <input type="text" name="urls" placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg" required>
+        <label for="urls">Product Page URLs (comma separated):</label>
+        <input type="text" name="urls" placeholder="https://example.com/product1, https://example.com/product2" required>
 
-        <label for="script">Optional Voiceover Script:</label>
-        <textarea name="script" rows="4" placeholder="Enter text for TTS voiceover"></textarea>
+        <label for="script">Optional Script (leave empty to auto-generate):</label>
+        <textarea name="script" rows="4" placeholder="Enter text for narration or captions"></textarea>
 
         <button type="submit">Generate Video</button>
     </form>
