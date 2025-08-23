@@ -1,28 +1,37 @@
-# Use a stable Python version compatible with MoviePy and NumPy
+# -------------------------------
+# Base image with Python 3.10
+# -------------------------------
 FROM python:3.10-slim
 
+# -------------------------------
+# Set working directory
+# -------------------------------
+WORKDIR /app
+
+# -------------------------------
 # Install system dependencies
+# -------------------------------
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     imagemagick \
     libx11-dev \
+    build-essential \
+    gfortran \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
-WORKDIR /app
-
+# -------------------------------
 # Copy project files
+# -------------------------------
 COPY . /app
 
-# Clear pip cache
-RUN pip cache purge
-
-# Upgrade pip and install dependencies
+# -------------------------------
+# Upgrade pip and install Python packages
+# -------------------------------
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
-# Expose Flask port
+# -------------------------------
+# Expose port and start server
+# -------------------------------
 EXPOSE 3000
-
-# Run the app with Gunicorn
 CMD ["gunicorn", "-k", "gthread", "-w", "2", "-b", "0.0.0.0:3000", "app:app"]
