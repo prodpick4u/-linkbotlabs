@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory
-import os, uuid
+import os, uuid, time
 from video_creator_dynamic import generate_video_from_urls
 from openai import OpenAI
 
@@ -17,9 +17,23 @@ SUBSCRIBERS = {"user@example.com": "password123"}
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 # ----------------------------
-# Login, Dashboard, Logout (unchanged)
+# Cleanup helper
 # ----------------------------
+def cleanup_old_videos(folder="static/output", max_age_seconds=3600):
+    now = time.time()
+    for filename in os.listdir(folder):
+        path = os.path.join(folder, filename)
+        if os.path.isfile(path):
+            if now - os.path.getmtime(path) > max_age_seconds:
+                try:
+                    os.remove(path)
+                    print(f"🗑️ Deleted old video: {filename}")
+                except Exception as e:
+                    print(f"⚠️ Could not delete {filename}: {e}")
 
+# ----------------------------
+# Generate Video Route
+# ----------------------------
 @app.route("/generate_video", methods=["GET", "POST"])
 def generate_video_page():
     if "user" not in session:
@@ -39,7 +53,11 @@ def generate_video_page():
             error = "❌ Please enter at least one URL."
         else:
             try:
-                # Generate AI script if user left it blank
+                # Cleanup old videos first
+                os.makedirs("static/output", exist_ok=True)
+                cleanup_old_videos(folder="static/output", max_age_seconds=3600)
+
+                # Generate AI script if blank
                 if not script_text:
                     prompt = (
                         f"Write a short TikTok voiceover script for these product URLs: {urls}. "
@@ -52,9 +70,6 @@ def generate_video_page():
                     )
                     script_text = response.choices[0].message.content
                     ai_generated_script = script_text
-
-                # Ensure static/output exists
-                os.makedirs("static/output", exist_ok=True)
 
                 # Generate unique filename
                 filename = f"video_{uuid.uuid4().hex}.mp4"
@@ -77,8 +92,16 @@ def generate_video_page():
     )
 
 # ----------------------------
-# Download video route
+# Download route
 # ----------------------------
 @app.route("/download/<filename>")
 def download_video(filename):
     return send_from_directory("static/output", filename, as_attachment=True)
+
+# ----------------------------
+# Run Flask App
+# ----------------------------
+if __name__ == '__main__':
+    os.makedirs("static/output", exist_ok=True)
+    cleanup_old_videos(folder="static/output", max_age_seconds=3600)
+    app.run(host='0.0.0.0', port=3000, debug=True)
