@@ -2,138 +2,152 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard - LinkBotLabs</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<title>Video Generator</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
-    body {
-        font-family: 'Inter', sans-serif;
-        margin: 0;
-        background-color: #f4f6f8;
-        color: #333;
-    }
-    header {
-        background-color: #4CAF50;
-        color: white;
-        padding: 20px 0;
-        text-align: center;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    }
-    main {
-        max-width: 1000px;
-        margin: 30px auto;
-        padding: 20px;
-    }
-    h1 { margin: 0; }
-    h2 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 30px;
-    }
-    .cards {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-    }
-    .card {
-        flex: 1 1 250px;
-        background-color: white;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        padding: 30px 20px;
-        text-align: center;
-        transition: transform 0.2s, box-shadow 0.2s;
-        text-decoration: none;
-        color: #333;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    }
-    .card-icon {
-        font-size: 48px;
-        color: #4CAF50;
-        margin-bottom: 15px;
-    }
-    .card-title {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-    .card-desc {
-        font-size: 14px;
-        color: #666;
-    }
-    .logout {
-        display: block;
-        margin: 50px auto 0;
-        text-align: center;
-        color: #ff4d4f;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 16px;
-    }
-    .logout:hover { text-decoration: underline; }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f2f5;
+}
+
+.container {
+    width: 600px;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px 0;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.error { color: red; margin-bottom: 15px; }
+.success { color: green; margin-bottom: 15px; }
+video, img { width: 100%; margin-top: 15px; border-radius: 6px; }
+#dalle_images img { margin-bottom: 10px; }
 </style>
 </head>
 <body>
-<header>
-    <h1>LinkBotLabs Dashboard</h1>
-</header>
-<main>
-    <h2>Welcome, {{ user }}!</h2>
-    <div class="cards">
-        <a href="/run" class="card">
-            <div class="card-icon">📄</div>
-            <div class="card-title">Run Automation</div>
-            <div class="card-desc">Generate blog or video scripts automatically.</div>
-        </a>
-        <a href="/generate_video" class="card">
-            <div class="card-icon">🎬</div>
-            <div class="card-title">Generate TikTok Video</div>
-            <div class="card-desc">Create a TikTok-style video from product/image URLs with voiceover.</div>
-        </a>
-        <a href="/generate_text" class="card">
-            <div class="card-icon">✍️</div>
-            <div class="card-title">Generate Blog/Script</div>
-            <div class="card-desc">Create a 1600-character script from any product URL.</div>
-        </a>
-        <a href="#" class="card" onclick="showImageGenerator()">
-            <div class="card-icon">🖼️</div>
-            <div class="card-title">AI Image Generator</div>
-            <div class="card-desc">Generate stunning images with DALL·E 3 instantly.</div>
-        </a>
-    </div>
+<div class="container">
+    <h2>Video Generator</h2>
+    <p><a href="{{ url_for('logout') }}">Logout</a></p>
 
-    <div id="imageGenerator" style="display:none; margin-top:30px; text-align:center;">
-        <input type="text" id="image_prompt" placeholder="Describe your image" style="width:60%; padding:10px;"/>
-        <button onclick="generateImage()" style="padding:10px 20px; margin-left:10px;">Generate Image</button>
-        <div id="image_container" style="margin-top:20px;"></div>
-    </div>
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
 
-    <a href="/logout" class="logout">Logout</a>
-</main>
+    <form id="videoForm">
+        <input type="text" id="urls" placeholder="Product URLs (comma separated)" required>
+        <textarea id="script" rows="3" placeholder="Optional script for narration"></textarea>
+        <input type="text" id="dalle_prompt" placeholder="Optional DALL·E image prompt">
+        <button type="button" id="generateDalleBtn">Generate Image</button>
+        <div id="dalle_images"></div>
+        <button type="submit">Generate Video</button>
+    </form>
+
+    <video id="video_preview" controls style="display:none;"></video>
+    <a id="download_link" href="#" download style="display:none; margin-top:10px; display:block;">Download Video</a>
+</div>
 
 <script>
-function showImageGenerator() {
-    document.getElementById('imageGenerator').style.display = 'block';
-}
+let dalleImages = [];
+let generatingImage = false;
 
-async function generateImage() {
-    const prompt = document.getElementById('image_prompt').value.trim();
-    const container = document.getElementById('image_container');
-    container.innerHTML = '';
-    if (!prompt) return alert('Please enter an image description.');
-
+document.getElementById('generateDalleBtn').addEventListener('click', async function() {
+    const prompt = document.getElementById('dalle_prompt').value.trim();
+    if (!prompt) return alert('Enter a prompt');
+    if (generatingImage) return alert('Please wait, generating image...');
+    
+    generatingImage = true;
     try {
         const imgEl = await puter.ai.txt2img(prompt); // DALL·E 3
-        container.appendChild(imgEl);
+        document.getElementById('dalle_images').appendChild(imgEl);
+        dalleImages.push(imgEl.src);
     } catch (err) {
         console.error(err);
-        alert('Failed to generate image.');
+        alert('Failed to generate image. Try again.');
+    } finally {
+        generatingImage = false;
     }
-}
+});
+
+document.getElementById('videoForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const errorEl = document.getElementById('error');
+    const successEl = document.getElementById('success');
+    const videoEl = document.getElementById('video_preview');
+    const downloadEl = document.getElementById('download_link');
+    errorEl.textContent = '';
+    successEl.textContent = '';
+    videoEl.style.display = 'none';
+    downloadEl.style.display = 'none';
+    videoEl.src = '';
+
+    let urls = document.getElementById('urls').value.split(',').map(u => u.trim()).filter(Boolean);
+    if (!urls.length) {
+        errorEl.textContent = '❌ Please enter at least one URL.';
+        return;
+    }
+
+    let scriptText = document.getElementById('script').value.trim();
+    try {
+        if (!scriptText) {
+            const prompt = `Write an engaging TikTok-style narration for these product pages: ${urls.join(', ')}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
+            scriptText = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+        }
+
+        const allImages = [...dalleImages, ...urls];
+
+        const response = await fetch('/generate_video', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ urls: allImages, script: scriptText })
+        });
+
+        const data = await response.json();
+
+        if (data.video_file) {
+            successEl.textContent = '✅ Video generated successfully!';
+            videoEl.src = `/download/${data.video_file}`;
+            videoEl.style.display = 'block';
+            downloadEl.href = `/download/${data.video_file}`;
+            downloadEl.style.display = 'block';
+        } else {
+            errorEl.textContent = '❌ Video generation failed: ' + (data.error || 'Unknown error');
+        }
+    } catch (err) {
+        console.error(err);
+        errorEl.textContent = '❌ Failed to generate video. Please try again.';
+    }
+});
 </script>
 </body>
 </html>
