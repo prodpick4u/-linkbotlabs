@@ -1,80 +1,39 @@
 import os
-import requests
-from PIL import Image
-from io import BytesIO
 import subprocess
+from PIL import Image
+import requests
+from io import BytesIO
 import textwrap
 
-
-# Temp directory
 TMP_DIR = "/tmp"
 os.makedirs(TMP_DIR, exist_ok=True)
 
-# 
-
-
-# ----------------------------
-# Download + Prepare Image
-# ----------------------------
+# Download image from URL
 def download_and_prepare_image(url, filename):
-    """
-    Download an image from a URL, convert to RGB if needed, and save as JPEG.
-    """
-    save_path = os.path.join(TMP_DIR, filename)
+    path = os.path.join(TMP_DIR, filename)
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
-
         img = Image.open(BytesIO(response.content))
-
-        # Convert unsupported modes
         if img.mode in ("P", "RGBA"):
             img = img.convert("RGB")
-
-        img.save(save_path, "JPEG")
-        return save_path
+        img.save(path, "JPEG")
+        return path
     except Exception as e:
-        raise RuntimeError(f"❌ Failed to process image from {url}: {e}")
+        raise RuntimeError(f"Failed image: {e}")
 
-# ----------------------------
-# Generate Voiceover (TTS)
-# ----------------------------
-def generate_tts(script_text, output_audio="voice.mp3"):
-    """
-    Generate speech from text using OpenAI TTS.
-    """
-    audio_path = os.path.join(TMP_DIR, output_audio)
-    with client.audio.speech.with_streaming_response.create(
-        model="gpt-4o-mini-tts",
-        voice="alloy",  # voices: alloy, verse, copper
-        input=script_text
-    ) as response:
-        response.stream_to_file(audio_path)
-    return audio_path
-
-# ----------------------------
-# Generate Video
-# ----------------------------
-def generate_video_from_urls(image_urls, script_text=None, output_filename="output.mp4"):
-    """
-    Create a simple slideshow video from a list of image URLs.
-    Optionally overlay a script as subtitles and/or generate voiceover.
-    """
-    image_files = []
-    for idx, url in enumerate(image_urls, start=1):
-        filename = f"frame_{idx}.jpg"
-        file_path = download_and_prepare_image(url, filename)
-        image_files.append(file_path)
-
-    # Create FFmpeg input list
+# Assemble video from images
+def generate_video_from_urls(image_urls, script_text=None, voiceover_path=None, output_filename="output.mp4"):
+    image_files = [download_and_prepare_image(url, f"frame_{i}.jpg") for i, url in enumerate(image_urls, 1)]
+    
+    # Create ffmpeg input list
     list_file = os.path.join(TMP_DIR, "images.txt")
     with open(list_file, "w") as f:
         for img in image_files:
             f.write(f"file '{img}'\n")
-            f.write("duration 3\n")  # 3s per image
+            f.write("duration 3\n")
         f.write(f"file '{image_files[-1]}'\n")  # last frame hold
 
-    # Step 1: Make slideshow video
     video_path = os.path.join(TMP_DIR, output_filename)
     cmd = [
         "ffmpeg", "-y",
@@ -87,39 +46,33 @@ def generate_video_from_urls(image_urls, script_text=None, output_filename="outp
     ]
     subprocess.run(cmd, check=True)
 
-    # Step 2: Subtitles (optional)
+    # Add subtitles
     if script_text:
         wrapped = textwrap.fill(script_text, width=40)
         subtitle_file = os.path.join(TMP_DIR, "subtitles.srt")
         with open(subtitle_file, "w") as srt:
-            srt.write("1\n")
-            srt.write("00:00:00,000 --> 00:00:10,000\n")
-            srt.write(wrapped + "\n")
-
-        video_with_subs = os.path.join(TMP_DIR, f"subtitled_{output_filename}")
-        cmd_subs = [
+            srt.write("1\n00:00:00,000 --> 00:00:10,000\n" + wrapped + "\n")
+        subtitled_video = os.path.join(TMP_DIR, f"subtitled_{output_filename}")
+        subprocess.run([
             "ffmpeg", "-y",
             "-i", video_path,
             "-vf", f"subtitles={subtitle_file}",
-            video_with_subs
-        ]
-        subprocess.run(cmd_subs, check=True)
-        video_path = video_with_subs
+            subtitled_video
+        ], check=True)
+        video_path = subtitled_video
 
-    # Step 3: Voiceover (optional)
-    if script_text:
-        audio_path = generate_tts(script_text)
-        final_output = os.path.join(TMP_DIR, f"final_{output_filename}")
-        cmd_mix = [
+    # Merge voiceover if provided
+    if voiceover_path:
+        final_video = os.path.join(TMP_DIR, f"final_{output_filename}")
+        subprocess.run([
             "ffmpeg", "-y",
             "-i", video_path,
-            "-i", audio_path,
+            "-i", voiceover_path,
             "-c:v", "copy",
             "-c:a", "aac",
             "-shortest",
-            final_output
-        ]
-        subprocess.run(cmd_mix, check=True)
-        return final_output
+            final_video
+        ], check=True)
+        return final_video
 
     return video_path
