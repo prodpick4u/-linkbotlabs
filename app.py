@@ -1,109 +1,120 @@
 import os
-from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory, jsonify
-from bs4 import BeautifulSoup
+from flask import Flask, request, jsonify, send_from_directory
+from PIL import Image
 import requests
-from video_creator_dynamic import generate_video_from_urls  # Your video generator logic
+from io import BytesIO
+import subprocess
+import textwrap
 
-# ----------------------------
-# Flask Setup
-# ----------------------------
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET", "supersecretkey")
-os.makedirs("/tmp", exist_ok=True)
+TMP_DIR = "/tmp"
+os.makedirs(TMP_DIR, exist_ok=True)
 
 # ----------------------------
-# Demo subscribers
+# Helper: Download + Prepare Image
 # ----------------------------
-SUBSCRIBERS = {"user@example.com": "password123"}
-
-# ----------------------------
-# Helper: Extract first image from product page
-# ----------------------------
-def extract_image_url(url):
+def download_and_prepare_image(url, filename):
+    path = os.path.join(TMP_DIR, filename)
     try:
-        headers = {"User-Agent": "Mozilla/5.0"}
-        r = requests.get(url, headers=headers, timeout=10)
-        r.raise_for_status()
-        soup = BeautifulSoup(r.text, "html.parser")
-        img = soup.find("img")
-        if img and img.get("src"):
-            return img["src"]
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        img = Image.open(BytesIO(response.content))
+        if img.mode in ("P", "RGBA"):
+            img = img.convert("RGB")
+        img.save(path, "JPEG")
+        return path
     except Exception as e:
-        print(f"⚠️ Failed to extract image from {url}: {e}")
-    return None
+        raise RuntimeError(f"Failed image: {e}")
 
 # ----------------------------
-# Routes
+# Generate Video
 # ----------------------------
-@app.route("/", methods=["GET", "POST"])
-def login():
-    if request.method == "POST":
-        email = request.form.get("email")
-        password = request.form.get("password")
-        if SUBSCRIBERS.get(email) == password:
-            session["user"] = email
-            return redirect(url_for("dashboard"))
-        return render_template("login.html", error="Invalid credentials")
-    return render_template("login.html")
+def generate_video(image_urls, script_text=None, voiceover_path=None, output_filename="output.mp4"):
+    image_files = [download_and_prepare_image(url, f"frame_{i}.jpg") for i, url in enumerate(image_urls, 1)]
 
-@app.route("/dashboard")
-def dashboard():
-    if "user" not in session:
-        return redirect(url_for("login"))
-    return render_template("dashboard.html", user=session["user"])
+    # FFmpeg input list
+    list_file = os.path.join(TMP_DIR, "images.txt")
+    with open(list_file, "w") as f:
+        for img in image_files:
+            f.write(f"file '{img}'\n")
+            f.write("duration 3\n")
+        f.write(f"file '{image_files[-1]}'\n")  # last frame hold
 
-@app.route("/logout")
-def logout():
-    session.pop("user", None)
-    return redirect(url_for("login"))
+    video_path = os.path.join(TMP_DIR, output_filename)
+    subprocess.run([
+        "ffmpeg", "-y",
+        "-f", "concat", "-safe", "0",
+        "-i", list_file,
+        "-vf", "scale=1080:-2:force_original_aspect_ratio=decrease,"
+               "pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p",
+        "-pix_fmt", "yuv420p",
+        video_path
+    ], check=True)
+
+    # Add subtitles
+    if script_text:
+        wrapped = textwrap.fill(script_text, width=40)
+        subtitle_file = os.path.join(TMP_DIR, "subtitles.srt")
+        with open(subtitle_file, "w") as srt:
+            srt.write("1\n00:00:00,000 --> 00:00:10,000\n" + wrapped + "\n")
+        subtitled_video = os.path.join(TMP_DIR, f"subtitled_{output_filename}")
+        subprocess.run([
+            "ffmpeg", "-y",
+            "-i", video_path,
+            "-vf", f"subtitles={subtitle_file}",
+            subtitled_video
+        ], check=True)
+        video_path = subtitled_video
+
+    # Merge voiceover if provided
+    if voiceover_path:
+        final_video = os.path.join(TMP_DIR, f"final_{output_filename}")
+        subprocess.run([
+            "ffmpeg", "-y",
+            "-i", video_path,
+            "-i", voiceover_path,
+            "-c:v", "copy",
+            "-c:a", "aac",
+            "-shortest",
+            final_video
+        ], check=True)
+        return final_video
+
+    return video_path
 
 # ----------------------------
-# Generate TikTok Video (POST JSON)
+# Flask Route
 # ----------------------------
 @app.route("/generate_video", methods=["POST"])
-def generate_video_page():
-    if "user" not in session:
-        return jsonify({"error": "Unauthorized"}), 401
-
-    data = request.get_json()
-    if not data:
-        return jsonify({"error": "Send JSON with urls and script"}), 400
-
-    urls = data.get("urls", [])
-    script_text = data.get("script", "")
-
-    if not urls or not script_text:
-        return jsonify({"error": "Missing URLs or script"}), 400
-
+def generate_video_route():
     try:
-        image_urls = []
-        for url in urls:
-            if url.startswith("http"):
-                if url.endswith((".jpg", ".jpeg", ".png", ".webp")):
-                    image_urls.append(url)
-                else:
-                    img_url = extract_image_url(url)
-                    if img_url:
-                        image_urls.append(img_url)
+        urls = request.form.get("urls")
+        script_text = request.form.get("script", "")
+        voice_file = request.files.get("voiceover")
 
-        if not image_urls:
-            return jsonify({"error": "No images could be extracted from URLs"}), 400
+        if not urls:
+            return jsonify({"error": "No image URLs provided"}), 400
 
-        video_path = generate_video_from_urls(image_urls, script_text=script_text)
+        urls = list(set(eval(urls)))  # convert stringified list to Python list and remove duplicates
+
+        voice_path = None
+        if voice_file:
+            voice_path = os.path.join(TMP_DIR, "voice.mp3")
+            voice_file.save(voice_path)
+
+        video_path = generate_video(urls, script_text=script_text, voiceover_path=voice_path)
         return jsonify({"video_file": os.path.basename(video_path)})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 # ----------------------------
-# Download generated video
+# Download Route
 # ----------------------------
 @app.route("/download/<filename>")
 def download_video(filename):
-    return send_from_directory("/tmp", filename, as_attachment=True)
+    return send_from_directory(TMP_DIR, filename, as_attachment=True)
 
-# ----------------------------
-# Run Flask App
 # ----------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000, debug=True)
