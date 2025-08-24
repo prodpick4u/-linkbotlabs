@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory, jsonify
 from bs4 import BeautifulSoup
 import requests
-from video_creator_dynamic import generate_video_from_urls
+from video_creator_dynamic import generate_video_from_urls  # Your video generator logic
 
 # ----------------------------
 # Flask Setup
@@ -80,7 +80,7 @@ def generate_video_page():
         for url in urls:
             if url.startswith("http"):
                 if url.endswith((".jpg", ".jpeg", ".png", ".webp")):
-                    image_urls.append(url)  # DALL·E or direct image
+                    image_urls.append(url)
                 else:
                     img_url = extract_image_url(url)
                     if img_url:
@@ -94,29 +94,6 @@ def generate_video_page():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-# ----------------------------
-# Generate text/script page
-# ----------------------------
-@app.route("/generate_text", methods=["GET", "POST"])
-def generate_text_page():
-    if "user" not in session:
-        return redirect(url_for("login"))
-
-    output_text = None
-    error = None
-    if request.method == "POST":
-        product_url = request.form.get("product_url")
-        if not product_url:
-            error = "❌ Please enter a product URL."
-        else:
-            try:
-                # Placeholder: replace with GPT/DALL·E API call
-                output_text = f"Generated script for {product_url}"
-            except Exception as e:
-                error = f"❌ Script generation failed: {str(e)}"
-
-    return render_template("generate_text.html", output_text=output_text, error=error)
 
 # ----------------------------
 # Download generated video
