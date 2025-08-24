@@ -1,7 +1,7 @@
 # Web framework
 Flask==3.1.2
 
-# Text-to-speech
+# Text-to-speech (optional, if using gTTS locally)
 gTTS==2.5.4
 
 # Image handling
