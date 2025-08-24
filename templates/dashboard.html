@@ -12,12 +12,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #4B0082, #1E90FF); /* purple-blue gradient */
+    background: linear-gradient(135deg, #4B0082, #1E90FF);
     color: white;
 }
 
 .container {
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     background: rgba(0,0,0,0.85);
     padding: 30px;
     border-radius: 12px;
@@ -25,10 +26,7 @@ body {
     text-align: center;
 }
 
-h2 {
-    margin-bottom: 20px;
-    color: #f0f0f0;
-}
+h2 { margin-bottom: 20px; color: #f0f0f0; }
 
 input[type="text"], textarea {
     width: 100%;
@@ -48,9 +46,15 @@ button {
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
+    transition: 0.3s;
 }
 
-button:hover {
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
     background: #6A5ACD;
 }
 
@@ -61,6 +65,13 @@ video, img { width: 100%; margin-top: 15px; border-radius: 6px; }
 #dalle_images img { margin-bottom: 10px; border: 2px solid #fff; }
 a { color: #00FFFF; text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+#loading {
+    display: none;
+    margin-top: 15px;
+    font-style: italic;
+    color: #FFD700;
+}
 </style>
 </head>
 <body>
@@ -77,9 +88,10 @@ a:hover { text-decoration: underline; }
         <input type="text" id="dalle_prompt" placeholder="Optional DALL·E image prompt">
         <button type="button" id="generateDalleBtn">Generate Image</button>
         <div id="dalle_images"></div>
-        <button type="submit">Generate Video</button>
+        <button type="submit" id="generateVideoBtn">Generate Video</button>
     </form>
 
+    <div id="loading">⏳ Please wait... generating...</div>
     <video id="video_preview" controls style="display:none;"></video>
     <a id="download_link" href="#" download style="display:none; margin-top:10px; display:block;">Download Video</a>
 </div>
@@ -88,14 +100,23 @@ a:hover { text-decoration: underline; }
 let dalleImages = [];
 let generatingImage = false;
 
+function toggleLoading(show, msg="⏳ Please wait... generating...") {
+    const loadingEl = document.getElementById('loading');
+    loadingEl.textContent = msg;
+    loadingEl.style.display = show ? 'block' : 'none';
+}
+
 document.getElementById('generateDalleBtn').addEventListener('click', async function() {
     const prompt = document.getElementById('dalle_prompt').value.trim();
     if (!prompt) return alert('Enter a prompt');
-    if (generatingImage) return alert('Please wait, generating image...');
-    
+    if (generatingImage) return;
+
     generatingImage = true;
+    toggleLoading(true, "🎨 Generating image...");
+    this.disabled = true;
+
     try {
-        const imgEl = await puter.ai.txt2img(prompt); // DALL·E 3
+        const imgEl = await puter.ai.txt2img(prompt);
         document.getElementById('dalle_images').appendChild(imgEl);
         dalleImages.push(imgEl.src);
     } catch (err) {
@@ -103,6 +124,8 @@ document.getElementById('generateDalleBtn').addEventListener('click', async func
         alert('Failed to generate image. Try again.');
     } finally {
         generatingImage = false;
+        toggleLoading(false);
+        this.disabled = false;
     }
 });
 
@@ -112,6 +135,8 @@ document.getElementById('videoForm').addEventListener('submit', async function(e
     const successEl = document.getElementById('success');
     const videoEl = document.getElementById('video_preview');
     const downloadEl = document.getElementById('download_link');
+    const videoBtn = document.getElementById('generateVideoBtn');
+
     errorEl.textContent = '';
     successEl.textContent = '';
     videoEl.style.display = 'none';
@@ -125,6 +150,9 @@ document.getElementById('videoForm').addEventListener('submit', async function(e
     }
 
     let scriptText = document.getElementById('script').value.trim();
+    videoBtn.disabled = true;
+    toggleLoading(true, "🎬 Generating video...");
+
     try {
         if (!scriptText) {
             const prompt = `Write an engaging TikTok-style narration for these product pages: ${urls.join(', ')}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
@@ -153,6 +181,9 @@ document.getElementById('videoForm').addEventListener('submit', async function(e
     } catch (err) {
         console.error(err);
         errorEl.textContent = '❌ Failed to generate video. Please try again.';
+    } finally {
+        videoBtn.disabled = false;
+        toggleLoading(false);
     }
 });
 </script>
