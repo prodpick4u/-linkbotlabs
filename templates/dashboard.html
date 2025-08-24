@@ -2,141 +2,124 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Video Generator</title>
-<script src="https://js.puter.com/v2/"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkBotLabs Video Generator</title>
 <style>
-body {
-    font-family: Arial, sans-serif;
+  body {
+    font-family: 'Inter', sans-serif;
     margin: 0;
-    height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(135deg, #4B0082, #1E90FF);
+    color: #fff;
     display: flex;
     justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #4B0082, #1E90FF);
-    color: white;
-}
-
-.container {
+    min-height: 100vh;
+  }
+  .container {
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
     background: rgba(0,0,0,0.85);
-    padding: 30px;
+    padding: 20px;
     border-radius: 12px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  }
+  h2 {
     text-align: center;
-}
-
-h2 { margin-bottom: 20px; color: #f0f0f0; }
-
-input[type="text"], textarea {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+  }
+  label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  input[type="text"], textarea, input[type="file"] {
     width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: #222;
-    color: #fff;
-}
-
-button {
-    padding: 10px 20px;
-    background: #7B68EE;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: 0.3s;
-}
-
-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
-    background: #6A5ACD;
-}
-
-.error { color: #FF6B6B; margin-bottom: 15px; }
-.success { color: #7CFC00; margin-bottom: 15px; }
-
-video, img { width: 100%; margin-top: 15px; border-radius: 6px; }
-#dalle_images img { margin-bottom: 10px; border: 2px solid #fff; }
-a { color: #00FFFF; text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-#loading {
-    display: none;
-    margin-top: 15px;
-    font-style: italic;
-    color: #FFD700;
-}
-
-.progress-container {
-    display: none;
-    margin-top: 15px;
-    background: #444;
+    padding: 12px;
+    margin-bottom: 15px;
     border-radius: 6px;
-    overflow: hidden;
-    height: 18px;
-}
-.progress-bar {
-    width: 0%;
-    height: 100%;
+    border: 1px solid #333;
+    background: #222;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  input:focus, textarea:focus {
+    transform: scale(1.05);
+    border-color: #FFD700;
+  }
+  textarea { resize: vertical; }
+  button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
     background: linear-gradient(90deg, #7B68EE, #00BFFF);
-    transition: width 0.4s ease;
-}
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 15px;
+  }
+  button:disabled { opacity: 0.6; cursor: not-allowed; }
+  .optional { font-size: 0.85rem; color: #FFD700; }
+  #loading { display: none; text-align: center; font-style: italic; color: #FFD700; margin-bottom: 15px; }
+  #dalle_images img { width: 100%; margin-bottom: 10px; border-radius: 6px; border: 2px solid #fff; }
+  video, a.download-link { width: 100%; display: block; margin-top: 15px; }
 </style>
 </head>
 <body>
+
 <div class="container">
-    <h2>Video Generator</h2>
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+  <h2>🎬 LinkBotLabs Video Generator</h2>
 
-    <div class="error" id="error"></div>
-    <div class="success" id="success"></div>
+  <!-- Step 1 -->
+  <label for="urls" id="step1">Step 1: Enter Product URL(s) <span class="optional">(Required)</span></label>
+  <input type="text" id="urls" placeholder="https://example.com/product1, https://example.com/product2">
 
-    <form id="videoForm">
-        <input type="text" id="urls" placeholder="Product URLs (comma separated)" required>
-        <textarea id="script" rows="3" placeholder="Optional script for narration"></textarea>
-        <input type="text" id="dalle_prompt" placeholder="Optional DALL·E image prompt">
-        <button type="button" id="generateDalleBtn">Generate Image</button>
-        <div id="dalle_images"></div>
-        <button type="submit" id="generateVideoBtn">Generate Video</button>
-    </form>
+  <!-- Step 2 -->
+  <label for="script" id="step2">Step 2: Optional Script / Narration <span class="optional">(AI generates if blank)</span></label>
+  <textarea id="script" rows="3" placeholder="Optional: Enter your own narration text here"></textarea>
 
-    <div id="loading">⏳ Please wait... generating...</div>
+  <!-- Step 3 -->
+  <label for="dalle_prompt" id="step3">Step 3: Optional AI Image Prompt <span class="optional">(Optional - for extra visuals)</span></label>
+  <input type="text" id="dalle_prompt" placeholder="e.g., 'Modern kitchen with kettle'">
+  <button type="button" id="generateDalleBtn">Generate Image</button>
+  <div id="dalle_images"></div>
 
-    <!-- Progress bar -->
-    <div class="progress-container" id="progressContainer">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
+  <!-- Generate Video -->
+  <button type="button" id="generateVideoBtn">Generate Video</button>
 
-    <video id="video_preview" controls style="display:none;"></video>
-    <a id="download_link" href="#" download style="display:none; margin-top:10px; display:block;">Download Video</a>
+  <!-- Loading -->
+  <div id="loading">⏳ Please wait... generating...</div>
+
+  <!-- Video & Download -->
+  <video id="video_preview" controls style="display:none;"></video>
+  <a id="download_link" href="#" download class="download-link" style="display:none;">Download Video</a>
 </div>
 
 <script>
-let dalleImages = [];
-let generatingImage = false;
+  let dalleImages = [];
+  let generatingImage = false;
 
-function toggleLoading(show, msg="⏳ Please wait... generating...") {
+  function toggleLoading(show, msg="⏳ Please wait... generating...") {
     const loadingEl = document.getElementById('loading');
     loadingEl.textContent = msg;
     loadingEl.style.display = show ? 'block' : 'none';
-}
+  }
 
-function updateProgress(percent) {
-    const container = document.getElementById('progressContainer');
-    const bar = document.getElementById('progressBar');
-    container.style.display = "block";
-    bar.style.width = percent + "%";
-}
+  // ===== Auto-scroll to focused input (mobile-friendly) =====
+  const inputs = document.querySelectorAll('input, textarea');
+  inputs.forEach(input => {
+    input.addEventListener('focus', () => {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
 
-document.getElementById('generateDalleBtn').addEventListener('click', async function() {
+  // ===== DALL·E Image Generation =====
+  document.getElementById('generateDalleBtn').addEventListener('click', async function() {
     const prompt = document.getElementById('dalle_prompt').value.trim();
-    if (!prompt) return alert('Enter a prompt');
+    if (!prompt) return alert('Enter a prompt for image generation');
     if (generatingImage) return;
 
     generatingImage = true;
@@ -144,88 +127,61 @@ document.getElementById('generateDalleBtn').addEventListener('click', async func
     this.disabled = true;
 
     try {
-        const imgEl = await puter.ai.txt2img(prompt);
-        document.getElementById('dalle_images').appendChild(imgEl);
-        dalleImages.push(imgEl.src);
+      // Replace with your AI image generation API call
+      const imgEl = document.createElement('img');
+      imgEl.src = 'https://via.placeholder.com/400x400.png?text=AI+Image'; // placeholder
+      document.getElementById('dalle_images').appendChild(imgEl);
+      dalleImages.push(imgEl.src);
     } catch (err) {
-        console.error(err);
-        alert('Failed to generate image. Try again.');
+      alert('Failed to generate image. Try again.');
     } finally {
-        generatingImage = false;
-        toggleLoading(false);
-        this.disabled = false;
+      generatingImage = false;
+      toggleLoading(false);
+      this.disabled = false;
     }
-});
+  });
 
-document.getElementById('videoForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const errorEl = document.getElementById('error');
-    const successEl = document.getElementById('success');
-    const videoEl = document.getElementById('video_preview');
-    const downloadEl = document.getElementById('download_link');
-    const videoBtn = document.getElementById('generateVideoBtn');
-
-    errorEl.textContent = '';
-    successEl.textContent = '';
-    videoEl.style.display = 'none';
-    downloadEl.style.display = 'none';
-    videoEl.src = '';
-
-    let urls = document.getElementById('urls').value.split(',').map(u => u.trim()).filter(Boolean);
-    if (!urls.length) {
-        errorEl.textContent = '❌ Please enter at least one URL.';
-        return;
-    }
+  // ===== Video Generation =====
+  document.getElementById('generateVideoBtn').addEventListener('click', async function() {
+    const urls = document.getElementById('urls').value.split(',').map(u => u.trim()).filter(Boolean);
+    if (!urls.length) return alert('❌ Please enter at least one URL');
 
     let scriptText = document.getElementById('script').value.trim();
-    videoBtn.disabled = true;
     toggleLoading(true, "🎬 Generating video...");
-    updateProgress(0);
 
     try {
-        if (!scriptText) {
-            const prompt = `Write an engaging TikTok-style narration for these product pages: ${urls.join(', ')}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
-            scriptText = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
-        }
+      if (!scriptText) {
+        const prompt = `Write an engaging TikTok-style narration for these product pages: ${urls.join(', ')}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
+        // Replace with AI call, e.g., puter.ai.chat(prompt)
+        scriptText = "🎤 AI-generated sample narration for the product video.";
+      }
 
-        const allImages = [...dalleImages, ...urls];
+      const allImages = [...dalleImages, ...urls];
 
-        // Simulated progress (replace with server events if available)
-        let percent = 0;
-        const fakeProgress = setInterval(() => {
-            percent += 10;
-            if (percent <= 90) updateProgress(percent);
-        }, 800);
+      const response = await fetch('/generate_video', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ urls: allImages, script: scriptText })
+      });
 
-        const response = await fetch('/generate_video', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ urls: allImages, script: scriptText })
-        });
+      const data = await response.json();
+      toggleLoading(false);
 
-        const data = await response.json();
-        clearInterval(fakeProgress);
-
-        if (data.video_file) {
-            updateProgress(100);
-            successEl.textContent = '✅ Video generated successfully!';
-            videoEl.src = `/download/${data.video_file}`;
-            videoEl.style.display = 'block';
-            downloadEl.href = `/download/${data.video_file}`;
-            downloadEl.style.display = 'block';
-        } else {
-            errorEl.textContent = '❌ Video generation failed: ' + (data.error || 'Unknown error');
-            document.getElementById('progressContainer').style.display = "none";
-        }
+      if (data.video_file) {
+        const videoEl = document.getElementById('video_preview');
+        const downloadEl = document.getElementById('download_link');
+        videoEl.src = `/download/${data.video_file}`;
+        videoEl.style.display = 'block';
+        downloadEl.href = `/download/${data.video_file}`;
+        downloadEl.style.display = 'block';
+      } else {
+        alert('❌ Video generation failed: ' + (data.error || 'Unknown error'));
+      }
     } catch (err) {
-        console.error(err);
-        errorEl.textContent = '❌ Failed to generate video. Please try again.';
-        document.getElementById('progressContainer').style.display = "none";
-    } finally {
-        videoBtn.disabled = false;
-        toggleLoading(false);
+      toggleLoading(false);
+      alert('❌ Failed to generate video. Please try again.');
     }
-});
+  });
 </script>
 </body>
 </html>
