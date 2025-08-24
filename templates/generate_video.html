@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Video Generator Dashboard</title>
+    <script src="https://js.puter.com/v2/"></script>
     <style>
         body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
         .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
@@ -11,6 +12,7 @@
         button:hover { background: #0056b3; }
         .error { color: red; margin-bottom: 15px; }
         .success { color: green; margin-bottom: 15px; }
+        video { width: 100%; margin-top: 15px; border-radius: 6px; }
     </style>
 </head>
 <body>
@@ -18,26 +20,70 @@
     <h2>Welcome, {{ user }}</h2>
     <p><a href="{{ url_for('logout') }}">Logout</a></p>
 
-    {% if error %}
-        <div class="error">{{ error }}</div>
-    {% endif %}
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
 
-    {% if video_file %}
-        <div class="success">
-            ✅ Video generated successfully!<br>
-            <a href="{{ url_for('download_video', filename=video_file) }}">Download Video</a>
-        </div>
-    {% endif %}
-
-    <form method="post">
+    <form id="videoForm">
         <label for="urls">Product Page URLs (comma separated):</label>
-        <input type="text" name="urls" placeholder="https://example.com/product1, https://example.com/product2" required>
+        <input type="text" id="urls" placeholder="https://example.com/product1, https://example.com/product2" required>
 
         <label for="script">Optional Script (leave empty to auto-generate):</label>
-        <textarea name="script" rows="4" placeholder="Enter text for narration or captions"></textarea>
+        <textarea id="script" rows="4" placeholder="Enter text for narration or captions"></textarea>
 
         <button type="submit">Generate Video</button>
     </form>
+
+    <video id="video_preview" controls style="display:none;"></video>
 </div>
+
+<script>
+document.getElementById('videoForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const errorEl = document.getElementById('error');
+    const successEl = document.getElementById('success');
+    const videoEl = document.getElementById('video_preview');
+    errorEl.textContent = '';
+    successEl.textContent = '';
+    videoEl.style.display = 'none';
+    videoEl.src = '';
+
+    let urls = document.getElementById('urls').value.split(',').map(u => u.trim()).filter(Boolean);
+    if (!urls.length) {
+        errorEl.textContent = '❌ Please enter at least one URL.';
+        return;
+    }
+
+    let scriptText = document.getElementById('script').value.trim();
+
+    try {
+        // Auto-generate script if empty
+        if (!scriptText) {
+            const prompt = `Write an engaging TikTok-style narration for these product pages: ${urls.join(', ')}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
+            scriptText = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+        }
+
+        // Send URLs + script to Flask backend
+        const response = await fetch('/generate_video', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ urls: urls, script: scriptText })
+        });
+
+        const data = await response.json();
+
+        if (data.video_file) {
+            successEl.textContent = '✅ Video generated successfully!';
+            videoEl.src = `/download/${data.video_file}`;
+            videoEl.style.display = 'block';
+        } else {
+            errorEl.textContent = '❌ Video generation failed: ' + (data.error || 'Unknown error');
+        }
+
+    } catch (err) {
+        console.error(err);
+        errorEl.textContent = '❌ Failed to generate video. Please try again.';
+    }
+});
+</script>
 </body>
 </html>
