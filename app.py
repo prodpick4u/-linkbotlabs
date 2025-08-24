@@ -1,16 +1,14 @@
-from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory
+from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory, jsonify
 import os
 import requests
 from bs4 import BeautifulSoup
 from video_creator_dynamic import generate_video_from_urls  # your FFmpeg+TTS video generator
-from utils import extract_image_urls
-from openai import OpenAI
 
 # ----------------------------
 # Flask Setup
 # ----------------------------
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET", "supersecretkey")  # use env variable in production
+app.secret_key = os.getenv("FLASK_SECRET", "supersecretkey")
 os.makedirs("/tmp", exist_ok=True)
 
 # ----------------------------
@@ -19,39 +17,9 @@ os.makedirs("/tmp", exist_ok=True)
 SUBSCRIBERS = {"user@example.com": "password123"}  # demo subscribers
 
 # ----------------------------
-# OpenAI Setup
-# ----------------------------
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # secure key
-
-def generate_script(product_url, max_chars=1600):
-    """
-    Generates a TikTok-style product narration script from a URL.
-    Uses OpenAI SDK >=1.0.0.
-    """
-    prompt = (
-        f"Write an engaging TikTok-style narration for the product page: {product_url}. "
-        f"Highlight benefits, visuals, and call-to-action. Max {max_chars} characters."
-    )
-
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are a creative TikTok script writer."},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=600
-    )
-
-    text = response.choices[0].message.content
-    return text[:max_chars]
-
-# ----------------------------
 # Helper: Extract first image from product page
 # ----------------------------
 def extract_image_url(url):
-    """
-    Attempt to get the first main image from a webpage.
-    """
     try:
         headers = {"User-Agent": "Mozilla/5.0"}
         r = requests.get(url, headers=headers, timeout=10)
@@ -75,8 +43,7 @@ def login():
         if SUBSCRIBERS.get(email) == password:
             session["user"] = email
             return redirect(url_for("dashboard"))
-        else:
-            return render_template("login.html", error="Invalid credentials")
+        return render_template("login.html", error="Invalid credentials")
     return render_template("login.html")
 
 @app.route("/dashboard")
@@ -91,67 +58,37 @@ def logout():
     return redirect(url_for("login"))
 
 # ----------------------------
-# Generate TikTok Video
+# Generate TikTok Video (JSON POST)
 # ----------------------------
-@app.route("/generate_video", methods=["GET", "POST"])
+@app.route("/generate_video", methods=["POST"])
 def generate_video_page():
     if "user" not in session:
-        return redirect(url_for("login"))
+        return jsonify({"error": "Unauthorized"}), 401
 
-    video_file = None
-    error = None
-    if request.method == "POST":
-        urls_input = request.form.get("urls")
-        script_text = request.form.get("script")  # optional user-supplied script
-        urls = [u.strip() for u in urls_input.split(",") if u.strip()]
+    data = request.get_json()
+    urls = data.get("urls", [])
+    script_text = data.get("script", "")
 
-        if not urls:
-            error = "❌ Please enter at least one URL."
-        else:
-            try:
-                # Extract first image from each URL
-                image_urls = []
-                for url in urls:
-                    img_url = extract_image_url(url)
-                    if img_url:
-                        image_urls.append(img_url)
-                if not image_urls:
-                    raise ValueError("No images could be extracted from the URLs provided.")
+    if not urls or not script_text:
+        return jsonify({"error": "Missing URLs or script"}), 400
 
-                # Generate script if not provided
-                if not script_text:
-                    script_text = generate_script(urls[0])
+    try:
+        # Extract first image from each URL
+        image_urls = []
+        for url in urls:
+            img_url = extract_image_url(url)
+            if img_url:
+                image_urls.append(img_url)
+        if not image_urls:
+            return jsonify({"error": "No images could be extracted from URLs"}), 400
 
-                # Generate video (with subtitles + TTS voiceover)
-                video_path = generate_video_from_urls(image_urls, script_text=script_text)
-                video_file = os.path.basename(video_path)
+        # Generate video (FFmpeg + TTS)
+        video_path = generate_video_from_urls(image_urls, script_text=script_text)
+        video_file = os.path.basename(video_path)
+        return jsonify({"video_file": video_file})
 
-            except Exception as e:
-                error = f"❌ Video generation failed: {str(e)}"
-
-    return render_template("generate_video.html", video_file=video_file, error=error)
-
-# ----------------------------
-# Generate Text / Blog / Script
-# ----------------------------
-@app.route("/generate_text", methods=["GET", "POST"])
-def generate_text_page():
-    if "user" not in session:
-        return redirect(url_for("login"))
-
-    output_text = None
-    error = None
-    if request.method == "POST":
-        product_url = request.form.get("product_url")
-        if not product_url:
-            error = "❌ Please enter a product URL."
-        else:
-            try:
-                output_text = generate_script(product_url)
-            except Exception as e:
-                error = f"❌ Script generation failed: {str(e)}"
-
-    return render_template("generate_text.html", output_text=output_text, error=error)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ----------------------------
 # Download generated video
