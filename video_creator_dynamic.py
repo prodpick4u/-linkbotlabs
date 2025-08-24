@@ -4,7 +4,7 @@ from PIL import Image
 from io import BytesIO
 import subprocess
 import textwrap
-from openai import OpenAI
+
 
 # Temp directory
 TMP_DIR = "/tmp"
