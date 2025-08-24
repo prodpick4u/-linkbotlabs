@@ -1,28 +1,41 @@
 import os
 from flask import Flask, request, render_template, jsonify, send_from_directory
-from video_creator_dynamic import generate_video_from_urls
 from bs4 import BeautifulSoup
 import requests
+from video_creator_dynamic import generate_video_from_urls
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET", "supersecretkey")
 os.makedirs("/tmp", exist_ok=True)
 
 # ----------------------------
-# Helper: Extract first image from product page
+# Helper: Extract all images from product page
 # ----------------------------
-def extract_image_url(url):
+def extract_image_urls(url):
+    images = []
     try:
         headers = {"User-Agent": "Mozilla/5.0"}
         r = requests.get(url, headers=headers, timeout=10)
         r.raise_for_status()
         soup = BeautifulSoup(r.text, "html.parser")
-        img = soup.find("img")
-        if img and img.get("src"):
-            return img["src"]
+
+        # Check for Open Graph / Twitter images first
+        og_img = soup.find("meta", property="og:image")
+        if og_img and og_img.get("content"):
+            images.append(og_img["content"])
+        twitter_img = soup.find("meta", attrs={"name": "twitter:image"})
+        if twitter_img and twitter_img.get("content"):
+            images.append(twitter_img["content"])
+
+        # Fallback: collect all <img> tags
+        for img in soup.find_all("img"):
+            src = img.get("src")
+            if src and src not in images:
+                images.append(src)
+
     except Exception as e:
-        print(f"⚠️ Failed to extract image from {url}: {e}")
-    return None
+        print(f"⚠️ Failed to extract images from {url}: {e}")
+    return images
 
 # ----------------------------
 # Routes
@@ -45,17 +58,26 @@ def generate_video():
 
     try:
         image_urls = []
+
         for url in urls:
             if url.startswith("http"):
                 if url.endswith((".jpg", ".jpeg", ".png", ".webp")):
-                    image_urls.append(url)  # DALL·E or direct image
+                    image_urls.append(url)  # Already an image (DALL·E)
                 else:
-                    img_url = extract_image_url(url)
-                    if img_url:
-                        image_urls.append(img_url)
+                    extracted = extract_image_urls(url)
+                    if extracted:
+                        image_urls.extend(extracted)
 
         if not image_urls:
             return jsonify({"error": "No images could be extracted from URLs"}), 400
+
+        # Remove duplicates
+        image_urls = list(dict.fromkeys(image_urls))
+
+        # If script is empty, auto-generate prompt
+        if not script_text:
+            urls_summary = ", ".join(urls)
+            script_text = f"Write an engaging TikTok-style narration for these products: {urls_summary}. Max 1600 characters."
 
         video_path = generate_video_from_urls(image_urls, script_text=script_text)
         return jsonify({"video_file": os.path.basename(video_path)})
