@@ -72,6 +72,21 @@ a:hover { text-decoration: underline; }
     font-style: italic;
     color: #FFD700;
 }
+
+.progress-container {
+    display: none;
+    margin-top: 15px;
+    background: #444;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 18px;
+}
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #7B68EE, #00BFFF);
+    transition: width 0.4s ease;
+}
 </style>
 </head>
 <body>
@@ -92,6 +107,12 @@ a:hover { text-decoration: underline; }
     </form>
 
     <div id="loading">⏳ Please wait... generating...</div>
+
+    <!-- Progress bar -->
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
     <video id="video_preview" controls style="display:none;"></video>
     <a id="download_link" href="#" download style="display:none; margin-top:10px; display:block;">Download Video</a>
 </div>
@@ -104,6 +125,13 @@ function toggleLoading(show, msg="⏳ Please wait... generating...") {
     const loadingEl = document.getElementById('loading');
     loadingEl.textContent = msg;
     loadingEl.style.display = show ? 'block' : 'none';
+}
+
+function updateProgress(percent) {
+    const container = document.getElementById('progressContainer');
+    const bar = document.getElementById('progressBar');
+    container.style.display = "block";
+    bar.style.width = percent + "%";
 }
 
 document.getElementById('generateDalleBtn').addEventListener('click', async function() {
@@ -152,6 +180,7 @@ document.getElementById('videoForm').addEventListener('submit', async function(e
     let scriptText = document.getElementById('script').value.trim();
     videoBtn.disabled = true;
     toggleLoading(true, "🎬 Generating video...");
+    updateProgress(0);
 
     try {
         if (!scriptText) {
@@ -161,6 +190,13 @@ document.getElementById('videoForm').addEventListener('submit', async function(e
 
         const allImages = [...dalleImages, ...urls];
 
+        // Simulated progress (replace with server events if available)
+        let percent = 0;
+        const fakeProgress = setInterval(() => {
+            percent += 10;
+            if (percent <= 90) updateProgress(percent);
+        }, 800);
+
         const response = await fetch('/generate_video', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -168,8 +204,10 @@ document.getElementById('videoForm').addEventListener('submit', async function(e
         });
 
         const data = await response.json();
+        clearInterval(fakeProgress);
 
         if (data.video_file) {
+            updateProgress(100);
             successEl.textContent = '✅ Video generated successfully!';
             videoEl.src = `/download/${data.video_file}`;
             videoEl.style.display = 'block';
@@ -177,10 +215,12 @@ document.getElementById('videoForm').addEventListener('submit', async function(e
             downloadEl.style.display = 'block';
         } else {
             errorEl.textContent = '❌ Video generation failed: ' + (data.error || 'Unknown error');
+            document.getElementById('progressContainer').style.display = "none";
         }
     } catch (err) {
         console.error(err);
         errorEl.textContent = '❌ Failed to generate video. Please try again.';
+        document.getElementById('progressContainer').style.display = "none";
     } finally {
         videoBtn.disabled = false;
         toggleLoading(false);
