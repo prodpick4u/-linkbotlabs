@@ -13,6 +13,3 @@ beautifulsoup4==4.13.4
 
 # Environment variables
 python-dotenv==1.1.1
-
-# OpenAI API (for script generation)
-openai==1.101.0
