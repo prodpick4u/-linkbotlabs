@@ -66,19 +66,25 @@ def generate_video_page():
         return jsonify({"error": "Unauthorized"}), 401
 
     data = request.get_json()
-    urls = data.get("urls", [])
+    urls = data.get("urls", [])  # product URLs + DALL·E images
     script_text = data.get("script", "")
 
     if not urls or not script_text:
         return jsonify({"error": "Missing URLs or script"}), 400
 
     try:
-        # Extract first image from each URL
         image_urls = []
         for url in urls:
-            img_url = extract_image_url(url)
-            if img_url:
-                image_urls.append(img_url)
+            if url.startswith("http"):
+                if url.endswith((".jpg", ".jpeg", ".png", ".webp")):
+                    # Already an image (DALL·E)
+                    image_urls.append(url)
+                else:
+                    # Product page: extract first image
+                    img_url = extract_image_url(url)
+                    if img_url:
+                        image_urls.append(img_url)
+
         if not image_urls:
             return jsonify({"error": "No images could be extracted from URLs"}), 400
 
@@ -89,6 +95,30 @@ def generate_video_page():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# ----------------------------
+# Generate text/script page
+# ----------------------------
+@app.route("/generate_text", methods=["GET", "POST"])
+def generate_text_page():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    output_text = None
+    error = None
+    if request.method == "POST":
+        product_url = request.form.get("product_url")
+        if not product_url:
+            error = "❌ Please enter a product URL."
+        else:
+            try:
+                # Use Puter.js GPT-5 via JS in browser or call OpenAI API here
+                # For simplicity, just return a placeholder
+                output_text = f"Generated script for {product_url} (replace with real GPT call)"
+            except Exception as e:
+                error = f"❌ Script generation failed: {str(e)}"
+
+    return render_template("generate_text.html", output_text=output_text, error=error)
 
 # ----------------------------
 # Download generated video
