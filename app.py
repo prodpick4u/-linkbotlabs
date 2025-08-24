@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template
 from PIL import Image
 import requests
 from io import BytesIO
@@ -7,6 +7,7 @@ import subprocess
 import textwrap
 
 app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET", "supersecretkey")
 TMP_DIR = "/tmp"
 os.makedirs(TMP_DIR, exist_ok=True)
 
@@ -83,38 +84,31 @@ def generate_video(image_urls, script_text=None, voiceover_path=None, output_fil
     return video_path
 
 # ----------------------------
-# Flask Route
+# Routes
 # ----------------------------
+@app.route("/", methods=["GET"])
+def home():
+    return render_template("dashboard.html")  # Put your Puter.js HTML here in templates/
+
 @app.route("/generate_video", methods=["POST"])
 def generate_video_route():
     try:
-        urls = request.form.get("urls")
-        script_text = request.form.get("script", "")
-        voice_file = request.files.get("voiceover")
-
+        data = request.get_json()
+        urls = data.get("urls", [])
+        script_text = data.get("script", "")
         if not urls:
             return jsonify({"error": "No image URLs provided"}), 400
 
-        urls = list(set(eval(urls)))  # convert stringified list to Python list and remove duplicates
-
-        voice_path = None
-        if voice_file:
-            voice_path = os.path.join(TMP_DIR, "voice.mp3")
-            voice_file.save(voice_path)
-
-        video_path = generate_video(urls, script_text=script_text, voiceover_path=voice_path)
+        video_path = generate_video(urls, script_text=script_text)
         return jsonify({"video_file": os.path.basename(video_path)})
-
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# ----------------------------
-# Download Route
-# ----------------------------
 @app.route("/download/<filename>")
 def download_video(filename):
     return send_from_directory(TMP_DIR, filename, as_attachment=True)
 
 # ----------------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=3000, debug=True)
+    port = int(os.environ.get("PORT", 3000))  # Render dynamic port
+    app.run(host="0.0.0.0", port=port, debug=True)
