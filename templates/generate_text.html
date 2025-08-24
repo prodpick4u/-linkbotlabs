@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Generate Script - LinkBotLabs</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://js.puter.com/v2/"></script>
 <style>
     body {
         font-family: 'Inter', sans-serif;
@@ -35,7 +36,7 @@
         flex-direction: column;
         gap: 15px;
     }
-    input[type="text"] {
+    input[type="text"], textarea {
         padding: 10px;
         font-size: 16px;
         border-radius: 6px;
@@ -43,11 +44,6 @@
         width: 100%;
     }
     textarea {
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        width: 100%;
         height: 200px;
         resize: vertical;
     }
@@ -88,20 +84,45 @@
     <h1>Generate TikTok Script</h1>
 </header>
 <main>
-    {% if error %}
-        <div class="error">{{ error }}</div>
-    {% endif %}
-    <form method="POST">
+    <div class="error" id="error"></div>
+    <form id="scriptForm">
         <label for="product_url">Product URL:</label>
         <input type="text" name="product_url" id="product_url" placeholder="Enter product page URL" required>
         <button type="submit">Generate Script</button>
     </form>
 
-    {% if output_text %}
-        <h2>Generated Script:</h2>
-        <textarea readonly>{{ output_text }}</textarea>
-    {% endif %}
+    <h2>Generated Script:</h2>
+    <textarea id="output_text" readonly></textarea>
 </main>
 <a href="/dashboard" class="logout">Back to Dashboard</a>
+
+<script>
+document.getElementById('scriptForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const url = document.getElementById('product_url').value.trim();
+    const errorEl = document.getElementById('error');
+    const outputEl = document.getElementById('output_text');
+    errorEl.textContent = '';
+    outputEl.value = '';
+
+    if(!url){
+        errorEl.textContent = '❌ Please enter a product URL.';
+        return;
+    }
+
+    try {
+        const prompt = `Write an engaging TikTok-style narration for the product page: ${url}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
+
+        // Call Puter.js AI
+        const response = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+
+        outputEl.value = response;
+
+    } catch (err) {
+        console.error(err);
+        errorEl.textContent = '❌ Failed to generate script. Please try again.';
+    }
+});
+</script>
 </body>
 </html>
