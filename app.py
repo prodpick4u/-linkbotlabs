@@ -1,8 +1,8 @@
 from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory, jsonify
 import os
-import requests
+from video_creator_dynamic import generate_video_from_urls
 from bs4 import BeautifulSoup
-from video_creator_dynamic import generate_video_from_urls  # your FFmpeg+TTS video generator
+import requests
 
 # ----------------------------
 # Flask Setup
@@ -66,7 +66,7 @@ def generate_video_page():
         return jsonify({"error": "Unauthorized"}), 401
 
     data = request.get_json()
-    urls = data.get("urls", [])  # product URLs + DALL·E images
+    urls = data.get("urls", [])
     script_text = data.get("script", "")
 
     if not urls or not script_text:
@@ -88,7 +88,6 @@ def generate_video_page():
         if not image_urls:
             return jsonify({"error": "No images could be extracted from URLs"}), 400
 
-        # Generate video (FFmpeg + TTS)
         video_path = generate_video_from_urls(image_urls, script_text=script_text)
         video_file = os.path.basename(video_path)
         return jsonify({"video_file": video_file})
@@ -112,9 +111,7 @@ def generate_text_page():
             error = "❌ Please enter a product URL."
         else:
             try:
-                # Use Puter.js GPT-5 via JS in browser or call OpenAI API here
-                # For simplicity, just return a placeholder
-                output_text = f"Generated script for {product_url} (replace with real GPT call)"
+                output_text = f"Generated script for {product_url} (replace with GPT/PUTER call)"
             except Exception as e:
                 error = f"❌ Script generation failed: {str(e)}"
 
