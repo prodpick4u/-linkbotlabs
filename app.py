@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template, jsonify, send_from_directory
+from flask import Flask, request, render_template, jsonify, send_from_directory, session, redirect, url_for
 from bs4 import BeautifulSoup
 import requests
 from video_creator_dynamic import generate_video_from_urls  # your TTS + video logic
@@ -90,5 +90,16 @@ def generate_video():
 def download_video(filename):
     return send_from_directory("/tmp", filename, as_attachment=True)
 
+# ----------------------------
+# Real Logout Route (clears session)
+# ----------------------------
+@app.route("/logout")
+def logout():
+    session.clear()  # clear all stored session data
+    return redirect(url_for("dashboard"))  # send back to dashboard
+
+# ----------------------------
+# Main
+# ----------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000, debug=True)
