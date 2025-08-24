@@ -10,8 +10,8 @@ import textwrap
 TMP_DIR = "/tmp"
 os.makedirs(TMP_DIR, exist_ok=True)
 
-# OpenAI client
-client = OpenAI()
+# 
+
 
 # ----------------------------
 # Download + Prepare Image
