@@ -1,115 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Video Generator Dashboard</title>
-<script src="https://js.puter.com/v2/"></script>
-<style>
-body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
-.container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
-input[type="text"], textarea { width: 100%; padding: 10px; margin: 5px 0 15px 0; border-radius: 4px; border: 1px solid #ccc; }
-button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
-button:hover { background: #0056b3; }
-.error { color: red; margin-bottom: 15px; }
-.success { color: green; margin-bottom: 15px; }
-video, img { width: 100%; margin-top: 15px; border-radius: 6px; }
-#dalle_images img { margin-bottom: 10px; }
-</style>
-</head>
-<body>
-<div class="container">
-    <h2>Welcome, {{ user }}</h2>
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+from flask import Flask, request, jsonify, send_from_directory
+import os
+import subprocess
+from PIL import Image
+from io import BytesIO
+import requests
+import textwrap
 
-    <div class="error" id="error"></div>
-    <div class="success" id="success"></div>
+app = Flask(__name__)
+TMP_DIR = "/tmp"
+os.makedirs(TMP_DIR, exist_ok=True)
 
-    <form id="videoForm">
-        <label for="urls">Product Page URLs (comma separated):</label>
-        <input type="text" id="urls" placeholder="https://example.com/product1, https://example.com/product2" required>
+# Helper: download and prepare image
+def download_and_prepare_image(url, filename):
+    path = os.path.join(TMP_DIR, filename)
+    try:
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+        img = Image.open(BytesIO(resp.content))
+        if img.mode in ("P", "RGBA"):
+            img = img.convert("RGB")
+        img.save(path, "JPEG")
+        return path
+    except Exception as e:
+        raise RuntimeError(f"Failed image: {e}")
 
-        <label for="script">Optional Script:</label>
-        <textarea id="script" rows="4" placeholder="Enter text for narration"></textarea>
-
-        <label for="dalle_prompt">Optional DALL·E 3 Images:</label>
-        <input type="text" id="dalle_prompt" placeholder="Describe an image to include">
-        <button type="button" id="generateDalleBtn">Generate Image</button>
-        <div id="dalle_images"></div>
-
-        <button type="submit">Generate Video</button>
-    </form>
-
-    <video id="video_preview" controls style="display:none;"></video>
-</div>
-
-<script>
-let dalleImages = [];
-let generatingImage = false;
-
-document.getElementById('generateDalleBtn').addEventListener('click', async function() {
-    const prompt = document.getElementById('dalle_prompt').value.trim();
-    if (!prompt) return alert('Enter a prompt');
-    if (generatingImage) return alert('Please wait, generating image...');
+# Generate video (same as before)
+def generate_video(image_urls, script_text=None, output_filename="output.mp4"):
+    image_files = [download_and_prepare_image(url, f"frame_{i}.jpg") for i, url in enumerate(image_urls, 1)]
     
-    generatingImage = true;
-    try {
-        const imgEl = await puter.ai.txt2img(prompt); // DALL·E 3
-        document.getElementById('dalle_images').appendChild(imgEl);
-        dalleImages.push(imgEl.src);
-    } catch (err) {
-        console.error(err);
-        alert('Failed to generate image. Try again.');
-    } finally {
-        generatingImage = false;
-    }
-});
+    # Create FFmpeg input list
+    list_file = os.path.join(TMP_DIR, "images.txt")
+    with open(list_file, "w") as f:
+        for img in image_files:
+            f.write(f"file '{img}'\n")
+            f.write("duration 3\n")
+        f.write(f"file '{image_files[-1]}'\n")  # last frame hold
 
-document.getElementById('videoForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const errorEl = document.getElementById('error');
-    const successEl = document.getElementById('success');
-    const videoEl = document.getElementById('video_preview');
-    errorEl.textContent = '';
-    successEl.textContent = '';
-    videoEl.style.display = 'none';
-    videoEl.src = '';
+    video_path = os.path.join(TMP_DIR, output_filename)
+    cmd = [
+        "ffmpeg", "-y", "-f", "concat", "-safe", "0",
+        "-i", list_file,
+        "-vf", "scale=1080:-2:force_original_aspect_ratio=decrease,"
+               "pad=1080:1920:(ow-iw)/2:(oh-ih)/2,format=yuv420p",
+        "-pix_fmt", "yuv420p",
+        video_path
+    ]
+    subprocess.run(cmd, check=True)
+    
+    # Add subtitles if provided
+    if script_text:
+        wrapped = textwrap.fill(script_text, width=40)
+        subtitle_file = os.path.join(TMP_DIR, "subtitles.srt")
+        with open(subtitle_file, "w") as srt:
+            srt.write("1\n00:00:00,000 --> 00:00:10,000\n" + wrapped + "\n")
+        subtitled_video = os.path.join(TMP_DIR, f"subtitled_{output_filename}")
+        subprocess.run([
+            "ffmpeg", "-y",
+            "-i", video_path,
+            "-vf", f"subtitles={subtitle_file}",
+            subtitled_video
+        ], check=True)
+        video_path = subtitled_video
 
-    let urls = document.getElementById('urls').value.split(',').map(u => u.trim()).filter(Boolean);
-    if (!urls.length) {
-        errorEl.textContent = '❌ Please enter at least one URL.';
-        return;
-    }
+    return video_path
 
-    let scriptText = document.getElementById('script').value.trim();
-    try {
-        if (!scriptText) {
-            const prompt = `Write an engaging TikTok-style narration for these product pages: ${urls.join(', ')}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
-            scriptText = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
-        }
+# Updated route: accept JSON
+@app.route("/generate_video", methods=["POST"])
+def generate_video_route():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No JSON payload provided"}), 400
 
-        // Combine product images + DALL·E images
-        const allImages = [...dalleImages, ...urls];
+        urls = data.get("urls", [])
+        script_text = data.get("script", "")
 
-        const response = await fetch('/generate_video', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ urls: allImages, script: scriptText })
-        });
+        if not urls:
+            return jsonify({"error": "No image URLs provided"}), 400
 
-        const data = await response.json();
+        video_path = generate_video(urls, script_text=script_text)
+        return jsonify({"video_file": os.path.basename(video_path)})
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-        if (data.video_file) {
-            successEl.textContent = '✅ Video generated successfully!';
-            videoEl.src = `/download/${data.video_file}`;
-            videoEl.style.display = 'block';
-        } else {
-            errorEl.textContent = '❌ Video generation failed: ' + (data.error || 'Unknown error');
-        }
-    } catch (err) {
-        console.error(err);
-        errorEl.textContent = '❌ Failed to generate video. Please try again.';
-    }
-});
-</script>
-</body>
-</html>
+# Download route
+@app.route("/download/<filename>")
+def download_video(filename):
+    return send_from_directory(TMP_DIR, filename, as_attachment=True)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=3000, debug=True)
