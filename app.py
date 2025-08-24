@@ -12,9 +12,9 @@ app.secret_key = os.getenv("FLASK_SECRET", "supersecretkey")
 os.makedirs("/tmp", exist_ok=True)
 
 # ----------------------------
-# Simple subscription simulation
+# Demo subscribers
 # ----------------------------
-SUBSCRIBERS = {"user@example.com": "password123"}  # demo subscribers
+SUBSCRIBERS = {"user@example.com": "password123"}
 
 # ----------------------------
 # Helper: Extract first image from product page
@@ -58,17 +58,17 @@ def logout():
     return redirect(url_for("login"))
 
 # ----------------------------
-# Generate TikTok Video (JSON POST)
+# Generate TikTok Video (POST JSON)
 # ----------------------------
-@app.route("/generate_video", methods=["GET", "POST"])
+@app.route("/generate_video", methods=["POST"])
 def generate_video_page():
     if "user" not in session:
         return jsonify({"error": "Unauthorized"}), 401
 
-    if request.method == "GET":
-        return "Send a POST request with JSON {urls: [], script: 'text'}"
-
     data = request.get_json()
+    if not data:
+        return jsonify({"error": "Send JSON with urls and script"}), 400
+
     urls = data.get("urls", [])
     script_text = data.get("script", "")
 
@@ -80,10 +80,8 @@ def generate_video_page():
         for url in urls:
             if url.startswith("http"):
                 if url.endswith((".jpg", ".jpeg", ".png", ".webp")):
-                    # Already an image (DALL·E)
-                    image_urls.append(url)
+                    image_urls.append(url)  # DALL·E or direct image
                 else:
-                    # Product page: extract first image
                     img_url = extract_image_url(url)
                     if img_url:
                         image_urls.append(img_url)
@@ -92,8 +90,7 @@ def generate_video_page():
             return jsonify({"error": "No images could be extracted from URLs"}), 400
 
         video_path = generate_video_from_urls(image_urls, script_text=script_text)
-        video_file = os.path.basename(video_path)
-        return jsonify({"video_file": video_file})
+        return jsonify({"video_file": os.path.basename(video_path)})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -114,7 +111,7 @@ def generate_text_page():
             error = "❌ Please enter a product URL."
         else:
             try:
-                # Placeholder: replace with GPT or PUTER API call
+                # Placeholder: replace with GPT/DALL·E API call
                 output_text = f"Generated script for {product_url}"
             except Exception as e:
                 error = f"❌ Script generation failed: {str(e)}"
