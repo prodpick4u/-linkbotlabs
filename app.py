@@ -1,8 +1,8 @@
-from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory, jsonify
 import os
-from video_creator_dynamic import generate_video_from_urls
+from flask import Flask, request, render_template, session, redirect, url_for, send_from_directory, jsonify
 from bs4 import BeautifulSoup
 import requests
+from video_creator_dynamic import generate_video_from_urls
 
 # ----------------------------
 # Flask Setup
@@ -60,10 +60,13 @@ def logout():
 # ----------------------------
 # Generate TikTok Video (JSON POST)
 # ----------------------------
-@app.route("/generate_video", methods=["POST"])
+@app.route("/generate_video", methods=["GET", "POST"])
 def generate_video_page():
     if "user" not in session:
         return jsonify({"error": "Unauthorized"}), 401
+
+    if request.method == "GET":
+        return "Send a POST request with JSON {urls: [], script: 'text'}"
 
     data = request.get_json()
     urls = data.get("urls", [])
@@ -111,7 +114,8 @@ def generate_text_page():
             error = "❌ Please enter a product URL."
         else:
             try:
-                output_text = f"Generated script for {product_url} (replace with GPT/PUTER call)"
+                # Placeholder: replace with GPT or PUTER API call
+                output_text = f"Generated script for {product_url}"
             except Exception as e:
                 error = f"❌ Script generation failed: {str(e)}"
 
