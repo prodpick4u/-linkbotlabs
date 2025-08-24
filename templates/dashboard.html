@@ -113,7 +113,7 @@
 
 <script>
   // ===== Password Logic =====
-  const correctPassword = "supersecret"; // set your password
+  const correctPassword = "supersecret"; // change to your password
   const overlay = document.getElementById('passwordOverlay');
   const input = document.getElementById('dashboardPassword');
   const btn = document.getElementById('submitPassword');
@@ -147,11 +147,11 @@
     if (generatingImage) return;
 
     generatingImage = true;
-    document.getElementById('loading').style.display = 'block';
+    toggleLoading(true, "🎨 Generating image...");
     this.disabled = true;
 
     try {
-      // ✅ Puter.js DALL·E 3 call
+      // ✅ DALL·E 3 via Puter.js
       const imgEl = await puter.ai.txt2img(prompt);
       document.getElementById('dalle_images').appendChild(imgEl);
       dalleImages.push(imgEl.src);
@@ -160,7 +160,7 @@
       alert('❌ Failed to generate image. Try again.');
     } finally {
       generatingImage = false;
-      document.getElementById('loading').style.display = 'none';
+      toggleLoading(false);
       this.disabled = false;
     }
   });
@@ -171,10 +171,9 @@
     if (!urls.length) return alert('❌ Please enter at least one URL');
 
     let scriptText = document.getElementById('script').value.trim();
-    document.getElementById('loading').style.display = 'block';
+    toggleLoading(true, "🎬 Generating video...");
 
     try {
-      // Auto-generate script if empty
       if (!scriptText) {
         const prompt = `Write an engaging TikTok-style narration for these product pages: ${urls.join(', ')}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
         scriptText = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
@@ -189,7 +188,7 @@
       });
 
       const data = await response.json();
-      document.getElementById('loading').style.display = 'none';
+      toggleLoading(false);
 
       if (data.video_file) {
         const videoEl = document.getElementById('video_preview');
@@ -201,9 +200,9 @@
       } else {
         alert('❌ Video generation failed: ' + (data.error || 'Unknown error'));
       }
-    } catch (err) {
+    } catch(err) {
       console.error(err);
-      document.getElementById('loading').style.display = 'none';
+      toggleLoading(false);
       alert('❌ Failed to generate video. Please try again.');
     }
   });
