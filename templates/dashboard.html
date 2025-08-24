@@ -12,10 +12,12 @@ input, textarea { width: 100%; padding: 10px; margin: 5px 0 15px 0; border-radiu
 button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
 button:hover { background: #0056b3; }
 video, img { width: 100%; margin-top: 15px; border-radius: 6px; }
-#dalle_images img { margin-bottom: 10px; }
 .error { color: red; }
 .success { color: green; }
-.step { margin-bottom: 8px; }
+.progress-container { margin-top: 10px; }
+.progress-bar { width: 0%; height: 20px; background: #28a745; border-radius: 4px; transition: width 0.3s; }
+.progress-text { margin-top: 5px; font-size: 0.9em; }
+#dalle_images img { margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -33,15 +35,16 @@ video, img { width: 100%; margin-top: 15px; border-radius: 6px; }
     <textarea id="script" rows="4" placeholder="Optional: leave blank to auto-generate"></textarea>
 
     <label>Optional DALL·E 3 Image Prompt</label>
-    <input type="text" id="dalle_prompt" placeholder="Describe an image">
+    <input type="text" id="dalle_prompt" placeholder="e.g., 'Modern kitchen with kettle'">
     <button type="button" id="generateDalleBtn">Generate Image</button>
     <div id="dalle_images"></div>
 
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-text" id="progressText">Idle</div>
+    </div>
+
     <button type="button" id="generateVideoBtn">Generate Video</button>
-
-    <h3>Progress:</h3>
-    <div id="video_steps"></div>
-
     <video id="video_preview" controls style="display:none;"></video>
 </div>
 
@@ -69,47 +72,64 @@ document.getElementById('generateDalleBtn').addEventListener('click', async func
 });
 
 // Generate video with progress
-document.getElementById('generateVideoBtn').addEventListener('click', async function() {
+document.getElementById('generateVideoBtn').addEventListener('click', function() {
+    const errorEl = document.getElementById('error');
+    const successEl = document.getElementById('success');
+    const videoEl = document.getElementById('video_preview');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+
+    errorEl.textContent = '';
+    successEl.textContent = '';
+    videoEl.style.display = 'none';
+    videoEl.src = '';
+    progressBar.style.width = '0%';
+    progressText.textContent = 'Starting...';
+
     const urls = document.getElementById('urls').value.split(',').map(u => u.trim()).filter(Boolean);
     const scriptText = document.getElementById('script').value.trim();
-    const videoStepsEl = document.getElementById('video_steps');
-    videoStepsEl.innerHTML = '';
-    document.getElementById('video_preview').style.display = 'none';
 
-    if(!urls.length && !dalleImages.length){
-        alert('❌ Enter at least one URL or DALL·E prompt');
+    if(!urls.length && !dalleImages.length) {
+        errorEl.textContent = '❌ Enter at least one URL or DALL·E prompt.';
         return;
     }
 
-    const data = { urls, dalle_prompts: dalleImages, script: scriptText };
-
+    // SSE connection to backend
     const evtSource = new EventSource('/generate_video_stream');
-    evtSource.onmessage = function(event) {
-        const info = JSON.parse(event.data);
-        let stepDiv = document.querySelector(`[data-step="${info.step}"]`);
-        if(!stepDiv){
-            stepDiv = document.createElement('div');
-            stepDiv.setAttribute('data-step', info.step);
-            stepDiv.classList.add('step');
-            videoStepsEl.appendChild(stepDiv);
-        }
-        stepDiv.textContent = `${info.step}: ${info.progress}%`;
-
-        if(info.video_file){
-            const videoEl = document.getElementById('video_preview');
-            videoEl.src = `/download/${info.video_file}`;
+    evtSource.onopen = () => { progressText.textContent = 'Connected to server...'; };
+    evtSource.onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        progressText.textContent = data.step || 'Processing...';
+        if(data.progress) progressBar.style.width = data.progress + '%';
+        if(data.video_file){
+            successEl.textContent = '✅ Video generated!';
+            videoEl.src = `/download/${data.video_file}`;
             videoEl.style.display = 'block';
+            progressBar.style.width = '100%';
+            progressText.textContent = 'Completed';
+            evtSource.close();
+        }
+        if(data.error){
+            errorEl.textContent = '❌ ' + data.error;
             evtSource.close();
         }
     };
+    evtSource.onerror = (err) => {
+        errorEl.textContent = '❌ Connection error.';
+        evtSource.close();
+    };
 
+    // Send JSON payload
     fetch('/generate_video_stream', {
-        method: 'POST',
+        method:'POST',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(data)
-    });
+        body: JSON.stringify({
+            urls: urls,
+            dalle_prompts: dalleImages,
+            script: scriptText
+        })
+    }).catch(err => { console.error(err); errorEl.textContent='❌ Failed to start generation'; });
 });
 </script>
-
 </body>
 </html>
