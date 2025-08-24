@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Dashboard - LinkBotLabs</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://js.puter.com/v2/"></script>
 <style>
     body {
         font-family: 'Inter', sans-serif;
@@ -23,9 +24,7 @@
         margin: 30px auto;
         padding: 20px;
     }
-    h1 {
-        margin: 0;
-    }
+    h1 { margin: 0; }
     h2 {
         text-align: center;
         color: #333;
@@ -75,9 +74,7 @@
         font-weight: bold;
         font-size: 16px;
     }
-    .logout:hover {
-        text-decoration: underline;
-    }
+    .logout:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -102,8 +99,41 @@
             <div class="card-title">Generate Blog/Script</div>
             <div class="card-desc">Create a 1600-character script from any product URL.</div>
         </a>
+        <a href="#" class="card" onclick="showImageGenerator()">
+            <div class="card-icon">🖼️</div>
+            <div class="card-title">AI Image Generator</div>
+            <div class="card-desc">Generate stunning images with DALL·E 3 instantly.</div>
+        </a>
     </div>
+
+    <div id="imageGenerator" style="display:none; margin-top:30px; text-align:center;">
+        <input type="text" id="image_prompt" placeholder="Describe your image" style="width:60%; padding:10px;"/>
+        <button onclick="generateImage()" style="padding:10px 20px; margin-left:10px;">Generate Image</button>
+        <div id="image_container" style="margin-top:20px;"></div>
+    </div>
+
     <a href="/logout" class="logout">Logout</a>
 </main>
+
+<script>
+function showImageGenerator() {
+    document.getElementById('imageGenerator').style.display = 'block';
+}
+
+async function generateImage() {
+    const prompt = document.getElementById('image_prompt').value.trim();
+    const container = document.getElementById('image_container');
+    container.innerHTML = '';
+    if (!prompt) return alert('Please enter an image description.');
+
+    try {
+        const imgEl = await puter.ai.txt2img(prompt); // DALL·E 3
+        container.appendChild(imgEl);
+    } catch (err) {
+        console.error(err);
+        alert('Failed to generate image.');
+    }
+}
+</script>
 </body>
 </html>
