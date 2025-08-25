@@ -30,6 +30,7 @@ def download_image(url, filename):
 # Generate video using FFmpeg
 # ----------------------------
 def generate_video(image_files, script_text="", voice_file=None, output_filename="output.mp4"):
+    # Create FFmpeg input list
     list_file = os.path.join(TMP_DIR, "images.txt")
     with open(list_file, "w") as f:
         for img in image_files:
@@ -46,7 +47,7 @@ def generate_video(image_files, script_text="", voice_file=None, output_filename
         video_path
     ], check=True)
 
-    # Add subtitles if script_text provided
+    # Add subtitles
     if script_text:
         srt_file = os.path.join(TMP_DIR,"subtitles.srt")
         with open(srt_file,"w") as srt:
@@ -58,7 +59,7 @@ def generate_video(image_files, script_text="", voice_file=None, output_filename
         ], check=True)
         video_path = subtitled
 
-    # Merge voiceover if provided
+    # Merge TTS voiceover
     if voice_file:
         voice_path = os.path.join(TMP_DIR, "voice.mp3")
         voice_file.save(voice_path)
@@ -80,7 +81,7 @@ def generate_video_endpoint():
         urls = json.loads(request.form.get("urls","[]"))
         script_text = request.form.get("script","")
         voice_file = request.files.get("voiceover")
-        dalle_urls = json.loads(request.form.get("dalle_urls","[]"))  # URLs from dashboard DALL·E images
+        dalle_urls = json.loads(request.form.get("dalle_urls","[]"))
 
         image_files = []
 
@@ -92,7 +93,7 @@ def generate_video_endpoint():
             except Exception as e:
                 print(f"Warning: failed to download {url} - {e}")
 
-        # Add frontend DALL·E images
+        # Download DALL·E images from dashboard
         for idx, dalle_url in enumerate(dalle_urls):
             try:
                 img_path = download_image(dalle_url, f"dalle_{idx}.jpg")
@@ -103,7 +104,6 @@ def generate_video_endpoint():
         if not image_files:
             return jsonify({"error":"No valid images to generate video"}), 400
 
-        # Generate video
         video_file = generate_video(image_files, script_text, voice_file=voice_file, output_filename="final_video.mp4")
         return jsonify({"video_file": os.path.basename(video_file)})
 
@@ -116,7 +116,7 @@ def generate_video_endpoint():
 # ----------------------------
 @app.route("/")
 def home():
-    return render_template("dashboard.html")  # Your HTML from previous step
+    return render_template("dashboard.html")  # Dashboard HTML you already created
 
 # ----------------------------
 # Download generated video
