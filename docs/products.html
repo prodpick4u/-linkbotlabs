@@ -47,6 +47,7 @@ h2 { font-size:1.6rem; margin-top:40px; }
 #chatPanel header {background:#5c00b3; padding:10px; text-align:center; font-weight:700;}
 #chatPanel .messages {flex:1; padding:10px; overflow-y:auto; font-size:13px;}
 #chatPanel input {padding:8px 10px; border:none; border-radius:8px; margin:10px; width: calc(100% - 40px);}
+.email-button {background:#7f33ff; color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer;}
 @media(max-width:900px){ .split-container{flex-direction:column;} }
 </style>
 </head>
@@ -119,21 +120,28 @@ Dynamic AI-powered product showcase with trending insights, affiliate links, and
     <input type="text" id="chatInput" placeholder="Type your question...">
 </div>
 
+<!-- Email / Developer contact -->
+<div class="glass">
+<h2>📧 Contact Developer / Subscribe</h2>
+<input type="email" id="emailInput" placeholder="Your email">
+<button class="email-button" onclick="captureEmail(document.getElementById('emailInput').value)">Subscribe / Contact</button>
+<p>Or email developer directly: <a href="mailto:omnistall70@gmail.com" style="color:#fff;">omnistall70@gmail.com</a></p>
+</div>
+
 <script src="https://js.puter.com/v2/"></script>
 <script>
-// Affiliate logic
+// ===== Affiliate logic =====
 let AFFILIATE_TAG = "mychanneld-20";
 let VALID_CODES = ["starter123","user456","demo789"];
 let userAffiliateTag = localStorage.getItem('affiliateTag') || "";
 
-// Access code
 function checkAccessCode(){
     const code = document.getElementById("accessCode").value.trim();
     if(VALID_CODES.includes(code)){
         document.getElementById("affiliateFormSection").style.display="block";
         document.getElementById("accessOutput").innerText="✅ Access granted! Register your affiliate ID.";
     } else {
-        document.getElementById("accessOutput").innerText="❌ Invalid code.";
+               document.getElementById("accessOutput").innerText="❌ Invalid code.";
     }
 }
 
@@ -149,24 +157,25 @@ function saveAffiliate(){
     }
 }
 
-// Product data
+// ===== Product data =====
 let AMAZON_PRODUCTS = [
     {title:"Instant Pot Duo 7-in-1", price:"$89", desc:"Multi-functional cooker.", url:"https://amzn.to/45IyLkt", category:"kitchen"},
     {title:"Air Fryer", price:"$279", desc:"Healthy frying alternative.", url:"https://amzn.to/3JogHVi", category:"kitchen"},
     {title:"KitchenAid Mixer", price:"$379", desc:"Stand mixer for baking.", url:"https://amzn.to/3HHSZmj", category:"kitchen"}
 ];
+
 let TEMU_PRODUCTS = [
     {title:"Multi Rice Cooker", price:"Varies", desc:"Cook rice easily.", url:"https://share.temu.com/jwZL6Tbh2SB", category:"kitchen"},
     {title:"Foldable Kettle", price:"Varies", desc:"Compact kettle.", url:"https://share.temu.com/GZe6nSeHcEB", category:"kitchen"},
     {title:"Food Processor", price:"Varies", desc:"Chop and blend food.", url:"https://share.temu.com/xnKAVQF3V7B", category:"kitchen"}
 ];
 
-// AI-enhanced descriptions & tips
+// ===== AI-enhanced descriptions & tips =====
 async function enhanceProducts(products){
     for(let p of products){
         try{
             const res = await puter.ai.chat(
-                `Write a punchy 2-sentence product description for "${p.title}". Include tip, price trends, and daily deal suggestion.`,
+                `Write a punchy 2-sentence product description for "${p.title}". Include tip, price trends, and daily deal suggestion using GPT-5, Claude, or Gemini.`,
                 { model:"gpt-5" }
             );
             if(res.text) p.desc = res.text;
@@ -174,7 +183,7 @@ async function enhanceProducts(products){
     }
 }
 
-// Render products
+// ===== Render products =====
 function renderProducts(products, containerId){
     const container = document.getElementById(containerId);
     container.innerHTML = "";
@@ -189,7 +198,7 @@ function renderProducts(products, containerId){
     });
 }
 
-// Filter by category
+// ===== Filter & search =====
 function filterProducts(){
     const amazonCat = document.getElementById("amazon-categories").value;
     const temuCat = document.getElementById("temu-categories").value;
@@ -197,101 +206,18 @@ function filterProducts(){
     renderProducts(TEMU_PRODUCTS.filter(p=>p.category===temuCat), "temu-products");
 }
 
-// Search filter
 document.getElementById("searchBox").addEventListener("input", (e)=>{
     const q = e.target.value.toLowerCase();
     renderProducts(AMAZON_PRODUCTS.filter(p=>p.title.toLowerCase().includes(q)), "amazon-products");
     renderProducts(TEMU_PRODUCTS.filter(p=>p.title.toLowerCase().includes(q)), "temu-products");
 });
 
-// Dropdown change
 document.getElementById("amazon-categories").addEventListener("change", filterProducts);
 document.getElementById("temu-categories").addEventListener("change", filterProducts);
 
-// Initial render with AI enhancement
+// ===== Initial AI render =====
 (async function(){
     await enhanceProducts(AMAZON_PRODUCTS);
     await enhanceProducts(TEMU_PRODUCTS);
     filterProducts();
 })();
-
-// ===== Chat panel logic =====
-    const chatButton = document.getElementById("chatButton");
-const chatPanel = document.getElementById("chatPanel");
-const chatMessages = document.getElementById("chatMessages");
-const chatInput = document.getElementById("chatInput");
-
-// Toggle chat panel
-chatButton.addEventListener("click", ()=> {
-    chatPanel.style.display = chatPanel.style.display==="flex"?"none":"flex";
-    chatPanel.style.flexDirection="column";
-});
-
-// Handle user messages
-chatInput.addEventListener("keypress", async (e)=>{
-    if(e.key === "Enter" && chatInput.value.trim()!==""){
-        const msg = chatInput.value.trim();
-        chatMessages.innerHTML += `<div style="margin-bottom:8px;"><strong>You:</strong> ${msg}</div>`;
-        chatInput.value="";
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        // Send message to AI
-        try{
-            const res = await puter.ai.chat(msg, {model:"gpt-5"});
-            chatMessages.innerHTML += `<div style="margin-bottom:8px;"><strong>AI:</strong> ${res.text}</div>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }catch(err){
-            chatMessages.innerHTML += `<div style="margin-bottom:8px;color:red;"><strong>AI Error:</strong> Could not respond.</div>`;
-        }
-    }
-});
-
-// ===== Weekly product update simulation =====
-async function weeklyUpdate(){
-    try{
-        const weeklyTip = await puter.ai.chat("Give a tip for trending products this week with hot picks for Amazon and Temu", {model:"gpt-5"});
-        document.getElementById("affiliateBanner").innerText = `📈 Weekly Hot Picks & Tips: ${weeklyTip.text}`;
-    }catch(e){
-        console.warn("Weekly AI update error:", e);
-    }
-}
-weeklyUpdate();
-
-// ===== DALL-E / Product images (optional AI-generated visuals) =====
-async function generateImages(){
-    for(let p of [...AMAZON_PRODUCTS,...TEMU_PRODUCTS]){
-        try{
-            const imgEl = await puter.ai.txt2img(`Professional product photo of ${p.title}`);
-            imgEl.style.width="100%";
-            const containerId = AMAZON_PRODUCTS.includes(p)?"amazon-products":"temu-products";
-            const container = document.getElementById(containerId);
-            const cards = container.getElementsByClassName("card");
-            for(let card of cards){
-                if(card.querySelector(".product-title").innerText === p.title){
-                    card.insertBefore(imgEl, card.firstChild);
-                }
-            }
-        }catch(e){ console.warn("Image AI error:", e);}
-    }
-}
-generateImages();
-
-// ===== Optional Email Capture =====
-function captureEmail(email){
-    if(email.trim()==="") return;
-    // Send email to backend or store for notifications
-    console.log("Captured email:", email); 
-    alert(`Thanks! We'll keep you updated, ${email}`);
-}
-
-// Example email input (optional, can be placed anywhere on page)
-const emailDiv = document.createElement("div");
-emailDiv.className = "glass";
-emailDiv.innerHTML = `<h2>📧 Stay Updated</h2>
-<input type="email" id="emailInput" placeholder="Your email">
-<button onclick="captureEmail(document.getElementById('emailInput').value)">Subscribe</button>`;
-document.body.appendChild(emailDiv);
-
-</script>
-</body>
-</html>
