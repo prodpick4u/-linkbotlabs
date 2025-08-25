@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LinkBotLabs – For Dummies Guide</title>
+<title>LinkBotLabs – For Dummies Guide (Multi-AI)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
   body { font-family:'Inter',sans-serif; margin:0; padding:1rem; background:#0a0033; color:#fff; line-height:1.6; }
@@ -11,28 +11,37 @@
   a { color:#0ff; text-decoration:none; }
   a:hover { text-decoration:underline; }
   section { margin-bottom:2rem; background:rgba(0,0,0,0.5); padding:1.5rem; border-radius:10px; }
-  ul { padding-left:1.2rem; }
+  ul, ol { padding-left:1.2rem; }
   code { background:rgba(255,255,255,0.1); padding:2px 4px; border-radius:4px; font-family:monospace; }
   .btn { display:inline-block; margin-top:0.5rem; padding:0.6rem 1.2rem; background: linear-gradient(135deg,#6a11cb,#2575fc); color:white; border-radius:6px; font-weight:600; text-decoration:none; cursor:pointer; }
-  .chat-box { background: rgba(0,0,0,0.6); padding:15px; border-radius:8px; max-height:300px; overflow-y:auto; margin-top:10px; }
+  .chat-box { background: rgba(0,0,0,0.6); padding:15px; border-radius:8px; max-height:400px; overflow-y:auto; margin-top:10px; }
   .chat-input { display:flex; gap:5px; margin-top:10px; }
   .chat-input input { flex:1; padding:10px; border-radius:5px; border:none; background: rgba(20,20,20,0.7); color:#fff; }
+  .ai-response { padding:8px; margin:5px 0; border-radius:6px; }
+  .ai-gpt5 { background: rgba(106,17,203,0.3); }
+  .ai-claude { background: rgba(37,117,252,0.3); }
+  .ai-grok { background: rgba(255,153,0,0.3); }
+  .ai-gemini { background: rgba(102,255,153,0.3); }
+  .voice-select { margin-bottom:1rem; }
 </style>
 </head>
 <body>
 
-<h1>📘 LinkBotLabs For Dummies Guide</h1>
-<p>Welcome! This interactive guide will walk you step-by-step through Amazon Affiliate setup, API keys, YouTube integration, and using LinkBotLabs with TTS and AI guidance.</p>
+<h1>📘 LinkBotLabs For Dummies Guide – Multi-AI Powered</h1>
+<p>Interactive guide with dynamic AI content, TTS, and multi-model responses (GPT-5, Claude, Grok, Gemini).</p>
 
-<!-- === Guide Sections === -->
+<!-- Voice Selector -->
+<div class="voice-select">
+<label>Select TTS Voice: </label>
+<select id="voiceSelect"></select>
+</div>
+
+<!-- Guide Sections -->
 <section>
 <h2>1️⃣ Registering for Amazon Affiliate</h2>
-<p>Follow these steps:</p>
 <ol>
   <li>Go to <a href="https://affiliate-program.amazon.com/" target="_blank">Amazon Associates</a>.</li>
-  <li>Click <strong>Sign Up</strong> and log in with your Amazon account.</li>
-  <li>Fill account info and describe your promotion method.</li>
-  <li>Submit application to get your Affiliate Tag (<code>mytag-20</code>).</li>
+  <li>Sign Up → Fill account info → Submit → Get Affiliate Tag (<code>mytag-20</code>).</li>
 </ol>
 <button class="btn" onclick="speakSection(1)">🔊 Read this section</button>
 </section>
@@ -40,9 +49,8 @@
 <section>
 <h2>2️⃣ Getting Amazon Product API Keys</h2>
 <ol>
-  <li>Log in to Amazon Associates → Tools → Product Advertising API → Manage Credentials.</li>
+  <li>Amazon Associates → Tools → Product Advertising API → Manage Credentials.</li>
   <li>Create credentials → Save Access Key ID & Secret Access Key.</li>
-  <li>Use only for displaying product info and linking via your affiliate tag.</li>
 </ol>
 <button class="btn" onclick="speakSection(2)">🔊 Read this section</button>
 </section>
@@ -50,9 +58,8 @@
 <section>
 <h2>3️⃣ Obtaining YouTube API Key</h2>
 <ol>
-  <li>Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a>.</li>
-  <li>Create a new project → Enable YouTube Data API v3.</li>
-  <li>Go to Credentials → Create API Key → Copy it.</li>
+  <li>Google Cloud Console → Create Project → Enable YouTube Data API v3.</li>
+  <li>Create API Key → Copy for LinkBotLabs usage.</li>
 </ol>
 <button class="btn" onclick="speakSection(3)">🔊 Read this section</button>
 </section>
@@ -60,7 +67,7 @@
 <section>
 <h2>4️⃣ How the Demo Works</h2>
 <ul>
-  <li>Browse categories with preloaded products.</li>
+  <li>Browse categories → AI-generated product suggestions.</li>
   <li>Generate SEO reviews & TTS audio.</li>
   <li>Ask AI bot questions for guidance.</li>
 </ul>
@@ -71,8 +78,8 @@
 <h2>5️⃣ Full Tool Operation</h2>
 <ul>
   <li>Automated Amazon product search using API keys.</li>
-  <li>SEO-optimized reviews for each product.</li>
-  <li>TTS audio narration.</li>
+  <li>SEO-optimized reviews per product.</li>
+  <li>TTS narration.</li>
   <li>Video generation & optional YouTube upload.</li>
   <li>Affiliate link integration for monetization.</li>
 </ul>
@@ -80,23 +87,11 @@
 </section>
 
 <section>
-<h2>6️⃣ Tips & Best Practices</h2>
-<ul>
-  <li>Test all affiliate links.</li>
-  <li>Use high-quality images for videos.</li>
-  <li>Follow Amazon policies.</li>
-  <li>Use descriptive keywords for SEO reviews.</li>
-</ul>
-<button class="btn" onclick="speakSection(6)">🔊 Read this section</button>
-</section>
-
-<!-- === AI Chat Assistant === -->
-<section>
-<h2>🤖 Ask the AI Guide</h2>
+<h2>🤖 Ask the AI Guide (Multi-AI)</h2>
 <div id="chatBox" class="chat-box"></div>
 <div class="chat-input">
 <input type="text" id="chatInput" placeholder="Ask a question...">
-<button onclick="askAI()">Send</button>
+<button id="sendBtn">Send</button>
 </div>
 </section>
 
@@ -107,54 +102,63 @@
 
 <script src="https://cdn.jsdelivr.net/npm/puter.js@latest/dist/puter.min.js"></script>
 <script>
-// === Initialize Puter ===
 const puter = new Puter({ debug:true });
-
-// === TTS ===
 let synth = window.speechSynthesis;
+
+// Populate voice select
+function populateVoiceSelects(){
+  let voices = synth.getVoices();
+  if(!voices.length){ setTimeout(populateVoiceSelects,100); return; }
+  voices = voices.filter(v=>v.lang.startsWith('en'));
+  const select = document.querySelector('#voiceSelect');
+  select.innerHTML='';
+  voices.forEach(v=>{ const opt=document.createElement('option'); opt.value=v.name; opt.textContent=v.name; select.appendChild(opt); });
+  select.value = voices[0].name;
+}
+if(speechSynthesis.onvoiceschanged!==undefined){ speechSynthesis.onvoiceschanged=populateVoiceSelects; }
+else { populateVoiceSelects(); }
+
+// TTS section reading
 const sectionTexts = {
-  1: "Step one: Registering for Amazon Affiliate. Go to Amazon Associates, sign up, fill account info, and get your affiliate tag.",
-  2: "Step two: Getting Amazon Product API Keys. Log in, create credentials, save your Access Key ID and Secret Access Key.",
-  3: "Step three: Obtaining YouTube API Key. Create project in Google Cloud, enable YouTube Data API v3, and generate API Key.",
-  4: "Step four: How the demo works. Browse categories, generate SEO reviews, TTS audio, and interact with the AI bot.",
-  5: "Step five: Full tool operation. Automated Amazon search, SEO reviews, TTS narration, video generation, YouTube uploads, affiliate integration.",
-  6: "Step six: Tips and best practices. Test links, use high-quality images, follow Amazon policies, use descriptive keywords for SEO."
+  1: "Step one: Registering for Amazon Affiliate...",
+  2: "Step two: Getting Amazon Product API Keys...",
+  3: "Step three: Obtaining YouTube API Key...",
+  4: "Step four: How the demo works...",
+  5: "Step five: Full tool operation..."
 };
 function speakSection(num){
   if(synth.speaking) synth.cancel();
   const utter = new SpeechSynthesisUtterance(sectionTexts[num]);
-  const voices = synth.getVoices().filter(v=>v.lang.startsWith('en'));
-  utter.voice = voices[0];
+  utter.voice = synth.getVoices().find(v=>v.name===document.querySelector('#voiceSelect').value);
   synth.speak(utter);
 }
 
-// === AI Chat Assistant ===
+// Multi-AI Chat
 const chatBox = document.getElementById('chatBox');
 const chatInput = document.getElementById('chatInput');
+document.getElementById('sendBtn').addEventListener('click', askAI);
+chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askAI(); });
 
 async function askAI(){
-  const question = chatInput.value.trim();
-  if(!question) return;
-  const userP = document.createElement('p');
-  userP.style.color="#0f0"; userP.textContent = "You: " + question;
-  chatBox.appendChild(userP);
-  chatBox.scrollTop = chatBox.scrollHeight;
-  chatInput.value = '';
+  const question = chatInput.value.trim(); if(!question) return;
+  const userP=document.createElement('p'); userP.style.color="#0f0"; userP.textContent="You: "+question; chatBox.appendChild(userP);
+  chatInput.value='';
+  chatBox.scrollTop=chatBox.scrollHeight;
 
-  // AI response using Puter.js (GPT-5)
-  const response = await puter.call('gpt-5', `You are a helpful assistant for LinkBotLabs guide. Answer clearly: "${question}"`);
-  const botP = document.createElement('p');
-  botP.style.color="#9cf"; botP.textContent = "AI Guide: " + response.text;
-  chatBox.appendChild(botP);
-  chatBox.scrollTop = chatBox.scrollHeight;
-
-  // TTS
-  if(synth.speaking) synth.cancel();
-  const utter = new SpeechSynthesisUtterance(response.text);
-  utter.voice = synth.getVoices().filter(v=>v.lang.startsWith('en'))[0];
-  synth.speak(utter);
+  const aiModels = ['gpt-5','claude','grok','gemini'];
+  for(const model of aiModels){
+    const response = await puter.call(model, `Answer clearly: "${question}"`);
+    const div = document.createElement('div'); 
+    div.className='ai-response ai-'+model.toLowerCase();
+    div.textContent = model.toUpperCase() + ": " + response.text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    // TTS for each AI (optional, sequential)
+    const utter = new SpeechSynthesisUtterance(response.text);
+    utter.voice = synth.getVoices().find(v=>v.name===document.querySelector('#voiceSelect').value);
+    synth.speak(utter);
+  }
 }
 </script>
-
 </body>
 </html>
