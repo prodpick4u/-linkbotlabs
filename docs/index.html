@@ -183,4 +183,142 @@ alt="LinkBotLabs Banner" style="width:100%; height:auto; display:block;">
 <section>
 <h2>💬 User Comments & Reviews</h2>
 <div class="comments">
-<p>
+<p>“The AI product recommendations are spot on. My affiliate sales went up immediately!” – <strong>Mark S.</strong></p>
+<p>“I love the desktop demo. Everything works seamlessly and the interface is very clean.” – <strong>Lucy P.</strong></p>
+</div>
+</section>
+<footer>
+<p>© 2025 LinkBotLabs. All Rights Reserved.</p>
+<p class="contact-form">
+<input type="email" placeholder="Your email">
+<button>Subscribe</button>
+</p>
+</footer>
+<div class="ai-chat" id="aiChat">💬</div>
+<script>
+// TTS Welcome Message
+const ttsBtn = document.getElementById('ttsBtn');
+ttsBtn.addEventListener('click',()=>{
+  const msg = new SpeechSynthesisUtterance("Welcome to LinkBotLabs! Explore top products, generate reviews, and create automated videos easily.");
+  msg.lang = 'en-US';
+  speechSynthesis.speak(msg);
+});
+
+// AI Chat Button (Multi-Model)
+const aiChat = document.getElementById('aiChat');
+aiChat.addEventListener('click', async ()=>{
+    const userQuestion = prompt("🤖 Ask a product question or request recommendations:");
+    if(!userQuestion) return;
+
+    const models = ["gpt-5-nano","gpt-4-mini","claude-instant","grok-4","gemini-1"];
+    let combinedAnswer = "";
+    
+    for(const model of models){
+        try{
+            const response = await puter.ai.chat(userQuestion,{model});
+            combinedAnswer += `\n[${model}]: ${response.text}`;
+        } catch(e){
+            combinedAnswer += `\n[${model}]: Failed to fetch.`;
+        }
+    }
+    alert(combinedAnswer);
+});
+
+// Category-Aware AI Product Generation (Multi-Model & Images)
+const categories = ["Kitchen", "Tech", "Beauty", "Health"];
+const aiProductsContainer = document.getElementById('aiProducts');
+
+async function generateAIProducts(category = "Kitchen") {
+    const cacheKey = `aiProductsCache_${category}`;
+    try {
+        let products = [];
+
+        // Fetch products from multiple models
+        const models = ["gpt-5-nano","gpt-4-mini","claude-instant","grok-4","gemini-1"];
+        for(const model of models){
+            const response = await puter.ai.chat(
+                `Generate 2 trending Amazon products in the ${category} category with JSON output: [{name, link}]`,
+                { model }
+            );
+            try{ products = products.concat(JSON.parse(response.text)); } catch{}
+        }
+
+        // Fallback if no products
+        if(products.length === 0){
+            products = Array.from({length:6},(_,i)=>({name:`${category} Product ${i+1}`, link:"#"}));
+        }
+
+        localStorage.setItem(cacheKey, JSON.stringify(products));
+        renderAIProducts(products);
+
+    } catch(err){
+        console.warn("AI fetch failed, loading cached products if available.", err);
+        const cachedData = localStorage.getItem(cacheKey);
+        if(cachedData) renderAIProducts(JSON.parse(cachedData));
+    }
+}
+
+async function renderAIProducts(products){
+    aiProductsContainer.innerHTML = "";
+
+    for(const p of products){
+        const card = document.createElement('div');
+        card.className = 'ai-card';
+        aiProductsContainer.appendChild(card);
+
+        try{
+            // Generate product image with DALL-E
+            const imgEl = await puter.ai.txt2img(`High-quality product photo of ${p.name}, realistic, white background, professional lighting`, {model:"dall-e"});
+            imgEl.style.width="100%";
+            imgEl.style.borderRadius="6px";
+            card.appendChild(imgEl);
+        } catch(e){
+            const fallbackImg = document.createElement('img');
+            fallbackImg.src = "https://via.placeholder.com/220x140.png?text=Product";
+            fallbackImg.style.width="100%";
+            fallbackImg.style.borderRadius="6px";
+            card.appendChild(fallbackImg);
+        }
+
+        const title = document.createElement('h4');
+        title.innerText = p.name;
+        card.appendChild(title);
+
+        const btn = document.createElement('a');
+        btn.href = p.link + "?tag=mychanneld-20";
+        btn.className = "btn";
+        btn.innerText = "Buy Now";
+
+        // TTS on click
+        btn.addEventListener('click', ()=>{
+            const ttsMsg = new SpeechSynthesisUtterance(`Check out ${p.name} on Amazon. ${p.link}`);
+            ttsMsg.lang='en-US';
+            speechSynthesis.speak(ttsMsg);
+        });
+
+        card.appendChild(btn);
+    }
+}
+
+// Add category buttons
+const categorySection = document.createElement('div');
+categorySection.style.textAlign = "center";
+categorySection.style.margin = "1rem 0";
+
+categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.innerText = cat;
+    btn.className = "btn";
+    btn.addEventListener('click', () => generateAIProducts(cat));
+    categorySection.appendChild(btn);
+});
+
+aiProductsContainer.parentNode.insertBefore(categorySection, aiProductsContainer);
+
+// Load default products
+generateAIProducts("Kitchen");
+</script>
+</body>
+</html>
+```
+
