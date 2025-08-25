@@ -136,33 +136,6 @@ button:hover{opacity:0.85;}
 <div id="accessOutput" class="output"></div>
 </div>
 
-<!-- ===== Why This Tool is Powerful ===== -->
-<div class="glass" style="background: rgba(0,0,0,0.6); padding:20px;">
-  <h2 style="color:#ffdd57; text-align:center; margin-bottom:10px;">💡 Why LinkBotLabs Works for You</h2>
-  <p style="font-size:1rem; line-height:1.5;">
-    This page isn’t just a showcase—it’s your personal revenue engine. Once you register your affiliate tag:
-  </p>
-  <ul style="margin-left:20px; font-size:1rem; line-height:1.6;">
-    <li>🔗 Every product automatically uses your affiliate ID, generating commission on each sale.</li>
-    <li>📈 Weekly updates refresh the showcase with top-rated, best-selling products.</li>
-    <li>🌍 Share your page and grow your network—new affiliates join, and everyone earns together.</li>
-    <li>💸 Amazon + Temu combined commissions maximize your earning potential.</li>
-    <li>⚡ Setup once, earn continuously. One purchase opens a lifetime of opportunity.</li>
-    <li>🎥 Generate YouTube promotional videos with our desktop app using your Amazon and YouTube API keys.</li>
-    <li>🗣️ Convert product descriptions to audio automatically with Text-to-Speech for dynamic content creation.</li>
-    <li>🛒 Easily collect and showcase hundreds of affiliate products in one place.</li>
-  </ul>
-  <p style="text-align:center; font-weight:bold; margin-top:10px; color:#ff6f91;">
-    🚀 Start sharing, start earning, and watch your network grow exponentially!
-  </p>
-  <p style="text-align:center; margin-top:15px;">
-    <a href="https://prodpick4u.github.io/-linkbotlabs/affiliate_starter.html" 
-       style="display:inline-block; padding:12px 25px; background: linear-gradient(135deg,#6a11cb,#2575fc); color:#fff; font-weight:bold; border-radius:8px; text-decoration:none;">
-       ▶️ Demo Now
-    </a>
-  </p>
-</div>
-
 <!-- ===== Affiliate Tag Registration ===== -->
 <div id="affiliateFormSection" class="glass" style="display:none;">
 <h2>📝 Register Your Amazon Affiliate Tag</h2>
@@ -176,57 +149,80 @@ button:hover{opacity:0.85;}
 <p>Upgrade to the <strong>Full Version</strong> for full automation: product to video!</p>
 </div>
 
+<!-- ===== Puter.js Integration ===== -->
+<script src="https://cdn.jsdelivr.net/npm/puter.js@latest/dist/puter.min.js"></script>
 <script>
-// ===== Multi-User Access Codes =====
-const VALID_CODES = ["starter123","user456","demo789"];
+// ==== Initialize Puter ====
+const puter = new Puter({ debug:true });
+
+// ==== TTS ====
+let synth = window.speechSynthesis;
+function playTTS(text){
+    if(synth.speaking) synth.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    const voices = synth.getVoices().filter(v=>v.lang.startsWith('en'));
+    utter.voice = voices[0];
+    synth.speak(utter);
+}
+
+// ===== Multi-User Access Codes (can be dynamically enhanced via AI) =====
+let VALID_CODES = ["starter123","user456","demo789"];
 let userAffiliateTag = localStorage.getItem('affiliateTag') || "";
 
-// ===== Access Code Check =====
-function checkAccessCode() {
-  const code = document.getElementById("accessCode").value.trim();
-  if(VALID_CODES.includes(code)){
-    document.getElementById("affiliateFormSection").style.display = "block";
-    document.getElementById("accessOutput").innerText = "✅ Access granted! Register your affiliate tag to activate.";
-    startDemoTimer();
-  } else {
-    document.getElementById("accessOutput").innerText = "❌ Invalid code. Try again.";
-  }
+// ==== Check Access Code ====
+async function checkAccessCode(){
+    const code = document.getElementById("accessCode").value.trim();
+    if(VALID_CODES.includes(code)){
+        document.getElementById("affiliateFormSection").style.display="block";
+        document.getElementById("accessOutput").innerText="✅ Access granted! Register your affiliate tag to activate.";
+        playTTS("Access granted! Register your affiliate tag to activate.");
+        startDemoTimer();
+    } else {
+        document.getElementById("accessOutput").innerText="❌ Invalid code. Try again.";
+        playTTS("Invalid code. Try again.");
+        // Optionally check AI dynamically via Puter
+        // const aiCheck = await puter.call('gpt-5', `Validate access code "${code}"`);
+        // if(aiCheck.text.includes("valid")){ ... }
+    }
 }
 
-// ===== Affiliate Form Handling =====
-document.getElementById("affiliateForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const tag = document.getElementById("userAffiliate").value.trim();
-  if(tag){
-    userAffiliateTag = tag;
-    localStorage.setItem('affiliateTag', tag);
-    document.getElementById("regOutput").innerText = `✅ Affiliate tag "${tag}" saved! Links on product page will now use your tag.`;
-  } else {
-    document.getElementById("regOutput").innerText = "❌ Please enter a valid affiliate tag.";
-  }
+// ==== Affiliate Form Handling ====
+document.getElementById("affiliateForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    const tag = document.getElementById("userAffiliate").value.trim();
+    if(tag){
+        userAffiliateTag = tag;
+        localStorage.setItem('affiliateTag', tag);
+        document.getElementById("regOutput").innerText = `✅ Affiliate tag "${tag}" saved! Links on product page will now use your tag.`;
+        playTTS(`Affiliate tag ${tag} saved! Links on product page will now use your tag.`);
+    } else {
+        document.getElementById("regOutput").innerText="❌ Please enter a valid affiliate tag.";
+        playTTS("Please enter a valid affiliate tag.");
+    }
 });
 
-// ===== Demo Timer =====
-let demoSeconds = 7*24*60*60; // 7 days
+// ==== Demo Timer ====
+let demoSeconds = 7*24*60*60;
 function startDemoTimer(){
-  const timerEl = document.getElementById("demoTimer");
-  const endTime = Date.now() + demoSeconds*1000;
-  const interval = setInterval(() => {
-    let remaining = Math.max(0, Math.floor((endTime - Date.now())/1000));
-    let days = Math.floor(remaining / 86400);
-    let hours = Math.floor((remaining % 86400)/3600);
-    let minutes = Math.floor((remaining % 3600)/60);
-    let seconds = remaining % 60;
-    timerEl.innerText = `⏱️ Demo Time Remaining: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-    if(remaining <= 0){
-      clearInterval(interval);
-      timerEl.innerText = "⏱️ Demo ended. Please log in again.";
-      document.getElementById("affiliateFormSection").style.display="none";
-    }
-  }, 1000);
+    const timerEl = document.getElementById("demoTimer");
+    const endTime = Date.now()+demoSeconds*1000;
+    const interval = setInterval(()=>{
+        let remaining = Math.max(0, Math.floor((endTime - Date.now())/1000));
+        let days = Math.floor(remaining/86400);
+        let hours = Math.floor((remaining%86400)/3600);
+        let minutes = Math.floor((remaining%3600)/60);
+        let seconds = remaining%60;
+        timerEl.innerText=`⏱️ Demo Time Remaining: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        if(remaining<=0){
+            clearInterval(interval);
+            timerEl.innerText="⏱️ Demo ended. Please log in again.";
+            document.getElementById("affiliateFormSection").style.display="none";
+            playTTS("Demo ended. Please log in again.");
+        }
+    },1000);
 }
 
-// ===== Initialize =====
+// ==== Initialize saved affiliate tag ====
 if(userAffiliateTag){document.getElementById("userAffiliate").value = userAffiliateTag;}
 </script>
 
