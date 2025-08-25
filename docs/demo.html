@@ -134,7 +134,7 @@ async function multiAiCall(prompt){
   const models = ['gpt-5','claude','grok','gemini'];
   const results = await Promise.all(models.map(async model=>{
     try{
-      const res = await puter.call(model, prompt);
+      const res = await puter.ai.chat(prompt,{ model });
       return { model, text: res.text.trim() };
     } catch(err){ console.error(model+' failed:',err); return { model, text:'' }; }
   }));
@@ -159,7 +159,7 @@ document.getElementById('keyholdersForm').addEventListener('submit', async e=>{
   const affiliate = document.getElementById('khAffiliate').value.trim() || "mychanneld-20";
   const prompt = `Generate 1 top Amazon product for the keyword "${keyword}" with description, price, and URL. Format as JSON.`;
   try{
-    const response = await puter.call('gpt-5', prompt);
+    const response = await puter.ai.chat(prompt,{ model:"gpt-5" });
     const product = JSON.parse(response.text)[0];
     const reviewPrompt = `Write a short persuasive SEO review for "${product.title}" using multiple AI models.`;
     const reviews = await multiAiCall(reviewPrompt);
@@ -187,7 +187,7 @@ document.getElementById('categorySelect').addEventListener('change', async e=>{
   if(!category){ document.getElementById('klOutput').innerHTML=''; return; }
   const prompt = `Generate 3 trending products in the "${category}" category for Amazon affiliates. Format as JSON array with title, url, price, description.`;
   try{
-    const response = await puter.call('gpt-5', prompt);
+    const response = await puter.ai.chat(prompt,{ model:"gpt-5" });
     const products = JSON.parse(response.text);
     let html='';
     products.forEach((p,idx)=>{
@@ -202,7 +202,6 @@ document.getElementById('categorySelect').addEventListener('change', async e=>{
     });
     document.getElementById('klOutput').innerHTML = html;
 
-    // Generate reviews asynchronously
     products.forEach(async(p,idx)=>{
       const reviews = await multiAiCall(`Write a short persuasive SEO review for "${p.title}"`);
       const consensusText = getConsensus(reviews);
@@ -221,23 +220,45 @@ const sendBtn = document.getElementById('sendBtn');
 async function askBot(){
   const input = chatInput.value.trim();
   if(!input) return;
-  const userP = document.createElement('p'); userP.style.color="#0f0"; userP.textContent="You: "+input; chatBox.appendChild(userP);
+  
+  // Display user input
+  const userP = document.createElement('p');
+  userP.style.color="#0f0";
+  userP.textContent="You: "+input;
+  chatBox.appendChild(userP);
 
   try{
+    // Get AI responses
     const responses = await multiAiCall(input);
     const consensusText = getConsensus(responses);
+
+    // Display each model response
     const botHtml = responses.map(r=>`<p><strong>${r.model}:</strong> ${r.text}</p>`).join('') +
                     (consensusText?`<p class="ai-consensus">Consensus: ${consensusText}</p>`:'');
-    const botP = document.createElement('div'); botP.innerHTML = botHtml; chatBox.appendChild(botP);
+    const botP = document.createElement('div');
+    botP.innerHTML = botHtml;
+    chatBox.appendChild(botP);
+
+    // Auto-scroll
     chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Play TTS for consensus or first response
     playTTS(consensusText || responses[0].text);
-  } catch(err){ console.error(err); alert("AI bot failed."); }
+
+  } catch(err){
+    console.error(err);
+    alert("AI bot failed.");
+  }
+
+  // Clear input
   chatInput.value='';
 }
 
+// Event listeners for send button and Enter key
 sendBtn.addEventListener('click', askBot);
-chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askBot(); });
-
+chatInput.addEventListener('keypress', e=>{
+  if(e.key==='Enter') askBot();
+});
 </script>
 </body>
 </html>
