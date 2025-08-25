@@ -6,17 +6,19 @@
 <title>LinkBotLabs AI Video Generator</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
+/* Body & layout */
 body {
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #4b6cb7, #182848);
     color: #fff;
-    margin:0;
-    padding:0;
+    margin:0; padding:0;
     height:100vh;
     display:flex;
     align-items:center;
     justify-content:center;
 }
+
+/* Password overlay */
 .overlay {
     position: fixed; top:0; left:0; width:100%; height:100%;
     background: rgba(0,0,0,0.85);
@@ -24,6 +26,8 @@ body {
 }
 .overlay input { padding:10px; width:200px; margin-top:10px; border-radius:5px; border:none; }
 .overlay button { margin-top:10px; padding:10px 20px; border:none; border-radius:5px; background:#7b5cf5; color:white; cursor:pointer; }
+
+/* Dashboard content */
 #dashboardContent {
     background: rgba(255,255,255,0.05);
     padding:20px;
@@ -33,17 +37,44 @@ body {
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
     display:none;
 }
+
+/* Inputs & buttons */
 input, textarea { width:100%; padding:10px; margin:5px 0 15px 0; border-radius:5px; border:none; background: rgba(255,255,255,0.1); color:white; }
 input::placeholder, textarea::placeholder { color: #ccc; }
 button { padding:10px 20px; border:none; border-radius:5px; background:#7b5cf5; color:white; cursor:pointer; margin-top:10px; }
 button:hover { background:#5a3cbf; }
+
+/* Status messages */
 .error { color:#ff6b6b; margin-bottom:10px; }
 .success { color:#4ade80; margin-bottom:10px; }
-#dalle_images img { width:100%; margin-bottom:10px; border-radius:10px; }
+
+/* DALL·E images container */
+#dalle_images { margin-top:10px; }
+.dalle-container { display:flex; flex-direction:column; align-items:center; margin-bottom:15px; }
+.dalle-container img { max-width:90%; border-radius:10px; cursor:pointer; }
+.dalle-container button { margin-top:5px; padding:8px 16px; border-radius:5px; border:none; background:#7b5cf5; color:white; cursor:pointer; }
+.dalle-container button:hover { background:#5a3cbf; }
+
+/* Video */
 video { width:100%; border-radius:10px; margin-top:15px; }
+
+/* Progress bar */
 .progress-container { margin-top:10px; background: rgba(255,255,255,0.1); border-radius:5px; }
 .progress-bar { width:0%; height:20px; background:#7b5cf5; border-radius:5px; transition:width 0.3s; }
 .progress-text { margin-top:5px; font-size:0.9em; color:#fff; }
+
+/* Image modal */
+#imageModal {
+  display:none;
+  position:fixed;
+  top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.9);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+#imageModal img { max-width:90%; max-height:90%; border-radius:10px; }
+#imageModal span { position:absolute; top:20px; right:30px; font-size:2rem; color:white; cursor:pointer; }
 </style>
 </head>
 <body>
@@ -83,7 +114,14 @@ video { width:100%; border-radius:10px; margin-top:15px; }
     <video id="video_preview" controls style="display:none;"></video>
 </div>
 
+<!-- Fullscreen image modal -->
+<div id="imageModal">
+  <span id="closeModal">&times;</span>
+  <img id="modalImage" src="" alt="Preview">
+</div>
+
 <script>
+// Password overlay
 const correctPassword = "supersecret";
 const overlay = document.getElementById('passwordOverlay');
 const input = document.getElementById('dashboardPassword');
@@ -102,6 +140,13 @@ btn.addEventListener('click', () => {
 });
 input.addEventListener('keypress', (e)=>{ if(e.key==='Enter') btn.click(); });
 
+// Progress updater
+async function updateProgress(stepText, percent){
+    document.getElementById('progressBar').style.width = percent+'%';
+    document.getElementById('progressText').textContent = stepText;
+}
+
+// DALL·E image generation
 let dalleImages = [];
 let generatingImage = false;
 
@@ -111,20 +156,58 @@ document.getElementById('generateDalleBtn').addEventListener('click', async func
     if(generatingImage) return alert('Please wait...');
     generatingImage = true;
     try{
+        await updateProgress('Generating image...', 30);
         const imgEl = await puter.ai.txt2img(prompt);
-        document.getElementById('dalle_images').appendChild(imgEl);
+
+        // Create container
+        const container = document.createElement('div');
+        container.classList.add('dalle-container');
+
+        // Make image clickable for modal
+        imgEl.addEventListener("click", () => openImageModal(imgEl.src));
+        container.appendChild(imgEl);
+
+        // Download button
+        const downloadBtn = document.createElement("button");
+        downloadBtn.textContent = "⬇️ Download";
+        downloadBtn.onclick = () => {
+            const link = document.createElement("a");
+            link.href = imgEl.src;
+            link.download = "AI_image.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        container.appendChild(downloadBtn);
+
+        document.getElementById('dalle_images').appendChild(container);
         dalleImages.push(imgEl.src);
+
+        await updateProgress('✅ Image ready', 100);
     } catch(err){
         console.error(err);
         alert('❌ Failed to generate image.');
-    } finally { generatingImage=false; }
+        await updateProgress('Idle', 0);
+    } finally { 
+        generatingImage=false; 
+    }
 });
 
-async function updateProgress(stepText, percent){
-    document.getElementById('progressBar').style.width = percent+'%';
-    document.getElementById('progressText').textContent = stepText;
+// Modal handling
+function openImageModal(src) {
+    document.getElementById("modalImage").src = src;
+    document.getElementById("imageModal").style.display = "flex";
 }
+document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("imageModal").style.display = "none";
+});
+document.getElementById("imageModal").addEventListener("click", (e) => {
+    if(e.target.id === "imageModal") {
+        document.getElementById("imageModal").style.display = "none";
+    }
+});
 
+// Video generation (your original code)
 document.getElementById('generateVideoBtn').addEventListener('click', async function(){
     const errorEl = document.getElementById('error');
     const successEl = document.getElementById('success');
@@ -148,7 +231,7 @@ document.getElementById('generateVideoBtn').addEventListener('click', async func
         // URL images
         if(urls.length){
             await updateProgress('Downloading product images...',currentProgress);
-            await new Promise(r=>setTimeout(r,1000)); // simulate
+            await new Promise(r=>setTimeout(r,1000));
             currentProgress+=stepsWeight.urls;
             await updateProgress('Product images ready',currentProgress);
         }
@@ -156,8 +239,8 @@ document.getElementById('generateVideoBtn').addEventListener('click', async func
         // DALL·E images
         if(dalleImages.length){
             for(let i=0;i<dalleImages.length;i++){
-                await updateProgress(`Generating DALL·E image ${i+1}/${dalleImages.length}`,currentProgress);
-                await new Promise(r=>setTimeout(r,500)); // simulate
+                await updateProgress(`Using DALL·E image ${i+1}/${dalleImages.length}`,currentProgress);
+                await new Promise(r=>setTimeout(r,500));
                 currentProgress+=stepsWeight.dalle/dalleImages.length;
             }
         }
