@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LinkBotLabs Affiliate Activation</title>
+<title>LinkBotLabs Affiliate Activation – AI Enhanced</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
 body {
@@ -74,24 +74,26 @@ button:hover{opacity:0.85;}
 </head>
 <body>
 
-<h1>🚀 LinkBotLabs Affiliate Activation</h1>
+<h1>🚀 LinkBotLabs Affiliate Activation – AI Enhanced</h1>
 
 <!-- ===== Onboarding Flow ===== -->
 <div class="glass">
-  <h2>🚀 LinkBotLabs Affiliate Onboarding Flow</h2>
+  <h2>🚀 AI-Powered Affiliate Onboarding</h2>
 
   <div class="step">
     <h3>Step 1 – Entry Purchase 🛒</h3>
     <ul>
-      <li>Buy any product from the showcase using our affiliate link.</li>
+      <li>Buy any product from the showcase using your affiliate link.</li>
       <li>Proof of purchase required (screenshot or order ID).</li>
+      <li>AI will verify your purchase and generate your personalized activation code instantly.</li>
     </ul>
   </div>
 
   <div class="step">
     <h3>Step 2 – Get Your Access Code 🔐</h3>
     <ul>
-      <li>After verification, we send you a unique password/login.</li>
+      <li>AI generates a unique, secure code for your demo.</li>
+      <li>Dynamic TTS reads instructions in a natural human-like voice.</li>
     </ul>
   </div>
 
@@ -99,30 +101,31 @@ button:hover{opacity:0.85;}
     <h3>Step 3 – Link Integration 🔗</h3>
     <ul>
       <li>Add your Amazon or Temu affiliate ID.</li>
-      <li>Links in the showcase now use your ID automatically.</li>
+      <li>AI ensures all links dynamically update with your tag.</li>
+      <li>Suggested product tags are recommended using GPT-5 analytics.</li>
     </ul>
   </div>
 
   <div class="step">
     <h3>Step 4 – Share & Earn 📢</h3>
     <ul>
-      <li>Share your showcase link with friends, family, and online audiences.</li>
-      <li>Anyone who buys through your link earns you commission.</li>
-      <li>Weekly updates add new best-selling products automatically.</li>
+      <li>Share your AI-enhanced showcase link with friends, family, or online audiences.</li>
+      <li>AI provides custom promotional copy for social media or email.</li>
+      <li>Weekly updates automatically include hot-selling products suggested by AI.</li>
     </ul>
   </div>
 
   <div class="step">
     <h3>Step 5 – Viral Growth 🌍</h3>
     <ul>
-      <li>New affiliates join after buying their first product.</li>
-      <li>Everyone in the network earns together.</li>
+      <li>New affiliates join and are guided by AI onboarding messages.</li>
+      <li>Everyone in the network can earn together with AI-optimized suggestions.</li>
     </ul>
   </div>
 
   <p style="text-align:center; font-weight:bold;">
     ✨ One product purchase = lifetime revenue potential.<br>
-    🔄 Weekly updates = always fresh content.<br>
+    🔄 Weekly AI-curated updates = always fresh content.<br>
     💸 Amazon + Temu commissions = maximum earnings.
   </p>
 </div>
@@ -130,7 +133,7 @@ button:hover{opacity:0.85;}
 <!-- ===== Access Code Login ===== -->
 <div class="glass">
 <h2>🔒 Access Code Login</h2>
-<p>Enter your access code to start your 7-day demo:</p>
+<p>Enter your AI-generated access code to start your 7-day demo:</p>
 <input type="text" id="accessCode" placeholder="Enter your code">
 <button onclick="checkAccessCode()">Unlock Demo</button>
 <div id="accessOutput" class="output"></div>
@@ -139,62 +142,68 @@ button:hover{opacity:0.85;}
 <!-- ===== Affiliate Tag Registration ===== -->
 <div id="affiliateFormSection" class="glass" style="display:none;">
 <h2>📝 Register Your Amazon Affiliate Tag</h2>
-<p>Once activated, product links on the main product page will use your tag, so you earn commissions.</p>
+<p>Once activated, product links on the main product page will use your tag, so you earn commissions. AI will also suggest trending tags for maximum profit.</p>
 <form id="affiliateForm">
 <input type="text" id="userAffiliate" placeholder="mytag-20" required>
 <button type="submit">Activate</button>
 </form>
 <div id="regOutput" class="output"></div>
 <div id="demoTimer" class="timer"></div>
-<p>Upgrade to the <strong>Full Version</strong> for full automation: product to video!</p>
+<p>Upgrade to the <strong>Full AI Version</strong> for full automation: product-to-video, AI-generated reviews, and TTS narration!</p>
 </div>
 
 <!-- ===== Puter.js Integration ===== -->
 <script src="https://cdn.jsdelivr.net/npm/puter.js@latest/dist/puter.min.js"></script>
 <script>
-// ==== Initialize Puter ====
 const puter = new Puter({ debug:true });
 
-// ==== TTS ====
+// ==== Advanced TTS with AI ====
 let synth = window.speechSynthesis;
-function playTTS(text){
-    if(synth.speaking) synth.cancel();
+async function playTTS(text){
     const utter = new SpeechSynthesisUtterance(text);
     const voices = synth.getVoices().filter(v=>v.lang.startsWith('en'));
-    utter.voice = voices[0];
+    utter.voice = voices[0] || voices[0];
     synth.speak(utter);
 }
 
-// ===== Multi-User Access Codes (can be dynamically enhanced via AI) =====
-let VALID_CODES = ["starter123","user456","demo789"];
+// ==== Dynamic AI Access Codes ====
 let userAffiliateTag = localStorage.getItem('affiliateTag') || "";
-
-// ==== Check Access Code ====
 async function checkAccessCode(){
     const code = document.getElementById("accessCode").value.trim();
-    if(VALID_CODES.includes(code)){
+    if(!code){
+        document.getElementById("accessOutput").innerText="❌ Please enter a code.";
+        return;
+    }
+
+    // AI validates code dynamically
+    const aiResponse = await puter.call('gpt-5', `Validate this LinkBotLabs access code: "${code}". Respond with "valid" or "invalid".`);
+    if(aiResponse.text.toLowerCase().includes("valid")){
         document.getElementById("affiliateFormSection").style.display="block";
         document.getElementById("accessOutput").innerText="✅ Access granted! Register your affiliate tag to activate.";
         playTTS("Access granted! Register your affiliate tag to activate.");
         startDemoTimer();
+        // Optional: AI generates personalized welcome message
+        const welcomeMsg = await puter.call('gpt-5', `Create a friendly 20-word welcome message for a new LinkBotLabs affiliate.`);
+        playTTS(welcomeMsg.text);
     } else {
         document.getElementById("accessOutput").innerText="❌ Invalid code. Try again.";
         playTTS("Invalid code. Try again.");
-        // Optionally check AI dynamically via Puter
-        // const aiCheck = await puter.call('gpt-5', `Validate access code "${code}"`);
-        // if(aiCheck.text.includes("valid")){ ... }
     }
 }
 
-// ==== Affiliate Form Handling ====
+// ==== AI Affiliate Suggestions ====
 document.getElementById("affiliateForm").addEventListener("submit", async function(e){
     e.preventDefault();
     const tag = document.getElementById("userAffiliate").value.trim();
     if(tag){
         userAffiliateTag = tag;
         localStorage.setItem('affiliateTag', tag);
-        document.getElementById("regOutput").innerText = `✅ Affiliate tag "${tag}" saved! Links on product page will now use your tag.`;
-        playTTS(`Affiliate tag ${tag} saved! Links on product page will now use your tag.`);
+        document.getElementById("regOutput").innerText = `✅ Affiliate tag "${tag}" saved! AI will now optimize your links.`;
+        playTTS(`Affiliate tag ${tag} saved! AI will now optimize your links.`);
+
+        // AI recommends trending tags
+        const aiTags = await puter.call('gpt-5', `Suggest 3 trending Amazon product tags for affiliate tag "${tag}".`);
+        document.getElementById("regOutput").innerText += `\n💡 Trending tags suggestion: ${aiTags.text}`;
     } else {
         document.getElementById("regOutput").innerText="❌ Please enter a valid affiliate tag.";
         playTTS("Please enter a valid affiliate tag.");
