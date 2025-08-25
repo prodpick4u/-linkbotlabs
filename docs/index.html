@@ -3,322 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LinkBotLabs – Smart Shopping Assistant</title>
-
-<!-- Favicon -->
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/prodpick4u/linkbotlabs/main/docs/9950FA69-865E-4707-AB91-B7CB65C501BF.png">
-
-<!-- Google Fonts -->
+<title>LinkBotLabs – AI Gateway</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
-
-<!-- Puter.js -->
-<script src="https://js.puter.com/v2/"></script>
-
-<style>
-body {
-  font-family: 'Inter', sans-serif;
-  margin:0; padding:0;
-  background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f);
-  background-size: 400% 400%;
-  animation: gradientShift 20s ease infinite;
-  color:white;
-  line-height:1.5;
-}
-@keyframes gradientShift {
-  0%{background-position:0% 50%;}
-  25%{background-position:50% 50%;}
-  50%{background-position:100% 50%;}
-  75%{background-position:50% 50%;}
-  100%{background-position:0% 50%;}
-}
-.btn {
-  display:inline-block; margin:0.4rem; padding:0.7rem 1.3rem;
-  background: linear-gradient(135deg,#6a11cb,#2575fc);
-  color:white; text-decoration:none; border-radius:6px;
-  font-weight:600; transition:0.3s;
-  font-size:0.95rem;
-}
-.btn:hover { opacity:0.85; }
-section { padding:2.5rem 1rem; text-align:center; max-width:1100px; margin:auto; }
-h2 { font-size:1.9rem; margin-bottom:1.3rem; color:#9cf; }
-.categories { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem; }
-.categories a {
-  flex:1 1 140px; max-width:180px; background: rgba(0,0,0,0.55);
-  padding:0.8rem; border-radius:8px; color:white; font-weight:600;
-  text-decoration:none; transition: transform 0.2s, background 0.3s;
-  font-size:0.9rem;
-}
-.categories a:hover {
-  transform: scale(1.05);
-  background: rgba(75,0,150,0.7);
-}
-.video-container {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%;
-  margin-bottom:1rem;
-}
-.video-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius:8px;
-}
-.link-box {
-  display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem; margin-bottom:1.5rem;
-}
-.ai-products {
-  display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:1.5rem;
-}
-.ai-card {
-  background: rgba(0,0,0,0.55);
-  padding:1rem;
-  border-radius:8px;
-  width:220px;
-  text-align:center;
-}
-.ai-card img { width:100%; border-radius:6px; margin-bottom:0.5rem; }
-footer {
-  background: rgba(0,0,0,0.4);
-  text-align:center; padding:1.5rem 1rem; font-size:0.9rem;
-}
-.contact-form input[type="email"] {
-  padding:8px; width:250px; border-radius:5px; border:none; margin-right:8px;
-}
-.contact-form button { padding:8px 14px; }
-.comments p {
-  background: rgba(0,0,0,0.5); padding:0.8rem 1rem; border-radius:6px;
-  margin-bottom:0.7rem;
-  text-align:left;
-  max-width:700px;
-  margin-left:auto; margin-right:auto;
-}
-.ai-chat {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  background: rgba(0,0,0,0.7);
-  border-radius:50%;
-  width:60px;
-  height:60px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  z-index:999;
-  font-size:1.8rem;
-}
-</style>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<header style="padding:0; margin:0; border-bottom:4px solid rgba(255,255,255,0.2);">
-<img src="https://raw.githubusercontent.com/prodpick4u/-linkbotlabs/main/docs/9950FA69-865E-4707-AB91-B7CB65C501BF.png" 
-alt="LinkBotLabs Banner" style="width:100%; height:auto; display:block;">
-<div style="padding:3rem 1rem; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); text-align:center;">
-<h1>🚀 Welcome to LinkBotLabs</h1>
-<p><strong>AI-powered tool to pick the best Amazon products & generate automated reviews and videos</strong></p>
-<p>Save time, boost sales, and explore full automation when desktop version launches soon!</p>
+<h1>🚀 LinkBotLabs AI Gateway</h1>
+<p>Ask questions, get product suggestions, and generate TTS from multi-AI models.</p>
 
-<a href="affiliate_starter.html" class="btn">🎁 Start Your Free 1-Week Affiliate Page</a>
-<a href="demo.html" class="btn">Try Demo</a>
-<a href="products.html" class="btn">🛒 View All Products</a>
-<a href="for_dummies.html" class="btn">📘 For Dummies Guide</a>
-<a href="https://drive.google.com/uc?export=download&id=1xwD_gDLZyPKLMmZY6UfAej6ZvMBjrzal" class="btn">📦 Download Desktop Demo (ZIP)</a>
-<a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" target="_blank" class="btn">💼 Hire Me on Fiverr</a>
-<a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" class="btn">📝 Visit Our Blog</a>
-<button id="ttsBtn" class="btn">🗣 Listen Welcome Message</button>
+<!-- TTS Voice Selector -->
+<div>
+<label>Select TTS Voice:</label>
+<select id="voiceSelect"></select>
 </div>
-</header>
 
+<!-- AI Chat -->
 <section>
-<h2>📖 About the Tool</h2>
-<p>LinkBotLabs simplifies your Amazon shopping and affiliate revenue creation. Input your product keyword, get optimized reviews, TTS scripts, and automated video outputs. Benefits include faster product selection, professional content generation, and the ability to earn commission by sharing products.</p>
-<p>New users can start with our <strong>For Dummies</strong> guide to get simple step-by-step instructions on using LinkBotLabs effectively.</p>
-</section>
-
-<section>
-<h2>📺 How It Works</h2>
-<div class="video-container">
-<iframe src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
-</div>
-<p>Watch how LinkBotLabs generates content and videos from a product in seconds.</p>
-</section>
-
-<section>
-<h2>🔗 Quick Links to All Pages</h2>
-<div class="link-box">
-<a href="affiliate_starter.html" class="btn">Affiliate Starter Page</a>
-<a href="demo.html" class="btn">Online Demo</a>
-<a href="products.html" class="btn">All Products</a>
-<a href="for_dummies.html" class="btn">For Dummies Guide</a>
-<a href="https://drive.google.com/uc?export=download&id=1xwD_gDLZyPKLMmZY6UfAej6ZvMBjrzal" class="btn">Desktop Demo (ZIP)</a>
-<a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" target="_blank" class="btn">Hire Me on Fiverr</a>
-<a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" class="btn">📝 Visit Our Blog</a>
+<h2>🤖 Multi-AI Chat</h2>
+<div id="chatBox" class="chat-box"></div>
+<div class="chat-input">
+<input type="text" id="chatInput" placeholder="Ask a question...">
+<button id="sendBtn">Send</button>
 </div>
 </section>
 
+<!-- Trending Products -->
 <section>
-<h2>📂 Categories – Shop & Support</h2>
-<p>Support the developer and earn credit for the full launch. Click a category to shop via Amazon with our affiliate links:</p>
-<div class="categories">
-<a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
-<a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
-<a href="https://www.amazon.com/s?k=blender&tag=mychanneld-20">🥤 Blenders</a>
-<a href="https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20">🍚 Rice Cookers</a>
-<a href="https://www.amazon.com/s?k=headphones&tag=mychanneld-20">🎧 Headphones</a>
-<a href="https://www.amazon.com/s?k=kitchen+products&tag=mychanneld-20">🍳 Kitchen Tools</a>
-<a href="https://www.amazon.com/s?k=tech&tag=mychanneld-20">💻 Tech Gadgets</a>
-</div>
+<h2>🛒 Trending Products</h2>
+<div id="productContainer" class="product-grid"></div>
 </section>
 
-<!-- AI Product Recommendations -->
+<!-- Affiliate Registration -->
 <section>
-<h2>🤖 AI Product Recommendations</h2>
-<div class="ai-products" id="aiProducts"></div>
+<h2>🔑 Register Affiliate ID</h2>
+<label>Affiliate ID: <input type="text" id="affiliateID" placeholder="Enter your tag"></label>
+<button id="saveAffiliateBtn">Save Affiliate</button>
+<p id="affiliateOutput"></p>
 </section>
 
-<section>
-<h2>💬 User Comments & Reviews</h2>
-<div class="comments">
-<p>“The AI product recommendations are spot on. My affiliate sales went up immediately!” – <strong>Mark S.</strong></p>
-<p>“I love the desktop demo. Everything works seamlessly and the interface is very clean.” – <strong>Lucy P.</strong></p>
-</div>
-</section>
-<footer>
-<p>© 2025 LinkBotLabs. All Rights Reserved.</p>
-<p class="contact-form">
-<input type="email" placeholder="Your email">
-<button>Subscribe</button>
-</p>
-</footer>
-<div class="ai-chat" id="aiChat">💬</div>
-<script>
-// TTS Welcome Message
-const ttsBtn = document.getElementById('ttsBtn');
-ttsBtn.addEventListener('click',()=>{
-  const msg = new SpeechSynthesisUtterance("Welcome to LinkBotLabs! Explore top products, generate reviews, and create automated videos easily.");
-  msg.lang = 'en-US';
-  speechSynthesis.speak(msg);
-});
-
-// AI Chat Button (Multi-Model)
-const aiChat = document.getElementById('aiChat');
-aiChat.addEventListener('click', async ()=>{
-    const userQuestion = prompt("🤖 Ask a product question or request recommendations:");
-    if(!userQuestion) return;
-
-    const models = ["gpt-5-nano","gpt-4-mini","claude-instant","grok-4","gemini-1"];
-    let combinedAnswer = "";
-    
-    for(const model of models){
-        try{
-            const response = await puter.ai.chat(userQuestion,{model});
-            combinedAnswer += `\n[${model}]: ${response.text}`;
-        } catch(e){
-            combinedAnswer += `\n[${model}]: Failed to fetch.`;
-        }
-    }
-    alert(combinedAnswer);
-});
-
-// Category-Aware AI Product Generation (Multi-Model & Images)
-const categories = ["Kitchen", "Tech", "Beauty", "Health"];
-const aiProductsContainer = document.getElementById('aiProducts');
-
-async function generateAIProducts(category = "Kitchen") {
-    const cacheKey = `aiProductsCache_${category}`;
-    try {
-        let products = [];
-
-        // Fetch products from multiple models
-        const models = ["gpt-5-nano","gpt-4-mini","claude-instant","grok-4","gemini-1"];
-        for(const model of models){
-            const response = await puter.ai.chat(
-                `Generate 2 trending Amazon products in the ${category} category with JSON output: [{name, link}]`,
-                { model }
-            );
-            try{ products = products.concat(JSON.parse(response.text)); } catch{}
-        }
-
-        // Fallback if no products
-        if(products.length === 0){
-            products = Array.from({length:6},(_,i)=>({name:`${category} Product ${i+1}`, link:"#"}));
-        }
-
-        localStorage.setItem(cacheKey, JSON.stringify(products));
-        renderAIProducts(products);
-
-    } catch(err){
-        console.warn("AI fetch failed, loading cached products if available.", err);
-        const cachedData = localStorage.getItem(cacheKey);
-        if(cachedData) renderAIProducts(JSON.parse(cachedData));
-    }
-}
-
-async function renderAIProducts(products){
-    aiProductsContainer.innerHTML = "";
-
-    for(const p of products){
-        const card = document.createElement('div');
-        card.className = 'ai-card';
-        aiProductsContainer.appendChild(card);
-
-        try{
-            // Generate product image with DALL-E
-            const imgEl = await puter.ai.txt2img(`High-quality product photo of ${p.name}, realistic, white background, professional lighting`, {model:"dall-e"});
-            imgEl.style.width="100%";
-            imgEl.style.borderRadius="6px";
-            card.appendChild(imgEl);
-        } catch(e){
-            const fallbackImg = document.createElement('img');
-            fallbackImg.src = "https://via.placeholder.com/220x140.png?text=Product";
-            fallbackImg.style.width="100%";
-            fallbackImg.style.borderRadius="6px";
-            card.appendChild(fallbackImg);
-        }
-
-        const title = document.createElement('h4');
-        title.innerText = p.name;
-        card.appendChild(title);
-
-        const btn = document.createElement('a');
-        btn.href = p.link + "?tag=mychanneld-20";
-        btn.className = "btn";
-        btn.innerText = "Buy Now";
-
-        // TTS on click
-        btn.addEventListener('click', ()=>{
-            const ttsMsg = new SpeechSynthesisUtterance(`Check out ${p.name} on Amazon. ${p.link}`);
-            ttsMsg.lang='en-US';
-            speechSynthesis.speak(ttsMsg);
-        });
-
-        card.appendChild(btn);
-    }
-}
-
-// Add category buttons
-const categorySection = document.createElement('div');
-categorySection.style.textAlign = "center";
-categorySection.style.margin = "1rem 0";
-
-categories.forEach(cat => {
-    const btn = document.createElement('button');
-    btn.innerText = cat;
-    btn.className = "btn";
-    btn.addEventListener('click', () => generateAIProducts(cat));
-    categorySection.appendChild(btn);
-});
-
-aiProductsContainer.parentNode.insertBefore(categorySection, aiProductsContainer);
-
-// Load default products
-generateAIProducts("Kitchen");
-</script>
+<script src="https://js.puter.com/v2/"></script>
+<script src="scripts/gateway.js"></script>
 </body>
 </html>
-```
-
