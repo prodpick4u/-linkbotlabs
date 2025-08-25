@@ -113,6 +113,7 @@ let AFFILIATE_TAG = "mychanneld-20";
 let VALID_CODES = ["starter123","user456","demo789"];
 let userAffiliateTag = localStorage.getItem('affiliateTag') || "";
 
+// ===== Check Access =====
 function checkAccessCode(){
     const code = document.getElementById("accessCode").value.trim();
     if(VALID_CODES.includes(code)){
@@ -123,6 +124,7 @@ function checkAccessCode(){
     }
 }
 
+// ===== Save Affiliate =====
 function saveAffiliate(){
     const tag = document.getElementById("userAffiliate").value.trim();
     if(tag){
@@ -135,62 +137,28 @@ function saveAffiliate(){
 }
 
 // ===== AI Product Data =====
-const AMAZON_PRODUCTS = [
+const puter = new Puter({ debug:true });
+
+let AMAZON_PRODUCTS = [
     {title:"Instant Pot Duo 7-in-1", price:"$89", desc:"Multi-functional cooker.", url:"https://amzn.to/45IyLkt"},
     {title:"Air Fryer", price:"$279", desc:"Healthy frying alternative.", url:"https://amzn.to/3JogHVi"},
     {title:"KitchenAid Mixer", price:"$379", desc:"Stand mixer for baking.", url:"https://amzn.to/3HHSZmj"}
 ];
 
-const TEMU_PRODUCTS = [
+let TEMU_PRODUCTS = [
     {title:"Multi Rice Cooker", price:"Varies", desc:"Cook rice easily.", url:"https://share.temu.com/jwZL6Tbh2SB"},
     {title:"Foldable Kettle", price:"Varies", desc:"Compact kettle.", url:"https://share.temu.com/GZe6nSeHcEB"},
     {title:"Food Processor", price:"Varies", desc:"Chop and blend food.", url:"https://share.temu.com/xnKAVQF3V7B"}
 ];
 
-function withTag(url){return url.includes("?")?`${url}&tag=${AFFILIATE_TAG}`:`${url}?tag=${AFFILIATE_TAG}`;}
-
-function renderProducts(){
-    const amazonGrid = document.getElementById('amazon-products');
-    const temuGrid = document.getElementById('temu-products');
-    amazonGrid.innerHTML=""; temuGrid.innerHTML="";
-    AMAZON_PRODUCTS.forEach(p=>{
-        const card = document.createElement('div'); card.className='card';
-        card.innerHTML=`<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.desc}</div><a href="${withTag(p.url)}" target="_blank" class="view-btn">Click for Info</a>`;
-        amazonGrid.appendChild(card);
-    });
-    TEMU_PRODUCTS.forEach(p=>{
-        const card = document.createElement('div'); card.className='card';
-        card.innerHTML=`<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.desc}</div><a href="${withTag(p.url)}" target="_blank" class="view-btn">Click for Info</a>`;
-        temuGrid.appendChild(card);
-    });
+// ===== AI-enhanced descriptions =====
+async function generateAIDesc(products){
+    for(let p of products){
+        try{
+            const res = await puter.call('gpt-5', `Write a punchy, compelling 2-sentence product description for "${p.title}"`);
+            if(res.text) p.desc = res.text;
+        }catch(e){ console.warn("AI error:", e); }
+    }
 }
 
-// ===== Search Filter =====
-document.getElementById('searchBox').addEventListener('input', e=>{
-    const term = e.target.value.toLowerCase();
-    const filter = (arr)=>arr.filter(p=>p.title.toLowerCase().includes(term));
-    renderFiltered(filter(AMAZON_PRODUCTS), filter(TEMU_PRODUCTS));
-});
-
-function renderFiltered(amazonArr, temuArr){
-    const amazonGrid = document.getElementById('amazon-products'); const temuGrid = document.getElementById('temu-products');
-    amazonGrid.innerHTML=""; temuGrid.innerHTML="";
-    amazonArr.forEach(p=>{
-        const card = document.createElement('div'); card.className='card';
-        card.innerHTML=`<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.desc}</div><a href="${withTag(p.url)}" target="_blank" class="view-btn">Click for Info</a>`;
-        amazonGrid.appendChild(card);
-    });
-    temuArr.forEach(p=>{
-        const card = document.createElement('div'); card.className='card';
-        card.innerHTML=`<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.desc}</div><a href="${withTag(p.url)}" target="_blank" class="view-btn">Click for Info</a>`;
-        temuGrid.appendChild(card);
-    });
-}
-
-// ===== Initial Render =====
-renderProducts();
-if(userAffiliateTag) { AFFILIATE_TAG = userAffiliateTag; document.getElementById('affiliateBanner').innerText = `✅ Active Affiliate: ${userAffiliateTag}`; document.getElementById("userAffiliate").value = userAffiliateTag; }
-
-</script>
-</body>
-</html>
+function withTag(url){return url.includes("?")?`${url}&tag=${AFFILIATE_TAG}`:`${url}?
