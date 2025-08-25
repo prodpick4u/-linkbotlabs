@@ -55,7 +55,7 @@ h2 { font-size:1.6rem; margin-top:40px; }
 
 <h1>Explore Best Selling Products on LinkBotLabs</h1>
 <p class="header-note">
-Price Compare & Affiliate Showcase – Amazon & Temu Kitchen Products. If you shop with us and have an affiliate key, drop us a line on Fiverr and we will add you free of charge! Rent space via affiliate page or Fiverr link.
+Price Compare & Affiliate Showcase – Amazon & Temu Kitchen Products. Your affiliate ID stays active, so every click you generate earns commission.
 </p>
 
 <div class="controls">
@@ -99,50 +99,51 @@ Price Compare & Affiliate Showcase – Amazon & Temu Kitchen Products. If you sh
 </div>
 
 <script>
-// ===== Affiliate tag =====
-let AFFILIATE_TAG = "mychanneld-20";
+// ===== Affiliate ID handling =====
+let AFFILIATE_TAG = "mychanneld-20"; // default
 const userAffiliate = localStorage.getItem('affiliateTag');
 if(userAffiliate){
     AFFILIATE_TAG = userAffiliate;
     const banner = document.getElementById('affiliateBanner');
     banner.innerText = `✅ Your affiliate tag is active: ${userAffiliate}`;
-    banner.style.display = 'block';
 }
 
-// ===== Fallback products =====
-const AMAZON_PRODUCTS = {
-  "kitchen":[
-    {"title":"Instant Pot Duo 7-in-1","url":"https://amzn.to/45IyLkt","price":"$89.00","description":"Multi-functional cooker."},
-    {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/4oKl7WG","price":"$24.99","description":"Durable cast iron skillet."},
-    {"title":"Air Fryer","url":"https://amzn.to/3JogHVi","price":"$279.95","description":"Healthy frying alternative."},
-    {"title":"Breville Smart Oven Air Fryer","url":"https://amzn.to/47BJoYI","price":"$279.95","description":"Smart convection oven."},
-    {"title":"KitchenAid Artisan Mixer","url":"https://amzn.to/3HHSZmj","price":"$379.99","description":"Stand mixer for baking."},
-    {"title":"Cuisinart Food Processor","url":"https://amzn.to/4fKXKs0","price":"$149.95","description":"Chop, slice, shred quickly."},
-    {"title":"Ninja 10-in-1 Air Fryer","url":"https://amzn.to/3V6wKcS","price":"$199.99","description":"Versatile cooking appliance."},
-    {"title":"NutriBullet Pro","url":"https://amzn.to/4mOUwG5","price":"$89.99","description":"Compact blender for smoothies."},
-    {"title":"Hydro Flask Bottle","url":"https://amzn.to/475gmRe","price":"$39.95","description":"Insulated drink bottle."}
-  ]
-};
+// ===== Fallback Weekly Products =====
+const WEEKLY_PRODUCTS = [
+  {"title":"Instant Pot Duo 7-in-1","url":"https://amzn.to/45IyLkt","price":"$89.00","description":"Multi-functional cooker."},
+  {"title":"Air Fryer","url":"https://amzn.to/3JogHVi","price":"$279.95","description":"Healthy frying alternative."},
+  {"title":"KitchenAid Mixer","url":"https://amzn.to/3HHSZmj","price":"$379.99","description":"Stand mixer."},
+  {"title":"Ninja Blender","url":"https://amzn.to/4mOUwG5","price":"$89.99","description":"Smoothies made easy."},
+  {"title":"Cast Iron Skillet","url":"https://amzn.to/4oKl7WG","price":"$24.99","description":"Durable skillet."},
+  {"title":"Multi Rice Cooker","url":"https://share.temu.com/jwZL6Tbh2SB","price":"Varies","description":"Cook rice easily."},
+  {"title":"Foldable Kettle","url":"https://share.temu.com/GZe6nSeHcEB","price":"Varies","description":"Compact foldable kettle."},
+  {"title":"Air Fryer","url":"https://share.temu.com/dQd6lwfzxcB","price":"Varies","description":"Healthy frying."},
+  {"title":"Hot Air Oven","url":"https://share.temu.com/8O9QYZ5o0eB","price":"Varies","description":"Air fry & bake."},
+  {"title":"5L Cooker","url":"https://share.temu.com/sCWvXsTkDLB","price":"Varies","description":"Cook large meals."}
+];
 
-const TEMU_PRODUCTS = {
-  "kitchen":[
-    {"title":"Multi Rice Cooker","url":"https://share.temu.com/jwZL6Tbh2SB","price":"Varies","description":"Cook rice easily."},
-    {"title":"Foldable Kettle","url":"https://share.temu.com/GZe6nSeHcEB","price":"Varies","description":"Compact foldable kettle."},
-    {"title":"Food Processor","url":"https://share.temu.com/xnKAVQF3V7B","price":"Varies","description":"Chop and blend food."},
-    {"title":"Hot Air Oven","url":"https://share.temu.com/8O9QYZ5o0eB","price":"Varies","description":"Air fry and bake."},
-    {"title":"Air Fryer","url":"https://share.temu.com/dQd6lwfzxcB","price":"Varies","description":"Healthy frying."},
-    {"title":"6 in 1 Cordless Vacuum Cleaner","url":"https://share.temu.com/7Qvf8xaoKiB","price":"Varies","description":"Clean efficiently."},
-    {"title":"Mortar and Pestle","url":"https://share.temu.com/DCHsUHCDe2B","price":"Varies","description":"Grind spices easily."},
-    {"title":"Ceiling Fan Light","url":"https://share.temu.com/Nops5j7hFnB","price":"Varies","description":"Lighting and cooling."},
-    {"title":"5L Cooker","url":"https://share.temu.com/sCWvXsTkDLB","price":"Varies","description":"Cook large meals."}
-  ]
-};
+let AMAZON_PRODUCTS = { kitchen: [] };
+let TEMU_PRODUCTS = { kitchen: [] };
 
-// ===== Helper =====
+// ===== Shuffle & Rotate Weekly =====
+function rotateWeeklyProducts(){
+    const today = new Date();
+    const start = new Date(today.getFullYear(),0,1);
+    const diff = today - start;
+    const oneWeek = 1000*60*60*24*7;
+    const weekNum = Math.floor(diff/oneWeek);
+
+    const shuffled = WEEKLY_PRODUCTS.sort((a,b)=> ((a.title.charCodeAt(0)+weekNum) % 10) - ((b.title.charCodeAt(0)+weekNum)%10));
+    
+    AMAZON_PRODUCTS.kitchen = shuffled.slice(0,5);
+    TEMU_PRODUCTS.kitchen = shuffled.slice(5,10);
+}
+
+// ===== Helper to append affiliate tag =====
 function withTag(url){return url.includes("?")?`${url}&tag=${AFFILIATE_TAG}`:`${url}?tag=${AFFILIATE_TAG}`;}
 
-// ===== Display kitchen products =====
-function displayKitchen(){
+// ===== Display Products =====
+function displayProducts(){
     const amazonGrid = document.getElementById('amazon-kitchen');
     const temuGrid = document.getElementById('temu-kitchen');
     amazonGrid.innerHTML = '';
@@ -158,12 +159,40 @@ function displayKitchen(){
     TEMU_PRODUCTS.kitchen.forEach(p=>{
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = `<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.description}</div><a href="${p.url}" target="_blank" class="view-btn">Click for Info</a>`;
+        card.innerHTML = `<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.description}</div><a href="${withTag(p.url)}" target="_blank" class="view-btn">Click for Info</a>`;
         temuGrid.appendChild(card);
     });
 }
 
-// ===== Dropdown category click =====
+// ===== Search Filter =====
+document.getElementById('searchBox').addEventListener('input', e=>{
+    const term = e.target.value.toLowerCase();
+    const filterCards = (grid, products)=>{
+        grid.innerHTML = '';
+        products.forEach(p=>{
+            if(p.title.toLowerCase().includes(term)){
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.description}</div><a href="${withTag(p.url)}" target="_blank" class="view-btn">Click for Info</a>`;
+                grid.appendChild(card);
+            }
+        });
+    };
+    filterCards(document.getElementById('amazon-kitchen'), AMAZON_PRODUCTS.kitchen);
+    filterCards(document.getElementById('temu-kitchen'), TEMU_PRODUCTS.kitchen);
+});
+
+// ===== Initial Render & Weekly Rotation =====
+rotateWeeklyProducts();
+displayProducts();
+
+// Optional: Auto-refresh daily to keep weekly products in sync
+setInterval(()=>{
+    rotateWeeklyProducts();
+    displayProducts();
+}, 24*60*60*1000);
+
+// ===== Dropdown Category Links =====
 document.getElementById('amazon-categories').addEventListener('change', e=>{
     const category = e.target.value;
     window.open(`https://www.amazon.co.uk/s?i=popular&rh=n%3A${category}`, '_blank');
@@ -173,27 +202,6 @@ document.getElementById('temu-categories').addEventListener('change', e=>{
     const category = e.target.value;
     window.open(`https://www.temu.com/uk/category/${category}`, '_blank');
 });
-
-// ===== Search not applied yet but can filter kitchen if needed =====
-document.getElementById('searchBox').addEventListener('input', e=>{
-    const term = e.target.value.toLowerCase();
-    const filterCards = (grid, products)=>{
-        grid.innerHTML = '';
-        products.forEach(p=>{
-            if(p.title.toLowerCase().includes(term)){
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.description}</div><a href="${p.url}" target="_blank" class="view-btn">Click for Info</a>`;
-                grid.appendChild(card);
-            }
-        });
-    };
-    filterCards(document.getElementById('amazon-kitchen'), AMAZON_PRODUCTS.kitchen);
-    filterCards(document.getElementById('temu-kitchen'), TEMU_PRODUCTS.kitchen);
-});
-
-// ===== Initial render =====
-displayKitchen();
 </script>
 </body>
 </html>
