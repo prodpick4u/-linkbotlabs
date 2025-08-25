@@ -39,7 +39,7 @@ h1{font-size:2rem;} h2{font-size:1.6rem;margin-top:40px;}
 
 <div id="affiliateBanner" class="banner">Welcome to AI Product Hub!</div>
 <h1>AI Product Hub – Multi-AI Powered</h1>
-<p class="header-note">Every product, review, tip, and chat is enhanced by GPT-5, Claude, Grok, Gemini via Puter.js.</p>
+<p class="header-note">Every product, review, tip, and chat is enhanced by GPT-5, Claude, Grok, Gemini, and more via Puter.js.</p>
 
 <div class="controls">
 <input type="text" id="searchBox" placeholder="Search products...">
@@ -66,98 +66,99 @@ h1{font-size:2rem;} h2{font-size:1.6rem;margin-top:40px;}
 
 <script src="https://js.puter.com/v2/"></script>
 <script>
-const puter = new Puter({debug:true});
+window.onload = async () => {
+  const puter = new Puter({debug:true});
+  const AFFILIATE_TAG = "mychanneld-20";
 
-// Sample fallback products
-let AMAZON_PRODUCTS = [
-{title:"Instant Pot Duo 7-in-1", price:"$89", category:"kitchen"},
-{title:"Air Fryer", price:"$279", category:"kitchen"},
-{title:"KitchenAid Mixer", price:"$379", category:"kitchen"}
-];
-let TEMU_PRODUCTS = [
-{title:"Multi Rice Cooker", price:"Varies", category:"kitchen"},
-{title:"Foldable Kettle", price:"Varies", category:"kitchen"},
-{title:"Food Processor", price:"Varies", category:"kitchen"}
-];
+  const AMAZON_PRODUCTS = [
+    {title:"Instant Pot Duo 7-in-1", price:"$89", category:"kitchen"},
+    {title:"Air Fryer", price:"$279", category:"kitchen"},
+    {title:"KitchenAid Mixer", price:"$379", category:"kitchen"}
+  ];
+  const TEMU_PRODUCTS = [
+    {title:"Multi Rice Cooker", price:"Varies", category:"kitchen"},
+    {title:"Foldable Kettle", price:"Varies", category:"kitchen"},
+    {title:"Food Processor", price:"Varies", category:"kitchen"}
+  ];
 
-// Generate AI description
-async function getDescription(product){
+  async function generateDescription(product){
     try{
-        const resp = await puter.ai.chat(`Generate a catchy product description for "${product.title}" with deals & trends.`, {model:"gpt-5-nano"});
-        product.desc = resp.text || "No description available";
-    }catch{ product.desc = "AI description unavailable"; }
-}
+      const models = ["gpt-5-nano","gpt-4.1","claude-instant"];
+      let results = [];
+      for(const model of models){
+        const resp = await puter.ai.chat(`Write a short product description for "${product.title}"`, {model});
+        results.push(resp.text);
+      }
+      product.desc = results.join(" | ");
+    }catch(e){ product.desc = "AI description unavailable"; }
+  }
 
-// Generate AI image
-async function getImage(product){
+  async function generateImage(product){
     try{
-        const imgEl = await puter.ai.txt2img(`High-quality image of ${product.title}, white background`);
-        return imgEl;
-    }catch{
-        const fallback = document.createElement("img");
-        fallback.src="https://via.placeholder.com/220x140.png?text=Product";
-        return fallback;
+      const imgEl = await puter.ai.txt2img(`High-quality product photo of ${product.title}, white background, professional lighting`, {model:"dall-e"});
+      return imgEl;
+    }catch(e){
+      const fallback = document.createElement("img");
+      fallback.src="https://via.placeholder.com/220x140.png?text=Product";
+      return fallback;
     }
-}
+  }
 
-// Render products
-async function renderProducts(products, containerId){
+  async function renderProducts(products, containerId){
     const container = document.getElementById(containerId);
     container.innerHTML="";
     for(const p of products){
-        await getDescription(p);
-        const card = document.createElement("div");
-        card.className="card";
-        const imgEl = await getImage(p);
-        card.appendChild(imgEl);
-        card.innerHTML += `
-            <div class="product-title">${p.title}</div>
-            <div class="product-price">${p.price}</div>
-            <div class="product-desc">${p.desc}</div>
-            <a href="#" class="view-btn">View Product</a>
-        `;
-        container.appendChild(card);
+      await generateDescription(p);
+      const card = document.createElement("div");
+      card.className="card";
+      const img = await generateImage(p);
+      card.appendChild(img);
+      const title = document.createElement("div");
+      title.className="product-title"; title.innerText = p.title;
+      const price = document.createElement("div");
+      price.className="product-price"; price.innerText = p.price;
+      const desc = document.createElement("div");
+      desc.className="product-desc"; desc.innerText = p.desc;
+      const btn = document.createElement("a");
+      btn.className="view-btn"; btn.href="#"; btn.innerText="View Product";
+      card.appendChild(title); card.appendChild(price); card.appendChild(desc); card.appendChild(btn);
+      container.appendChild(card);
     }
-}
+  }
 
-// Initial render
-(async function(){
-    await renderProducts(AMAZON_PRODUCTS, "amazon-products");
-    await renderProducts(TEMU_PRODUCTS, "temu-products");
-})();
+  await renderProducts(AMAZON_PRODUCTS, "amazon-products");
+  await renderProducts(TEMU_PRODUCTS, "temu-products");
 
-// Search
-document.getElementById("searchBox").addEventListener("input", e=>{
+  document.getElementById("searchBox").addEventListener("input", e=>{
     const q = e.target.value.toLowerCase();
     renderProducts(AMAZON_PRODUCTS.filter(p=>p.title.toLowerCase().includes(q)), "amazon-products");
     renderProducts(TEMU_PRODUCTS.filter(p=>p.title.toLowerCase().includes(q)), "temu-products");
-});
+  });
 
-// Chat
-const chatButton = document.getElementById("chatButton");
-const chatPanel = document.getElementById("chatPanel");
-const chatMessages = document.getElementById("chatMessages");
-const chatInput = document.getElementById("chatInput");
+  // Chat panel
+  const chatButton = document.getElementById("chatButton");
+  const chatPanel = document.getElementById("chatPanel");
+  const chatMessages = document.getElementById("chatMessages");
+  const chatInput = document.getElementById("chatInput");
 
-chatButton.addEventListener("click", ()=>{chatPanel.style.display=(chatPanel.style.display==="flex"?"none":"flex"); chatPanel.style.flexDirection="column";});
+  chatButton.addEventListener("click", ()=>{chatPanel.style.display=(chatPanel.style.display==="flex"?"none":"flex");chatPanel.style.flexDirection="column";});
 
-chatInput.addEventListener("keypress", async e=>{
+  chatInput.addEventListener("keypress", async e=>{
     if(e.key==="Enter" && chatInput.value.trim()!==""){
-        const msg = chatInput.value.trim();
-        chatMessages.innerHTML += `<div style="margin-bottom:8px;"><strong>You:</strong> ${msg}</div>`;
-        chatInput.value=""; chatMessages.scrollTop=chatMessages.scrollHeight;
-        try{
-            const models=["gpt-5","claude","grok-4","gemini"];
-            const responses = await Promise.all(models.map(m=>puter.ai.chat(msg,{model:m})));
-            const allTexts = responses.map(r=>r.text.split(/[\.\!\?]/).map(s=>s.trim()).filter(Boolean)).flat();
-            const freq={}; allTexts.forEach(s=>freq[s]=(freq[s]||0)+1);
-            const consensus = Object.entries(freq).filter(([s,c])=>c>1).map(([s])=>s).join('. ') + (allTexts.length?'.':'');
-            const botHtml = responses.map(r=>`<p>${r.text}</p>`).join('') + `<p style="color:#0ff;"><strong>Consensus:</strong> ${consensus}</p>`;
-            chatMessages.innerHTML += `<div style="margin-bottom:8px;"><strong>AI:</strong> ${botHtml}</div>`;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }catch{ chatMessages.innerHTML += `<div style="margin-bottom:8px;color:red;">AI Error</div>`; }
+      const msg = chatInput.value.trim();
+      chatMessages.innerHTML += `<div style="margin-bottom:8px;"><strong>You:</strong> ${msg}</div>`;
+      chatInput.value=""; chatMessages.scrollTop=chatMessages.scrollHeight;
+      try{
+        const models = ["gpt-5-nano","claude-instant"];
+        const responses = await Promise.all(models.map(async m=>{try{return await puter.ai.chat(msg,{model:m});}catch(e){return {text:"[Failed]"}}}));
+        const allTexts = responses.map(r=>r.text).join(" | ");
+        chatMessages.innerHTML += `<div style="margin-bottom:8px;"><strong>AI:</strong> ${allTexts}</div>`;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }catch(e){ chatMessages.innerHTML += `<div style="margin-bottom:8px;color:red;">AI Error</div>`; }
     }
-});
+  });
+
+};
 </script>
 </body>
 </html>
