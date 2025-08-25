@@ -6,40 +6,59 @@
 <title>🚀 LinkBotLabs AI Gateway</title>
 <link rel="stylesheet" href="styles.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body { font-family:'Inter',sans-serif; background:#0a0033; color:#fff; margin:0; padding:1rem; }
+h1,h2 { color:#9cf; }
+.btn { padding:0.6rem 1.2rem; background: linear-gradient(135deg,#6a11cb,#2575fc); color:white; border-radius:6px; text-decoration:none; cursor:pointer; }
+.chat-input { display:flex; gap:5px; margin-top:10px; }
+.chat-input input { flex:1; padding:10px; border-radius:5px; border:none; background: rgba(20,20,20,0.7); color:#fff; }
+.ai-box { padding:15px; border-radius:10px; margin-bottom:20px; height:250px; overflow-y:auto; font-size:16px; }
+.ai-gpt5 { background: rgba(106,17,203,0.3); }
+.ai-claude { background: rgba(37,117,252,0.3); }
+.ai-grok { background: rgba(255,153,0,0.3); }
+.ai-gemini { background: rgba(102,255,153,0.3); }
+.ai-dalle { background: rgba(255,255,255,0.1); text-align:center; }
+.product-card { background: rgba(0,0,0,0.6); padding:10px; margin:10px; border-radius:8px; text-align:center; }
+.product-grid { display:flex; flex-wrap:wrap; gap:10px; }
+</style>
 </head>
 <body>
 
 <h1>🚀 LinkBotLabs AI Gateway</h1>
-<p>Ask questions, get product suggestions, and generate TTS from multi-AI models.</p>
+<p>Ask questions, get product suggestions, generate TTS, and see images from DALL-E.</p>
 
 <!-- TTS Voice Selector -->
 <div>
-  <label>Select TTS Voice:</label>
-  <select id="voiceSelect"></select>
+<label>Select TTS Voice:</label>
+<select id="voiceSelect"></select>
 </div>
 
 <!-- AI Chat -->
 <section>
-  <h2>🤖 Multi-AI Chat</h2>
-  <div id="chatBox" class="chat-box"></div>
-  <div class="chat-input">
-    <input type="text" id="chatInput" placeholder="Ask a question...">
-    <button id="sendBtn">Send</button>
-  </div>
+<h2>🤖 Ask Multi-AI Models</h2>
+<div class="chat-input">
+<input type="text" id="chatInput" placeholder="Ask a question...">
+<button id="sendBtn">Send</button>
+</div>
+<div id="gpt5Box" class="ai-box ai-gpt5"></div>
+<div id="claudeBox" class="ai-box ai-claude"></div>
+<div id="grokBox" class="ai-box ai-grok"></div>
+<div id="geminiBox" class="ai-box ai-gemini"></div>
+<div id="dalleBox" class="ai-box ai-dalle"></div>
 </section>
 
 <!-- Trending Products -->
 <section>
-  <h2>🛒 Trending Products</h2>
-  <div id="productContainer" class="product-grid"></div>
+<h2>🛒 Trending Products</h2>
+<div id="productContainer" class="product-grid"></div>
 </section>
 
 <!-- Affiliate Registration -->
 <section>
-  <h2>🔑 Register Affiliate ID</h2>
-  <label>Affiliate ID: <input type="text" id="affiliateID" placeholder="Enter your tag"></label>
-  <button id="saveAffiliateBtn">Save Affiliate</button>
-  <p id="affiliateOutput"></p>
+<h2>🔑 Register Affiliate ID</h2>
+<label>Affiliate ID: <input type="text" id="affiliateID" placeholder="Enter your tag"></label>
+<button id="saveAffiliateBtn">Save Affiliate</button>
+<p id="affiliateOutput"></p>
 </section>
 
 <script src="https://js.puter.com/v2/"></script>
