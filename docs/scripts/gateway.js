@@ -1,4 +1,3 @@
-const puter = new Puter({ debug: true });
 const synth = window.speechSynthesis;
 
 // ---- Voice Selector ----
@@ -10,13 +9,17 @@ function populateVoiceSelect(){
     select.innerHTML = '';
     voices.forEach(v=>{
         const opt = document.createElement('option');
-        opt.value = v.name; opt.textContent = v.name + ' (' + v.lang + ')';
+        opt.value = v.name; 
+        opt.textContent = v.name + ' (' + v.lang + ')';
         select.appendChild(opt);
     });
     select.value = voices[0]?.name;
 }
-if(speechSynthesis.onvoiceschanged!==undefined){ speechSynthesis.onvoiceschanged=populateVoiceSelect; } 
-else { populateVoiceSelect(); }
+if(speechSynthesis.onvoiceschanged!==undefined){ 
+    speechSynthesis.onvoiceschanged = populateVoiceSelect; 
+} else { 
+    populateVoiceSelect(); 
+}
 
 // ---- TTS ----
 function playTTS(text){
@@ -46,23 +49,27 @@ if(sendBtn){
 async function askAI(){
     const question = chatInput.value.trim();
     if(!question) return;
-
     chatInput.value='';
 
     for(const model of ['gpt-5','claude','grok','gemini']){
         try{
-            const response = await puter.call(model, `Answer clearly: "${question}"`);
-            aiBoxes[model].innerHTML += `<p>${response.text}</p>`;
-            aiBoxes[model].scrollTop = aiBoxes[model].scrollHeight;
-            playTTS(response.text);
+            const response = await puter.ai.chat(`Answer clearly: "${question}"`, { model });
+            const text = response.text || response;
+            if(aiBoxes[model]){
+                aiBoxes[model].innerHTML += `<p>${text}</p>`;
+                aiBoxes[model].scrollTop = aiBoxes[model].scrollHeight;
+                playTTS(text);
+            }
         } catch(e){ console.warn(model + " failed", e); }
     }
 
     // DALL-E box
     try{
         const imgEl = await puter.ai.txt2img(question);
-        aiBoxes['dalle'].appendChild(imgEl);
-        aiBoxes['dalle'].scrollTop = aiBoxes['dalle'].scrollHeight;
+        if(aiBoxes['dalle']){
+            aiBoxes['dalle'].appendChild(imgEl);
+            aiBoxes['dalle'].scrollTop = aiBoxes['dalle'].scrollHeight;
+        }
     } catch(e){ console.warn("DALL-E failed", e); }
 }
 
