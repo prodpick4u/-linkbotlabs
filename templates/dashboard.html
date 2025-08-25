@@ -231,4 +231,115 @@ document.getElementById('generateDalleBtn').addEventListener('click', async func
         container.appendChild(imgEl);
 
         const downloadBtn = document.createElement("button");
-        downloadBtn
+        downloadBtn.textContent = "⬇️ Download";
+        downloadBtn.onclick = () => {
+            const link = document.createElement("a");
+            link.href = imgEl.src;
+            link.download = "AI_image.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+        container.appendChild(downloadBtn);
+
+        document.getElementById('dalle_images').appendChild(container);
+        dalleImages.push(imgEl.src);
+        await updateProgress('✅ Image ready', 100);
+
+    } catch(err){
+        console.error(err);
+        alert('❌ Failed to generate image.');
+    } finally { generatingImage=false; }
+});
+
+// Image modal
+function openImageModal(src) {
+    document.getElementById("modalImage").src = src;
+    document.getElementById("imageModal").style.display = "flex";
+}
+document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("imageModal").style.display = "none";
+});
+document.getElementById("imageModal").addEventListener("click", (e) => {
+    if(e.target.id === "imageModal") {
+        document.getElementById("imageModal").style.display = "none";
+    }
+});
+
+// Video generation
+document.getElementById('generateVideoBtn').addEventListener('click', async function(){
+    const errorEl = document.getElementById('error');
+    const successEl = document.getElementById('success');
+    const videoEl = document.getElementById('video_preview');
+    const urlsRaw = document.getElementById('urls').value.split(',').map(u=>u.trim()).filter(Boolean);
+
+    errorEl.textContent=''; successEl.textContent=''; videoEl.style.display='none';
+    await updateProgress('Checking URLs...', 5);
+
+    const validUrls = await validateUrls(urlsRaw);
+    if(!validUrls.length && !dalleImages.length){
+        errorEl.textContent = '❌ None of the URLs worked. Enter at least one valid URL or DALL·E prompt.';
+        await updateProgress('Idle', 0);
+        return;
+    }
+    await updateProgress('✅ URLs valid', 10);
+
+    try{
+        let currentProgress=10;
+        const stepsWeight={urls:30,dalle:20,script:10,tts:10,video:30};
+
+        // URLs step
+        if(validUrls.length){
+            await updateProgress('Downloading product images...', currentProgress);
+            await new Promise(r=>setTimeout(r,1000));
+            currentProgress+=stepsWeight.urls;
+            await updateProgress('Product images ready', currentProgress);
+        }
+
+        // DALL·E images step
+        if(dalleImages.length){
+            for(let i=0;i<dalleImages.length;i++){
+                await updateProgress(`Using DALL·E image ${i+1}/${dalleImages.length}`, currentProgress);
+                await new Promise(r=>setTimeout(r,500));
+                currentProgress+=stepsWeight.dalle/dalleImages.length;
+            }
+        }
+
+        // Script generation
+        const scriptText = document.getElementById('script').value.trim();
+        const finalScript = scriptText || await puter.ai.chat(`Write a TikTok-style narration for these products: ${validUrls.join(', ')}`, {model:"gpt-5-nano"});
+        currentProgress+=stepsWeight.script;
+        await updateProgress('Script ready', currentProgress);
+
+        // TTS
+        const ttsBlob = await puter.ai.tts(finalScript,{voice:"alloy"});
+        currentProgress+=stepsWeight.tts;
+        await updateProgress('TTS ready', currentProgress);
+
+        // Video generation
+        const ttsFile = new File([ttsBlob],"voice.mp3",{type:"audio/mpeg"});
+        const formData = new FormData();
+        formData.append("urls",JSON.stringify([...validUrls,...dalleImages]));
+        formData.append("script",finalScript);
+        formData.append("voiceover",ttsFile);
+        await updateProgress('Generating video...', currentProgress);
+
+        const response = await fetch('/generate_video',{method:'POST',body:formData});
+        const data = await response.json();
+
+        if(data.video_file){
+            await updateProgress('Completed',100);
+            successEl.textContent='✅ Video generated!';
+            videoEl.src=`/download/${data.video_file}`;
+            videoEl.style.display='block';
+        } else errorEl.textContent='❌ '+(data.error||'Unknown error');
+
+    } catch(err){
+        console.error(err);
+        errorEl.textContent='❌ Failed to generate video.';
+        await updateProgress('Idle',0);
+    }
+});
+</script>
+</body>
+</html>
