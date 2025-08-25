@@ -13,7 +13,7 @@ function populateVoiceSelect(){
         opt.value = v.name; opt.textContent = v.name + ' (' + v.lang + ')';
         select.appendChild(opt);
     });
-    select.value = voices[0].name;
+    select.value = voices[0]?.name;
 }
 if(speechSynthesis.onvoiceschanged!==undefined){ speechSynthesis.onvoiceschanged=populateVoiceSelect; } 
 else { populateVoiceSelect(); }
@@ -27,38 +27,43 @@ function playTTS(text){
 }
 
 // ---- Multi-AI Chat ----
-const chatBox = document.getElementById('chatBox');
 const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
+
+const aiBoxes = {
+    'gpt-5': document.getElementById('gpt5Box'),
+    'claude': document.getElementById('claudeBox'),
+    'grok': document.getElementById('grokBox'),
+    'gemini': document.getElementById('geminiBox'),
+    'dalle': document.getElementById('dalleBox')
+};
+
 if(sendBtn){
-  sendBtn.addEventListener('click', askAI);
-  chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askAI(); });
+    sendBtn.addEventListener('click', askAI);
+    chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askAI(); });
 }
 
 async function askAI(){
     const question = chatInput.value.trim();
     if(!question) return;
-    const userP = document.createElement('p'); 
-    userP.style.color="#0f0"; 
-    userP.textContent = "You: " + question; 
-    chatBox.appendChild(userP);
-    chatInput.value='';
-    chatBox.scrollTop = chatBox.scrollHeight;
 
-    const aiModels = ['gpt-5','claude','grok','gemini'];
-    for(const model of aiModels){
+    chatInput.value='';
+
+    for(const model of ['gpt-5','claude','grok','gemini']){
         try{
             const response = await puter.call(model, `Answer clearly: "${question}"`);
-            const div = document.createElement('div'); 
-            div.className = 'ai-response ai-' + model.toLowerCase();
-            div.textContent = model.toUpperCase() + ": " + response.text;
-            chatBox.appendChild(div);
-            chatBox.scrollTop = chatBox.scrollHeight;
+            aiBoxes[model].innerHTML += `<p>${response.text}</p>`;
+            aiBoxes[model].scrollTop = aiBoxes[model].scrollHeight;
             playTTS(response.text);
-        } catch(e){
-            console.warn(model + " failed", e);
-        }
+        } catch(e){ console.warn(model + " failed", e); }
     }
+
+    // DALL-E box
+    try{
+        const imgEl = await puter.ai.txt2img(question);
+        aiBoxes['dalle'].appendChild(imgEl);
+        aiBoxes['dalle'].scrollTop = aiBoxes['dalle'].scrollHeight;
+    } catch(e){ console.warn("DALL-E failed", e); }
 }
 
 // ---- Affiliate Registration ----
@@ -74,10 +79,11 @@ if(saveAffiliateBtn){
 }
 
 // ---- Generate Products ----
-async function generateProducts(category="Trending", affiliateTag=""){
+async function generateProducts(category="Trending"){
     const container = document.getElementById('productContainer');
     if(!container) return;
     container.innerHTML = "";
+    const affiliateTag = localStorage.getItem('affiliateTag') || "";
     try{
         const response = await puter.ai.chat(
             `Generate 5 trending Amazon products for ${category} category, JSON format [{name, link}]`,
@@ -98,7 +104,8 @@ async function generateProducts(category="Trending", affiliateTag=""){
             card.appendChild(btn);
             container.appendChild(card);
         }
-    } catch(err){
-        console.warn("Product generation failed", err);
-    }
+    } catch(err){ console.warn("Product generation failed", err); }
 }
+
+// Call product generation on load
+generateProducts();
