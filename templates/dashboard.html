@@ -6,19 +6,14 @@
 <title>LinkBotLabs AI Video Generator</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
-/* Body & layout */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #4b6cb7, #8e2de2); /* Blue → Purple */
+    background: linear-gradient(135deg, #4b6cb7, #8e2de2);
     color: #fff;
     margin:0; padding:0;
     min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
 }
-
-/* Password overlay */
 .overlay {
     position: fixed; top:0; left:0; width:100%; height:100%;
     background: rgba(0,0,0,0.85);
@@ -26,95 +21,37 @@ body {
 }
 .overlay input { padding:10px; width:200px; margin-top:10px; border-radius:5px; border:none; }
 .overlay button { margin-top:10px; padding:10px 20px; border:none; border-radius:5px; background:#7b5cf5; color:white; cursor:pointer; }
-
-/* Dashboard container - glass style */
 #dashboardContent {
     background: rgba(255,255,255,0.05);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    padding:20px;
-    border-radius:20px;
-    width:90%;
-    max-width:700px;
+    padding:20px; border-radius:20px;
+    width:90%; max-width:700px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.5);
     display:none;
 }
-
-/* Inputs & buttons - glass style */
 input, textarea {
-    width:100%;
-    padding:10px;
-    margin:5px 0 15px 0;
-    border-radius:10px;
-    border:none;
-    background: rgba(255,255,255,0.1);
-    color:white;
-    backdrop-filter: blur(5px);
+    width:100%; padding:10px; margin:5px 0 15px 0; border-radius:10px;
+    border:none; background: rgba(255,255,255,0.1); color:white; backdrop-filter: blur(5px);
 }
 input::placeholder, textarea::placeholder { color: #ccc; }
-
 button {
-    padding:10px 20px;
-    border:none;
-    border-radius:10px;
-    background: rgba(123,92,245,0.8);
-    color:white;
-    cursor:pointer;
-    transition: all 0.3s ease;
-    margin-top:10px;
+    padding:10px 20px; border:none; border-radius:10px;
+    background: rgba(123,92,245,0.8); color:white; cursor:pointer;
+    transition: all 0.3s ease; margin-top:10px;
 }
 button:hover { background: rgba(90,60,191,0.9); }
-
-/* Status messages */
 .error { color:#ff6b6b; margin-bottom:10px; }
 .success { color:#4ade80; margin-bottom:10px; }
-
-/* DALL·E images container */
-#dalle_images { margin-top:10px; }
-.dalle-container {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    margin-bottom:15px;
-    backdrop-filter: blur(8px);
-    padding:10px;
-    border-radius:15px;
-    background: rgba(255,255,255,0.05);
-}
-.dalle-container img { max-width:90%; border-radius:10px; cursor:pointer; }
-.dalle-container button {
-    margin-top:5px;
-    padding:8px 16px;
-    border-radius:5px;
-    border:none;
-    background:#7b5cf5;
-    color:white;
-    cursor:pointer;
-}
+#dalle_images { margin-top:10px; display:flex; flex-wrap:wrap; gap:10px; }
+.dalle-container { position:relative; flex:1 1 45%; display:flex; flex-direction:column; align-items:center; margin-bottom:15px; backdrop-filter: blur(8px); padding:10px; border-radius:15px; background: rgba(255,255,255,0.05); }
+.dalle-container img { max-width:100%; border-radius:10px; cursor:pointer; }
+.dalle-container button { margin-top:5px; padding:8px 16px; border-radius:5px; border:none; background:#7b5cf5; color:white; cursor:pointer; }
 .dalle-container button:hover { background:#5a3cbf; }
-
-/* Video */
 video { width:100%; border-radius:10px; margin-top:15px; }
-
-/* Progress bar */
 .progress-container { margin-top:10px; background: rgba(255,255,255,0.1); border-radius:5px; }
 .progress-bar { width:0%; height:20px; background:#7b5cf5; border-radius:5px; transition:width 0.3s; }
 .progress-text { margin-top:5px; font-size:0.9em; color:#fff; }
-
-/* Image modal */
-#imageModal {
-  display:none;
-  position:fixed;
-  top:0; left:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.9);
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
-}
-#imageModal img { max-width:90%; max-height:90%; border-radius:10px; }
-#imageModal span { position:absolute; top:20px; right:30px; font-size:2rem; color:white; cursor:pointer; }
-
-/* Clear/reset buttons */
 #clearImages, #clearUrls { margin-top:5px; background: rgba(255,255,255,0.15); color:#fff; }
 #clearImages:hover, #clearUrls:hover { background: rgba(255,255,255,0.25); }
 </style>
@@ -158,12 +95,6 @@ video { width:100%; border-radius:10px; margin-top:15px; }
     <video id="video_preview" controls style="display:none;"></video>
 </div>
 
-<!-- Fullscreen image modal -->
-<div id="imageModal">
-  <span id="closeModal">&times;</span>
-  <img id="modalImage" src="" alt="Preview">
-</div>
-
 <script>
 // Password overlay
 const correctPassword = "supersecret";
@@ -193,28 +124,13 @@ async function updateProgress(stepText, percent){
 // Clear buttons
 document.getElementById('clearImages').addEventListener('click', ()=>{ 
     document.getElementById('dalle_images').innerHTML=''; 
-    dalleImages=[]; 
 });
 document.getElementById('clearUrls').addEventListener('click', ()=>{ 
     document.getElementById('urls').value=''; 
 });
 
-// URL validation
-async function validateUrls(urls) {
-    const validUrls = [];
-    for (let url of urls) {
-        try {
-            const resp = await fetch(url, { method: 'HEAD' });
-            if (resp.ok) validUrls.push(url);
-        } catch(e) { console.warn('Invalid URL:', url); }
-    }
-    return validUrls;
-}
-
 // DALL·E image generation
-let dalleImages = [];
 let generatingImage = false;
-
 document.getElementById('generateDalleBtn').addEventListener('click', async function() {
     const prompt = document.getElementById('dalle_prompt').value.trim();
     if(!prompt) return alert('Enter a prompt');
@@ -226,120 +142,73 @@ document.getElementById('generateDalleBtn').addEventListener('click', async func
 
         const container = document.createElement('div');
         container.classList.add('dalle-container');
-
-        imgEl.addEventListener("click", () => openImageModal(imgEl.src));
+        imgEl.addEventListener("click", () => window.open(imgEl.src));
         container.appendChild(imgEl);
 
         const downloadBtn = document.createElement("button");
-        downloadBtn.textContent = "⬇️ Download";
-        downloadBtn.onclick = () => {
-            const link = document.createElement("a");
-            link.href = imgEl.src;
-            link.download = "AI_image.png";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
+        downloadBtn.textContent = "Download";
+        downloadBtn.onclick = ()=>{ const a = document.createElement("a"); a.href=imgEl.src; a.download="image.png"; a.click(); }
         container.appendChild(downloadBtn);
 
         document.getElementById('dalle_images').appendChild(container);
-        dalleImages.push(imgEl.src);
-        await updateProgress('✅ Image ready', 100);
-
     } catch(err){
         console.error(err);
         alert('❌ Failed to generate image.');
-    } finally { generatingImage=false; }
+    } finally { generatingImage=false; await updateProgress('Idle',0); }
 });
 
-// Image modal
-function openImageModal(src) {
-    document.getElementById("modalImage").src = src;
-    document.getElementById("imageModal").style.display = "flex";
-}
-document.getElementById("closeModal").addEventListener("click", () => {
-    document.getElementById("imageModal").style.display = "none";
-});
-document.getElementById("imageModal").addEventListener("click", (e) => {
-    if(e.target.id === "imageModal") {
-        document.getElementById("imageModal").style.display = "none";
-    }
-});
-
-// Video generation
+// Generate Video
 document.getElementById('generateVideoBtn').addEventListener('click', async function(){
     const errorEl = document.getElementById('error');
     const successEl = document.getElementById('success');
     const videoEl = document.getElementById('video_preview');
-    const urlsRaw = document.getElementById('urls').value.split(',').map(u=>u.trim()).filter(Boolean);
 
-    errorEl.textContent=''; successEl.textContent=''; videoEl.style.display='none';
-    await updateProgress('Checking URLs...', 5);
+    errorEl.textContent = '';
+    successEl.textContent = '';
+    videoEl.style.display = 'none';
 
-    const validUrls = await validateUrls(urlsRaw);
-    if(!validUrls.length && !dalleImages.length){
-        errorEl.textContent = '❌ None of the URLs worked. Enter at least one valid URL or DALL·E prompt.';
-        await updateProgress('Idle', 0);
+    const urls = document.getElementById('urls').value.split(',').map(u=>u.trim()).filter(Boolean);
+    const scriptText = document.getElementById('script').value.trim();
+
+    // Collect DALL·E image URLs
+    const dalleImages = Array.from(document.querySelectorAll('#dalle_images img')).map(img => img.src);
+
+    if(!urls.length && !dalleImages.length){
+        errorEl.textContent = '❌ Enter at least one URL or generate a DALL·E image.';
         return;
     }
-    await updateProgress('✅ URLs valid', 10);
 
-    try{
-        let currentProgress=10;
-        const stepsWeight={urls:30,dalle:20,script:10,tts:10,video:30};
-
-        // URLs step
-        if(validUrls.length){
-            await updateProgress('Downloading product images...', currentProgress);
-            await new Promise(r=>setTimeout(r,1000));
-            currentProgress+=stepsWeight.urls;
-            await updateProgress('Product images ready', currentProgress);
-        }
-
-        // DALL·E images step
-        if(dalleImages.length){
-            for(let i=0;i<dalleImages.length;i++){
-                await updateProgress(`Using DALL·E image ${i+1}/${dalleImages.length}`, currentProgress);
-                await new Promise(r=>setTimeout(r,500));
-                currentProgress+=stepsWeight.dalle/dalleImages.length;
-            }
-        }
-
-        // Script generation
-        const scriptText = document.getElementById('script').value.trim();
-        const finalScript = scriptText || await puter.ai.chat(`Write a TikTok-style narration for these products: ${validUrls.join(', ')}`, {model:"gpt-5-nano"});
-        currentProgress+=stepsWeight.script;
-        await updateProgress('Script ready', currentProgress);
-
-        // TTS
-        const ttsBlob = await puter.ai.tts(finalScript,{voice:"alloy"});
-        currentProgress+=stepsWeight.tts;
-        await updateProgress('TTS ready', currentProgress);
-
-        // Video generation
-        const ttsFile = new File([ttsBlob],"voice.mp3",{type:"audio/mpeg"});
+    try {
+        await updateProgress('Preparing video...', 10);
         const formData = new FormData();
-        formData.append("urls",JSON.stringify([...validUrls,...dalleImages]));
-        formData.append("script",finalScript);
-        formData.append("voiceover",ttsFile);
-        await updateProgress('Generating video...', currentProgress);
+        formData.append('urls', JSON.stringify(urls));
+        formData.append('dalle_urls', JSON.stringify(dalleImages));
+        formData.append('script', scriptText);
 
-        const response = await fetch('/generate_video',{method:'POST',body:formData});
+        if(window.ttsBlob){
+            formData.append('voiceover', new File([window.ttsBlob], "voice.mp3", {type:"audio/mpeg"}));
+        }
+
+        const response = await fetch('/generate_video', { method:'POST', body: formData });
         const data = await response.json();
 
         if(data.video_file){
-            await updateProgress('Completed',100);
-            successEl.textContent='✅ Video generated!';
-            videoEl.src=`/download/${data.video_file}`;
-            videoEl.style.display='block';
-        } else errorEl.textContent='❌ '+(data.error||'Unknown error');
+            await updateProgress('Completed', 100);
+            successEl.textContent = '✅ Video generated!';
+            videoEl.src = `/download/${data.video_file}`;
+            videoEl.style.display = 'block';
+        } else {
+            errorEl.textContent = '❌ ' + (data.error || 'Unknown error');
+            await updateProgress('Idle', 0);
+        }
 
     } catch(err){
         console.error(err);
-        errorEl.textContent='❌ Failed to generate video.';
-        await updateProgress('Idle',0);
+        errorEl.textContent = '❌ Failed to generate video.';
+        await updateProgress('Idle', 0);
     }
 });
 </script>
+
 </body>
 </html>
