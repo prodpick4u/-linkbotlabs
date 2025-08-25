@@ -4,26 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LinkBotLabs Demo – Multi-AI Shopping & TTS</title>
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/prodpick4u/linkbotlabs/main/docs/9950FA69-865E-4707-AB91-B7CB65C501BF.png">
+<link rel="icon" href="https://raw.githubusercontent.com/prodpick4u/linkbotlabs/main/docs/9950FA69-865E-4707-AB91-B7CB65C501BF.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
-body {
-  font-family:'Inter',sans-serif;
-  margin:0; padding:2rem;
-  color:#fff;
+body { font-family:'Inter',sans-serif; margin:0; padding:2rem; color:#fff;
   background: linear-gradient(-45deg,#0a0033,#3b007f,#1a1aff,#6f00ff);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-}
-@keyframes gradientShift {
-  0%{background-position:0% 50%;}
-  25%{background-position:50% 50%;}
-  50%{background-position:100% 50%;}
-  75%{background-position:50% 50%;}
-  100%{background-position:0% 50%;}
-}
-h1,h2 { color:#9cf; }
-h1 { text-align:center; font-size:2.5rem; margin-bottom:1rem; }
+  background-size: 400% 400%; animation: gradientShift 15s ease infinite; }
+@keyframes gradientShift {0%{background-position:0% 50%;}25%{background-position:50% 50%;}50%{background-position:100% 50%;}75%{background-position:50% 50%;}100%{background-position:0% 50%;}}
+h1,h2 { color:#9cf; text-align:center; }
+h1 { font-size:2.5rem; margin-bottom:1rem; }
 p { line-height:1.5; }
 .glass { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border-radius:12px; padding:20px; margin-bottom:2rem; }
 input, button, select { width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none; }
@@ -45,7 +34,7 @@ button:hover { opacity:0.85; }
 <body>
 
 <h1>🚀 LinkBotLabs Demo – Multi-AI Powered</h1>
-<p style="text-align:center;">Try AI-powered product suggestions, reviews, and TTS using GPT-5, Claude, Grok, Gemini, and more.</p>
+<p style="text-align:center;">AI-powered product suggestions, reviews, and TTS using GPT-5, Claude, Grok, Gemini, and more.</p>
 
 <!-- Voice Selector -->
 <div class="glass" style="text-align:center;">
@@ -53,28 +42,9 @@ button:hover { opacity:0.85; }
 <select id="voiceSelect"></select>
 </div>
 
-<!-- Keyholders Demo -->
-<div class="glass">
-<h2 class="section-title">🔑 Keyholders Demo</h2>
-<p>Enter your Amazon Affiliate Tag, API Key, and keyword. Max 3 searches per session.</p>
-<form id="keyholdersForm">
-<label>Amazon Affiliate Tag:
-  <input id="khAffiliate" type="text" placeholder="mychanneld-20" required>
-</label>
-<label>Amazon API Key:
-  <input id="khApiKey" type="text" placeholder="AKIA..." required>
-</label>
-<label>Keyword:
-  <input id="khKeyword" type="text" placeholder="e.g. blender" required>
-</label>
-<button type="submit">Generate Demo</button>
-</form>
-<div id="khOutput" class="output"></div>
-</div>
-
 <!-- Keyless Demo -->
 <div class="glass">
-<h2 class="section-title">🗝️ Keyless Demo</h2>
+<h2 class="section-title">🗝️ Demo Products</h2>
 <p>Select a category to see AI-suggested products with multi-AI reviews and TTS preview.</p>
 <label>Category:
 <select id="categorySelect">
@@ -98,7 +68,6 @@ button:hover { opacity:0.85; }
 </div>
 </div>
 
-<!-- Puter.js -->
 <script src="https://cdn.jsdelivr.net/npm/puter.js@latest/dist/puter.min.js"></script>
 <script>
 const puter = new Puter({ debug:true });
@@ -149,38 +118,6 @@ function getConsensus(responses){
   return consensus.join('. ') + (consensus.length?'.':'');
 }
 
-// ==== Keyholders Demo ====
-let khTries=0, maxKhTries=3;
-document.getElementById('keyholdersForm').addEventListener('submit', async e=>{
-  e.preventDefault();
-  if(khTries>=maxKhTries){ alert("Max tries reached"); return; }
-  khTries++;
-  const keyword = document.getElementById('khKeyword').value.trim();
-  const affiliate = document.getElementById('khAffiliate').value.trim() || "mychanneld-20";
-  const prompt = `Generate 1 top Amazon product for the keyword "${keyword}" with description, price, and URL. Format as JSON.`;
-  try{
-    const response = await puter.ai.chat(prompt,{ model:"gpt-5" });
-    const product = JSON.parse(response.text)[0];
-    const reviewPrompt = `Write a short persuasive SEO review for "${product.title}" using multiple AI models.`;
-    const reviews = await multiAiCall(reviewPrompt);
-    const consensusText = getConsensus(reviews);
-
-    document.getElementById('khOutput').innerHTML = `
-      <div class="product-card">
-        🛒 <a href="${product.url}?tag=${affiliate}" target="_blank">${product.title}</a>
-        <p>Price: ${product.price}</p>
-        <p>${product.description}</p>
-        <div class="ai-response">
-          ${reviews.map(r=>`<p><strong>${r.model}:</strong> ${r.text}</p>`).join('')}
-          ${consensusText?`<p class="ai-consensus">Consensus: ${consensusText}</p>`:''}
-        </div>
-        <button onclick="playTTS('${consensusText.replace(/'/g,"\\'") || reviews[0].text.replace(/'/g,"\\'")}')">🔊 Play TTS</button>
-        <button onclick="synth.cancel()">⏹ Stop TTS</button>
-      </div>
-    `;
-  } catch(err){ console.error(err); alert("AI fetch failed."); }
-});
-
 // ==== Keyless Demo ====
 document.getElementById('categorySelect').addEventListener('change', async e=>{
   const category = e.target.value;
@@ -221,44 +158,27 @@ async function askBot(){
   const input = chatInput.value.trim();
   if(!input) return;
   
-  // Display user input
-  const userP = document.createElement('p');
-  userP.style.color="#0f0";
-  userP.textContent="You: "+input;
+  const userP = document.createElement('p'); userP.style.color="#0f0"; userP.textContent="You: "+input;
   chatBox.appendChild(userP);
 
   try{
-    // Get AI responses
     const responses = await multiAiCall(input);
     const consensusText = getConsensus(responses);
-
-    // Display each model response
     const botHtml = responses.map(r=>`<p><strong>${r.model}:</strong> ${r.text}</p>`).join('') +
                     (consensusText?`<p class="ai-consensus">Consensus: ${consensusText}</p>`:'');
-    const botP = document.createElement('div');
-    botP.innerHTML = botHtml;
+    const botP = document.createElement('div'); botP.innerHTML = botHtml;
     chatBox.appendChild(botP);
 
-    // Auto-scroll
     chatBox.scrollTop = chatBox.scrollHeight;
-
-    // Play TTS for consensus or first response
     playTTS(consensusText || responses[0].text);
 
-  } catch(err){
-    console.error(err);
-    alert("AI bot failed.");
-  }
+  } catch(err){ console.error(err); alert("AI bot failed."); }
 
-  // Clear input
   chatInput.value='';
 }
 
-// Event listeners for send button and Enter key
 sendBtn.addEventListener('click', askBot);
-chatInput.addEventListener('keypress', e=>{
-  if(e.key==='Enter') askBot();
-});
+chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askBot(); });
 </script>
 </body>
 </html>
