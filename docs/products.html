@@ -52,7 +52,7 @@ h2 { font-size:1.6rem; margin-top:40px; }
 </head>
 <body>
 
-<div id="affiliateBanner" class="banner"></div>
+<div id="affiliateBanner" class="banner">Welcome to AI Product Hub!</div>
 
 <h1>AI Product Hub – Powered by LinkBotLabs</h1>
 <p class="header-note">
@@ -155,7 +155,6 @@ let AMAZON_PRODUCTS = [
     {title:"Air Fryer", price:"$279", desc:"Healthy frying alternative.", url:"https://amzn.to/3JogHVi", category:"kitchen"},
     {title:"KitchenAid Mixer", price:"$379", desc:"Stand mixer for baking.", url:"https://amzn.to/3HHSZmj", category:"kitchen"}
 ];
-
 let TEMU_PRODUCTS = [
     {title:"Multi Rice Cooker", price:"Varies", desc:"Cook rice easily.", url:"https://share.temu.com/jwZL6Tbh2SB", category:"kitchen"},
     {title:"Foldable Kettle", price:"Varies", desc:"Compact kettle.", url:"https://share.temu.com/GZe6nSeHcEB", category:"kitchen"},
@@ -210,8 +209,6 @@ document.getElementById("amazon-categories").addEventListener("change", filterPr
 document.getElementById("temu-categories").addEventListener("change", filterProducts);
 
 // Initial render with AI enhancement
-(async
- // Initial render with AI enhancement
 (async function(){
     await enhanceProducts(AMAZON_PRODUCTS);
     await enhanceProducts(TEMU_PRODUCTS);
@@ -219,11 +216,11 @@ document.getElementById("temu-categories").addEventListener("change", filterProd
 })();
 
 // ===== Chat panel logic =====
-const chatButton = document.getElementById("chatButton");
 const chatPanel = document.getElementById("chatPanel");
 const chatMessages = document.getElementById("chatMessages");
 const chatInput = document.getElementById("chatInput");
 
+// Toggle chat panel
 chatButton.addEventListener("click", ()=> {
     chatPanel.style.display = chatPanel.style.display==="flex"?"none":"flex";
     chatPanel.style.flexDirection="column";
@@ -250,9 +247,12 @@ chatInput.addEventListener("keypress", async (e)=>{
 
 // ===== Weekly product update simulation =====
 async function weeklyUpdate(){
-    // In a real setup, fetch new top-selling products or AI recommendations
-    const weeklyTip = await puter.ai.chat("Give a tip for trending products this week with hot picks for Amazon and Temu", {model:"gpt-5"});
-    document.getElementById("affiliateBanner").innerText = `📈 Weekly Hot Picks & Tips: ${weeklyTip.text}`;
+    try{
+        const weeklyTip = await puter.ai.chat("Give a tip for trending products this week with hot picks for Amazon and Temu", {model:"gpt-5"});
+        document.getElementById("affiliateBanner").innerText = `📈 Weekly Hot Picks & Tips: ${weeklyTip.text}`;
+    }catch(e){
+        console.warn("Weekly AI update error:", e);
+    }
 }
 weeklyUpdate();
 
@@ -282,6 +282,15 @@ function captureEmail(email){
     console.log("Captured email:", email); 
     alert(`Thanks! We'll keep you updated, ${email}`);
 }
+
+// Example email input (optional, can be placed anywhere on page)
+const emailDiv = document.createElement("div");
+emailDiv.className = "glass";
+emailDiv.innerHTML = `<h2>📧 Stay Updated</h2>
+<input type="email" id="emailInput" placeholder="Your email">
+<button onclick="captureEmail(document.getElementById('emailInput').value)">Subscribe</button>`;
+document.body.appendChild(emailDiv);
+
 </script>
 </body>
 </html>
