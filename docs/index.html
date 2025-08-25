@@ -166,7 +166,8 @@ alt="LinkBotLabs Banner" style="width:100%; height:auto; display:block;">
 <div class="categories">
 <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
 <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
-<a href="https://www.amazon.com/s?k=blender&tag=mychanneld-20">🥤 Blenders</<a href="https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20">🍚 Rice Cookers</a>
+<a href="https://www.amazon.com/s?k=blender&tag=mychanneld-20">🥤 Blenders</a>
+<a href="https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20">🍚 Rice Cookers</a>
 <a href="https://www.amazon.com/s?k=headphones&tag=mychanneld-20">🎧 Headphones</a>
 <a href="https://www.amazon.com/s?k=kitchen+products&tag=mychanneld-20">🍳 Kitchen Tools</a>
 <a href="https://www.amazon.com/s?k=tech&tag=mychanneld-20">💻 Tech Gadgets</a>
@@ -176,12 +177,9 @@ alt="LinkBotLabs Banner" style="width:100%; height:auto; display:block;">
 <!-- AI Product Recommendations -->
 <section>
 <h2>🤖 AI Product Recommendations</h2>
-<div class="ai-products" id="aiProducts">
-  <!-- Dynamically filled by Puter.js -->
-</div>
+<div class="ai-products" id="aiProducts"></div>
 </section>
 
-<!-- Comments / Testimonials -->
 <section>
 <h2>💬 User Comments & Reviews</h2>
 <div class="comments">
@@ -191,7 +189,6 @@ alt="LinkBotLabs Banner" style="width:100%; height:auto; display:block;">
 </div>
 </section>
 
-<!-- Footer -->
 <footer>
 <p>© 2025 LinkBotLabs. All Rights Reserved.</p>
 <p class="contact-form">
@@ -200,25 +197,9 @@ alt="LinkBotLabs Banner" style="width:100%; height:auto; display:block;">
 </p>
 </footer>
 
-<!-- Floating AI Chat Icon -->
 <div class="ai-chat" id="aiChat">💬</div>
 
 <script>
-// Populate AI product cards dynamically
-const aiProductsData = [
-  {name:"Smart Blender X100", img:"https://via.placeholder.com/220x140.png?text=Blender", link:"#"},
-  {name:"Wireless Headphones Pro", img:"https://via.placeholder.com/220x140.png?text=Headphones", link:"#"},
-  {name:"Advanced Rice Cooker", img:"https://via.placeholder.com/220x140.png?text=Rice+Cooker", link:"#"},
-  {name:"Vitamin Supplements Pack", img:"https://via.placeholder.com/220x140.png?text=Supplements", link:"#"},
-];
-const container = document.getElementById('aiProducts');
-aiProductsData.forEach(p=>{
-  const card = document.createElement('div');
-  card.className = 'ai-card';
-  card.innerHTML = `<img src="${p.img}" alt="${p.name}"><h4>${p.name}</h4><a href="${p.link}" class="btn">Buy Now</a>`;
-  container.appendChild(card);
-});
-
 // TTS Welcome Message
 const ttsBtn = document.getElementById('ttsBtn');
 ttsBtn.addEventListener('click',()=>{
@@ -227,12 +208,101 @@ ttsBtn.addEventListener('click',()=>{
   speechSynthesis.speak(msg);
 });
 
-// AI Chat Floating Button
+// AI Chat Button
 const aiChat = document.getElementById('aiChat');
 aiChat.addEventListener('click',()=>{
   alert("🤖 AI Chat coming soon! Ask product questions or get suggestions directly here.");
 });
+
+// Category-Aware AI Product Generation
+const categories = ["Kitchen", "Tech", "Beauty", "Health"];
+const aiProductsContainer = document.getElementById('aiProducts');
+
+async function generateAIProducts(category = "Kitchen") {
+    const cacheKey = `aiProductsCache_${category}`;
+    try {
+        const response = await puter.ai.chat(
+            `Generate 6 trending Amazon products in the ${category} category with JSON output: [{name, link}]`,
+            { model: "gpt-5-nano" }
+        );
+
+        let products = [];
+        try { products = JSON.parse(response.text); } catch(e) {
+            console.warn("Invalid JSON from AI, using fallback", e);
+        }
+
+        if(products.length === 0){
+            products = [
+                {name: `${category} Product 1`, link:"#"},
+                {name: `${category} Product 2`, link:"#"},
+                {name: `${category} Product 3`, link:"#"},
+                {name: `${category} Product 4`, link:"#"},
+                {name: `${category} Product 5`, link:"#"},
+                {name: `${category} Product 6`, link:"#"}
+            ];
+        }
+
+        localStorage.setItem(cacheKey, JSON.stringify(products));
+        renderAIProducts(products);
+
+    } catch(err){
+        console.warn("AI fetch failed, loading cached products if available.", err);
+        const cachedData = localStorage.getItem(cacheKey);
+        if(cachedData) renderAIProducts(JSON.parse(cachedData));
+    }
+}
+
+async function renderAIProducts(products){
+    aiProductsContainer.innerHTML = "";
+
+    for(const p of products){
+        const card = document.createElement('div');
+        card.className = 'ai-card';
+        aiProductsContainer.appendChild(card);
+
+        try{
+            const imgEl = await puter.ai.txt2img(`Professional product photo of ${p.name}, realistic, high quality`);
+            imgEl.style.width="100%";
+            imgEl.style.borderRadius="6px";
+            card.appendChild(imgEl);
+        } catch(e){
+            const fallbackImg = document.createElement('img');
+            fallbackImg.src = "https://via.placeholder.com/220x140.png?text=Product";
+            fallbackImg.style.width="100%";
+            fallbackImg.style.borderRadius="6px";
+            card.appendChild(fallbackImg);
+        }
+
+        const title = document.createElement('h4');
+        title.innerText = p.name;
+        card.appendChild(title);
+
+        const btn = document.createElement('a');
+        btn.href = p.link + "?tag=mychanneld-20";
+        btn.className = "btn";
+        btn.innerText = "Buy Now";
+        card.appendChild(btn);
+    }
+}
+
+// Add category buttons
+const categorySection = document.createElement('div');
+categorySection.style.textAlign = "center";
+categorySection.style.margin = "1rem 0";
+
+categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.innerText = cat;
+    btn.className = "btn";
+    btn.addEventListener('click', () => generateAIProducts(cat));
+    categorySection.appendChild(btn);
+});
+
+aiProductsContainer.parentNode.insertBefore(categorySection, aiProductsContainer);
+
+// Load default products
+generateAIProducts("Kitchen");
 </script>
 
 </body>
-</html>                                                                         
+</html>
