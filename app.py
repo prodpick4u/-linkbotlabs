@@ -1,19 +1,17 @@
 import os
 import json
-from flask import Flask, request, Response, send_from_directory, render_template
+from flask import Flask, request, send_from_directory, jsonify, render_template
 from io import BytesIO
 from PIL import Image
 import requests
 import subprocess
-import textwrap
-import tempfile
 
 app = Flask(__name__)
 TMP_DIR = "/tmp"
 os.makedirs(TMP_DIR, exist_ok=True)
 
 # ----------------------------
-# Download image
+# Download image from URL
 # ----------------------------
 def download_image(url, filename):
     path = os.path.join(TMP_DIR, filename)
@@ -29,16 +27,16 @@ def download_image(url, filename):
         raise RuntimeError(f"Failed to download image {url}: {e}")
 
 # ----------------------------
-# Generate video with FFmpeg
+# Generate video using FFmpeg
 # ----------------------------
-def generate_video(image_files, script_text, voice_file=None, output_filename="output.mp4"):
-    # Create ffmpeg input list
+def generate_video(image_files, script_text="", voice_file=None, output_filename="output.mp4"):
     list_file = os.path.join(TMP_DIR, "images.txt")
     with open(list_file, "w") as f:
         for img in image_files:
             f.write(f"file '{img}'\n")
             f.write("duration 3\n")
-        f.write(f"file '{image_files[-1]}'\n")
+        if image_files:
+            f.write(f"file '{image_files[-1]}'\n")
 
     video_path = os.path.join(TMP_DIR, output_filename)
     subprocess.run([
@@ -48,7 +46,7 @@ def generate_video(image_files, script_text, voice_file=None, output_filename="o
         video_path
     ], check=True)
 
-    # Add subtitles if script provided
+    # Add subtitles if script_text provided
     if script_text:
         srt_file = os.path.join(TMP_DIR,"subtitles.srt")
         with open(srt_file,"w") as srt:
@@ -60,11 +58,13 @@ def generate_video(image_files, script_text, voice_file=None, output_filename="o
         ], check=True)
         video_path = subtitled
 
-    # Merge voiceover
+    # Merge voiceover if provided
     if voice_file:
+        voice_path = os.path.join(TMP_DIR, "voice.mp3")
+        voice_file.save(voice_path)
         final_video = os.path.join(TMP_DIR,f"final_{output_filename}")
         subprocess.run([
-            "ffmpeg","-y","-i",video_path,"-i",voice_file,
+            "ffmpeg","-y","-i",video_path,"-i",voice_path,
             "-c:v","copy","-c:a","aac","-shortest",final_video
         ], check=True)
         video_path = final_video
@@ -72,61 +72,54 @@ def generate_video(image_files, script_text, voice_file=None, output_filename="o
     return video_path
 
 # ----------------------------
-# SSE: Stream real progress
+# Generate video endpoint
 # ----------------------------
-@app.route("/generate_video_stream", methods=["POST"])
-def generate_video_stream():
-    data = request.get_json()
-    urls = data.get("urls", [])
-    dalle_prompts = data.get("dalle_prompts", [])
-    script_text = data.get("script", "")
+@app.route("/generate_video", methods=["POST"])
+def generate_video_endpoint():
+    try:
+        urls = json.loads(request.form.get("urls","[]"))
+        script_text = request.form.get("script","")
+        voice_file = request.files.get("voiceover")
+        dalle_urls = json.loads(request.form.get("dalle_urls","[]"))  # URLs from dashboard DALL·E images
 
-    def stream():
         image_files = []
 
-        # ---------------- Step 1: Fetch product URLs ----------------
-        for url in urls:
+        # Download product URLs
+        for idx, url in enumerate(urls):
             try:
-                img_path = download_image(url, f"url_{urls.index(url)}.jpg")
+                img_path = download_image(url, f"url_{idx}.jpg")
                 image_files.append(img_path)
-                yield f"data: {json.dumps({'step': f'Fetched {url}', 'progress': 100})}\n\n"
             except Exception as e:
-                yield f"data: {json.dumps({'step': f'Failed {url}', 'progress': 0, 'error': str(e)})}\n\n"
+                print(f"Warning: failed to download {url} - {e}")
 
-        # ---------------- Step 2: Generate DALL·E images ----------------
-        for prompt in dalle_prompts:
+        # Add frontend DALL·E images
+        for idx, dalle_url in enumerate(dalle_urls):
             try:
-                # Use Puter.js in frontend to generate image, backend just stores URL here
-                # For demo purposes, we simulate download
-                # Replace with AI generation call if backend TTS/images available
-                img_path = download_image(prompt, f"dalle_{dalle_prompts.index(prompt)}.jpg")
+                img_path = download_image(dalle_url, f"dalle_{idx}.jpg")
                 image_files.append(img_path)
-                yield f"data: {json.dumps({'step': f'Generated image: {prompt}', 'progress': 100})}\n\n"
             except Exception as e:
-                yield f"data: {json.dumps({'step': f'Failed image {prompt}', 'progress': 0, 'error': str(e)})}\n\n"
+                print(f"Warning: failed to download DALL·E image {dalle_url} - {e}")
 
-        # ---------------- Step 3: Generate TTS ----------------
-        tts_file = None
-        if script_text:
-            # In production, call TTS service; here we simulate
-            tts_file = None
-            yield f"data: {json.dumps({'step': 'Generated TTS', 'progress': 100})}\n\n"
+        if not image_files:
+            return jsonify({"error":"No valid images to generate video"}), 400
 
-        # ---------------- Step 4: Render video ----------------
-        video_file = generate_video(image_files, script_text, voice_file=tts_file, output_filename="final_video.mp4")
-        yield f"data: {json.dumps({'step': 'Complete', 'progress': 100, 'video_file': os.path.basename(video_file)})}\n\n"
+        # Generate video
+        video_file = generate_video(image_files, script_text, voice_file=voice_file, output_filename="final_video.mp4")
+        return jsonify({"video_file": os.path.basename(video_file)})
 
-    return Response(stream(), mimetype='text/event-stream')
+    except Exception as e:
+        print("Error generating video:", e)
+        return jsonify({"error": str(e)}), 500
 
 # ----------------------------
-# Frontend
+# Frontend dashboard
 # ----------------------------
 @app.route("/")
 def home():
-    return render_template("dashboard.html")
+    return render_template("dashboard.html")  # Your HTML from previous step
 
 # ----------------------------
-# Download
+# Download generated video
 # ----------------------------
 @app.route("/download/<filename>")
 def download(filename):
