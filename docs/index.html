@@ -25,28 +25,28 @@
   <h2>GPT-5</h2>
   <div class="ai-box" id="gpt5Box"></div>
   <input type="text" id="gpt5Input" placeholder="Ask GPT-5...">
-  <button onclick="askModel('gpt-5')">Send</button>
+  <button onclick="askModel('gpt-5', 'gpt5Box', 'gpt5Input')">Send</button>
 </section>
 
 <section>
   <h2>Claude</h2>
   <div class="ai-box" id="claudeBox"></div>
   <input type="text" id="claudeInput" placeholder="Ask Claude...">
-  <button onclick="askModel('claude')">Send</button>
+  <button onclick="askModel('claude', 'claudeBox', 'claudeInput')">Send</button>
 </section>
 
 <section>
   <h2>Grok</h2>
   <div class="ai-box" id="grokBox"></div>
   <input type="text" id="grokInput" placeholder="Ask Grok...">
-  <button onclick="askModel('grok')">Send</button>
+  <button onclick="askModel('grok', 'grokBox', 'grokInput')">Send</button>
 </section>
 
 <section>
   <h2>Gemini</h2>
   <div class="ai-box" id="geminiBox"></div>
   <input type="text" id="geminiInput" placeholder="Ask Gemini...">
-  <button onclick="askModel('gemini')">Send</button>
+  <button onclick="askModel('gemini', 'geminiBox', 'geminiInput')">Send</button>
 </section>
 
 <section>
@@ -58,39 +58,34 @@
 
 <script src="https://js.puter.com/v2/"></script>
 <script>
-const puter = new Puter({ debug:true });
-
-// Ask a text model
-async function askModel(model) {
-  const inputEl = document.getElementById(model+'Input');
-  const box = document.getElementById(model+'Box');
-  const query = inputEl.value.trim();
-  if(!query) return;
-
-  box.innerHTML = 'Loading...';
-  try {
-    const res = await puter.ai.chat(query, { model });
-    box.innerHTML = res.text;
-  } catch(e) {
-    box.innerHTML = 'Error: ' + e.message;
+  // Ask a text model
+  async function askModel(model, boxId, inputId) {
+    const query = document.getElementById(inputId).value.trim();
+    const box = document.getElementById(boxId);
+    if(!query) return;
+    box.innerHTML = 'Loading...';
+    try {
+      const res = await puter.ai.chat(query, { model });
+      box.innerHTML = res.text || res; // Use res.text if available
+    } catch(e) {
+      box.innerHTML = 'Error: ' + e.message;
+    }
   }
-}
 
-// Generate DALL-E image
-async function generateImage() {
-  const prompt = document.getElementById('dalleInput').value.trim();
-  const box = document.getElementById('dalleBox');
-  if(!prompt) return;
-
-  box.innerHTML = 'Generating...';
-  try {
-    const img = await puter.ai.txt2img(prompt);
-    box.innerHTML = '';
-    box.appendChild(img);
-  } catch(e) {
-    box.innerHTML = 'Error: ' + e.message;
+  // Generate DALL-E image
+  async function generateImage() {
+    const prompt = document.getElementById('dalleInput').value.trim();
+    const box = document.getElementById('dalleBox');
+    if(!prompt) return;
+    box.innerHTML = 'Generating...';
+    try {
+      const img = await puter.ai.txt2img(prompt);
+      box.innerHTML = '';
+      box.appendChild(img);
+    } catch(e) {
+      box.innerHTML = 'Error: ' + e.message;
+    }
   }
-}
 </script>
 </body>
 </html>
