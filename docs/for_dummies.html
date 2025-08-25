@@ -13,125 +13,148 @@
   section { margin-bottom:2rem; background:rgba(0,0,0,0.5); padding:1.5rem; border-radius:10px; }
   ul { padding-left:1.2rem; }
   code { background:rgba(255,255,255,0.1); padding:2px 4px; border-radius:4px; font-family:monospace; }
-  .btn { display:inline-block; margin-top:0.5rem; padding:0.6rem 1.2rem; background: linear-gradient(135deg,#6a11cb,#2575fc); color:white; border-radius:6px; font-weight:600; text-decoration:none; }
+  .btn { display:inline-block; margin-top:0.5rem; padding:0.6rem 1.2rem; background: linear-gradient(135deg,#6a11cb,#2575fc); color:white; border-radius:6px; font-weight:600; text-decoration:none; cursor:pointer; }
+  .chat-box { background: rgba(0,0,0,0.6); padding:15px; border-radius:8px; max-height:300px; overflow-y:auto; margin-top:10px; }
+  .chat-input { display:flex; gap:5px; margin-top:10px; }
+  .chat-input input { flex:1; padding:10px; border-radius:5px; border:none; background: rgba(20,20,20,0.7); color:#fff; }
 </style>
 </head>
 <body>
 
 <h1>📘 LinkBotLabs For Dummies Guide</h1>
-<p>Welcome! This guide will take you step-by-step through setting up your Amazon Affiliate account, generating API keys, using YouTube API for uploads, and understanding how LinkBotLabs demo and full tool operate.</p>
+<p>Welcome! This interactive guide will walk you step-by-step through Amazon Affiliate setup, API keys, YouTube integration, and using LinkBotLabs with TTS and AI guidance.</p>
 
+<!-- === Guide Sections === -->
 <section>
 <h2>1️⃣ Registering for Amazon Affiliate</h2>
-<p>Follow these steps to become an Amazon Associate:</p>
+<p>Follow these steps:</p>
 <ol>
   <li>Go to <a href="https://affiliate-program.amazon.com/" target="_blank">Amazon Associates</a>.</li>
   <li>Click <strong>Sign Up</strong> and log in with your Amazon account.</li>
-  <li>Fill out your account information, including payee details and website/blog.</li>
-  <li>Explain how you intend to promote products (content description).</li>
-  <li>Submit your application. You will get an Affiliate Tag (something like <code>mytag-20</code>).</li>
-  <li>Start using affiliate links with your tag appended to Amazon product URLs, e.g., <code>https://www.amazon.com/dp/B08XYZ?tag=mytag-20</code></li>
+  <li>Fill account info and describe your promotion method.</li>
+  <li>Submit application to get your Affiliate Tag (<code>mytag-20</code>).</li>
 </ol>
-<p>Important: You must make at least 3 qualified sales within 180 days to fully activate your account.</p>
+<button class="btn" onclick="speakSection(1)">🔊 Read this section</button>
 </section>
 
 <section>
-<h2>2️⃣ Getting Amazon Product Advertising API Keys</h2>
-<p>These keys allow tools like LinkBotLabs to pull product info automatically.</p>
+<h2>2️⃣ Getting Amazon Product API Keys</h2>
 <ol>
-  <li>Log in to <a href="https://affiliate-program.amazon.com/" target="_blank">Amazon Associates</a>.</li>
-  <li>Go to Tools → Product Advertising API → Manage Your Credentials.</li>
-  <li>Click <strong>Create Credentials</strong> and save your <strong>Access Key ID</strong> and <strong>Secret Access Key</strong>.</li>
-  <li>Follow Amazon rules: your tool must use the API only to display product info and direct users via affiliate links.</li>
+  <li>Log in to Amazon Associates → Tools → Product Advertising API → Manage Credentials.</li>
+  <li>Create credentials → Save Access Key ID & Secret Access Key.</li>
+  <li>Use only for displaying product info and linking via your affiliate tag.</li>
 </ol>
-<p>Important: Violating Amazon API policies may result in termination of your affiliate account.</p>
+<button class="btn" onclick="speakSection(2)">🔊 Read this section</button>
 </section>
 
 <section>
-<h2>3️⃣ Obtaining a YouTube API Key</h2>
-<p>LinkBotLabs can generate automated video uploads. To enable this:</p>
+<h2>3️⃣ Obtaining YouTube API Key</h2>
 <ol>
   <li>Go to <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a>.</li>
-  <li>Create a new project.</li>
-  <li>Enable <strong>YouTube Data API v3</strong>.</li>
+  <li>Create a new project → Enable YouTube Data API v3.</li>
   <li>Go to Credentials → Create API Key → Copy it.</li>
-  <li>Use this key in LinkBotLabs for automated uploads.</li>
 </ol>
-<p>Important: Do not share your API key publicly. Keep it secure.</p>
+<button class="btn" onclick="speakSection(3)">🔊 Read this section</button>
 </section>
 
 <section>
 <h2>4️⃣ How the Demo Works</h2>
-<p>The online demo lets you explore LinkBotLabs features without keys:</p>
 <ul>
-  <li>Browse categories with preloaded fallback products.</li>
-  <li>Generate sample SEO reviews and text-to-speech (TTS) audio.</li>
-  <li>Interact with the AI bot for guidance.</li>
+  <li>Browse categories with preloaded products.</li>
+  <li>Generate SEO reviews & TTS audio.</li>
+  <li>Ask AI bot questions for guidance.</li>
 </ul>
-<p>The demo uses <strong>placeholder affiliate links</strong> so you can see the process without an active account.</p>
+<button class="btn" onclick="speakSection(4)">🔊 Read this section</button>
 </section>
 
 <section>
 <h2>5️⃣ Full Tool Operation</h2>
-<p>The full LinkBotLabs tool provides:</p>
 <ul>
-  <li>Automated Amazon product search using your API keys.</li>
-  <li>Instant SEO-optimized review generation for each product.</li>
-  <li>TTS audio for narration scripts.</li>
-  <li>Video generation (product image + review narration + background music).</li>
-  <li>Option to automatically upload generated videos to your YouTube channel using YouTube API.</li>
+  <li>Automated Amazon product search using API keys.</li>
+  <li>SEO-optimized reviews for each product.</li>
+  <li>TTS audio narration.</li>
+  <li>Video generation & optional YouTube upload.</li>
   <li>Affiliate link integration for monetization.</li>
 </ul>
-<p>Workflow summary:</p>
-<ol>
-  <li>Input your product keyword(s).</li>
-  <li>LinkBotLabs retrieves product info from Amazon API.</li>
-  <li>Generate text review → TTS narration → video creation.</li>
-  <li>Preview locally or upload directly to YouTube.</li>
-  <li>Share the affiliate video to earn commissions.</li>
-</ol>
+<button class="btn" onclick="speakSection(5)">🔊 Read this section</button>
 </section>
 
 <section>
 <h2>6️⃣ Tips & Best Practices</h2>
 <ul>
-  <li>Always test your affiliate links to ensure they redirect correctly.</li>
-  <li>Use high-quality images for video generation.</li>
-  <li>Keep your TTS narration clear and professional.</li>
-  <li>Follow Amazon Associates policies strictly to avoid penalties.</li>
-  <li>Use descriptive keywords for SEO-friendly reviews.</li>
-  <li>Regularly refresh API keys if necessary to maintain access.</li>
+  <li>Test all affiliate links.</li>
+  <li>Use high-quality images for videos.</li>
+  <li>Follow Amazon policies.</li>
+  <li>Use descriptive keywords for SEO reviews.</li>
 </ul>
+<button class="btn" onclick="speakSection(6)">🔊 Read this section</button>
 </section>
 
+<!-- === AI Chat Assistant === -->
 <section>
-<h2>7️⃣ Helpful Links</h2>
-<ul>
-  <li><a href="https://affiliate-program.amazon.com/" target="_blank">Amazon Associates Program</a></li>
-  <li><a href="https://docs.aws.amazon.com/AWSECommerceService/latest/DG/Welcome.html" target="_blank">Amazon Product Advertising API Docs</a></li>
-  <li><a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
-  <li><a href="https://developers.google.com/youtube/v3" target="_blank">YouTube Data API v3 Docs</a></li>
-</ul>
-</section>
-
-<section>
-<h2>8️⃣ Getting Started</h2>
-<p>Once your API keys are ready:</p>
-<ul>
-  <li>Open LinkBotLabs demo or full desktop tool.</li>
-  <li>Enter your Amazon Affiliate Tag and Product API keys.</li>
-  <li>Enter your YouTube API key for video uploads.</li>
-  <li>Select a category or enter a product keyword.</li>
-  <li>Generate review, TTS, and optionally upload video automatically.</li>
-</ul>
-<p>Congratulations! You’re now ready to automate product review creation and affiliate monetization.</p>
+<h2>🤖 Ask the AI Guide</h2>
+<div id="chatBox" class="chat-box"></div>
+<div class="chat-input">
+<input type="text" id="chatInput" placeholder="Ask a question...">
+<button onclick="askAI()">Send</button>
+</div>
 </section>
 
 <footer style="text-align:center; margin-top:2rem; padding-top:1rem; border-top:1px solid #444;">
 <p>© 2025 LinkBotLabs – All Rights Reserved</p>
 <p>Support development by shopping via <a href="https://www.amazon.com/?tag=mychanneld-20" target="_blank">Amazon Affiliate Link</a></p>
-<p>Need custom automation? <a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" target="_blank">Hire Me on Fiverr</a></p>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/puter.js@latest/dist/puter.min.js"></script>
+<script>
+// === Initialize Puter ===
+const puter = new Puter({ debug:true });
+
+// === TTS ===
+let synth = window.speechSynthesis;
+const sectionTexts = {
+  1: "Step one: Registering for Amazon Affiliate. Go to Amazon Associates, sign up, fill account info, and get your affiliate tag.",
+  2: "Step two: Getting Amazon Product API Keys. Log in, create credentials, save your Access Key ID and Secret Access Key.",
+  3: "Step three: Obtaining YouTube API Key. Create project in Google Cloud, enable YouTube Data API v3, and generate API Key.",
+  4: "Step four: How the demo works. Browse categories, generate SEO reviews, TTS audio, and interact with the AI bot.",
+  5: "Step five: Full tool operation. Automated Amazon search, SEO reviews, TTS narration, video generation, YouTube uploads, affiliate integration.",
+  6: "Step six: Tips and best practices. Test links, use high-quality images, follow Amazon policies, use descriptive keywords for SEO."
+};
+function speakSection(num){
+  if(synth.speaking) synth.cancel();
+  const utter = new SpeechSynthesisUtterance(sectionTexts[num]);
+  const voices = synth.getVoices().filter(v=>v.lang.startsWith('en'));
+  utter.voice = voices[0];
+  synth.speak(utter);
+}
+
+// === AI Chat Assistant ===
+const chatBox = document.getElementById('chatBox');
+const chatInput = document.getElementById('chatInput');
+
+async function askAI(){
+  const question = chatInput.value.trim();
+  if(!question) return;
+  const userP = document.createElement('p');
+  userP.style.color="#0f0"; userP.textContent = "You: " + question;
+  chatBox.appendChild(userP);
+  chatBox.scrollTop = chatBox.scrollHeight;
+  chatInput.value = '';
+
+  // AI response using Puter.js (GPT-5)
+  const response = await puter.call('gpt-5', `You are a helpful assistant for LinkBotLabs guide. Answer clearly: "${question}"`);
+  const botP = document.createElement('p');
+  botP.style.color="#9cf"; botP.textContent = "AI Guide: " + response.text;
+  chatBox.appendChild(botP);
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  // TTS
+  if(synth.speaking) synth.cancel();
+  const utter = new SpeechSynthesisUtterance(response.text);
+  utter.voice = synth.getVoices().filter(v=>v.lang.startsWith('en'))[0];
+  synth.speak(utter);
+}
+</script>
 
 </body>
 </html>
