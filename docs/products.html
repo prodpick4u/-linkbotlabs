@@ -3,125 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Product Hub – Fallback Data</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-body { margin:0; font-family:'Inter',sans-serif; background:#12003a; color:#fff; }
-h1,h2{text-align:center;}
-.split-container{display:flex; flex-wrap:wrap; justify-content:space-around; margin:20px;}
-.split{flex:1 1 300px; margin:10px; background:rgba(255,255,255,0.05); border-radius:12px; padding:10px;}
-.card{background:rgba(255,255,255,0.08); border-radius:12px; padding:10px; margin:10px 0; text-align:center;}
-.card img{width:100%; max-width:220px; border-radius:8px;}
-.view-btn{padding:6px 12px; background:#5c00b3; color:#fff; border:none; border-radius:6px; cursor:pointer; margin-top:6px;}
-.ai-box{margin:10px 0; padding:10px; background:rgba(0,0,0,0.5); border-radius:8px;}
-.ai-box input{width:80%; padding:6px; border-radius:6px; border:none;}
-.ai-box button{padding:6px 12px; margin-left:6px; border:none; border-radius:6px; background:#7f33ff; color:#fff; cursor:pointer;}
-.category-title{text-align:center; font-weight:700; margin-top:10px;}
-</style>
+<title>LinkBotLabs Product Page</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
-<h1>AI Product Hub – Fallback Data</h1>
+<h1>🛍️ Products</h1>
+<p>Affiliate-linked products are automatically tagged with your Affiliate ID.</p>
 
-<div class="split-container">
-  <div class="split" id="amazon-side">
-    <h2>Amazon Products</h2>
-  </div>
-  <div class="split" id="temu-side">
-    <h2>Temu Products</h2>
-  </div>
-</div>
-
-<h2>Ask AI Models</h2>
-<div id="ai-container">
-  <div class="ai-box">
-    <strong>GPT-5:</strong>
-    <input type="text" placeholder="Ask GPT-5...">
-    <button onclick="askAI(this, 'gpt-5')">Ask</button>
-    <div class="response"></div>
-  </div>
-  <div class="ai-box">
-    <strong>Claude:</strong>
-    <input type="text" placeholder="Ask Claude...">
-    <button onclick="askAI(this, 'claude-instant')">Ask</button>
-    <div class="response"></div>
-  </div>
-  <div class="ai-box">
-    <strong>Grok:</strong>
-    <input type="text" placeholder="Ask Grok...">
-    <button onclick="askAI(this, 'grok-4')">Ask</button>
-    <div class="response"></div>
-  </div>
-  <div class="ai-box">
-    <strong>Gemini:</strong>
-    <input type="text" placeholder="Ask Gemini...">
-    <button onclick="askAI(this, 'gemini')">Ask</button>
-    <div class="response"></div>
-  </div>
-</div>
+<div id="productContainer" class="product-grid"></div>
 
 <script src="https://js.puter.com/v2/"></script>
+<script src="scripts/gateway.js"></script>
 <script>
-const puter = new Puter({debug:true});
-
-// Fallback.py data grouped by categories
-const AMAZON_PRODUCTS = {
-  kitchen:[
-    {title:"Instant Pot Duo 7-in-1", price:"$89"},
-    {title:"Air Fryer", price:"$279"}
-  ],
-  tech:[
-    {title:"Echo Dot", price:"$49"},
-    {title:"Fire TV Stick", price:"$39"}
-  ]
-};
-
-const TEMU_PRODUCTS = {
-  kitchen:[
-    {title:"Multi Rice Cooker", price:"Varies"},
-    {title:"Foldable Kettle", price:"Varies"}
-  ],
-  beauty:[
-    {title:"Facial Steamer", price:"Varies"},
-    {title:"Massage Roller", price:"Varies"}
-  ]
-};
-
-function renderCategories(productsObj, containerId){
-  const container = document.getElementById(containerId);
-  container.innerHTML="";
-  for(const category in productsObj){
-    const catTitle = document.createElement('div');
-    catTitle.className='category-title';
-    catTitle.innerText = category.toUpperCase();
-    container.appendChild(catTitle);
-    productsObj[category].forEach(p=>{
-      const card = document.createElement('div'); card.className='card';
-      const title = document.createElement('div'); title.innerText=p.title; card.appendChild(title);
-      const price = document.createElement('div'); price.innerText=p.price; card.appendChild(price);
-      const btn = document.createElement('button'); btn.className='view-btn'; btn.innerText='View Product'; card.appendChild(btn);
-      container.appendChild(card);
-    });
+  // Load products with saved affiliate tag
+  const AFFILIATE_TAG = localStorage.getItem('affiliateTag') || "";
+  if(AFFILIATE_TAG){
+    generateProducts("Trending", AFFILIATE_TAG);
+  } else {
+    document.getElementById('productContainer').innerHTML = "<p>Please register an Affiliate ID on the AI Gateway first.</p>";
   }
-}
-
-renderCategories(AMAZON_PRODUCTS, 'amazon-side');
-renderCategories(TEMU_PRODUCTS, 'temu-side');
-
-// Ask AI function
-async function askAI(button, model){
-  const input = button.previousElementSibling;
-  const responseDiv = button.nextElementSibling;
-  const query = input.value.trim();
-  if(!query) return;
-  responseDiv.innerText = "Loading...";
-  try{
-    const res = await puter.ai.chat(query, {model});
-    responseDiv.innerText = res.text;
-  }catch(e){
-    responseDiv.innerText = "Error fetching AI response.";
-  }
-}
 </script>
 </body>
 </html>
