@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Product Hub – Powered by LinkBotLabs</title>
+<title>AI Product Hub – Multi-AI Powered</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 body { margin:0; font-family:'Inter',sans-serif; background:linear-gradient(135deg,#0a0033,#2b0066,#5c00b3,#7f33ff); background-size:400% 400%; animation:gradientShift 15s ease infinite; color:#fff; }
@@ -37,25 +37,10 @@ h1{font-size:2rem;} h2{font-size:1.6rem;margin-top:40px;}
 </style>
 </head>
 <body>
+
 <div id="affiliateBanner" class="banner">Welcome to AI Product Hub!</div>
-<h1>AI Product Hub – Powered by LinkBotLabs</h1>
-<p class="header-note">Dynamic AI-powered product showcase with trending insights, affiliate links, and real-time recommendations.</p>
-
-<!-- Affiliate Access -->
-<div class="glass">
-<h2>🔒 Affiliate Access</h2>
-<p>Enter access code to join the program and register your affiliate ID:</p>
-<input type="text" id="accessCode" placeholder="Enter code">
-<button onclick="checkAccessCode()">Unlock Access</button>
-<div id="accessOutput" class="output"></div>
-</div>
-
-<div id="affiliateFormSection" class="glass" style="display:none;">
-<h2>📝 Register Your Affiliate ID</h2>
-<input type="text" id="userAffiliate" placeholder="Your affiliate ID">
-<button onclick="saveAffiliate()">Activate</button>
-<div id="regOutput" class="output"></div>
-</div>
+<h1>AI Product Hub – Multi-AI Powered</h1>
+<p class="header-note">Every product, review, tip, and chat is enhanced by GPT-5, Claude, Grok, Gemini, and more via Puter.js.</p>
 
 <div class="controls">
 <input type="text" id="searchBox" placeholder="Search products...">
@@ -97,186 +82,102 @@ h1{font-size:2rem;} h2{font-size:1.6rem;margin-top:40px;}
 <!-- Chat / AI interaction -->
 <button id="chatButton">💬</button>
 <div id="chatPanel">
-<header>Ask AI</header>
+<header>Ask Multi-AI</header>
 <div class="messages" id="chatMessages"></div>
 <input type="text" id="chatInput" placeholder="Type your question...">
 </div>
 
-<!-- Email Capture -->
-<div class="glass">
-<h2>📧 Stay Updated</h2>
-<input type="email" id="emailInput" placeholder="Your email">
-<button onclick="captureEmail(document.getElementById('emailInput').value)">Subscribe</button>
-</div>
-
 <script src="https://js.puter.com/v2/"></script>
 <script>
-// ===== Affiliate Logic =====
+const puter = new Puter({debug:true});
 let AFFILIATE_TAG = "mychanneld-20";
-let VALID_CODES = ["starter123","user456","demo789"];
-let userAffiliateTag = localStorage.getItem('affiliateTag') || "";
-function checkAccessCode(){
-const code = document.getElementById("accessCode").value.trim();
-if(VALID_CODES.includes(code)){
-document.getElementById("affiliateFormSection").style.display="block";
-document.getElementById("accessOutput").innerText="✅ Access granted! Register your affiliate ID.";
-} else {
-document.getElementById("accessOutput").innerText="❌ Invalid code.";
-}
-}
-function saveAffiliate(){
-const tag = document.getElementById("userAffiliate").value.trim();
-if(tag){
-userAffiliateTag = tag;
-AFFILIATE_TAG = tag;
-localStorage.setItem('affiliateTag', tag);
-document.getElementById("regOutput").innerText = `✅ Affiliate tag "${tag}" saved!`;
-document.getElementById('affiliateBanner').innerText = `✅ Active Affiliate: ${tag}`;
-}
-}
 
-// ===== Product Data (Fallbacks) =====
+// Example fallback products
 let AMAZON_PRODUCTS = [
-{title:"Instant Pot Duo 7-in-1", price:"$89", desc:"Multi-functional cooker.", url:"https://amzn.to/45IyLkt", category:"kitchen"},
-{title:"Air Fryer", price:"$279", desc:"Healthy frying alternative.", url:"https://amzn.to/3JogHVi", category:"kitchen"},
-{title:"KitchenAid Mixer", price:"$379", desc:"Stand mixer for baking.", url:"https://amzn.to/3HHSZmj", category:"kitchen"}
+{title:"Instant Pot Duo 7-in-1", price:"$89", category:"kitchen"},
+{title:"Air Fryer", price:"$279", category:"kitchen"},
+{title:"KitchenAid Mixer", price:"$379", category:"kitchen"}
 ];
 let TEMU_PRODUCTS = [
-{title:"Multi Rice Cooker", price:"Varies", desc:"Cook rice easily.", url:"https://share.temu.com/jwZL6Tbh2SB", category:"kitchen"},
-{title:"Foldable Kettle", price:"Varies", desc:"Compact kettle.", url:"https://share.temu.com/GZe6nSeHcEB", category:"kitchen"},
-{title:"Food Processor", price:"Varies", desc:"Chop and blend food.", url:"https://share.temu.com/xnKAVQF3V7B", category:"kitchen"}
+{title:"Multi Rice Cooker", price:"Varies", category:"kitchen"},
+{title:"Foldable Kettle", price:"Varies", category:"kitchen"},
+{title:"Food Processor", price:"Varies", category:"kitchen"}
 ];
 
-// ===== Filter, Search & Render =====
-function renderProducts(products, containerId){
-const container = document.getElementById(containerId);
-container.innerHTML="";
-products.forEach(p=>{
-const card = document.createElement('div');
-card.className="card";
-card.innerHTML=`
-<div class="product-title">${p.title}</div>
-<div class="product-price">${p.price}</div>
-<div class="product-desc">${p.desc}</div>
-<a href="${p.url}${p.url.includes('?')?'&':'?'}tag=${AFFILIATE_TAG}" target="_blank" class="view-btn">View Product</a>
-`;
-container.appendChild(card);
-});
-}
-function filterProducts(){
-const amazonCat = document.getElementById("amazon-categories").value;
-const temuCat = document.getElementById("temu-categories").value;
-renderProducts(AMAZON_PRODUCTS.filter(p=>p.category===amazonCat), "amazon-products");
-renderProducts(TEMU_PRODUCTS.filter(p=>p.category===temuCat), "temu-products");
-}
-document.getElementById("searchBox").addEventListener("input",(e)=>{
-const q=e.target.value.toLowerCase();
-renderProducts(AMAZON_PRODUCTS.filter(p=>p.title.toLowerCase().includes(q)),"amazon-products");
-renderProducts(TEMU_PRODUCTS.filter(p=>p.title.toLowerCase().includes(q)),"temu-products");
-});
-document.getElementById("amazon-categories").addEventListener("change",filterProducts);
-document.getElementById("temu-categories").addEventListener("change",filterProducts);
-(async function(){
-filterProducts();
-})();
- // ===== AI-enhanced Descriptions & Daily Deals =====
-async function enhanceProducts(products){
-    for(let p of products){
+// Multi-AI description generator
+async function generateMultiAiDescription(product){
+    const models = ["gpt-5","claude","grok-4","gemini"];
+    let results = [];
+    for(const model of models){
         try{
-            // Multi-AI model enhancement
-            const gptDesc = await puter.ai.chat(`Write a 2-sentence punchy product description for "${p.title}", include trending tips, deal hints, and top-seller info.`, {model:"gpt-5"});
-            const claudeTip = await puter.ai.chat(`Generate a quick buying tip and highlight daily deals for "${p.title}"`, {model:"claude"});
-            const geminiTrend = await puter.ai.chat(`Check Google or trending insights for "${p.title}" and give a short summary.`, {model:"gemini"});
-            const grokSummary = await puter.ai.chat(`Summarize for user in short, catchy style: "${p.title}"`, {model:"grok"});
-            
-            // Combine outputs
-            p.desc = `${gptDesc.text || p.desc} ${claudeTip.text || ''} ${geminiTrend.text || ''} ${grokSummary.text || ''}`;
-        }catch(e){
-            console.warn("AI enhancement error:", e);
-        }
+            const resp = await puter.ai.chat(`Generate a catchy product description for "${product.title}" with deals & trends.`, {model});
+            results.push(resp.text.trim());
+        }catch(e){ results.push(""); }
+    }
+    // Simple consensus: take repeated sentences
+    const allTexts = results.map(t=>t.split(/[\.\!\?]/).map(s=>s.trim()).filter(Boolean)).flat();
+    const freq = {};
+    allTexts.forEach(s=>freq[s]=(freq[s]||0)+1);
+    const consensus = Object.entries(freq).filter(([s,c])=>c>1).map(([s])=>s).join('. ') + (allTexts.length?'.':'');
+    product.desc = consensus || results.join(' ');
+}
+
+// Render products with AI descriptions
+async function renderProducts(products, containerId){
+    const container = document.getElementById(containerId);
+    container.innerHTML="";
+    for(let p of products){
+        await generateMultiAiDescription(p);
+        const card = document.createElement("div");
+        card.className="card";
+        card.innerHTML = `
+            <div class="product-title">${p.title}</div>
+            <div class="product-price">${p.price}</div>
+            <div class="product-desc">${p.desc}</div>
+            <a href="#" class="view-btn">View Product</a>
+        `;
+        container.appendChild(card);
     }
 }
 
-// ===== Initial AI-enhanced Render =====
+// Initial render
 (async function(){
-    await enhanceProducts(AMAZON_PRODUCTS);
-    await enhanceProducts(TEMU_PRODUCTS);
-    filterProducts();
+    await renderProducts(AMAZON_PRODUCTS, "amazon-products");
+    await renderProducts(TEMU_PRODUCTS, "temu-products");
 })();
 
-// ===== Chat Panel Logic (Live AI Chat) =====
+// Search filter
+document.getElementById("searchBox").addEventListener("input", e=>{
+    const q=e.target.value.toLowerCase();
+    renderProducts(AMAZON_PRODUCTS.filter(p=>p.title.toLowerCase().includes(q)), "amazon-products");
+    renderProducts(TEMU_PRODUCTS.filter(p=>p.title.toLowerCase().includes(q)), "temu-products");
+});
+
+// Chat panel logic
 const chatButton = document.getElementById("chatButton");
 const chatPanel = document.getElementById("chatPanel");
 const chatMessages = document.getElementById("chatMessages");
 const chatInput = document.getElementById("chatInput");
 
-// Toggle Chat Panel
-chatButton.addEventListener("click", () => {
-    chatPanel.style.display = chatPanel.style.display === "flex" ? "none" : "flex";
-    chatPanel.style.flexDirection = "column";
-});
+chatButton.addEventListener("click", ()=>{chatPanel.style.display=(chatPanel.style.display==="flex"?"none":"flex");chatPanel.style.flexDirection="column";});
 
-// Handle User Messages
-chatInput.addEventListener("keypress", async (e) => {
-    if(e.key === "Enter" && chatInput.value.trim() !== ""){
+chatInput.addEventListener("keypress", async e=>{
+    if(e.key==="Enter" && chatInput.value.trim()!==""){
         const msg = chatInput.value.trim();
         chatMessages.innerHTML += `<div style="margin-bottom:8px;"><strong>You:</strong> ${msg}</div>`;
-        chatInput.value="";
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
+        chatInput.value=""; chatMessages.scrollTop=chatMessages.scrollHeight;
         try{
-            // Query all AI models simultaneously
-            const gptResp = await puter.ai.chat(msg, {model:"gpt-5"});
-            const claudeResp = await puter.ai.chat(msg, {model:"claude"});
-            const geminiResp = await puter.ai.chat(msg, {model:"gemini"});
-            const grokResp = await puter.ai.chat(msg, {model:"grok"});
-
-            chatMessages.innerHTML += `<div style="margin-bottom:8px;"><strong>AI:</strong> ${gptResp.text || ''} ${claudeResp.text || ''} ${geminiResp.text || ''} ${grokResp.text || ''}</div>`;
+            const models = ["gpt-5","claude","grok-4","gemini"];
+            const responses = await Promise.all(models.map(async m=>{try{return await puter.ai.chat(msg,{model:m});}catch(e){return {text:"[Failed]"}}}));
+            const allTexts = responses.map(r=>r.text.split(/[\.\!\?]/).map(s=>s.trim()).filter(Boolean)).flat();
+            const freq={}; allTexts.forEach(s=>freq[s]=(freq[s]||0)+1);
+            const consensus = Object.entries(freq).filter(([s,c])=>c>1).map(([s])=>s).join('. ') + (allTexts.length?'.':'');
+            const botHtml = responses.map(r=>`<p>${r.text}</p>`).join('') + `<p style="color:#0ff;"><strong>Consensus:</strong> ${consensus}</p>`;
+            chatMessages.innerHTML += `<div style="margin-bottom:8px;"><strong>AI:</strong> ${botHtml}</div>`;
             chatMessages.scrollTop = chatMessages.scrollHeight;
-        }catch(err){
-            chatMessages.innerHTML += `<div style="margin-bottom:8px;color:red;"><strong>AI Error:</strong> Could not respond.</div>`;
-        }
+        }catch(e){ chatMessages.innerHTML += `<div style="margin-bottom:8px;color:red;">AI Error</div>`; }
     }
 });
-
-// ===== Weekly / Daily Product Updates =====
-async function weeklyUpdate(){
-    try{
-        const weeklyTip = await puter.ai.chat("Generate trending daily deals, best-selling tips, and top product recommendations combining Amazon, Temu and AI insights.", {model:"gpt-5"});
-        document.getElementById("affiliateBanner").innerText = `📈 Daily & Weekly Hot Picks: ${weeklyTip.text}`;
-    }catch(e){
-        console.warn("Weekly AI update error:", e);
-    }
-}
-weeklyUpdate();
-
-// ===== Optional AI Image Generation (DALL-E) =====
-document.getElementById("generateImagesBtn").addEventListener("click", generateImages);
-async function generateImages(){
-    for(let p of [...AMAZON_PRODUCTS,...TEMU_PRODUCTS]){
-        try{
-            const imgEl = await puter.ai.txt2img(`Professional product photo of ${p.title}`);
-            imgEl.style.width="100%";
-            const containerId = AMAZON_PRODUCTS.includes(p) ? "amazon-products" : "temu-products";
-            const container = document.getElementById(containerId);
-            const cards = container.getElementsByClassName("card");
-            for(let card of cards){
-                if(card.querySelector(".product-title").innerText === p.title){
-                    card.insertBefore(imgEl, card.firstChild);
-                }
-            }
-        }catch(e){
-            console.warn("Image AI error:", e);
-        }
-    }
-}
-
-// ===== Email Capture / Contact =====
-function captureEmail(email){
-    if(email.trim()==="") return;
-    console.log("Captured email:", email); 
-    alert(`Thanks! We'll keep you updated, ${email}. For live support or inquiries, email: omnistall70@gmail.com`);
-}
 </script>
 </body>
-</html>   
+</html>
