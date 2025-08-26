@@ -3,43 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚀 LinkBotLabs AI Gateway</title>
+<title>LinkBotLabs AI Dashboard</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 <script src="https://js.puter.com/v2/"></script>
 </head>
 <body>
 <div class="container">
-  <h1>🚀 LinkBotLabs AI Gateway</h1>
-  <p>Multi-AI Chat & DALL·E Image Generation</p>
+  <h1>🚀 LinkBotLabs AI Dashboard</h1>
 
-  <!-- Multi-AI Chat -->
-  <section>
-    <h2>AI Chat</h2>
-    <label for="modelSelect"><strong>Choose Model:</strong></label>
-    <select id="modelSelect">
-      <option value="gpt-5-nano">GPT-5 Nano</option>
-      <option value="gpt-4.1">GPT-4.1</option>
-      <option value="gpt-4o">GPT-4o</option>
-      <option value="x-ai/grok-4">Grok-4</option>
-      <option value="google/gemini-2.5-pro-exp-03-25:free">Gemini 2.5 Pro</option>
-      <option value="claude-sonnet-4">Claude Sonnet 4</option>
-    </select>
+  <!-- Password Overlay -->
+  <div class="overlay" id="passwordOverlay">
+      <h2>🔒 Enter Password</h2>
+      <input type="password" id="dashboardPassword" placeholder="Password">
+      <button id="submitPassword">Submit</button>
+      <p id="pwError" style="color:red; display:none;">❌ Incorrect password</p>
+  </div>
 
-    <br><br>
-    <input type="text" id="chatInput" placeholder="Ask a question...">
-    <button id="sendBtn">Send</button>
-    <div class="ai-box" id="chatBox"></div>
-  </section>
+  <div id="dashboardContent" style="display:none;">
 
-  <!-- DALL-E Image -->
-  <section>
-    <h2>DALL·E Image Generation</h2>
-    <input type="text" id="dalleInput" placeholder="Describe an image...">
-    <button id="generateBtn">Generate Image</button>
-    <div class="ai-box" id="dalleBox"></div>
-  </section>
+    <!-- Q&A / Search -->
+    <section>
+      <h2>AI Q&A / Search</h2>
+      <input type="text" id="qaInput" placeholder="Ask a question...">
+      <button id="qaBtn">Ask</button>
+      <div class="ai-box" id="qaBox"></div>
+    </section>
+
+    <!-- DALL-E Image -->
+    <section>
+      <h2>DALL·E Image Generation</h2>
+      <input type="text" id="dalleInput" placeholder="Describe an image...">
+      <button id="generateBtn">Generate Image</button>
+      <div class="ai-box" id="dalleBox"></div>
+    </section>
+
+    <!-- Video Generation -->
+    <section>
+      <h2>Video Generation</h2>
+      <label>Product URLs (comma separated)</label>
+      <input type="text" id="urls" placeholder="https://example.com/p1, https://example.com/p2">
+      <label>Optional Script / Narration</label>
+      <textarea id="script" rows="4" placeholder="Leave blank to auto-generate"></textarea>
+      <button id="generateVideoBtn">Generate Video</button>
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-text" id="progressText">Idle</div>
+      </div>
+      <video id="video_preview" controls style="display:none;"></video>
+    </section>
+
+  </div>
 </div>
 
 <script src="{{ url_for('static', filename='gateway.js') }}"></script>
+<script>
+const correctPassword = "supersecret";
+const overlay = document.getElementById('passwordOverlay');
+const input = document.getElementById('dashboardPassword');
+const btn = document.getElementById('submitPassword');
+const dashboard = document.getElementById('dashboardContent');
+
+btn.addEventListener('click', () => {
+    if(input.value === correctPassword){
+        overlay.style.display='none';
+        dashboard.style.display='block';
+    } else {
+        document.getElementById('pwError').style.display='block';
+        input.value='';
+    }
+});
+input.addEventListener('keypress', (e)=>{ if(e.key==='Enter') btn.click(); });
+</script>
 </body>
 </html>
