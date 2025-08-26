@@ -1,9 +1,13 @@
 const synth = window.speechSynthesis;
 const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
-const voiceSelect = document.getElementById('voiceSelect');
+const messagesInput = document.getElementById('messagesInput');
+const sendMessagesBtn = document.getElementById('sendMessagesBtn');
+const imageInput = document.getElementById('imageInput');
+const analyzeImgBtn = document.getElementById('analyzeImgBtn');
 const dalleInput = document.getElementById('dalleInput');
 const generateImgBtn = document.getElementById('generateImgBtn');
+const voiceSelect = document.getElementById('voiceSelect');
 
 const aiBoxes = {
     'claude': document.getElementById('claudeBox'),
@@ -14,10 +18,10 @@ const aiBoxes = {
 };
 
 const models = {
-    'claude': 'claude-3.5-sonnet', // Updated to a supported Claude model
-    'gemini': 'gemini-2.0-flash', // Kept as is, assuming supported
-    'gpt-5': 'gpt-5-nano', // Updated to a supported OpenAI model
-    'grok': 'x-ai/grok-4' // Updated to a supported Grok model
+    'claude': 'claude-3.5-sonnet',
+    'gemini': 'gemini-2.0-flash',
+    'gpt-5': 'gpt-5-nano',
+    'grok': 'grok-beta'
 };
 
 // ---- Voice Selector ----
@@ -66,9 +70,9 @@ function processTTSQueue() {
     synth.speak(utter);
 }
 
-// ---- Multi-AI Chat with Streaming ----
-async function askAI(question) {
-    if (!question) {
+// ---- Multi-AI Chat with Prompt ----
+async function askAI(prompt) {
+    if (!prompt) {
         Object.values(aiBoxes).forEach(box => {
             const p = document.createElement('p');
             p.innerHTML = 'Error: Please enter a question.';
@@ -99,7 +103,7 @@ async function askAI(question) {
         p.className = 'response';
         box.appendChild(p);
         try {
-            const stream = await puter.ai.chat(`Answer clearly: "${question}"`, { model, stream: true });
+            const stream = await puter.ai.chat(prompt, { model, stream: true });
             let fullText = '';
             for await (const part of stream) {
                 if (part?.text) {
@@ -125,7 +129,125 @@ async function askAI(question) {
     sendBtn.classList.remove('loading');
 }
 
-// ---- DALL·E 3 Images (Example 2 from Tutorial) ----
+// ---- Multi-AI Chat with Messages ----
+async function askWithMessages(messages) {
+    if (!messages) {
+        Object.values(aiBoxes).forEach(box => {
+            const p = document.createElement('p');
+            p.innerHTML = 'Error: Please enter valid message history (JSON).';
+            p.className = 'error';
+            box.appendChild(p);
+            box.scrollTop = box.scrollHeight;
+        });
+        return;
+    }
+    if (!window.puter || !window.puter.ai) {
+        Object.values(aiBoxes).forEach(box => {
+            const p = document.createElement('p');
+            p.innerHTML = 'Error: Puter.js failed to load. Check network or script URL.';
+            p.className = 'error';
+            box.appendChild(p);
+            box.scrollTop = box.scrollHeight;
+        });
+        return;
+    }
+    sendMessagesBtn.disabled = true;
+    sendMessagesBtn.classList.add('loading');
+    const modelKeys = Object.keys(models).sort();
+    for (const key of modelKeys) {
+        const model = models[key];
+        const box = aiBoxes[key];
+        box.setAttribute('aria-busy', 'true');
+        const p = document.createElement('p');
+        p.className = 'response';
+        box.appendChild(p);
+        try {
+            const stream = await puter.ai.chat(messages, false, { model, stream: true });
+            let fullText = '';
+            for await (const part of stream) {
+                if (part?.text) {
+                    fullText += part.text;
+                    p.innerHTML = fullText.replace(/\n/g, '<br>');
+                    box.scrollTop = box.scrollHeight;
+                    playTTS(part.text);
+                }
+            }
+            if (!fullText) {
+                p.innerHTML = `Error: No response from ${key}.`;
+                p.className = 'error';
+            }
+        } catch (e) {
+            console.warn(`${key} failed`, e);
+            p.innerHTML = `Error: ${key} failed to respond - ${e.message}`;
+            p.className = 'error';
+        }
+        box.setAttribute('aria-busy', 'false');
+        box.scrollTop = box.scrollHeight;
+    }
+    sendMessagesBtn.disabled = false;
+    sendMessagesBtn.classList.remove('loading');
+}
+
+// ---- Image Analysis (GPT-4 Vision) ----
+async function analyzeImage(prompt, imageURL) {
+    if (!prompt || !imageURL) {
+        Object.values(aiBoxes).forEach(box => {
+            const p = document.createElement('p');
+            p.innerHTML = 'Error: Please enter both a question and an image URL.';
+            p.className = 'error';
+            box.appendChild(p);
+            box.scrollTop = box.scrollHeight;
+        });
+        return;
+    }
+    if (!window.puter || !window.puter.ai) {
+        Object.values(aiBoxes).forEach(box => {
+            const p = document.createElement('p');
+            p.innerHTML = 'Error: Puter.js failed to load. Check network or script URL.';
+            p.className = 'error';
+            box.appendChild(p);
+            box.scrollTop = box.scrollHeight;
+        });
+        return;
+    }
+    analyzeImgBtn.disabled = true;
+    analyzeImgBtn.classList.add('loading');
+    const modelKeys = Object.keys(models).sort();
+    for (const key of modelKeys) {
+        const model = models[key];
+        const box = aiBoxes[key];
+        box.setAttribute('aria-busy', 'true');
+        const p = document.createElement('p');
+        p.className = 'response';
+        box.appendChild(p);
+        try {
+            const stream = await puter.ai.chat(prompt, imageURL, false, { model, stream: true });
+            let fullText = '';
+            for await (const part of stream) {
+                if (part?.text) {
+                    fullText += part.text;
+                    p.innerHTML = fullText.replace(/\n/g, '<br>');
+                    box.scrollTop = box.scrollHeight;
+                    playTTS(part.text);
+                }
+            }
+            if (!fullText) {
+                p.innerHTML = `Error: No response from ${key} for image analysis.`;
+                p.className = 'error';
+            }
+        } catch (e) {
+            console.warn(`${key} image analysis failed`, e);
+            p.innerHTML = `Error: ${key} failed to analyze image - ${e.message}`;
+            p.className = 'error';
+        }
+        box.setAttribute('aria-busy', 'false');
+        box.scrollTop = box.scrollHeight;
+    }
+    analyzeImgBtn.disabled = false;
+    analyzeImgBtn.classList.remove('loading');
+}
+
+// ---- DALL·E 3 Images ----
 async function generateImages(prompt) {
     if (!prompt) {
         const p = document.createElement('p');
@@ -173,6 +295,52 @@ chatInput.addEventListener('keypress', e => {
     if (e.key === 'Enter') {
         askAI(chatInput.value);
         chatInput.value = '';
+    }
+});
+
+sendMessagesBtn.addEventListener('click', () => {
+    try {
+        const messages = JSON.parse(messagesInput.value);
+        askWithMessages(messages);
+        messagesInput.value = '';
+    } catch (e) {
+        Object.values(aiBoxes).forEach(box => {
+            const p = document.createElement('p');
+            p.innerHTML = 'Error: Invalid JSON format for messages.';
+            p.className = 'error';
+            box.appendChild(p);
+            box.scrollTop = box.scrollHeight;
+        });
+    }
+});
+messagesInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        try {
+            const messages = JSON.parse(messagesInput.value);
+            askWithMessages(messages);
+            messagesInput.value = '';
+        } catch (e) {
+            Object.values(aiBoxes).forEach(box => {
+                const p = document.createElement('p');
+                p.innerHTML = 'Error: Invalid JSON format for messages.';
+                p.className = 'error';
+                box.appendChild(p);
+                box.scrollTop = box.scrollHeight;
+            });
+        }
+    }
+});
+
+analyzeImgBtn.addEventListener('click', () => {
+    analyzeImage(chatInput.value, imageInput.value);
+    chatInput.value = '';
+    imageInput.value = '';
+});
+imageInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') {
+        analyzeImage(chatInput.value, imageInput.value);
+        chatInput.value = '';
+        imageInput.value = '';
     }
 });
 
