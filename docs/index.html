@@ -124,6 +124,7 @@
 </footer>
 
 <script>
+<script>
 const puter = new Puter();
 const chatBox = document.getElementById("chatBox");
 const input = document.getElementById("userInput");
@@ -141,7 +142,8 @@ function addMessage(text, sender){
 function speakText(text){
   if('speechSynthesis' in window){
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'en-US'; utter.rate = 1;
+    utter.lang = 'en-US';
+    utter.rate = 1;
     speechSynthesis.speak(utter);
   }
 }
@@ -152,28 +154,36 @@ async function sendMessage(){
   input.value = '';
   addMessage(query,'user');
   addMessage('⏳ Thinking...','assistant');
+
   try{
-    const res = await puter.ai.chat(query, {model:'gpt-5-nano'});
-    const text = res.choices?.[0]?.message?.content || '⚠️ No response';
-    chatBox.querySelector('.assistant:last-child').textContent = text;
+    const response = await puter.ai.chat(query, { model:'gpt-5-nano' });
+    // response is already a string
+    chatBox.querySelector('.assistant:last-child').textContent = response;
   } catch(err){
-    chatBox.querySelector('.assistant:last-child').textContent = '⚠️ Error: '+(err.message||err);
+    chatBox.querySelector('.assistant:last-child').textContent = '⚠️ Error: '+err;
   }
 }
 
 function askExample(prompt, model){
   addMessage(prompt,'user');
   addMessage('⏳ Thinking...','assistant');
-  puter.ai.chat(prompt, {model:model}).then(res=>{
-    const text = res.choices?.[0]?.message?.content || '⚠️ No response';
-    chatBox.querySelector('.assistant:last-child').textContent = text;
-  }).catch(err=>{
-    chatBox.querySelector('.assistant:last-child').textContent = '⚠️ Error: '+(err.message||err);
-  });
+  puter.ai.chat(prompt, { model:model })
+    .then(res=>{
+      chatBox.querySelector('.assistant:last-child').textContent = res;
+    })
+    .catch(err=>{
+      chatBox.querySelector('.assistant:last-child').textContent = '⚠️ Error: '+err;
+    });
 }
 
 sendBtn.addEventListener('click', sendMessage);
-input.addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
-</script>
+input.addEventListener('keypress', (e)=>{
+  if(e.key==='Enter' && !e.shiftKey){
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+  </script>
 </body>
 </html>
