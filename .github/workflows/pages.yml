@@ -3,21 +3,19 @@ name: GitHub Pages Deployment
 on:
   push:
     branches:
-      - main        # or your default branch
-  workflow_dispatch:  # manual trigger
+      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout your repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v6
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./   # your index.html is at repo root
+          publish_dir: ./  # Publish the root directory
