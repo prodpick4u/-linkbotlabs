@@ -7,159 +7,129 @@
 <script src="https://js.puter.com/v2/"></script>
 <style>
     body {
-        font-family: 'Segoe UI', Roboto, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         margin: 0;
-        padding: 0;
+        padding: 20px;
         background: #f0f4f8;
         color: #333;
     }
-    header {
-        background: #1a73e8;
-        color: white;
-        padding: 20px;
+    h1 {
         text-align: center;
-    }
-    header h1 {
-        margin: 0;
-        font-size: 2rem;
-    }
-    main {
-        max-width: 900px;
-        margin: 20px auto;
-        padding: 0 20px;
+        color: #1a73e8;
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
     }
     .section {
         background: white;
         border-radius: 10px;
         padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        margin: 20px auto;
+        max-width: 800px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .section h2 {
-        margin-top: 0;
-        color: #1a73e8;
-    }
-    input, textarea, select, button {
+    input, textarea, button, select {
         width: 100%;
         padding: 12px;
         margin: 8px 0;
         border-radius: 6px;
         border: 1px solid #ccc;
         font-size: 1rem;
+        box-sizing: border-box;
     }
     button {
         background: #1a73e8;
         color: white;
         font-weight: bold;
         cursor: pointer;
-        transition: 0.2s;
+        transition: background 0.2s;
     }
-    button:hover {
-        background: #1557b0;
-    }
+    button:hover { background: #1557b0; }
     .output {
-        background: #e9ecef;
-        padding: 15px;
-        border-radius: 6px;
-        max-height: 400px;
-        overflow-y: auto;
         margin-top: 10px;
+        padding: 12px;
+        background: #e8f0fe;
+        border-radius: 6px;
+        max-height: 300px;
+        overflow-y: auto;
+        font-family: monospace;
+        white-space: pre-wrap;
     }
     img {
         max-width: 100%;
         border-radius: 6px;
-        margin-top: 10px;
-    }
-    @media (max-width: 600px) {
-        header h1 { font-size: 1.5rem; }
-        .section { padding: 15px; }
+        margin-top: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 </style>
 </head>
 <body>
-<header>
-    <h1>Puter.js AI Dashboard</h1>
-</header>
-<main>
-    <div class="section">
-        <h2>Chat with AI (Text)</h2>
-        <input id="chatInput" placeholder="Enter prompt for GPT-5 nano...">
-        <select id="modelSelect">
-            <option value="gpt-5-nano">GPT-5 Nano</option>
-            <option value="gpt-4.1">GPT-4.1</option>
-            <option value="o3-mini">o3-mini</option>
-            <option value="gpt-4o">GPT-4o</option>
-        </select>
-        <button id="sendBtn">Generate Text</button>
-        <div id="chatOutput" class="output"></div>
-    </div>
 
-    <div class="section">
-        <h2>Generate Images (DALL-E)</h2>
-        <input id="imageInput" placeholder="Enter prompt for DALL-E...">
-        <button id="generateImgBtn">Generate Image</button>
-        <div id="imageOutput" class="output"></div>
-    </div>
-</main>
+<h1>Puter.js AI Dashboard</h1>
+
+<div class="section">
+    <h2>Chat with AI</h2>
+    <input id="chatInput" placeholder="Enter prompt for GPT...">
+    <select id="modelSelect">
+        <option value="gpt-5-nano">GPT-5 Nano</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+        <option value="o3-mini">O3 Mini</option>
+        <option value="gpt-4o">GPT-4o</option>
+    </select>
+    <button id="sendBtn">Generate Text</button>
+    <div id="chatOutput" class="output"></div>
+</div>
+
+<div class="section">
+    <h2>Generate Images (DALL-E)</h2>
+    <input id="imageInput" placeholder="Enter prompt for DALL-E...">
+    <button id="generateImgBtn">Generate Image</button>
+    <div id="imageOutput" class="output"></div>
+</div>
 
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
-    // Wait for Puter.js to load
-    if (!window.puter || !puter.ai) {
-        console.log("Waiting for Puter.js...");
-        await new Promise(resolve => {
-            const interval = setInterval(() => {
-                if (window.puter && puter.ai) {
-                    clearInterval(interval);
-                    resolve();
-                }
-            }, 100);
-        });
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const chatOutput = document.getElementById('chatOutput');
+const modelSelect = document.getElementById('modelSelect');
+
+const imageInput = document.getElementById('imageInput');
+const generateImgBtn = document.getElementById('generateImgBtn');
+const imageOutput = document.getElementById('imageOutput');
+
+// ---- Text Generation ----
+sendBtn.addEventListener('click', async () => {
+    const prompt = chatInput.value.trim();
+    const model = modelSelect.value;
+    if(!prompt) return alert('Enter a prompt');
+
+    chatOutput.innerHTML = "Processing...";
+    try {
+        const stream = await puter.ai.chat(prompt, { model, stream:true });
+        let fullText = '';
+        for await (const part of stream) {
+            fullText += part?.text || '';
+            chatOutput.innerHTML = fullText.replace(/\n/g,'<br>');
+        }
+    } catch(e) {
+        chatOutput.innerHTML = `Error: ${e.message}`;
     }
+});
 
-    const chatInput = document.getElementById('chatInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const chatOutput = document.getElementById('chatOutput');
-    const modelSelect = document.getElementById('modelSelect');
+// ---- Image Generation ----
+generateImgBtn.addEventListener('click', async () => {
+    const prompt = imageInput.value.trim();
+    if(!prompt) return alert('Enter an image prompt');
 
-    const imageInput = document.getElementById('imageInput');
-    const generateImgBtn = document.getElementById('generateImgBtn');
-    const imageOutput = document.getElementById('imageOutput');
-
-    // ---- Text Generation ----
-    sendBtn.addEventListener('click', async () => {
-        const prompt = chatInput.value.trim();
-        const model = modelSelect.value;
-        if(!prompt) return alert('Enter a prompt');
-
-        chatOutput.innerHTML = "Processing...";
-        try {
-            const stream = await puter.ai.chat(prompt, { model, stream:true });
-            let fullText = '';
-            for await (const part of stream) {
-                fullText += part?.text || '';
-                chatOutput.innerHTML = fullText.replace(/\n/g,'<br>');
-            }
-        } catch(e) {
-            chatOutput.innerHTML = `Error: ${e.message}`;
-        }
-    });
-
-    // ---- Image Generation ----
-    generateImgBtn.addEventListener('click', async () => {
-        const prompt = imageInput.value.trim();
-        if(!prompt) return alert('Enter an image prompt');
-
-        imageOutput.innerHTML = "Generating image...";
-        try {
-            const img = await puter.ai.txt2img(prompt);
-            imageOutput.innerHTML = '';
-            imageOutput.appendChild(img);
-        } catch(e) {
-            imageOutput.innerHTML = `Error: ${e.message}`;
-        }
-    });
+    imageOutput.innerHTML = "Generating image...";
+    try {
+        const img = await puter.ai.txt2img(prompt);
+        imageOutput.innerHTML = '';
+        imageOutput.appendChild(img);
+    } catch(e) {
+        imageOutput.innerHTML = `Error: ${e.message}`;
+    }
 });
 </script>
+
 </body>
 </html>
