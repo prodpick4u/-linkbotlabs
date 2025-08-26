@@ -1,33 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AI Search Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puter.js AI Dashboard</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+    body { font-family: Arial, sans-serif; margin:0; padding:20px; background:#f4f4f4; color:#333; }
+    h1 { text-align:center; color:#1a73e8; }
+    .section { margin:20px 0; padding:15px; background:white; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    input, textarea, button, select { width:100%; padding:10px; margin:5px 0; border-radius:5px; border:1px solid #ccc; }
+    button { background:#1a73e8; color:white; font-weight:bold; cursor:pointer; }
+    button:hover { background:#1557b0; }
+    .output { margin-top:10px; padding:10px; background:#e0e0e0; border-radius:5px; max-height:300px; overflow:auto; }
+    img { max-width:100%; border-radius:5px; margin-top:5px; }
+</style>
 </head>
 <body>
-    <h1>AI Search</h1>
+<h1>Puter.js AI Dashboard</h1>
 
-    <!-- Text input -->
-    <input type="text" id="chatInput" placeholder="Ask AI...">
-    <button id="sendBtn">Send</button>
+<div class="section">
+    <h2>Chat with AI (Text)</h2>
+    <input id="chatInput" placeholder="Enter prompt for GPT-5 nano...">
+    <select id="modelSelect">
+        <option value="gpt-5-nano">GPT-5 Nano</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+        <option value="o3-mini">o3-mini</option>
+        <option value="gpt-4o">GPT-4o</option>
+    </select>
+    <button id="sendBtn">Generate Text</button>
+    <div id="chatOutput" class="output"></div>
+</div>
 
-    <div id="responseBox"></div>
-    <div id="errorBox"></div>
-
-    <!-- DALL·E input -->
-    <input type="text" id="dalleInput" placeholder="Image prompt...">
+<div class="section">
+    <h2>Generate Images (DALL-E)</h2>
+    <input id="imageInput" placeholder="Enter prompt for DALL-E...">
     <button id="generateImgBtn">Generate Image</button>
-    <div id="dalleBox"></div>
+    <div id="imageOutput" class="output"></div>
+</div>
 
-    <!-- Product URLs for video -->
-    <textarea id="productUrls" placeholder="Enter product URLs..."></textarea>
-    <button id="generateVideoBtn">Generate Video</button>
-    <div id="videoBox"></div>
+<script>
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const chatOutput = document.getElementById('chatOutput');
+const modelSelect = document.getElementById('modelSelect');
 
-    <select id="voiceSelect"></select>
-    <button id="retryBtn">Retry Last Action</button>
+const imageInput = document.getElementById('imageInput');
+const generateImgBtn = document.getElementById('generateImgBtn');
+const imageOutput = document.getElementById('imageOutput');
 
-    <script src="{{ url_for('static', filename='js/gateway.js') }}"></script>
+// ---- Text Generation ----
+sendBtn.addEventListener('click', async () => {
+    const prompt = chatInput.value.trim();
+    const model = modelSelect.value;
+    if(!prompt) return alert('Enter a prompt');
+
+    chatOutput.innerHTML = "Processing...";
+    try {
+        const stream = await puter.ai.chat(prompt, { model, stream:true });
+        let fullText = '';
+        for await (const part of stream) {
+            fullText += part?.text || '';
+            chatOutput.innerHTML = fullText.replace(/\n/g,'<br>');
+        }
+    } catch(e) {
+        chatOutput.innerHTML = `Error: ${e.message}`;
+    }
+});
+
+// ---- Image Generation ----
+generateImgBtn.addEventListener('click', async () => {
+    const prompt = imageInput.value.trim();
+    if(!prompt) return alert('Enter an image prompt');
+
+    imageOutput.innerHTML = "Generating image...";
+    try {
+        const img = await puter.ai.txt2img(prompt);
+        imageOutput.innerHTML = '';
+        imageOutput.appendChild(img);
+    } catch(e) {
+        imageOutput.innerHTML = `Error: ${e.message}`;
+    }
+});
+</script>
 </body>
 </html>
