@@ -52,19 +52,13 @@ button:hover { opacity:0.85; }
         <!-- Chat Tab -->
         <div id="chatTab" class="tab-content active">
             <section>
-                <label>Select AI Model:</label>
+                <label for="modelSelect">Select AI Model:</label>
                 <select id="modelSelect">
                     <option value="gpt-5">GPT-5</option>
                     <option value="claude-4">Claude 4</option>
                     <option value="grok-1">Grok 1</option>
                 </select>
-                <!-- Add this inside your Chat tab, above input -->
-<label for="modelSelect">Select AI Model:</label>
-<select id="modelSelect">
-  <option value="gpt-5">GPT-5</option>
-  <option value="claude-4">Claude 4</option>
-  <option value="grok-1">Grok 1</option>
-</select>
+
                 <input type="text" id="qaInput" placeholder="Ask a question...">
                 <button id="qaBtn">Ask</button>
                 <button id="clearChatBtn">Clear Chat</button>
@@ -102,7 +96,7 @@ button:hover { opacity:0.85; }
 
 <script src="{{ url_for('static', filename='gateway.js') }}"></script>
 <script>
-// Password handling
+// Password Handling
 const correctPassword = "supersecret";
 const overlay = document.getElementById('passwordOverlay');
 const input = document.getElementById('dashboardPassword');
@@ -113,15 +107,15 @@ btn.addEventListener('click', () => {
     if(input.value === correctPassword){
         overlay.style.display='none';
         dashboard.style.display='block';
-        initPuterAI(); // Initialize Puter after unlock
+        initPuterAI();
     } else {
         document.getElementById('pwError').style.display='block';
         input.value='';
     }
 });
-input.addEventListener('keypress', e=>{ if(e.key==='Enter') btn.click(); });
+input.addEventListener('keypress', e => { if(e.key==='Enter') btn.click(); });
 
-// Tabs switching
+// Tabs Switching
 const tabs = document.querySelectorAll('.tab');
 tabs.forEach(tab=>{
     tab.addEventListener('click', ()=>{
@@ -132,7 +126,7 @@ tabs.forEach(tab=>{
     });
 });
 
-// Initialize Puter AI after dashboard unlock
+// --- Initialize Puter AI ---
 function initPuterAI() {
     const puter = new Puter({ debug:true });
 
@@ -159,14 +153,21 @@ function initPuterAI() {
         qaBox.appendChild(span);
         qaBox.scrollTop = qaBox.scrollHeight;
 
-        try{
+        try {
             const selectedModel = modelSelect.value;
-            const stream = await puter.ai.chat(question, { model: selectedModel, stream:true });
-            const streamingSpan = span.querySelector('.streaming');
-            streamingSpan.textContent = '';
-            for await (const chunk of stream) {
-                streamingSpan.textContent += chunk.text || chunk;
-                qaBox.scrollTop = qaBox.scrollHeight;
+            let stream;
+            try {
+                stream = await puter.ai.chat(question, { model: selectedModel, stream:true });
+                const streamingSpan = span.querySelector('.streaming');
+                streamingSpan.textContent = '';
+                for await (const chunk of stream) {
+                    streamingSpan.textContent += chunk.text || chunk;
+                    qaBox.scrollTop = qaBox.scrollHeight;
+                }
+            } catch(err) {
+                // Fallback if streaming fails
+                const response = await puter.ai.chat(question, { model: selectedModel });
+                span.querySelector('.streaming').textContent = response.text || response;
             }
         } catch(e){
             span.innerHTML = `<strong>AI Error:</strong> ${e.message}`;
