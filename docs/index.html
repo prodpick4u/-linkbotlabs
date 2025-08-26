@@ -35,7 +35,7 @@
             font-weight: 500;
             margin-right: 0.5rem;
         }
-        input, select {
+        input, select, textarea {
             padding: 0.75rem;
             font-size: 1rem;
             border: 1px solid #ccc;
@@ -44,7 +44,11 @@
             min-width: 200px;
             transition: border-color 0.2s;
         }
-        input:focus, select:focus {
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #1a73e8;
             box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
@@ -145,7 +149,7 @@
         @media (max-width: 768px) {
             h1 { font-size: 1.75rem; }
             .input-section { flex-direction: column; }
-            input, select, button { width: 100%; }
+            input, select, textarea, button { width: 100%; }
             .ai-container { grid-template-columns: 1fr; }
             .ai-box { height: 300px; }
         }
@@ -173,9 +177,19 @@
         <button id="sendBtn" aria-label="Send chat prompt">Send</button>
     </div>
     <div class="input-section">
+        <label for="messagesInput" class="sr-only">Enter message history (JSON)</label>
+        <textarea id="messagesInput" placeholder="Enter message history (JSON, e.g., [{role: 'user', content: 'Hello'}])" aria-label="Enter message history (JSON)"></textarea>
+        <button id="sendMessagesBtn" aria-label="Send message history">Send Messages</button>
+    </div>
+    <div class="input-section">
+        <label for="imageInput" class="sr-only">Enter image URL for analysis</label>
+        <input id="imageInput" type="text" placeholder="Enter image URL for analysis..." aria-label="Enter image URL for analysis">
+        <button id="analyzeImgBtn" aria-label="Analyze image with AI">Analyze Image</button>
+    </div>
+    <div class="input-section">
         <label for="dalleInput" class="sr-only">Enter image prompt</label>
         <input id="dalleInput" type="text" placeholder="Enter image prompt..." aria-label="Enter image prompt">
-        <button id="generateImgBtn" aria-label="Generate images with DALL·E">Generate Images</button>
+        <button id="generateImgBtn" aria-label="Generate image with DALL·E">Generate Image</button>
     </div>
     <div class="input-section">
         <label for="voiceSelect">Voice:</label>
@@ -189,7 +203,8 @@
         <div class="ai-box" id="grokBox" aria-live="polite" aria-atomic="false"><h3>Grok</h3><span class="loading">Processing...</span></div>
     </div>
     <footer>
-        Powered by <a href="https://developer.puter.com/tutorials/free-unlimited-openai-api/">Puter.js Free, Unlimited OpenAI API</a>. 
+        Powered by <a href="https://developer.puter.com/tutorials/free-unlimited-openai-api/">Puter.js Free, Unlimited OpenAI API</a> and 
+        <a href="https://docs.puter.com/AI/chat/">Puter.js AI Chat Documentation</a>. 
         Uses the "User Pays" model, allowing developers to integrate AI capabilities like GPT-5, GPT-4o, and DALL·E for free, with users covering usage costs.
     </footer>
 </body>
