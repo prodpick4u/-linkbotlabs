@@ -7,12 +7,9 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 <script src="https://js.puter.com/v2/"></script>
 <style>
-body {
-    font-family: 'Inter', sans-serif;
-    margin:0; padding:0; background: #0a0033; color:white;
-}
+body { font-family:'Inter', sans-serif; margin:0; padding:0; background:#0a0033; color:white; }
 .container { max-width:1200px; margin:auto; padding:1rem; }
-h1, h2 { text-align:center; color:#9cf; }
+h1,h2 { text-align:center; color:#9cf; }
 .ai-box { background: rgba(255,255,255,0.05); padding:1rem; border-radius:8px; max-height:300px; overflow-y:auto; margin-top:0.5rem; }
 input, textarea, select { width:100%; padding:0.5rem; margin:0.5rem 0; border-radius:5px; border:none; }
 button { padding:0.6rem 1.2rem; border:none; border-radius:5px; background:linear-gradient(135deg,#6a11cb,#2575fc); color:white; cursor:pointer; }
@@ -45,20 +42,32 @@ button:hover { opacity:0.85; }
         <!-- Tabs -->
         <div class="tabs">
             <div class="tab active" data-tab="chatTab">🤖 Chat</div>
-            <div class="tab" data-tab="imageTab">🖼️ DALL·E</div>
+            <div class="tab" data-tab="imageTab">🖼️ Image</div>
             <div class="tab" data-tab="videoTab">🎬 Video</div>
         </div>
 
         <!-- Chat Tab -->
         <div id="chatTab" class="tab-content active">
             <section>
-                <label for="modelSelect">Select AI Model:</label>
+                <label>Select AI Model:</label>
                 <select id="modelSelect">
                     <option value="gpt-5">GPT-5</option>
-                    <option value="claude-4">Claude 4</option>
-                    <option value="grok-1">Grok 1</option>
+                    <option value="gpt-5-mini">GPT-5 Mini</option>
+                    <option value="gpt-5-nano">GPT-5 Nano</option>
+                    <option value="gpt-5-chat-latest">GPT-5 Chat Latest</option>
+                    <option value="gpt-4.1">GPT-4.1</option>
+                    <option value="gpt-4.1-mini">GPT-4.1 Mini</option>
+                    <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
+                    <option value="gpt-4.5-preview">GPT-4.5 Preview</option>
+                    <option value="gpt-4o">GPT-4o</option>
+                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                    <option value="o1">O1</option>
+                    <option value="o1-mini">O1 Mini</option>
+                    <option value="o1-pro">O1 Pro</option>
+                    <option value="o3">O3</option>
+                    <option value="o3-mini">O3 Mini</option>
+                    <option value="o4-mini">O4 Mini</option>
                 </select>
-
                 <input type="text" id="qaInput" placeholder="Ask a question...">
                 <button id="qaBtn">Ask</button>
                 <button id="clearChatBtn">Clear Chat</button>
@@ -66,9 +75,15 @@ button:hover { opacity:0.85; }
             </section>
         </div>
 
-        <!-- DALL-E Tab -->
+        <!-- Image Tab -->
         <div id="imageTab" class="tab-content">
             <section>
+                <label>Select Image Model:</label>
+                <select id="imageModelSelect">
+                    <option value="dall-e">DALL·E 3</option>
+                    <option value="gemini-image">Gemini Image</option>
+                    <option value="claude-image">Claude Image</option>
+                </select>
                 <input type="text" id="dalleInput" placeholder="Describe an image...">
                 <button id="generateBtn">Generate Image</button>
                 <div class="ai-box" id="dalleBox"></div>
@@ -96,7 +111,7 @@ button:hover { opacity:0.85; }
 
 <script src="{{ url_for('static', filename='gateway.js') }}"></script>
 <script>
-// Password Handling
+// Password handling
 const correctPassword = "supersecret";
 const overlay = document.getElementById('passwordOverlay');
 const input = document.getElementById('dashboardPassword');
@@ -113,11 +128,10 @@ btn.addEventListener('click', () => {
         input.value='';
     }
 });
-input.addEventListener('keypress', e => { if(e.key==='Enter') btn.click(); });
+input.addEventListener('keypress', e=>{ if(e.key==='Enter') btn.click(); });
 
-// Tabs Switching
-const tabs = document.querySelectorAll('.tab');
-tabs.forEach(tab=>{
+// Tabs switching
+document.querySelectorAll('.tab').forEach(tab=>{
     tab.addEventListener('click', ()=>{
         document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
@@ -126,11 +140,11 @@ tabs.forEach(tab=>{
     });
 });
 
-// --- Initialize Puter AI ---
+// Initialize Puter AI
 function initPuterAI() {
     const puter = new Puter({ debug:true });
 
-    // --- Chat / Q&A ---
+    // --- Chat ---
     const qaInput = document.getElementById('qaInput');
     const qaBtn = document.getElementById('qaBtn');
     const qaBox = document.getElementById('qaBox');
@@ -149,50 +163,38 @@ function initPuterAI() {
         qaInput.value='';
 
         const span = document.createElement('p');
-        span.innerHTML = `<strong>AI:</strong> <span class="streaming">...</span>`;
+        span.innerHTML = `<strong>AI:</strong> <span class="streaming">Loading...</span>`;
         qaBox.appendChild(span);
         qaBox.scrollTop = qaBox.scrollHeight;
 
         try {
             const selectedModel = modelSelect.value;
-            let stream;
-            try {
-                stream = await puter.ai.chat(question, { model: selectedModel, stream:true });
-                const streamingSpan = span.querySelector('.streaming');
-                streamingSpan.textContent = '';
-                for await (const chunk of stream) {
-                    streamingSpan.textContent += chunk.text || chunk;
-                    qaBox.scrollTop = qaBox.scrollHeight;
-                }
-            } catch(err) {
-                // Fallback if streaming fails
-                const response = await puter.ai.chat(question, { model: selectedModel });
-                span.querySelector('.streaming').textContent = response.text || response;
+            const stream = await puter.ai.chat(question, { model: selectedModel, stream:true });
+            const streamingSpan = span.querySelector('.streaming');
+            streamingSpan.textContent='';
+            for await (const chunk of stream) {
+                streamingSpan.textContent += chunk.text || chunk;
+                qaBox.scrollTop = qaBox.scrollHeight;
             }
         } catch(e){
             span.innerHTML = `<strong>AI Error:</strong> ${e.message}`;
         }
     }
 
-    // --- DALL-E ---
+    // --- Image ---
     const dalleInput = document.getElementById('dalleInput');
     const generateBtn = document.getElementById('generateBtn');
     const dalleBox = document.getElementById('dalleBox');
+    const imageModelSelect = document.getElementById('imageModelSelect');
 
     generateBtn.addEventListener('click', async () => {
         const prompt = dalleInput.value.trim();
         if(!prompt) return;
-        dalleBox.innerHTML = '<p>Generating image...</p>';
+        dalleBox.innerHTML='<p>Generating image...</p>';
         try{
-            const img = await puter.ai.txt2img(prompt);
+            const selectedImageModel = imageModelSelect.value;
+            const img = await puter.ai.txt2img(prompt, { model: selectedImageModel });
             dalleBox.innerHTML='';
             dalleBox.appendChild(img);
         } catch(e){
-            dalleBox.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
-        }
-    });
-}
-</script>
-
-</body>
-</html>
+            dalleBox
