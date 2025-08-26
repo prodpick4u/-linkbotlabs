@@ -37,29 +37,46 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
     populateVoiceSelect();
 }
 
-// ---- TTS ----
+// ---- TTS with Queue ----
+let ttsQueue = [];
+let isSpeaking = false;
+
 function playTTS(text) {
-    if (synth.speaking) synth.cancel();
+    if (!text) return;
+    ttsQueue.push(text);
+    processTTSQueue();
+}
+
+function processTTSQueue() {
+    if (isSpeaking || !ttsQueue.length) return;
+    isSpeaking = true;
+    const text = ttsQueue.shift();
     const utter = new SpeechSynthesisUtterance(text);
     const selectedVoice = voiceSelect.value;
     if (selectedVoice) {
         const voice = synth.getVoices().find(v => v.name === selectedVoice);
         if (voice) utter.voice = voice;
     }
+    utter.onend = () => {
+        isSpeaking = false;
+        processTTSQueue();
+    };
     synth.speak(utter);
 }
 
-// ---- Multi-AI Chat ----
+// ---- Multi-AI Chat with Streaming ----
 async function askAI(question) {
     if (!question) return;
-    const modelKeys = Object.keys(models).sort(); // Sort model keys alphabetically
+    sendBtn.disabled = true;
+    sendBtn.classList.add('loading');
+    const modelKeys = Object.keys(models).sort();
     for (const key of modelKeys) {
         const model = models[key];
+        const box = aiBoxes[key];
+        box.setAttribute('aria-busy', 'true');
+        const p = document.createElement('p');
+        box.appendChild(p);
         try {
-            const box = aiBoxes[key];
-            const p = document.createElement('p');
-            box.appendChild(p);
-
             const stream = await puter.ai.chat(`Answer clearly: "${question}"`, { model, stream: true });
             let fullText = '';
             for await (const part of stream) {
@@ -67,21 +84,23 @@ async function askAI(question) {
                     fullText += part.text;
                     p.innerHTML = fullText.replace(/\n/g, '<br>');
                     box.scrollTop = box.scrollHeight;
+                    playTTS(part.text); // Speak each chunk
                 }
             }
-            playTTS(fullText);
         } catch (e) {
             console.warn(`${key} failed`, e);
-            const p = document.createElement('p');
             p.innerHTML = `Error: ${key} failed to respond.`;
-            aiBoxes[key].appendChild(p);
         }
+        box.setAttribute('aria-busy', 'false');
     }
+    sendBtn.disabled = false;
+    sendBtn.classList.remove('loading');
 }
 
 // ---- DALL·E 3 Images ----
 async function generateImages(prompt) {
     const box = aiBoxes['dalle'];
+    box.setAttribute('aria-busy', 'true');
     box.innerHTML = '<h3>DALL·E</h3>';
     for (let i = 0; i < 3; i++) {
         try {
@@ -94,6 +113,7 @@ async function generateImages(prompt) {
             box.appendChild(p);
         }
     }
+    box.setAttribute('aria-busy', 'false');
 }
 
 // ---- Event Listeners ----
