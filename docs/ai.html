@@ -64,7 +64,6 @@
       <div class="hint">Ask anything. Choose a chat model (includes <strong>GPT-4.1-nano</strong>).</div>
       <label for="chat-model">Model</label>
       <select id="chat-model">
-        <!-- OpenAI / GPT family -->
         <option value="gpt-4.1-nano" selected>GPT-4.1-nano (fast & light)</option>
         <option value="gpt-4.1">GPT-4.1</option>
         <option value="gpt-4.1-mini">GPT-4.1-mini</option>
@@ -80,16 +79,13 @@
         <option value="o3">o3</option>
         <option value="o3-mini">o3-mini</option>
         <option value="o4-mini">o4-mini</option>
-        <!-- Claude -->
         <option value="claude-sonnet-4">Claude Sonnet 4</option>
         <option value="claude-opus-4">Claude Opus 4</option>
         <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
         <option value="claude-3-7-opus">Claude 3.7 Opus</option>
-        <!-- Gemini -->
         <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
         <option value="google/gemini-2.5-pro-exp-03-25:free">Gemini 2.5 Pro (exp)</option>
         <option value="google/gemini-flash-1.5-8b">Gemini 1.5 Flash (8B)</option>
-        <!-- Grok -->
         <option value="x-ai/grok-4">Grok 4</option>
         <option value="x-ai/grok-3">Grok 3</option>
         <option value="x-ai/grok-3-mini">Grok 3 Mini</option>
@@ -123,7 +119,6 @@
       <div class="hint">Paste an image URL and ask a question about it.</div>
       <label for="vision-model">Model</label>
       <select id="vision-model">
-        <!-- Models known/used for vision via chat(imageURL) -->
         <option value="gpt-4o" selected>GPT-4o (vision)</option>
         <option value="gpt-4.1">GPT-4.1</option>
         <option value="gpt-4.1-nano">GPT-4.1-nano</option>
@@ -150,7 +145,6 @@
       <div class="hint">See responses arrive in real-time.</div>
       <label for="stream-model">Model</label>
       <select id="stream-model">
-        <!-- Prioritize models typically supporting stream -->
         <option value="gpt-4.1-nano" selected>GPT-4.1-nano</option>
         <option value="gpt-4.1">GPT-4.1</option>
         <option value="gpt-4o">GPT-4o</option>
@@ -180,15 +174,19 @@ function appendText(el, text) {
   el.innerHTML += (text ?? '').toString();
 }
 function normalizeNonStream(resp) {
-  // Try best-effort extraction across providers
   if (typeof resp === 'string') return resp;
+  if (resp?.output_text) return resp.output_text; // ✅ Fix for Puter.js
   if (resp?.text) return resp.text;
   if (resp?.message?.content) {
     if (Array.isArray(resp.message.content)) {
       const first = resp.message.content[0];
-      return typeof first === 'string' ? first : (first?.text ?? JSON.stringify(resp.message.content));
+      return typeof first === 'string'
+        ? first
+        : (first?.text ?? JSON.stringify(resp.message.content));
     }
-    return typeof resp.message.content === 'string' ? resp.message.content : JSON.stringify(resp.message.content);
+    return typeof resp.message.content === 'string'
+      ? resp.message.content
+      : JSON.stringify(resp.message.content);
   }
   return JSON.stringify(resp ?? {});
 }
@@ -216,7 +214,6 @@ document.getElementById('imggen-run').addEventListener('click', async () => {
   putText(out, 'Generating…');
   out.innerHTML = '';
   try {
-    // Puter.js txt2img currently doesn't require a model param (uses DALL·E).
     const imgEl = await puter.ai.txt2img(prompt);
     imgEl.classList.add('gen');
     out.appendChild(imgEl);
@@ -252,7 +249,8 @@ document.getElementById('stream-run').addEventListener('click', async () => {
   try {
     const stream = await puter.ai.chat(prompt, { model, stream: true });
     for await (const part of stream) {
-      if (part?.text) appendText(out, part.text.replaceAll('\n','<br>'));
+      if (part?.output_text) appendText(out, part.output_text.replaceAll('\n','<br>'));
+      else if (part?.text) appendText(out, part.text.replaceAll('\n','<br>'));
     }
   } catch (e) {
     putText(out, 'Error: ' + (e?.message ?? e));
