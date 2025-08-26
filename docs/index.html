@@ -13,12 +13,7 @@
         background: #f0f4f8;
         color: #333;
     }
-    h1 {
-        text-align: center;
-        color: #1a73e8;
-        font-size: 2.2rem;
-        margin-bottom: 1rem;
-    }
+    h1 { text-align: center; color: #1a73e8; font-size: 2.2rem; margin-bottom: 1rem; }
     .section {
         background: white;
         border-radius: 10px;
@@ -27,7 +22,7 @@
         max-width: 800px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    input, textarea, button, select {
+    input, button, select {
         width: 100%;
         padding: 12px;
         margin: 8px 0;
@@ -49,7 +44,7 @@
         padding: 12px;
         background: #e8f0fe;
         border-radius: 6px;
-        max-height: 300px;
+        max-height: 350px;
         overflow-y: auto;
         font-family: monospace;
         white-space: pre-wrap;
@@ -60,6 +55,7 @@
         margin-top: 8px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
+    .loading { font-style: italic; color: #555; }
 </style>
 </head>
 <body>
@@ -96,22 +92,35 @@ const imageInput = document.getElementById('imageInput');
 const generateImgBtn = document.getElementById('generateImgBtn');
 const imageOutput = document.getElementById('imageOutput');
 
+// ---- Helper: display messages ----
+function showOutput(container, text, append=false) {
+    if(!append) container.innerHTML = '';
+    const p = document.createElement('p');
+    p.innerHTML = text;
+    container.appendChild(p);
+    container.scrollTop = container.scrollHeight;
+}
+
 // ---- Text Generation ----
 sendBtn.addEventListener('click', async () => {
     const prompt = chatInput.value.trim();
     const model = modelSelect.value;
     if(!prompt) return alert('Enter a prompt');
 
-    chatOutput.innerHTML = "Processing...";
+    chatOutput.innerHTML = '<span class="loading">Processing...</span>';
     try {
         const stream = await puter.ai.chat(prompt, { model, stream:true });
+        chatOutput.innerHTML = '';
         let fullText = '';
         for await (const part of stream) {
-            fullText += part?.text || '';
-            chatOutput.innerHTML = fullText.replace(/\n/g,'<br>');
+            if(part?.text) {
+                fullText += part.text;
+                showOutput(chatOutput, fullText, false);
+            }
         }
+        if(!fullText) showOutput(chatOutput, 'No response received from AI.', false);
     } catch(e) {
-        chatOutput.innerHTML = `Error: ${e.message}`;
+        showOutput(chatOutput, `Error: ${e.message}`, false);
     }
 });
 
@@ -120,13 +129,13 @@ generateImgBtn.addEventListener('click', async () => {
     const prompt = imageInput.value.trim();
     if(!prompt) return alert('Enter an image prompt');
 
-    imageOutput.innerHTML = "Generating image...";
+    imageOutput.innerHTML = '<span class="loading">Generating image...</span>';
     try {
         const img = await puter.ai.txt2img(prompt);
         imageOutput.innerHTML = '';
         imageOutput.appendChild(img);
     } catch(e) {
-        imageOutput.innerHTML = `Error: ${e.message}`;
+        showOutput(imageOutput, `Error: ${e.message}`, false);
     }
 });
 </script>
