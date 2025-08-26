@@ -2,158 +2,142 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Video Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkBotLabs AI Video Generator</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #4B0082, #1E90FF); /* purple-blue gradient */
-    color: white;
-}
-
-.container {
-    width: 600px;
-    background: rgba(0,0,0,0.85);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-    text-align: center;
-}
-
-h2 {
-    margin-bottom: 20px;
-    color: #f0f0f0;
-}
-
-input[type="text"], textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: #222;
-    color: #fff;
-}
-
-button {
-    padding: 10px 20px;
-    background: #7B68EE;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:hover {
-    background: #6A5ACD;
-}
-
-.error { color: #FF6B6B; margin-bottom: 15px; }
-.success { color: #7CFC00; margin-bottom: 15px; }
-
-video, img { width: 100%; margin-top: 15px; border-radius: 6px; }
-#dalle_images img { margin-bottom: 10px; border: 2px solid #fff; }
-a { color: #00FFFF; text-decoration: none; }
-a:hover { text-decoration: underline; }
+body { font-family: Arial; background: #f0f2f5; padding: 20px; }
+.container { max-width:700px; margin:auto; background:white; padding:20px; border-radius:8px; }
+input,textarea{width:100%; padding:10px; margin:5px 0 15px 0; border-radius:4px;border:1px solid #ccc;}
+button{padding:10px 20px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;margin-top:10px;}
+button:hover{background:#0056b3;}
+video,img{width:100%;margin-top:15px;border-radius:6px;}
+#error{color:red;}
+#success{color:green;}
+#dalle_images img{margin-bottom:10px;}
+#progressContainer{margin:10px 0; display:none;}
+#progressBarContainer{background:#eee; border-radius:4px; overflow:hidden; height:25px;}
+#progressBar{background:#28a745; width:0%; height:100%; text-align:center; color:white; line-height:25px;}
 </style>
 </head>
 <body>
 <div class="container">
-    <h2>Video Generator</h2>
-    <p><a href="{{ url_for('logout') }}">Logout</a></p>
+<h2>🎬 LinkBotLabs AI Video Generator</h2>
+<div id="error"></div>
+<div id="success"></div>
 
-    <div class="error" id="error"></div>
-    <div class="success" id="success"></div>
+<label>Product URLs</label>
+<input type="text" id="urls" placeholder="https://example.com/product1, ...">
 
-    <form id="videoForm">
-        <input type="text" id="urls" placeholder="Product URLs (comma separated)" required>
-        <textarea id="script" rows="3" placeholder="Optional script for narration"></textarea>
-        <input type="text" id="dalle_prompt" placeholder="Optional DALL·E image prompt">
-        <button type="button" id="generateDalleBtn">Generate Image</button>
-        <div id="dalle_images"></div>
-        <button type="submit">Generate Video</button>
-    </form>
+<label>Optional Script</label>
+<textarea id="script" rows="4" placeholder="Leave blank to auto-generate"></textarea>
 
-    <video id="video_preview" controls style="display:none;"></video>
-    <a id="download_link" href="#" download style="display:none; margin-top:10px; display:block;">Download Video</a>
+<label>Optional DALL·E 3 Image Prompt</label>
+<input type="text" id="dalle_prompt" placeholder="e.g., 'Modern kitchen with kettle'">
+<button type="button" id="generateDalleBtn">Generate Image</button>
+<div id="dalle_images"></div>
+
+<div id="progressContainer">
+    <div id="progressBarContainer">
+        <div id="progressBar">0%</div>
+    </div>
+    <p id="progressText"></p>
+</div>
+
+<button type="button" id="generateVideoBtn">Generate Video</button>
+<video id="video_preview" controls style="display:none;"></video>
 </div>
 
 <script>
 let dalleImages = [];
 let generatingImage = false;
 
-document.getElementById('generateDalleBtn').addEventListener('click', async function() {
-    const prompt = document.getElementById('dalle_prompt').value.trim();
-    if (!prompt) return alert('Enter a prompt');
-    if (generatingImage) return alert('Please wait, generating image...');
-    
-    generatingImage = true;
-    try {
-        const imgEl = await puter.ai.txt2img(prompt); // DALL·E 3
+// Smooth progress animation
+function smoothProgress(start, end, duration, text){
+    return new Promise(resolve=>{
+        const bar=document.getElementById('progressBar');
+        const txt=document.getElementById('progressText');
+        let startTime=performance.now();
+        function step(now){
+            let elapsed=now-startTime;
+            let progress=start + (end-start)*(elapsed/duration);
+            if(progress>end) progress=end;
+            bar.style.width=progress+'%';
+            bar.textContent=Math.round(progress)+'%';
+            txt.textContent=text;
+            if(progress<end) requestAnimationFrame(step);
+            else resolve();
+        }
+        requestAnimationFrame(step);
+    });
+}
+
+// Generate DALL-E image
+document.getElementById('generateDalleBtn').addEventListener('click', async()=>{
+    const prompt=document.getElementById('dalle_prompt').value.trim();
+    if(!prompt) return alert('Enter a prompt');
+    if(generatingImage) return alert('Please wait...');
+    generatingImage=true;
+    try{
+        await smoothProgress(0,20,1000,'Generating DALL·E image...');
+        const imgEl=await puter.ai.txt2img(prompt);
         document.getElementById('dalle_images').appendChild(imgEl);
         dalleImages.push(imgEl.src);
-    } catch (err) {
-        console.error(err);
-        alert('Failed to generate image. Try again.');
-    } finally {
-        generatingImage = false;
-    }
+        await smoothProgress(20,30,500,'✅ Image ready');
+    }catch(err){console.error(err); alert('❌ Failed to generate image.');}
+    finally{generatingImage=false;}
 });
 
-document.getElementById('videoForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const errorEl = document.getElementById('error');
-    const successEl = document.getElementById('success');
-    const videoEl = document.getElementById('video_preview');
-    const downloadEl = document.getElementById('download_link');
-    errorEl.textContent = '';
-    successEl.textContent = '';
-    videoEl.style.display = 'none';
-    downloadEl.style.display = 'none';
-    videoEl.src = '';
+// Generate Video
+document.getElementById('generateVideoBtn').addEventListener('click', async()=>{
+    const errorEl=document.getElementById('error');
+    const successEl=document.getElementById('success');
+    const videoEl=document.getElementById('video_preview');
+    errorEl.textContent=''; successEl.textContent='';
+    videoEl.style.display='none'; videoEl.src='';
 
-    let urls = document.getElementById('urls').value.split(',').map(u => u.trim()).filter(Boolean);
-    if (!urls.length) {
-        errorEl.textContent = '❌ Please enter at least one URL.';
-        return;
-    }
+    const urls=document.getElementById('urls').value.split(',').map(u=>u.trim()).filter(Boolean);
+    if(!urls.length){errorEl.textContent='❌ Please enter at least one URL.'; return;}
 
-    let scriptText = document.getElementById('script').value.trim();
-    try {
-        if (!scriptText) {
-            const prompt = `Write an engaging TikTok-style narration for these product pages: ${urls.join(', ')}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
-            scriptText = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+    const scriptTextOrig=document.getElementById('script').value.trim();
+    document.getElementById('progressContainer').style.display='block';
+    let scriptText=scriptTextOrig;
+
+    try{
+        await smoothProgress(30,40,500,'✅ URLs confirmed');
+
+        // Script
+        if(!scriptText){
+            await smoothProgress(40,55,1000,'Generating script...');
+            scriptText=await puter.ai.chat(`Write TikTok-style narration for these products: ${urls.join(', ')}`, {model:"gpt-5-nano"});
         }
+        await smoothProgress(55,60,500,'✅ Script ready');
 
-        const allImages = [...dalleImages, ...urls];
+        // TTS
+        await smoothProgress(60,75,1500,'Generating voiceover...');
+        const ttsBlob=await puter.ai.tts(scriptText,{voice:"alloy"});
+        const ttsFile=new File([ttsBlob],"voice.mp3",{type:"audio/mpeg"});
+        await smoothProgress(75,80,500,'✅ Voiceover ready');
 
-        const response = await fetch('/generate_video', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ urls: allImages, script: scriptText })
-        });
+        // Send to backend
+        const formData=new FormData();
+        formData.append("urls",JSON.stringify([...urls,...dalleImages]));
+        formData.append("script",scriptText);
+        formData.append("voiceover",ttsFile);
+        await smoothProgress(80,90,500,'Uploading to backend...');
+        const response=await fetch('/generate_video',{method:'POST',body:formData});
+        const data=await response.json();
 
-        const data = await response.json();
-
-        if (data.video_file) {
-            successEl.textContent = '✅ Video generated successfully!';
-            videoEl.src = `/download/${data.video_file}`;
-            videoEl.style.display = 'block';
-            downloadEl.href = `/download/${data.video_file}`;
-            downloadEl.style.display = 'block';
-        } else {
-            errorEl.textContent = '❌ Video generation failed: ' + (data.error || 'Unknown error');
+        if(data.video_file){
+            await smoothProgress(90,100,500,'✅ Video generated!');
+            successEl.textContent='✅ Video generated!';
+            videoEl.src=`/download/${data.video_file}`;
+            videoEl.style.display='block';
+        }else{
+            errorEl.textContent='❌ Video generation failed: '+(data.error||'Unknown error');
+            await smoothProgress(0,0,0,'');
         }
-    } catch (err) {
-        console.error(err);
-        errorEl.textContent = '❌ Failed to generate video. Please try again.';
-    }
+    }catch(err){console.error(err); errorEl.textContent='❌ Failed to generate video.'; await smoothProgress(0,0,0,'');}
 });
 </script>
 </body>
