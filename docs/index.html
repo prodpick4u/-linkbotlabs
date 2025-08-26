@@ -13,7 +13,12 @@
         background: #f0f4f8;
         color: #333;
     }
-    h1 { text-align: center; color: #1a73e8; font-size: 2.2rem; margin-bottom: 1rem; }
+    h1 {
+        text-align: center;
+        color: #1a73e8;
+        font-size: 2.4rem;
+        margin-bottom: 1rem;
+    }
     .section {
         background: white;
         border-radius: 10px;
@@ -22,7 +27,7 @@
         max-width: 800px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    input, button, select {
+    input, textarea, button, select {
         width: 100%;
         padding: 12px;
         margin: 8px 0;
@@ -44,7 +49,7 @@
         padding: 12px;
         background: #e8f0fe;
         border-radius: 6px;
-        max-height: 350px;
+        max-height: 400px;
         overflow-y: auto;
         font-family: monospace;
         white-space: pre-wrap;
@@ -55,7 +60,6 @@
         margin-top: 8px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .loading { font-style: italic; color: #555; }
 </style>
 </head>
 <body>
@@ -92,51 +96,80 @@ const imageInput = document.getElementById('imageInput');
 const generateImgBtn = document.getElementById('generateImgBtn');
 const imageOutput = document.getElementById('imageOutput');
 
-// ---- Helper: display messages ----
-function showOutput(container, text, append=false) {
-    if(!append) container.innerHTML = '';
-    const p = document.createElement('p');
-    p.innerHTML = text;
-    container.appendChild(p);
-    container.scrollTop = container.scrollHeight;
+let ttsQueue = [];
+let isSpeaking = false;
+const synth = window.speechSynthesis;
+
+// ---- TTS function ----
+function speakText(text) {
+    if (!text) return;
+    ttsQueue.push(text);
+    if (isSpeaking) return;
+    const next = () => {
+        if (!ttsQueue.length) { isSpeaking=false; return; }
+        isSpeaking = true;
+        const utter = new SpeechSynthesisUtterance(ttsQueue.shift());
+        utter.onend = () => { next(); };
+        synth.speak(utter);
+    };
+    next();
 }
 
-// ---- Text Generation ----
-sendBtn.addEventListener('click', async () => {
-    const prompt = chatInput.value.trim();
-    const model = modelSelect.value;
-    if(!prompt) return alert('Enter a prompt');
-
-    chatOutput.innerHTML = '<span class="loading">Processing...</span>';
+// ---- Safe AI call with streaming ----
+async function askAI(prompt, model) {
+    chatOutput.innerHTML = 'Processing...';
     try {
-        const stream = await puter.ai.chat(prompt, { model, stream:true });
-        chatOutput.innerHTML = '';
+        if(!puter || !puter.ai) throw new Error('Puter.js not loaded.');
+
         let fullText = '';
+        const stream = await puter.ai.chat(prompt, { model, stream: true });
+
         for await (const part of stream) {
             if(part?.text) {
                 fullText += part.text;
-                showOutput(chatOutput, fullText, false);
+                chatOutput.innerHTML = fullText.replace(/\n/g,'<br>');
+                speakText(part.text);
             }
         }
-        if(!fullText) showOutput(chatOutput, 'No response received from AI.', false);
-    } catch(e) {
-        showOutput(chatOutput, `Error: ${e.message}`, false);
+
+        if(!fullText) {
+            chatOutput.innerHTML = `No response from ${model}.`;
+        }
+
+    } catch(err) {
+        chatOutput.innerHTML = `Error with ${model}: ${err.message || 'Unknown error'}`;
+        // Retry with gpt-5-nano if not already
+        if(model !== 'gpt-5-nano') {
+            chatOutput.innerHTML += '<br>Retrying with GPT-5 Nano...';
+            await askAI(prompt, 'gpt-5-nano');
+        }
     }
-});
+}
 
-// ---- Image Generation ----
-generateImgBtn.addEventListener('click', async () => {
-    const prompt = imageInput.value.trim();
-    if(!prompt) return alert('Enter an image prompt');
-
-    imageOutput.innerHTML = '<span class="loading">Generating image...</span>';
+// ---- Image generation ----
+async function generateImage(prompt) {
+    imageOutput.innerHTML = 'Generating image...';
     try {
         const img = await puter.ai.txt2img(prompt);
         imageOutput.innerHTML = '';
         imageOutput.appendChild(img);
-    } catch(e) {
-        showOutput(imageOutput, `Error: ${e.message}`, false);
+    } catch(err) {
+        imageOutput.innerHTML = `Error: ${err.message || 'Unknown error'}`;
     }
+}
+
+// ---- Event listeners ----
+sendBtn.addEventListener('click', () => {
+    const prompt = chatInput.value.trim();
+    if(!prompt) return alert('Enter a prompt');
+    const model = modelSelect.value;
+    askAI(prompt, model);
+});
+
+generateImgBtn.addEventListener('click', () => {
+    const prompt = imageInput.value.trim();
+    if(!prompt) return alert('Enter image prompt');
+    generateImage(prompt);
 });
 </script>
 
