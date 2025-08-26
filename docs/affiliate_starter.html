@@ -3,129 +3,218 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LinkBotLabs Affiliate Demo & AI</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<script src="https://js.puter.com/v2/"></script>
+<title>LinkBotLabs Affiliate Activation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
-body { font-family:'Inter',sans-serif; background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f); background-size:400% 400%; animation:gradientShift 20s ease infinite; color:#fff; padding:2rem; text-align:center; }
-@keyframes gradientShift {0%{background-position:0% 50%;}25%{background-position:50% 50%;}50%{background-position:100% 50%;}75%{background-position:50% 50%;}100%{background-position:0% 50%;}}
-.glass { background:rgba(0,0,0,0.5); backdrop-filter:blur(10px); padding:20px; border-radius:12px; margin-bottom:20px; }
-input, button { padding:10px; margin:5px; border-radius:6px; border:none; font-size:14px; }
-button { background:linear-gradient(135deg,#6a11cb,#2575fc); color:#fff; font-weight:600; cursor:pointer; }
-button:hover { opacity:0.85; }
-.output { margin-top:10px; color:#0f0; font-weight:600; }
-button:disabled { opacity:0.5; cursor:not-allowed; }
-.ai-products { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:1.5rem; }
-.ai-card { background: rgba(0,0,0,0.55); padding:1rem; border-radius:8px; width:220px; text-align:center; }
-.ai-card img { width:100%; border-radius:6px; margin-bottom:0.5rem; }
+body {
+    font-family:'Inter',sans-serif;
+    margin:0;
+    padding:1rem;
+    color:#fff;
+    background: linear-gradient(-45deg,#0a0033,#3b007f,#1a1aff,#6f00ff);
+    background-size:400% 400%;
+    animation: gradientShift 15s ease infinite;
+}
+@keyframes gradientShift{
+    0%{background-position:0% 50%;}
+    25%{background-position:50% 50%;}
+    50%{background-position:100% 50%;}
+    75%{background-position:50% 50%;}
+    100%{background-position:0% 50%;}
+}
+h1,h2,h3,h4{color:#9cf;text-align:center;}
+.glass{
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:1rem;
+}
+input, button{
+    width:100%;
+    padding:10px;
+    margin:5px 0;
+    border-radius:5px;
+    border:none;
+}
+input{background: rgba(20,20,20,0.7); color:#fff;}
+button{
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+}
+button:hover{opacity:0.85;}
+.output{
+    background:rgba(0,0,0,0.7);
+    padding:10px;
+    border-radius:8px;
+    margin-top:8px;
+    color:#0f0;
+    white-space:pre-wrap;
+}
+.timer{
+    text-align:center;
+    font-size:1rem;
+    margin-bottom:0.8rem;
+    color:#ff0;
+}
+.step{
+    margin-bottom:15px;
+}
+.step h3{
+    color:#ffdd57;
+    margin-bottom:5px;
+}
+.step ul{
+    margin-left:20px;
+    line-height:1.5;
+}
 </style>
 </head>
 <body>
 
-<h1>🔑 LinkBotLabs Affiliate Demo</h1>
-<p>Everything below is visible for demo purposes. Enter your access code to activate affiliate features and AI product generation.</p>
+<h1>🚀 LinkBotLabs Affiliate Activation</h1>
 
+<!-- ===== Onboarding Flow ===== -->
 <div class="glass">
-  <label>Access Code:
-    <input type="text" id="accessCode" placeholder="Enter your code">
-  </label>
-  <button id="unlockBtn">Unlock Access</button>
-  <div id="accessOutput" class="output"></div>
+  <h2>🚀 LinkBotLabs Affiliate Onboarding Flow</h2>
+
+  <div class="step">
+    <h3>Step 1 – Entry Purchase 🛒</h3>
+    <ul>
+      <li>Buy any product from the showcase using our affiliate link.</li>
+      <li>Proof of purchase required (screenshot or order ID).</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>Step 2 – Get Your Access Code 🔐</h3>
+    <ul>
+      <li>After verification, we send you a unique password/login.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>Step 3 – Link Integration 🔗</h3>
+    <ul>
+      <li>Add your Amazon or Temu affiliate ID.</li>
+      <li>Links in the showcase now use your ID automatically.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>Step 4 – Share & Earn 📢</h3>
+    <ul>
+      <li>Share your showcase link with friends, family, and online audiences.</li>
+      <li>Anyone who buys through your link earns you commission.</li>
+      <li>Weekly updates add new best-selling products automatically.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>Step 5 – Viral Growth 🌍</h3>
+    <ul>
+      <li>New affiliates join after buying their first product.</li>
+      <li>Everyone in the network earns together.</li>
+    </ul>
+  </div>
+
+  <p style="text-align:center; font-weight:bold;">
+    ✨ One product purchase = lifetime revenue potential.<br>
+    🔄 Weekly updates = always fresh content.<br>
+    💸 Amazon + Temu commissions = maximum earnings.
+  </p>
 </div>
 
-<div id="affiliateForm" class="glass">
-  <p>Register your Affiliate ID to automatically append your tag to product links.</p>
-  <label>Affiliate ID:
-    <input type="text" id="affiliateID" placeholder="Your Affiliate ID">
-  </label>
-  <button id="registerBtn" disabled>Register Affiliate</button>
-  <div id="affiliateOutput" class="output"></div>
+<!-- ===== Access Code Login ===== -->
+<div class="glass">
+<h2>🔒 Access Code Login</h2>
+<p>Enter your access code to start your 7-day demo:</p>
+<input type="text" id="accessCode" placeholder="Enter your code">
+<button onclick="checkAccessCode()">Unlock Demo</button>
+<div id="accessOutput" class="output"></div>
 </div>
 
-<section class="glass" id="aiSection">
-<h2>🤖 AI Product & Trend Assistant</h2>
-<p>Ask our AI about trending products or reviews. Buttons are disabled until access is granted.</p>
-<button id="aiBtn" disabled>Ask AI a Question</button>
+<!-- ===== Detailed Explanation Section ===== -->
+<div class="glass" id="activationInfo" style="background: rgba(0,0,0,0.6); padding:20px;">
+  <h2 style="color:#ffdd57; text-align:center; margin-bottom:10px;">📢 How You Can Access Our Affiliate Products</h2>
+  <p style="font-size:1rem; line-height:1.5;">We offer <strong>three ways</strong> to get started:</p>
+  <ol style="margin-left:20px; font-size:1rem; line-height:1.6;">
+    <li style="margin-bottom:8px;"><span style="color:#00ffea; font-weight:bold;">Join for 1 Week via Fiverr:</span> Test the tool for 7 days by requesting access through our Fiverr link on the front page.</li>
+    <li style="margin-bottom:8px;"><span style="color:#00ffea; font-weight:bold;">Purchase the Full Tool:</span> Get 1 week free with your full purchase.</li>
+    <li style="margin-bottom:8px;"><span style="color:#00ffea; font-weight:bold;">Special Launch Promotion:</span> If you already have an Amazon affiliate link and can support this project, you are welcome to use it <strong>for 1 month free</strong>.</li>
+  </ol>
+  <p style="font-size:1rem; line-height:1.5; margin-top:10px;">All products will dynamically link to your Amazon affiliate ID, giving you more commission at no cost. The tool is primarily for desktop and provides <strong>full automation</strong>. You can also test the live demo via the ZIP Flask app. Full automation requires keys, but you can explore the demo without keys.</p>
+  <p style="font-size:1rem; font-weight:bold; color:#ff6f91;">👉 All requests for access should be made via the Fiverr link on the front page.</p>
+</div>
 
-<div class="ai-products" id="aiProducts"></div>
-</section>
+<!-- ===== Affiliate Tag Registration ===== -->
+<div id="affiliateFormSection" class="glass" style="display:none;">
+<h2>📝 Register Your Amazon Affiliate Tag</h2>
+<p>Once activated, product links on the main product page will use your tag, so you earn commissions.</p>
+<form id="affiliateForm">
+<input type="text" id="userAffiliate" placeholder="mytag-20" required>
+<button type="submit">Activate</button>
+</form>
+<div id="regOutput" class="output"></div>
+<div id="demoTimer" class="timer"></div>
+<p>Upgrade to the <strong>Full Version</strong> for full automation: product to video!</p>
+</div>
 
 <script>
-let AFFILIATE_TAG = localStorage.getItem('affiliateTag') || "";
+// ===== Multi-User Access Codes =====
 const VALID_CODES = ["starter123","user456","demo789"];
+let userAffiliateTag = localStorage.getItem('affiliateTag') || "";
 
-// ==== Unlock Access ====
-document.getElementById('unlockBtn').addEventListener('click', ()=>{
-  const code = document.getElementById('accessCode').value.trim();
-  const output = document.getElementById('accessOutput');
+// ===== Access Code Check =====
+function checkAccessCode() {
+  const code = document.getElementById("accessCode").value.trim();
   if(VALID_CODES.includes(code)){
-    output.innerText = "✅ Access granted! You can now register your Affiliate ID and use AI features.";
-    document.getElementById('registerBtn').disabled = false;
-    document.getElementById('aiBtn').disabled = false;
+    document.getElementById("affiliateFormSection").style.display = "block";
+    document.getElementById("accessOutput").innerText = "✅ Access granted! Register your affiliate tag to activate.";
+    startDemoTimer();
   } else {
-    output.innerText = "❌ Invalid code. Contact developer if you just purchased a product.";
+    document.getElementById("accessOutput").innerText = "❌ Invalid code. Try again.";
   }
-});
-
-// ==== Register Affiliate ====
-document.getElementById('registerBtn').addEventListener('click', ()=>{
-  const tag = document.getElementById('affiliateID').value.trim();
-  if(tag){
-    AFFILIATE_TAG = tag;
-    localStorage.setItem('affiliateTag', tag);
-    document.getElementById("affiliateOutput").innerText = `✅ Affiliate ID "${tag}" saved! All product links now include this tag.`;
-    alert(`Your affiliate tag "${tag}" is now active!`);
-    generateAIProducts("Trending");
-  }
-});
-
-// ==== AI Chat ====
-document.getElementById('aiBtn').addEventListener('click', async ()=>{
-  if(!AFFILIATE_TAG) { alert("Enter a valid access code and register affiliate first."); return; }
-  const question = prompt("🤖 Ask a product question or request trending recommendations:");
-  if(!question) return;
-  try{
-    const response = await puter.ai.chat(question, {model:"gpt-5"});
-    alert("AI Response:\n\n" + response.text);
-  } catch(e){ alert("AI failed to respond, try again."); }
-});
-
-// ==== AI Product Generation ====
-const aiProductsContainer = document.getElementById('aiProducts');
-async function generateAIProducts(category = "Trending"){
-  if(!AFFILIATE_TAG) return; // must have affiliate ID
-  aiProductsContainer.innerHTML = "";
-  try{
-    const response = await puter.ai.chat(
-      `Generate 5 trending Amazon products for ${category} category, JSON format [{name, link}]`,
-      {model:"gpt-5"}
-    );
-    let products = [];
-    try{ products = JSON.parse(response.text); } 
-    catch{ products = Array.from({length:5},(_,i)=>({name:`${category} Product ${i+1}`, link:"#"})); }
-
-    for(const p of products){
-      const card = document.createElement('div');
-      card.className = "ai-card";
-      try{
-        const imgEl = await puter.ai.txt2img(`High-quality photo of ${p.name}, realistic, white background, professional lighting`, {model:"dall-e"});
-        imgEl.style.width="100%"; imgEl.style.borderRadius="6px";
-        card.appendChild(imgEl);
-      } catch(e){
-        const fallbackImg = document.createElement('img');
-        fallbackImg.src = "https://via.placeholder.com/220x140.png?text=Product";
-        card.appendChild(fallbackImg);
-      }
-      const title = document.createElement('h4'); title.innerText = p.name;
-      card.appendChild(title);
-      const btn = document.createElement('a');
-      btn.href = p.link + (p.link.includes('?') ? '&' : '?') + 'tag=' + AFFILIATE_TAG;
-      btn.className = "btn"; btn.innerText = "Buy Now";
-      card.appendChild(btn);
-      aiProductsContainer.appendChild(card);
-    }
-  } catch(err){ console.warn("AI product fetch failed.", err); }
 }
+
+// ===== Affiliate Form Handling =====
+document.getElementById("affiliateForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const tag = document.getElementById("userAffiliate").value.trim();
+  if(tag){
+    userAffiliateTag = tag;
+    localStorage.setItem('affiliateTag', tag);
+    document.getElementById("regOutput").innerText = `✅ Affiliate tag "${tag}" saved! Links on product page will now use your tag.`;
+  } else {
+    document.getElementById("regOutput").innerText = "❌ Please enter a valid affiliate tag.";
+  }
+});
+
+// ===== Demo Timer =====
+let demoSeconds = 7*24*60*60; // 7 days
+function startDemoTimer(){
+  const timerEl = document.getElementById("demoTimer");
+  const endTime = Date.now() + demoSeconds*1000;
+  const interval = setInterval(() => {
+    let remaining = Math.max(0, Math.floor((endTime - Date.now())/1000));
+    let days = Math.floor(remaining / 86400);
+    let hours = Math.floor((remaining % 86400)/3600);
+    let minutes = Math.floor((remaining % 3600)/60);
+    let seconds = remaining % 60;
+    timerEl.innerText = `⏱️ Demo Time Remaining: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    if(remaining <= 0){
+      clearInterval(interval);
+      timerEl.innerText = "⏱️ Demo ended. Please log in again.";
+      document.getElementById("affiliateFormSection").style.display="none";
+    }
+  }, 1000);
+}
+
+// ===== Initialize =====
+if(userAffiliateTag){document.getElementById("userAffiliate").value = userAffiliateTag;}
 </script>
+
 </body>
 </html>
