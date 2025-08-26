@@ -1,35 +1,32 @@
 import os
 import json
-from flask import Flask, request, send_from_directory, jsonify
+from flask import Flask, request, render_template, send_from_directory, jsonify
 from io import BytesIO
 from PIL import Image
 import requests
 import subprocess
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+app = Flask(__name__)
 TMP_DIR = "/tmp"
 os.makedirs(TMP_DIR, exist_ok=True)
 
-# Serve dashboard
-@app.route('/')
-def serve_dashboard():
-    return app.send_static_file('index.html')
+# ---- Serve AI Page ----
+@app.route("/")
+def index():
+    return render_template("index.html")
 
-# Download image from URL
+# ---- Helper: Download Image from URL ----
 def download_image(url, filename):
     path = os.path.join(TMP_DIR, filename)
-    try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        img = Image.open(BytesIO(response.content))
-        if img.mode in ("P", "RGBA"):
-            img = img.convert("RGB")
-        img.save(path, "JPEG")
-        return path
-    except Exception as e:
-        raise RuntimeError(f"Failed to download image {url}: {e}")
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
+    img = Image.open(BytesIO(response.content))
+    if img.mode in ("P", "RGBA"):
+        img = img.convert("RGB")
+    img.save(path, "JPEG")
+    return path
 
-# Generate video using FFmpeg
+# ---- Helper: Generate Video using FFmpeg ----
 def generate_video(image_files, script_text="", voice_file=None, output_filename="output.mp4"):
     list_file = os.path.join(TMP_DIR, "images.txt")
     with open(list_file, "w") as f:
@@ -46,6 +43,7 @@ def generate_video(image_files, script_text="", voice_file=None, output_filename
         "-pix_fmt", "yuv420p", video_path
     ], check=True)
 
+    # Add subtitles if provided
     if script_text:
         srt_file = os.path.join(TMP_DIR, "subtitles.srt")
         with open(srt_file, "w") as srt:
@@ -57,6 +55,7 @@ def generate_video(image_files, script_text="", voice_file=None, output_filename
         ], check=True)
         video_path = subtitled
 
+    # Add voiceover if provided
     if voice_file:
         voice_path = os.path.join(TMP_DIR, "voice.mp3")
         voice_file.save(voice_path)
@@ -69,7 +68,7 @@ def generate_video(image_files, script_text="", voice_file=None, output_filename
 
     return video_path
 
-# Generate video endpoint
+# ---- Video Generation Endpoint ----
 @app.route("/generate_video", methods=["POST"])
 def generate_video_endpoint():
     try:
@@ -104,11 +103,12 @@ def generate_video_endpoint():
         print("Error generating video:", e)
         return jsonify({"error": str(e)}), 500
 
-# Download generated video
+# ---- Download Generated Video ----
 @app.route("/download/<filename>")
 def download(filename):
     return send_from_directory(TMP_DIR, filename, as_attachment=True)
 
+# ---- Run Flask ----
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Render uses PORT env variable
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=False)
