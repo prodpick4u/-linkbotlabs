@@ -1,3 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-AI Chat (Streaming)</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+    body { font-family: Arial, sans-serif; background:#111; color:#eee; }
+    #chatInput { width:80%; padding:8px; }
+    #sendBtn { padding:8px; }
+    .ai-box { border:1px solid #444; padding:10px; margin:10px 0; height:150px; overflow-y:auto; background:#222; }
+    .product-card { border:1px solid #444; padding:10px; margin:10px; background:#222; border-radius:6px; }
+    .btn { display:inline-block; padding:6px 12px; background:#007bff; color:#fff; text-decoration:none; border-radius:4px; }
+</style>
+</head>
+<body>
+
+<h2>Multi-AI Chat (Streaming)</h2>
+
+<!-- Chat input -->
+<input type="text" id="chatInput" placeholder="Ask something..." />
+<button id="sendBtn">Send</button>
+<br><br>
+
+<!-- Voice selector -->
+<select id="voiceSelect"></select>
+
+<!-- AI Response Boxes -->
+<div id="gpt5Box" class="ai-box"><strong>GPT-5:</strong></div>
+<div id="claudeBox" class="ai-box"><strong>Claude:</strong></div>
+<div id="grokBox" class="ai-box"><strong>Grok:</strong></div>
+<div id="geminiBox" class="ai-box"><strong>Gemini:</strong></div>
+<div id="dalleBox" class="ai-box"><strong>DALL·E:</strong></div>
+
+<!-- Affiliate Section -->
+<h3>Affiliate</h3>
+<input type="text" id="affiliateID" placeholder="Enter Affiliate ID">
+<button id="saveAffiliateBtn">Save</button>
+<p id="affiliateOutput"></p>
+
+<!-- Products -->
+<h3>Products</h3>
+<div id="productContainer"></div>
+
+<script>
 const synth = window.speechSynthesis;
 
 // ---- Voice Selector ----
@@ -41,6 +87,14 @@ const aiBoxes = {
     'dalle': document.getElementById('dalleBox')
 };
 
+// Correct model IDs
+const models = {
+    'gpt-5': 'gpt-5',
+    'claude': 'claude-sonnet-4',
+    'grok': 'grok-beta',
+    'gemini': 'gemini-2.0-flash'
+};
+
 if(sendBtn){
     sendBtn.addEventListener('click', askAI);
     chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askAI(); });
@@ -51,19 +105,32 @@ async function askAI(){
     if(!question) return;
     chatInput.value='';
 
-    for(const model of ['gpt-5','claude','grok','gemini']){
+    // Text models with streaming
+    for(const key in models){
+        const model = models[key];
         try{
-            const response = await puter.ai.chat(`Answer clearly: "${question}"`, { model });
-            const text = response.text || response;
-            if(aiBoxes[model]){
-                aiBoxes[model].innerHTML += `<p>${text}</p>`;
-                aiBoxes[model].scrollTop = aiBoxes[model].scrollHeight;
-                playTTS(text);
+            const box = aiBoxes[key];
+            const p = document.createElement("p");
+            box.appendChild(p);
+
+            const stream = await puter.ai.chat(`Answer clearly: "${question}"`, { model, stream: true });
+
+            let fullText = "";
+            for await (const part of stream){
+                if(part?.text){
+                    fullText += part.text;
+                    p.innerHTML = fullText.replace(/\n/g,"<br>");
+                    box.scrollTop = box.scrollHeight;
+                }
             }
+
+            // Play full response via TTS
+            playTTS(fullText);
+
         } catch(e){ console.warn(model + " failed", e); }
     }
 
-    // DALL-E box
+    // DALL·E image
     try{
         const imgEl = await puter.ai.txt2img(question);
         if(aiBoxes['dalle']){
@@ -116,3 +183,6 @@ async function generateProducts(category="Trending"){
 
 // Call product generation on load
 generateProducts();
+</script>
+</body>
+</html>
