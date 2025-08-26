@@ -1,34 +1,36 @@
-name: Daily Blog Auto-Deploy
+name: Deploy Puter.js Dashboard to GitHub Pages
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # Runs daily at 00:00 UTC
-  workflow_dispatch:     # Allow manual trigger
+  push:
+    branches:
+      - main  # change to your default branch
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      id-token: write  # required by some actions, safe to include
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          python-version: 3.11
+          node-version: 20
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: npm ci
+        working-directory: ./pages/v4
 
-      - name: Run blog generator
-        run: python main.py
+      - name: Build project (optional)
+        run: npm run build
+        working-directory: ./pages/v4
+        # if you don't have a build step, you can skip this
 
-      - name: Commit and push generated files
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add docs/
-          git commit -m "🤖 Daily blog update" || echo "No changes to commit"
-          git push
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./pages/v4
