@@ -1,52 +1,52 @@
-// static/gateway.js
+const puter = new Puter({ debug:true });
 
-// === Multi-AI Chat Handler ===
-document.getElementById("sendBtn").addEventListener("click", async () => {
-    const input = document.getElementById("chatInput").value;
-    if (!input) return;
+// --- Q&A / Search ---
+const qaInput = document.getElementById('qaInput');
+const qaBtn = document.getElementById('qaBtn');
+const qaBox = document.getElementById('qaBox');
 
-    const chatBox = document.getElementById("chatBox");
-    chatBox.innerHTML += `<div><strong>You:</strong> ${input}</div>`;
+qaBtn.addEventListener('click', askQuestion);
+qaInput.addEventListener('keypress', e => { if(e.key==='Enter') askQuestion(); });
 
-    // Choose which model to test (switch this as you like)
-    const model = "gpt-5-nano"; 
-    // Examples: "x-ai/grok-4", "google/gemini-2.5-pro-exp-03-25:free", "claude-sonnet-4"
+async function askQuestion(){
+    const question = qaInput.value.trim();
+    if(!question) return;
 
-    try {
-        const response = await puter.ai.chat(input, { model, stream: true });
+    qaBox.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
+    qaInput.value='';
 
-        // Add AI response progressively
-        const aiDiv = document.createElement("div");
-        aiDiv.innerHTML = `<strong>${model}:</strong> <span></span>`;
-        chatBox.appendChild(aiDiv);
-        const span = aiDiv.querySelector("span");
+    const span = document.createElement('p');
+    span.innerHTML = `<strong>AI:</strong> <span class="streaming">...</span>`;
+    qaBox.appendChild(span);
+    qaBox.scrollTop = qaBox.scrollHeight;
 
-        for await (const part of response) {
-            if (part?.text) {
-                span.innerHTML += part.text;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
+    try{
+        const stream = await puter.ai.chat(question, { model: 'gpt-5', stream:true });
+        const streamingSpan = span.querySelector('.streaming');
+        streamingSpan.textContent = '';
+        for await (const chunk of stream) {
+            streamingSpan.textContent += chunk.text || chunk;
+            qaBox.scrollTop = qaBox.scrollHeight;
         }
-    } catch (err) {
-        chatBox.innerHTML += `<div style="color:red;"><strong>Error:</strong> ${err}</div>`;
+    } catch(e){
+        span.innerHTML = `<strong>AI Error:</strong> ${e.message}`;
     }
+}
 
-    document.getElementById("chatInput").value = "";
-});
+// --- DALL-E Image ---
+const dalleInput = document.getElementById('dalleInput');
+const generateBtn = document.getElementById('generateBtn');
+const dalleBox = document.getElementById('dalleBox');
 
-// === DALL·E / Image Generation ===
-document.getElementById("generateBtn").addEventListener("click", async () => {
-    const prompt = document.getElementById("dalleInput").value;
-    if (!prompt) return;
-
-    const dalleBox = document.getElementById("dalleBox");
-    dalleBox.innerHTML = `<div><strong>Generating:</strong> ${prompt}</div>`;
-
+generateBtn.addEventListener('click', async () => {
+    const prompt = dalleInput.value.trim();
+    if(!prompt) return;
+    dalleBox.innerHTML = '<p>Generating image...</p>';
     try {
-        const imgEl = await puter.ai.txt2img(prompt); 
-        dalleBox.innerHTML = "";
-        dalleBox.appendChild(imgEl);
-    } catch (err) {
-        dalleBox.innerHTML = `<div style="color:red;"><strong>Error:</strong> ${err}</div>`;
+        const img = await puter.ai.txt2img(prompt);
+        dalleBox.innerHTML = '';
+        dalleBox.appendChild(img);
+    } catch(e){
+        dalleBox.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
     }
 });
