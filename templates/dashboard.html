@@ -7,106 +7,92 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 <script src="https://js.puter.com/v2/"></script>
 <style>
-body { font-family:'Inter', sans-serif; margin:0; padding:0; background:#0a0033; color:white; }
-.container { max-width:1200px; margin:auto; padding:1rem; }
-h1,h2 { text-align:center; color:#9cf; }
-.ai-box { background: rgba(255,255,255,0.05); padding:1rem; border-radius:8px; max-height:300px; overflow-y:auto; margin-top:0.5rem; }
-input, textarea, select { width:100%; padding:0.5rem; margin:0.5rem 0; border-radius:5px; border:none; }
-button { padding:0.6rem 1.2rem; border:none; border-radius:5px; background:linear-gradient(135deg,#6a11cb,#2575fc); color:white; cursor:pointer; }
-button:hover { opacity:0.85; }
-.overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:1000; }
-.tabs { display:flex; justify-content:center; gap:1rem; margin-bottom:1rem; }
-.tab { cursor:pointer; padding:0.5rem 1rem; background:rgba(255,255,255,0.1); border-radius:5px; }
-.tab.active { background:linear-gradient(135deg,#6a11cb,#2575fc); color:white; }
-.tab-content { display:none; }
-.tab-content.active { display:block; }
-.progress-container { background: rgba(255,255,255,0.1); border-radius:6px; overflow:hidden; margin-top:0.5rem; height:20px; }
-.progress-bar { height:100%; width:0%; background:#2575fc; transition:0.3s; }
+body { font-family:'Inter',sans-serif; margin:0;padding:0; background:#0a0033; color:white; }
+.container{ max-width:1200px; margin:auto; padding:1rem; }
+h1,h2{text-align:center;color:#9cf;}
+.ai-box{background: rgba(255,255,255,0.05); padding:1rem; border-radius:8px; max-height:300px; overflow-y:auto; margin-top:0.5rem;}
+input,textarea,select{width:100%;padding:0.5rem;margin:0.5rem 0;border-radius:5px;border:none;}
+button{padding:0.6rem 1.2rem;border:none;border-radius:5px;background:linear-gradient(135deg,#6a11cb,#2575fc);color:white;cursor:pointer;}
+button:hover{opacity:0.85;}
+.overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:1000;}
+.tabs{display:flex;justify-content:center;gap:1rem;margin-bottom:1rem;}
+.tab{cursor:pointer;padding:0.5rem 1rem;background:rgba(255,255,255,0.1);border-radius:5px;}
+.tab.active{background:linear-gradient(135deg,#6a11cb,#2575fc);color:white;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.progress-container{background: rgba(255,255,255,0.1);border-radius:6px;overflow:hidden;margin-top:0.5rem;height:20px;}
+.progress-bar{height:100%;width:0%;background:#2575fc;transition:0.3s;}
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🚀 LinkBotLabs AI Dashboard</h1>
+<h1>🚀 LinkBotLabs AI Dashboard</h1>
 
-    <!-- Password Overlay -->
-    <div class="overlay" id="passwordOverlay">
-        <h2>🔒 Enter Password</h2>
-        <input type="password" id="dashboardPassword" placeholder="Password">
-        <button id="submitPassword">Submit</button>
-        <p id="pwError" style="color:red; display:none;">❌ Incorrect password</p>
+<!-- Password Overlay -->
+<div class="overlay" id="passwordOverlay">
+    <h2>🔒 Enter Password</h2>
+    <input type="password" id="dashboardPassword" placeholder="Password">
+    <button id="submitPassword">Submit</button>
+    <p id="pwError" style="color:red; display:none;">❌ Incorrect password</p>
+</div>
+
+<div id="dashboardContent" style="display:none;">
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab active" data-tab="chatTab">🤖 Chat</div>
+        <div class="tab" data-tab="imageTab">🖼️ DALL·E</div>
+        <div class="tab" data-tab="videoTab">🎬 Video</div>
     </div>
 
-    <div id="dashboardContent" style="display:none;">
-
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active" data-tab="chatTab">🤖 Chat</div>
-            <div class="tab" data-tab="imageTab">🖼️ Image</div>
-            <div class="tab" data-tab="videoTab">🎬 Video</div>
-        </div>
-
-        <!-- Chat Tab -->
-        <div id="chatTab" class="tab-content active">
-            <section>
-                <label>Select AI Model:</label>
-                <select id="modelSelect">
-                    <option value="gpt-5">GPT-5</option>
-                    <option value="gpt-5-mini">GPT-5 Mini</option>
-                    <option value="gpt-5-nano">GPT-5 Nano</option>
-                    <option value="gpt-5-chat-latest">GPT-5 Chat Latest</option>
-                    <option value="gpt-4.1">GPT-4.1</option>
-                    <option value="gpt-4.1-mini">GPT-4.1 Mini</option>
-                    <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
-                    <option value="gpt-4.5-preview">GPT-4.5 Preview</option>
-                    <option value="gpt-4o">GPT-4o</option>
-                    <option value="gpt-4o-mini">GPT-4o Mini</option>
-                    <option value="o1">O1</option>
-                    <option value="o1-mini">O1 Mini</option>
-                    <option value="o1-pro">O1 Pro</option>
-                    <option value="o3">O3</option>
-                    <option value="o3-mini">O3 Mini</option>
-                    <option value="o4-mini">O4 Mini</option>
-                </select>
-                <input type="text" id="qaInput" placeholder="Ask a question...">
-                <button id="qaBtn">Ask</button>
-                <button id="clearChatBtn">Clear Chat</button>
-                <div class="ai-box" id="qaBox"></div>
-            </section>
-        </div>
-
-        <!-- Image Tab -->
-        <div id="imageTab" class="tab-content">
-            <section>
-                <label>Select Image Model:</label>
-                <select id="imageModelSelect">
-                    <option value="dall-e">DALL·E 3</option>
-                    <option value="gemini-image">Gemini Image</option>
-                    <option value="claude-image">Claude Image</option>
-                </select>
-                <input type="text" id="dalleInput" placeholder="Describe an image...">
-                <button id="generateBtn">Generate Image</button>
-                <div class="ai-box" id="dalleBox"></div>
-            </section>
-        </div>
-
-        <!-- Video Tab -->
-        <div id="videoTab" class="tab-content">
-            <section>
-                <label>Product URLs (comma separated)</label>
-                <input type="text" id="urls" placeholder="https://example.com/p1, https://example.com/p2">
-                <label>Optional Script / Narration</label>
-                <textarea id="script" rows="4" placeholder="Leave blank to auto-generate"></textarea>
-                <button id="generateVideoBtn">Generate Video</button>
-                <div class="progress-container">
-                    <div class="progress-bar" id="progressBar"></div>
-                </div>
-                <div class="progress-text" id="progressText">Idle</div>
-                <video id="video_preview" controls style="display:none; margin-top:1rem;"></video>
-            </section>
-        </div>
-
+    <!-- Chat Tab -->
+    <div id="chatTab" class="tab-content active">
+        <section>
+            <label>Select AI Model:</label>
+            <select id="modelSelect">
+                <option value="gpt-5">GPT-5</option>
+                <option value="gpt-5-nano">GPT-5 Nano</option>
+                <option value="gpt-4.1">GPT-4.1</option>
+                <option value="gpt-4o">GPT-4o</option>
+                <option value="o3-mini">o3-mini</option>
+                <option value="o1-mini">o1-mini</option>
+                <option value="claude-4">Claude 4</option>
+                <option value="grok-1">Grok 1</option>
+            </select>
+            <input type="text" id="qaInput" placeholder="Ask a question...">
+            <button id="qaBtn">Ask</button>
+            <button id="clearChatBtn">Clear Chat</button>
+            <div class="ai-box" id="qaBox"></div>
+        </section>
     </div>
+
+    <!-- DALL-E Tab -->
+    <div id="imageTab" class="tab-content">
+        <section>
+            <input type="text" id="dalleInput" placeholder="Describe an image...">
+            <button id="generateBtn">Generate Image</button>
+            <div class="ai-box" id="dalleBox"></div>
+        </section>
+    </div>
+
+    <!-- Video Tab -->
+    <div id="videoTab" class="tab-content">
+        <section>
+            <label>Product URLs (comma separated)</label>
+            <input type="text" id="urls" placeholder="https://example.com/p1, https://example.com/p2">
+            <label>Optional Script / Narration</label>
+            <textarea id="script" rows="4" placeholder="Leave blank to auto-generate"></textarea>
+            <button id="generateVideoBtn">Generate Video</button>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">Idle</div>
+            <video id="video_preview" controls style="display:none; margin-top:1rem;"></video>
+        </section>
+    </div>
+
+</div>
 </div>
 
 <script src="{{ url_for('static', filename='gateway.js') }}"></script>
@@ -122,7 +108,7 @@ btn.addEventListener('click', () => {
     if(input.value === correctPassword){
         overlay.style.display='none';
         dashboard.style.display='block';
-        initPuterAI();
+        initPuterAI(); // initialize Puter
     } else {
         document.getElementById('pwError').style.display='block';
         input.value='';
@@ -131,7 +117,8 @@ btn.addEventListener('click', () => {
 input.addEventListener('keypress', e=>{ if(e.key==='Enter') btn.click(); });
 
 // Tabs switching
-document.querySelectorAll('.tab').forEach(tab=>{
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab=>{
     tab.addEventListener('click', ()=>{
         document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
@@ -140,11 +127,11 @@ document.querySelectorAll('.tab').forEach(tab=>{
     });
 });
 
-// Initialize Puter AI
+// --- Initialize Puter AI ---
 function initPuterAI() {
     const puter = new Puter({ debug:true });
 
-    // --- Chat ---
+    // Chat / Q&A
     const qaInput = document.getElementById('qaInput');
     const qaBtn = document.getElementById('qaBtn');
     const qaBox = document.getElementById('qaBox');
@@ -163,78 +150,47 @@ function initPuterAI() {
         qaInput.value='';
 
         const span = document.createElement('p');
-        span.innerHTML = `<strong>AI:</strong> <span class="streaming">Loading...</span>`;
+        span.innerHTML = `<strong>AI:</strong> <span class="streaming">...</span>`;
         qaBox.appendChild(span);
         qaBox.scrollTop = qaBox.scrollHeight;
 
-        try {
+        try{
             const selectedModel = modelSelect.value;
-            const stream = await puter.ai.chat(question, { model: selectedModel, stream:true });
-            const streamingSpan = span.querySelector('.streaming');
-            streamingSpan.textContent='';
-            for await (const chunk of stream) {
-                streamingSpan.textContent += chunk.text || chunk;
-                qaBox.scrollTop = qaBox.scrollHeight;
+            let stream;
+            try {
+                stream = await puter.ai.chat(question, { model: selectedModel, stream:true });
+                const streamingSpan = span.querySelector('.streaming');
+                streamingSpan.textContent = '';
+                for await (const chunk of stream) {
+                    streamingSpan.textContent += chunk.text || chunk;
+                    qaBox.scrollTop = qaBox.scrollHeight;
+                }
+            } catch(err){
+                // fallback non-streaming
+                const response = await puter.ai.chat(question, { model: selectedModel });
+                span.querySelector('.streaming').textContent = response.text || response;
             }
         } catch(e){
             span.innerHTML = `<strong>AI Error:</strong> ${e.message}`;
         }
     }
 
-    // --- Image ---
+    // DALL-E
     const dalleInput = document.getElementById('dalleInput');
     const generateBtn = document.getElementById('generateBtn');
     const dalleBox = document.getElementById('dalleBox');
-    const imageModelSelect = document.getElementById('imageModelSelect');
 
-    generateBtn.addEventListener('click', async () => {
+    generateBtn.addEventListener('click', async()=>{
         const prompt = dalleInput.value.trim();
         if(!prompt) return;
         dalleBox.innerHTML='<p>Generating image...</p>';
         try{
-            const selectedImageModel = imageModelSelect.value;
-            const img = await puter.ai.txt2img(prompt, { model: selectedImageModel });
+            const img = await puter.ai.txt2img(prompt);
             dalleBox.innerHTML='';
             dalleBox.appendChild(img);
         } catch(e){
-                        dalleBox.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
+            dalleBox.innerHTML=`<p style="color:red;">Error: ${e.message}</p>`;
         }
-    });
-
-    // --- Video generation placeholder ---
-    const generateVideoBtn = document.getElementById('generateVideoBtn');
-    const urlsInput = document.getElementById('urls');
-    const scriptInput = document.getElementById('script');
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
-    const videoPreview = document.getElementById('video_preview');
-
-    generateVideoBtn.addEventListener('click', async () => {
-        const urls = urlsInput.value.split(',').map(u=>u.trim()).filter(u=>u);
-        const narration = scriptInput.value.trim();
-
-        if(!urls.length) {
-            progressText.textContent = "Please enter at least one product URL.";
-            return;
-        }
-
-        progressText.textContent = "Generating video...";
-        progressBar.style.width = "0%";
-        videoPreview.style.display = "none";
-
-        // Placeholder logic - replace with actual video generation code
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 10;
-            progressBar.style.width = progress + "%";
-            if(progress >= 100){
-                clearInterval(interval);
-                progressText.textContent = "Video ready!";
-                // Show placeholder video (or generated URL)
-                videoPreview.src = "https://www.w3schools.com/html/mov_bbb.mp4";
-                videoPreview.style.display = "block";
-            }
-        }, 300);
     });
 }
 </script>
