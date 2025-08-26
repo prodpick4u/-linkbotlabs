@@ -8,6 +8,7 @@ const analyzeImgBtn = document.getElementById('analyzeImgBtn');
 const dalleInput = document.getElementById('dalleInput');
 const generateImgBtn = document.getElementById('generateImgBtn');
 const voiceSelect = document.getElementById('voiceSelect');
+const errorBox = document.getElementById('errorBox');
 
 const aiBoxes = {
     'claude': document.getElementById('claudeBox'),
@@ -24,10 +25,29 @@ const models = {
     'grok': 'grok-beta'
 };
 
+// Fallback models if primary models fail
+const fallbackModels = {
+    'claude': 'gpt-4o-mini',
+    'gemini': 'gpt-4o-mini',
+    'gpt-5': 'gpt-4o-mini',
+    'grok': 'gpt-4o-mini'
+};
+
+// ---- Error Display Function ----
+function displayError(message) {
+    errorBox.innerHTML += `<p>${message}</p>`;
+    errorBox.classList.add('active');
+    errorBox.scrollTop = errorBox.scrollHeight;
+    console.error(message);
+}
+
 // ---- Voice Selector ----
 function populateVoiceSelect() {
     let voices = synth.getVoices();
-    if (!voices.length) { setTimeout(populateVoiceSelect, 100); return; }
+    if (!voices.length) {
+        setTimeout(populateVoiceSelect, 100);
+        return;
+    }
     voices = voices.filter(v => v.lang.startsWith('en')).sort((a, b) => a.name.localeCompare(b.name));
     voiceSelect.innerHTML = '<option value="">Select Voice</option>';
     voices.forEach(v => {
@@ -73,6 +93,7 @@ function processTTSQueue() {
 // ---- Multi-AI Chat with Prompt ----
 async function askAI(prompt) {
     if (!prompt) {
+        displayError('Please enter a question.');
         Object.values(aiBoxes).forEach(box => {
             const p = document.createElement('p');
             p.innerHTML = 'Error: Please enter a question.';
@@ -83,9 +104,10 @@ async function askAI(prompt) {
         return;
     }
     if (!window.puter || !window.puter.ai) {
+        displayError('Puter.js failed to load. Check network or script URL: https://js.puter.com/v2/');
         Object.values(aiBoxes).forEach(box => {
             const p = document.createElement('p');
-            p.innerHTML = 'Error: Puter.js failed to load. Check network or script URL.';
+            p.innerHTML = 'Error: Puter.js failed to load.';
             p.className = 'error';
             box.appendChild(p);
             box.scrollTop = box.scrollHeight;
@@ -96,7 +118,7 @@ async function askAI(prompt) {
     sendBtn.classList.add('loading');
     const modelKeys = Object.keys(models).sort();
     for (const key of modelKeys) {
-        const model = models[key];
+        let model = models[key];
         const box = aiBoxes[key];
         box.setAttribute('aria-busy', 'true');
         const p = document.createElement('p');
@@ -114,11 +136,32 @@ async function askAI(prompt) {
                 }
             }
             if (!fullText) {
-                p.innerHTML = `Error: No response from ${key}.`;
+                p.innerHTML = `Error: No response from ${key}. Trying fallback model.`;
                 p.className = 'error';
+                model = fallbackModels[key];
+                try {
+                    const stream = await puter.ai.chat(prompt, { model, stream: true });
+                    fullText = '';
+                    for await (const part of stream) {
+                        if (part?.text) {
+                            fullText += part.text;
+                            p.innerHTML = fullText.replace(/\n/g, '<br>');
+                            box.scrollTop = box.scrollHeight;
+                            playTTS(part.text);
+                        }
+                    }
+                    if (!fullText) {
+                        p.innerHTML = `Error: No response from fallback model ${model}.`;
+                        p.className = 'error';
+                    }
+                } catch (e) {
+                    displayError(`Fallback ${key} (${model}) failed: ${e.message}`);
+                    p.innerHTML = `Error: Fallback ${key} failed - ${e.message}`;
+                    p.className = 'error';
+                }
             }
         } catch (e) {
-            console.warn(`${key} failed`, e);
+            displayError(`${key} (${model}) failed: ${e.message}`);
             p.innerHTML = `Error: ${key} failed to respond - ${e.message}`;
             p.className = 'error';
         }
@@ -131,10 +174,11 @@ async function askAI(prompt) {
 
 // ---- Multi-AI Chat with Messages ----
 async function askWithMessages(messages) {
-    if (!messages) {
+    if (!messages || !Array.isArray(messages)) {
+        displayError('Invalid message history. Please enter valid JSON array.');
         Object.values(aiBoxes).forEach(box => {
             const p = document.createElement('p');
-            p.innerHTML = 'Error: Please enter valid message history (JSON).';
+            p.innerHTML = 'Error: Invalid JSON format for messages.';
             p.className = 'error';
             box.appendChild(p);
             box.scrollTop = box.scrollHeight;
@@ -142,9 +186,10 @@ async function askWithMessages(messages) {
         return;
     }
     if (!window.puter || !window.puter.ai) {
+        displayError('Puter.js failed to load. Check network or script URL: https://js.puter.com/v2/');
         Object.values(aiBoxes).forEach(box => {
             const p = document.createElement('p');
-            p.innerHTML = 'Error: Puter.js failed to load. Check network or script URL.';
+            p.innerHTML = 'Error: Puter.js failed to load.';
             p.className = 'error';
             box.appendChild(p);
             box.scrollTop = box.scrollHeight;
@@ -155,7 +200,7 @@ async function askWithMessages(messages) {
     sendMessagesBtn.classList.add('loading');
     const modelKeys = Object.keys(models).sort();
     for (const key of modelKeys) {
-        const model = models[key];
+        let model = models[key];
         const box = aiBoxes[key];
         box.setAttribute('aria-busy', 'true');
         const p = document.createElement('p');
@@ -173,11 +218,32 @@ async function askWithMessages(messages) {
                 }
             }
             if (!fullText) {
-                p.innerHTML = `Error: No response from ${key}.`;
+                p.innerHTML = `Error: No response from ${key}. Trying fallback model.`;
                 p.className = 'error';
+                model = fallbackModels[key];
+                try {
+                    const stream = await puter.ai.chat(messages, false, { model, stream: true });
+                    fullText = '';
+                    for await (const part of stream) {
+                        if (part?.text) {
+                            fullText += part.text;
+                            p.innerHTML = fullText.replace(/\n/g, '<br>');
+                            box.scrollTop = box.scrollHeight;
+                            playTTS(part.text);
+                        }
+                    }
+                    if (!fullText) {
+                        p.innerHTML = `Error: No response from fallback model ${model}.`;
+                        p.className = 'error';
+                    }
+                } catch (e) {
+                    displayError(`Fallback ${key} (${model}) failed: ${e.message}`);
+                    p.innerHTML = `Error: Fallback ${key} failed - ${e.message}`;
+                    p.className = 'error';
+                }
             }
         } catch (e) {
-            console.warn(`${key} failed`, e);
+            displayError(`${key} (${model}) failed: ${e.message}`);
             p.innerHTML = `Error: ${key} failed to respond - ${e.message}`;
             p.className = 'error';
         }
@@ -191,6 +257,7 @@ async function askWithMessages(messages) {
 // ---- Image Analysis (GPT-4 Vision) ----
 async function analyzeImage(prompt, imageURL) {
     if (!prompt || !imageURL) {
+        displayError('Please enter both a question and an image URL.');
         Object.values(aiBoxes).forEach(box => {
             const p = document.createElement('p');
             p.innerHTML = 'Error: Please enter both a question and an image URL.';
@@ -201,9 +268,10 @@ async function analyzeImage(prompt, imageURL) {
         return;
     }
     if (!window.puter || !window.puter.ai) {
+        displayError('Puter.js failed to load. Check network or script URL: https://js.puter.com/v2/');
         Object.values(aiBoxes).forEach(box => {
             const p = document.createElement('p');
-            p.innerHTML = 'Error: Puter.js failed to load. Check network or script URL.';
+            p.innerHTML = 'Error: Puter.js failed to load.';
             p.className = 'error';
             box.appendChild(p);
             box.scrollTop = box.scrollHeight;
@@ -214,7 +282,7 @@ async function analyzeImage(prompt, imageURL) {
     analyzeImgBtn.classList.add('loading');
     const modelKeys = Object.keys(models).sort();
     for (const key of modelKeys) {
-        const model = models[key];
+        let model = models[key];
         const box = aiBoxes[key];
         box.setAttribute('aria-busy', 'true');
         const p = document.createElement('p');
@@ -232,11 +300,32 @@ async function analyzeImage(prompt, imageURL) {
                 }
             }
             if (!fullText) {
-                p.innerHTML = `Error: No response from ${key} for image analysis.`;
+                p.innerHTML = `Error: No response from ${key} for image analysis. Trying fallback model.`;
                 p.className = 'error';
+                model = fallbackModels[key];
+                try {
+                    const stream = await puter.ai.chat(prompt, imageURL, false, { model, stream: true });
+                    fullText = '';
+                    for await (const part of stream) {
+                        if (part?.text) {
+                            fullText += part.text;
+                            p.innerHTML = fullText.replace(/\n/g, '<br>');
+                            box.scrollTop = box.scrollHeight;
+                            playTTS(part.text);
+                        }
+                    }
+                    if (!fullText) {
+                        p.innerHTML = `Error: No response from fallback model ${model}.`;
+                        p.className = 'error';
+                    }
+                } catch (e) {
+                    displayError(`Fallback ${key} (${model}) failed: ${e.message}`);
+                    p.innerHTML = `Error: Fallback ${key} failed - ${e.message}`;
+                    p.className = 'error';
+                }
             }
         } catch (e) {
-            console.warn(`${key} image analysis failed`, e);
+            displayError(`${key} (${model}) failed: ${e.message}`);
             p.innerHTML = `Error: ${key} failed to analyze image - ${e.message}`;
             p.className = 'error';
         }
@@ -250,6 +339,7 @@ async function analyzeImage(prompt, imageURL) {
 // ---- DALL·E 3 Images ----
 async function generateImages(prompt) {
     if (!prompt) {
+        displayError('Please enter an image prompt.');
         const p = document.createElement('p');
         p.innerHTML = 'Error: Please enter an image prompt.';
         p.className = 'error';
@@ -258,8 +348,9 @@ async function generateImages(prompt) {
         return;
     }
     if (!window.puter || !window.puter.ai) {
+        displayError('Puter.js failed to load. Check network or script URL: https://js.puter.com/v2/');
         const p = document.createElement('p');
-        p.innerHTML = 'Error: Puter.js failed to load. Check network or script URL.';
+        p.innerHTML = 'Error: Puter.js failed to load.';
         p.className = 'error';
         aiBoxes['dalle'].appendChild(p);
         aiBoxes['dalle'].scrollTop = aiBoxes['dalle'].scrollHeight;
@@ -274,7 +365,7 @@ async function generateImages(prompt) {
         const img = await puter.ai.txt2img(prompt);
         box.appendChild(img);
     } catch (e) {
-        console.warn('DALL-E failed', e);
+        displayError(`DALL-E failed: ${e.message}`);
         const p = document.createElement('p');
         p.innerHTML = `Error: Failed to generate image - ${e.message}`;
         p.className = 'error';
@@ -288,22 +379,29 @@ async function generateImages(prompt) {
 
 // ---- Event Listeners ----
 sendBtn.addEventListener('click', () => {
+    errorBox.innerHTML = ''; // Clear errors
+    errorBox.classList.remove('active');
     askAI(chatInput.value);
     chatInput.value = '';
 });
 chatInput.addEventListener('keypress', e => {
     if (e.key === 'Enter') {
+        errorBox.innerHTML = '';
+        errorBox.classList.remove('active');
         askAI(chatInput.value);
         chatInput.value = '';
     }
 });
 
 sendMessagesBtn.addEventListener('click', () => {
+    errorBox.innerHTML = '';
+    errorBox.classList.remove('active');
     try {
         const messages = JSON.parse(messagesInput.value);
         askWithMessages(messages);
         messagesInput.value = '';
     } catch (e) {
+        displayError('Invalid JSON format for messages.');
         Object.values(aiBoxes).forEach(box => {
             const p = document.createElement('p');
             p.innerHTML = 'Error: Invalid JSON format for messages.';
@@ -315,11 +413,14 @@ sendMessagesBtn.addEventListener('click', () => {
 });
 messagesInput.addEventListener('keypress', e => {
     if (e.key === 'Enter' && !e.shiftKey) {
+        errorBox.innerHTML = '';
+        errorBox.classList.remove('active');
         try {
             const messages = JSON.parse(messagesInput.value);
             askWithMessages(messages);
             messagesInput.value = '';
         } catch (e) {
+            displayError('Invalid JSON format for messages.');
             Object.values(aiBoxes).forEach(box => {
                 const p = document.createElement('p');
                 p.innerHTML = 'Error: Invalid JSON format for messages.';
@@ -332,25 +433,7 @@ messagesInput.addEventListener('keypress', e => {
 });
 
 analyzeImgBtn.addEventListener('click', () => {
+    errorBox.innerHTML = '';
+    errorBox.classList.remove('active');
     analyzeImage(chatInput.value, imageInput.value);
-    chatInput.value = '';
-    imageInput.value = '';
-});
-imageInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') {
-        analyzeImage(chatInput.value, imageInput.value);
-        chatInput.value = '';
-        imageInput.value = '';
-    }
-});
-
-generateImgBtn.addEventListener('click', () => {
-    generateImages(dalleInput.value);
-    dalleInput.value = '';
-});
-dalleInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') {
-        generateImages(dalleInput.value);
-        dalleInput.value = '';
-    }
-});
+    chat
