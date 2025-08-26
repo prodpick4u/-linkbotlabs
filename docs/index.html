@@ -122,6 +122,22 @@
             border: 1px solid #ddd;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
+        #errorBox {
+            border: 1px solid #d32f2f;
+            border-radius: 8px;
+            padding: 1rem;
+            background-color: #ffebee;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        #errorBox.active {
+            display: block;
+        }
+        #errorBox p {
+            margin: 0.5rem 0;
+            color: #d32f2f;
+            font-style: italic;
+        }
         .loading {
             display: none;
         }
@@ -171,6 +187,7 @@
 </head>
 <body>
     <h1>AI Prompts with Puter.js</h1>
+    <div id="errorBox" aria-live="assertive"></div>
     <div class="input-section">
         <label for="chatInput" class="sr-only">Ask AI a question</label>
         <input id="chatInput" type="text" placeholder="Ask AI something..." aria-label="Ask AI a question">
