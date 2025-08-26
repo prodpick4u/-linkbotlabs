@@ -6,37 +6,116 @@
 <title>Puter.js AI Dashboard</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
-    body { font-family: Arial, sans-serif; margin:0; padding:20px; background:#f4f4f4; color:#333; }
-    h1 { text-align:center; color:#1a73e8; }
-    .section { margin:20px 0; padding:15px; background:white; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-    input, textarea, button, select { width:100%; padding:10px; margin:5px 0; border-radius:5px; border:1px solid #ccc; }
-    button { background:#1a73e8; color:white; font-weight:bold; cursor:pointer; }
-    button:hover { background:#1557b0; }
-    .output { margin-top:10px; padding:10px; background:#e0e0e0; border-radius:5px; max-height:300px; overflow:auto; }
-    img { max-width:100%; border-radius:5px; margin-top:5px; }
+    /* Base */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f0f2f5;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        color: #1a73e8;
+        font-size: 2.5rem;
+        margin: 20px 0;
+    }
+
+    h2 {
+        color: #1a73e8;
+        margin-bottom: 10px;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .section {
+        background: #fff;
+        padding: 25px;
+        margin-bottom: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    input, textarea, select, button {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #1a73e8;
+        outline: none;
+        box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
+    }
+
+    button {
+        background: #1a73e8;
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    button:hover {
+        background: #1557b0;
+    }
+
+    .output {
+        margin-top: 15px;
+        padding: 15px;
+        background: #e6f0ff;
+        border-radius: 10px;
+        min-height: 150px;
+        max-height: 400px;
+        overflow-y: auto;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .output img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-top: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 2rem; }
+        .section { padding: 15px; }
+        input, textarea, select, button { font-size: 0.95rem; }
+    }
 </style>
 </head>
 <body>
 <h1>Puter.js AI Dashboard</h1>
+<div class="container">
+    <div class="section">
+        <h2>Chat with AI (Text)</h2>
+        <input id="chatInput" placeholder="Enter prompt for GPT-5 nano...">
+        <select id="modelSelect">
+            <option value="gpt-5-nano">GPT-5 Nano</option>
+            <option value="gpt-4.1">GPT-4.1</option>
+            <option value="o3-mini">o3-mini</option>
+            <option value="gpt-4o">GPT-4o</option>
+        </select>
+        <button id="sendBtn">Generate Text</button>
+        <div id="chatOutput" class="output"></div>
+    </div>
 
-<div class="section">
-    <h2>Chat with AI (Text)</h2>
-    <input id="chatInput" placeholder="Enter prompt for GPT-5 nano...">
-    <select id="modelSelect">
-        <option value="gpt-5-nano">GPT-5 Nano</option>
-        <option value="gpt-4.1">GPT-4.1</option>
-        <option value="o3-mini">o3-mini</option>
-        <option value="gpt-4o">GPT-4o</option>
-    </select>
-    <button id="sendBtn">Generate Text</button>
-    <div id="chatOutput" class="output"></div>
-</div>
-
-<div class="section">
-    <h2>Generate Images (DALL-E)</h2>
-    <input id="imageInput" placeholder="Enter prompt for DALL-E...">
-    <button id="generateImgBtn">Generate Image</button>
-    <div id="imageOutput" class="output"></div>
+    <div class="section">
+        <h2>Generate Images (DALL-E)</h2>
+        <input id="imageInput" placeholder="Enter prompt for DALL-E...">
+        <button id="generateImgBtn">Generate Image</button>
+        <div id="imageOutput" class="output"></div>
+    </div>
 </div>
 
 <script>
@@ -53,9 +132,9 @@ const imageOutput = document.getElementById('imageOutput');
 sendBtn.addEventListener('click', async () => {
     const prompt = chatInput.value.trim();
     const model = modelSelect.value;
-    if(!prompt) return alert('Enter a prompt');
+    if(!prompt) return alert('Please enter a prompt.');
 
-    chatOutput.innerHTML = "Processing...";
+    chatOutput.innerHTML = "<em>Processing...</em>";
     try {
         const stream = await puter.ai.chat(prompt, { model, stream:true });
         let fullText = '';
@@ -64,22 +143,22 @@ sendBtn.addEventListener('click', async () => {
             chatOutput.innerHTML = fullText.replace(/\n/g,'<br>');
         }
     } catch(e) {
-        chatOutput.innerHTML = `Error: ${e.message}`;
+        chatOutput.innerHTML = `<span style="color:red;">Error: ${e.message}</span>`;
     }
 });
 
 // ---- Image Generation ----
 generateImgBtn.addEventListener('click', async () => {
     const prompt = imageInput.value.trim();
-    if(!prompt) return alert('Enter an image prompt');
+    if(!prompt) return alert('Please enter an image prompt.');
 
-    imageOutput.innerHTML = "Generating image...";
+    imageOutput.innerHTML = "<em>Generating image...</em>";
     try {
         const img = await puter.ai.txt2img(prompt);
         imageOutput.innerHTML = '';
         imageOutput.appendChild(img);
     } catch(e) {
-        imageOutput.innerHTML = `Error: ${e.message}`;
+        imageOutput.innerHTML = `<span style="color:red;">Error: ${e.message}</span>`;
     }
 });
 </script>
