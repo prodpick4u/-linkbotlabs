@@ -3,14 +3,11 @@ const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
 const dalleInput = document.getElementById('dalleInput');
 const generateImgBtn = document.getElementById('generateImgBtn');
-const productUrls = document.getElementById('productUrls');
-const generateVideoBtn = document.getElementById('generateVideoBtn');
 const voiceSelect = document.getElementById('voiceSelect');
 const retryBtn = document.getElementById('retryBtn');
 const errorBox = document.getElementById('errorBox');
 const responseBox = document.getElementById('responseBox');
 const dalleBox = document.getElementById('dalleBox');
-const videoBox = document.getElementById('videoBox');
 
 const defaultModel = 'gpt-4o-mini'; // Fallback model
 const appId = 'linkbotlabs'; // Placeholder app ID
@@ -72,7 +69,7 @@ function processTTSQueue() {
     synth.speak(utter);
 }
 
-// ---- Text Generation (Example 1) ----
+// ---- Text Generation ----
 async function askAI(prompt, retry = false) {
     if (!prompt) {
         displayError('Please enter a text prompt.');
@@ -122,8 +119,8 @@ async function askAI(prompt, retry = false) {
             p.className = 'error';
             displayError(`No response from ${model}.`);
         } else {
-            // Store text in puter.kv
             await puter.kv.set(`${appId}:lastText`, fullText);
+            await puter.kv.set(`${appId}:lastTextPrompt`, prompt);
         }
     } catch (e) {
         if (!retry) {
@@ -145,7 +142,7 @@ async function askAI(prompt, retry = false) {
     sendBtn.classList.remove('loading');
 }
 
-// ---- Image Generation (Example 2) ----
+// ---- Image Generation ----
 async function generateImages(prompt, retry = false) {
     if (!prompt) {
         displayError('Please enter an image prompt.');
@@ -170,13 +167,17 @@ async function generateImages(prompt, retry = false) {
     dalleBox.setAttribute('aria-busy', 'true');
     try {
         const img = await puter.ai.txt2img(prompt);
-        const imgUrl = img.src; // Get image URL
+        const imgUrl = img.src;
         dalleBox.appendChild(img);
-        // Store image URL in puter.kv
+        const p = document.createElement('p');
+        p.className = 'url';
+        p.innerHTML = `Image URL: <a href="${imgUrl}" target="_blank">${imgUrl}</a>`;
+        dalleBox.appendChild(p);
         let imageUrls = await puter.kv.get(`${appId}:imageUrls`) || [];
         if (!Array.isArray(imageUrls)) imageUrls = [];
         imageUrls.push(imgUrl);
         await puter.kv.set(`${appId}:imageUrls`, imageUrls);
+        await puter.kv.set(`${appId}:lastImagePrompt`, prompt);
     } catch (e) {
         if (!retry) {
             displayError(`DALL-E failed: ${e.message}. Retrying.`);
@@ -201,62 +202,6 @@ async function generateImages(prompt, retry = false) {
     generateImgBtn.classList.remove('loading');
 }
 
-// ---- Generate Video ----
-async function generateVideo() {
-    if (!window.puter || !window.puter.ai) {
-        displayError('Puter.js failed to load. Check network or script URL: https://js.puter.com/v2/');
-        const p = document.createElement('p');
-        p.innerHTML = 'Error: Puter.js failed to load.';
-        p.className = 'error';
-        videoBox.appendChild(p);
-        videoBox.scrollTop = videoBox.scrollHeight;
-        return;
-    }
-    generateVideoBtn.disabled = true;
-    generateVideoBtn.classList.add('loading');
-    videoBox.setAttribute('aria-busy', 'true');
-    videoBox.innerHTML = '<h3>Generated Video</h3><span class="loading">Processing...</span>';
-    try {
-        // Get data from puter.kv
-        const scriptText = await puter.kv.get(`${appId}:lastText`) || '';
-        const dalleUrls = await puter.kv.get(`${appId}:imageUrls`) || [];
-        const productUrlsList = productUrls.value.split('\n').filter(url => url.trim());
-
-        // Prepare form data
-        const formData = new FormData();
-        formData.append('urls', JSON.stringify(productUrlsList));
-        formData.append('dalle_urls', JSON.stringify(dalleUrls));
-        formData.append('script', scriptText);
-
-        // Send to Flask endpoint
-        const response = await fetch('/generate_video', {
-            method: 'POST',
-            body: formData
-        });
-        const result = await response.json();
-        if (result.error) {
-            throw new Error(result.error);
-        }
-
-        // Display video
-        const video = document.createElement('video');
-        video.src = `/download/${result.video_file}`;
-        video.controls = true;
-        videoBox.innerHTML = '<h3>Generated Video</h3>';
-        videoBox.appendChild(video);
-    } catch (e) {
-        displayError(`Video generation failed: ${e.message}`);
-        const p = document.createElement('p');
-        p.innerHTML = `Error: Failed to generate video - ${e.message}`;
-        p.className = 'error';
-        videoBox.appendChild(p);
-    }
-    videoBox.setAttribute('aria-busy', 'false');
-    videoBox.scrollTop = videoBox.scrollHeight;
-    generateVideoBtn.disabled = false;
-    generateVideoBtn.classList.remove('loading');
-}
-
 // ---- Retry Mechanism ----
 async function retryLastAction() {
     errorBox.innerHTML = '';
@@ -278,7 +223,6 @@ async function retryLastAction() {
 sendBtn.addEventListener('click', async () => {
     errorBox.innerHTML = '';
     errorBox.classList.remove('active');
-    await puter.kv.set(`${appId}:lastTextPrompt`, chatInput.value);
     await puter.kv.del(`${appId}:lastImagePrompt`);
     askAI(chatInput.value);
     chatInput.value = '';
@@ -287,7 +231,6 @@ chatInput.addEventListener('keypress', async e => {
     if (e.key === 'Enter') {
         errorBox.innerHTML = '';
         errorBox.classList.remove('active');
-        await puter.kv.set(`${appId}:lastTextPrompt`, chatInput.value);
         await puter.kv.del(`${appId}:lastImagePrompt`);
         askAI(chatInput.value);
         chatInput.value = '';
@@ -297,7 +240,6 @@ chatInput.addEventListener('keypress', async e => {
 generateImgBtn.addEventListener('click', async () => {
     errorBox.innerHTML = '';
     errorBox.classList.remove('active');
-    await puter.kv.set(`${appId}:lastImagePrompt`, dalleInput.value);
     await puter.kv.del(`${appId}:lastTextPrompt`);
     generateImages(dalleInput.value);
     dalleInput.value = '';
@@ -306,17 +248,10 @@ dalleInput.addEventListener('keypress', async e => {
     if (e.key === 'Enter') {
         errorBox.innerHTML = '';
         errorBox.classList.remove('active');
-        await puter.kv.set(`${appId}:lastImagePrompt`, dalleInput.value);
         await puter.kv.del(`${appId}:lastTextPrompt`);
         generateImages(dalleInput.value);
         dalleInput.value = '';
     }
-});
-
-generateVideoBtn.addEventListener('click', () => {
-    errorBox.innerHTML = '';
-    errorBox.classList.remove('active');
-    generateVideo();
 });
 
 retryBtn.addEventListener('click', () => {
