@@ -7,9 +7,14 @@ function initPuterAI() {
     const qaBtn = document.getElementById('qaBtn');
     const qaBox = document.getElementById('qaBox');
     const modelSelect = document.getElementById('modelSelect');
+    const clearChatBtn = document.getElementById('clearChatBtn');
 
+    // Ask question
     qaBtn.addEventListener('click', askQuestion);
-    qaInput.addEventListener('keypress', e => { if(e.key==='Enter') askQuestion(); });
+    qaInput.addEventListener('keypress', e => { if (e.key === 'Enter') askQuestion(); });
+
+    // Clear chat
+    clearChatBtn.addEventListener('click', () => { qaBox.innerHTML = ''; });
 
     async function askQuestion() {
         const question = qaInput.value.trim();
@@ -17,9 +22,11 @@ function initPuterAI() {
 
         const selectedModel = modelSelect.value || 'gpt-5';
 
+        // Display user question
         qaBox.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
-        qaInput.value='';
+        qaInput.value = '';
 
+        // Placeholder for AI answer
         const span = document.createElement('p');
         span.innerHTML = `<strong>AI:</strong> <span class="streaming">...</span>`;
         qaBox.appendChild(span);
@@ -28,40 +35,40 @@ function initPuterAI() {
         try {
             let stream;
             try {
-                // Attempt streaming first
-                stream = await puter.ai.chat(question, { model: selectedModel, stream:true });
+                // Try streaming first
+                stream = await puter.ai.chat(question, { model: selectedModel, stream: true });
                 const streamingSpan = span.querySelector('.streaming');
                 streamingSpan.textContent = '';
                 for await (const chunk of stream) {
                     streamingSpan.textContent += chunk.text || chunk;
                     qaBox.scrollTop = qaBox.scrollHeight;
                 }
-            } catch(err) {
-                // Fallback to non-streaming mode
+            } catch (err) {
+                // Fallback to normal response
                 const response = await puter.ai.chat(question, { model: selectedModel });
                 span.querySelector('.streaming').textContent = response.text || response;
             }
-        } catch(e) {
+        } catch (e) {
             span.innerHTML = `<strong>AI Error:</strong> ${e.message}<br>Try selecting another model.`;
         }
     }
 
-    // --- DALL-E Image Generation ---
+    // --- DALL-E / Image Generation ---
     const dalleInput = document.getElementById('dalleInput');
     const generateBtn = document.getElementById('generateBtn');
     const dalleBox = document.getElementById('dalleBox');
 
     generateBtn.addEventListener('click', async () => {
         const prompt = dalleInput.value.trim();
-        if(!prompt) return;
+        if (!prompt) return;
 
         dalleBox.innerHTML = '<p>Generating image...</p>';
 
         try {
-            const img = await puter.ai.txt2img(prompt); // You can also specify model here if needed
+            const img = await puter.ai.txt2img(prompt); // You can add model option if needed
             dalleBox.innerHTML = '';
             dalleBox.appendChild(img);
-        } catch(e) {
+        } catch (e) {
             dalleBox.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
         }
     });
