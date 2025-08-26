@@ -1,220 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Video Generator with Puter.js</title>
-    <script src="https://js.puter.com/v2/"></script>
-    <script src="/gateway.js" defer></script>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        h1 {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            color: #1a73e8;
-        }
-        .input-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            align-items: center;
-        }
-        label {
-            font-size: 1rem;
-            font-weight: 500;
-            margin-right: 0.5rem;
-        }
-        input, select, textarea {
-            padding: 0.75rem;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            flex: 1;
-            min-width: 200px;
-            transition: border-color 0.2s;
-        }
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #1a73e8;
-            box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
-        }
-        button {
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            background-color: #1a73e8;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        button:hover {
-            background-color: #1557b0;
-        }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        .ai-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        .ai-box {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 1rem;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            height: 300px;
-            overflow-y: auto;
-        }
-        .ai-box h3 {
-            margin: 0 0 1rem;
-            font-size: 1.25rem;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 0.5rem;
-        }
-        .ai-box[aria-busy="true"] .loading {
-            display: block;
-            color: #666;
-            font-style: italic;
-            margin-top: 0.5rem;
-        }
-        .ai-box .response, .ai-box .url {
-            font-family: 'Courier New', Courier, monospace;
-            animation: typing 0.1s steps(1, end);
-        }
-        .ai-box .error {
-            color: #d32f2f;
-            font-style: italic;
-        }
-        #dalleBox img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1rem;
-        }
-        #errorBox {
-            border: 1px solid #d32f2f;
-            border-radius: 8px;
-            padding: 1rem;
-            background-color: #ffebee;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-        #errorBox.active {
-            display: block;
-        }
-        #errorBox p {
-            margin: 0.5rem 0;
-            color: #d32f2f;
-            font-style: italic;
-        }
-        .loading {
-            display: none;
-        }
-        button.loading::after {
-            content: " Loading...";
-            font-style: italic;
-        }
-        #videoBox video {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-        @keyframes typing {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        footer {
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        footer a {
-            color: #1a73e8;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-        @media (max-width: 768px) {
-            h1 { font-size: 1.5rem; }
-            .input-section { flex-direction: column; }
-            input, select, textarea, button { width: 100%; }
-            .ai-container { grid-template-columns: 1fr; }
-            .ai-box { height: 250px; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .ai-box .response { animation: none; }
-        }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkBotLabs AI Video Generator</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4b6cb7, #182848);
+    color: #fff;
+    margin:0;
+    padding:0;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.overlay {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.85);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+}
+.overlay input { padding:10px; width:200px; margin-top:10px; border-radius:5px; border:none; }
+.overlay button { margin-top:10px; padding:10px 20px; border:none; border-radius:5px; background:#7b5cf5; color:white; cursor:pointer; }
+#dashboardContent {
+    background: rgba(255,255,255,0.05);
+    padding:20px;
+    border-radius:15px;
+    width:90%;
+    max-width:700px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    display:none;
+}
+input, textarea { width:100%; padding:10px; margin:5px 0 15px 0; border-radius:5px; border:none; background: rgba(255,255,255,0.1); color:white; }
+input::placeholder, textarea::placeholder { color: #ccc; }
+button { padding:10px 20px; border:none; border-radius:5px; background:#7b5cf5; color:white; cursor:pointer; margin-top:10px; }
+button:hover { background:#5a3cbf; }
+.error { color:#ff6b6b; margin-bottom:10px; }
+.success { color:#4ade80; margin-bottom:10px; }
+#dalle_images img { width:100%; margin-bottom:10px; border-radius:10px; }
+video { width:100%; border-radius:10px; margin-top:15px; }
+.progress-container { margin-top:10px; background: rgba(255,255,255,0.1); border-radius:5px; }
+.progress-bar { width:0%; height:20px; background:#7b5cf5; border-radius:5px; transition:width 0.3s; }
+.progress-text { margin-top:5px; font-size:0.9em; color:#fff; }
+</style>
 </head>
 <body>
-    <h1>AI Video Generator with Puter.js</h1>
-    <div id="errorBox" aria-live="assertive"></div>
-    <div class="input-section">
-        <button id="retryBtn" aria-label="Retry last action">Retry</button>
+
+<!-- Password Overlay -->
+<div class="overlay" id="passwordOverlay">
+    <h2>🔒 Enter Dashboard Password</h2>
+    <input type="password" id="dashboardPassword" placeholder="Password">
+    <button id="submitPassword">Submit</button>
+    <p id="pwError" style="color:red; display:none;">❌ Incorrect password</p>
+</div>
+
+<!-- Dashboard Content -->
+<div id="dashboardContent">
+    <h2>🎬 LinkBotLabs AI Video Generator</h2>
+
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
+
+    <label>Product URLs (comma separated)</label>
+    <input type="text" id="urls" placeholder="https://example.com/product1, https://example.com/product2">
+
+    <label>Optional Script / Narration</label>
+    <textarea id="script" rows="4" placeholder="Optional: leave blank to auto-generate"></textarea>
+
+    <label>Optional DALL·E 3 Image Prompt</label>
+    <input type="text" id="dalle_prompt" placeholder="e.g., 'Modern kitchen with kettle'">
+    <button type="button" id="generateDalleBtn">Generate Image</button>
+    <div id="dalle_images"></div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-text" id="progressText">Idle</div>
     </div>
-    <div class="input-section">
-        <label for="chatInput" class="sr-only">Generate text for video subtitles</label>
-        <input id="chatInput" type="text" placeholder="Generate text for subtitles (e.g., What are the benefits of exercise?)" aria-label="Generate text for video subtitles">
-        <button id="sendBtn" aria-label="Generate text">Generate Text</button>
-    </div>
-    <div class="input-section">
-        <label for="dalleInput" class="sr-only">Generate image for video</label>
-        <input id="dalleInput" type="text" placeholder="Generate image for video (e.g., A futuristic cityscape at night)" aria-label="Generate image for video">
-        <button id="generateImgBtn" aria-label="Generate image with DALL·E">Generate Image</button>
-    </div>
-    <div class="input-section">
-        <label for="productUrls" class="sr-only">Product image URLs</label>
-        <textarea id="productUrls" placeholder="Enter product image URLs (one per line)" aria-label="Product image URLs"></textarea>
-        <button id="generateVideoBtn" aria-label="Generate video">Generate Video</button>
-    </div>
-    <div class="input-section">
-        <label for="voiceSelect">Voice:</label>
-        <select id="voiceSelect" aria-label="Select TTS voice"></select>
-    </div>
-    <div class="ai-container">
-        <div class="ai-box" id="responseBox" aria-live="polite" aria-atomic="false"><h3>GPT-5 Nano</h3><span class="loading">Processing...</span></div>
-        <div class="ai-box" id="dalleBox" aria-live="polite" aria-atomic="false"><h3>DALL·E Images</h3><span class="loading">Processing...</span></div>
-        <div class="ai-box" id="videoBox" aria-live="polite" aria-atomic="false"><h3>Generated Video</h3><span class="loading">Processing...</span></div>
-    </div>
-    <footer>
-        Powered by <a href="https://developer.puter.com/tutorials/free-unlimited-openai-api/">Puter.js Free, Unlimited OpenAI API</a> and 
-        <a href="https://docs.puter.com/AI/chat/">Puter.js AI Chat Documentation</a>.
-    </footer>
+
+    <button type="button" id="generateVideoBtn">Generate Video</button>
+    <video id="video_preview" controls style="display:none;"></video>
+</div>
+
+<script>
+const correctPassword = "supersecret";
+const overlay = document.getElementById('passwordOverlay');
+const input = document.getElementById('dashboardPassword');
+const btn = document.getElementById('submitPassword');
+const pwError = document.getElementById('pwError');
+const dashboard = document.getElementById('dashboardContent');
+
+btn.addEventListener('click', () => {
+    if(input.value === correctPassword){
+        overlay.style.display = 'none';
+        dashboard.style.display = 'block';
+    } else {
+        pwError.style.display='block';
+        input.value='';
+    }
+});
+input.addEventListener('keypress', (e)=>{ if(e.key==='Enter') btn.click(); });
+
+let dalleImages = [];
+let generatingImage = false;
+
+document.getElementById('generateDalleBtn').addEventListener('click', async function() {
+    const prompt = document.getElementById('dalle_prompt').value.trim();
+    if(!prompt) return alert('Enter a prompt');
+    if(generatingImage) return alert('Please wait...');
+    generatingImage = true;
+    try{
+        const imgEl = await puter.ai.txt2img(prompt);
+        document.getElementById('dalle_images').appendChild(imgEl);
+        dalleImages.push(imgEl.src);
+    } catch(err){
+        console.error(err);
+        alert('❌ Failed to generate image.');
+    } finally { generatingImage=false; }
+});
+
+async function updateProgress(stepText, percent){
+    document.getElementById('progressBar').style.width = percent+'%';
+    document.getElementById('progressText').textContent = stepText;
+}
+
+document.getElementById('generateVideoBtn').addEventListener('click', async function(){
+    const errorEl = document.getElementById('error');
+    const successEl = document.getElementById('success');
+    const videoEl = document.getElementById('video_preview');
+    const urls = document.getElementById('urls').value.split(',').map(u=>u.trim()).filter(Boolean);
+    const scriptText = document.getElementById('script').value.trim();
+
+    errorEl.textContent=''; successEl.textContent=''; videoEl.style.display='none';
+    await updateProgress('Starting...',0);
+
+    if(!urls.length && !dalleImages.length){
+        errorEl.textContent='❌ Enter at least one URL or DALL·E prompt.';
+        await updateProgress('Idle',0);
+        return;
+    }
+
+    try{
+        let currentProgress=0;
+        const stepsWeight={urls:30,dalle:20,script:10,tts:10,video:30};
+
+        // URL images
+        if(urls.length){
+            await updateProgress('Downloading product images...',currentProgress);
+            await new Promise(r=>setTimeout(r,1000)); // simulate
+            currentProgress+=stepsWeight.urls;
+            await updateProgress('Product images ready',currentProgress);
+        }
+
+        // DALL·E images
+        if(dalleImages.length){
+            for(let i=0;i<dalleImages.length;i++){
+                await updateProgress(`Generating DALL·E image ${i+1}/${dalleImages.length}`,currentProgress);
+                await new Promise(r=>setTimeout(r,500)); // simulate
+                currentProgress+=stepsWeight.dalle/dalleImages.length;
+            }
+        }
+
+        // Script
+        let finalScript = scriptText || await puter.ai.chat(`Write a TikTok-style narration for these products: ${urls.join(', ')}`, {model:"gpt-5-nano"});
+        currentProgress+=stepsWeight.script;
+        await updateProgress('Script ready',currentProgress);
+
+        // TTS
+        const ttsBlob = await puter.ai.tts(finalScript,{voice:"alloy"});
+        currentProgress+=stepsWeight.tts;
+        await updateProgress('TTS ready',currentProgress);
+
+        // Video
+        const ttsFile = new File([ttsBlob],"voice.mp3",{type:"audio/mpeg"});
+        const formData = new FormData();
+        formData.append("urls",JSON.stringify([...urls,...dalleImages]));
+        formData.append("script",finalScript);
+        formData.append("voiceover",ttsFile);
+        await updateProgress('Generating video...',currentProgress);
+
+        const response = await fetch('/generate_video',{method:'POST',body:formData});
+        const data = await response.json();
+
+        if(data.video_file){
+            await updateProgress('Completed',100);
+            successEl.textContent='✅ Video generated!';
+            videoEl.src=`/download/${data.video_file}`;
+            videoEl.style.display='block';
+        } else errorEl.textContent='❌ '+(data.error||'Unknown error');
+
+    } catch(err){ console.error(err); errorEl.textContent='❌ Failed to generate video.'; await updateProgress('Idle',0);}
+});
+</script>
 </body>
 </html>
