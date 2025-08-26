@@ -197,4 +197,46 @@ function initPuterAI() {
             dalleBox.innerHTML='';
             dalleBox.appendChild(img);
         } catch(e){
-            dalleBox
+                        dalleBox.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
+        }
+    });
+
+    // --- Video generation placeholder ---
+    const generateVideoBtn = document.getElementById('generateVideoBtn');
+    const urlsInput = document.getElementById('urls');
+    const scriptInput = document.getElementById('script');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const videoPreview = document.getElementById('video_preview');
+
+    generateVideoBtn.addEventListener('click', async () => {
+        const urls = urlsInput.value.split(',').map(u=>u.trim()).filter(u=>u);
+        const narration = scriptInput.value.trim();
+
+        if(!urls.length) {
+            progressText.textContent = "Please enter at least one product URL.";
+            return;
+        }
+
+        progressText.textContent = "Generating video...";
+        progressBar.style.width = "0%";
+        videoPreview.style.display = "none";
+
+        // Placeholder logic - replace with actual video generation code
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            progressBar.style.width = progress + "%";
+            if(progress >= 100){
+                clearInterval(interval);
+                progressText.textContent = "Video ready!";
+                // Show placeholder video (or generated URL)
+                videoPreview.src = "https://www.w3schools.com/html/mov_bbb.mp4";
+                videoPreview.style.display = "block";
+            }
+        }, 300);
+    });
+}
+</script>
+</body>
+</html>
