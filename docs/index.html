@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Prompts with Puter.js</title>
+    <title>AI Generator with Puter.js</title>
     <script src="https://js.puter.com/v2/"></script>
-    <script src="gateway.js" defer></script>
+    <script src="/gateway.js" defer></script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 20px;
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             background-color: #f8f9fa;
             color: #333;
         }
         h1 {
             text-align: center;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 2rem;
             color: #1a73e8;
@@ -35,7 +35,7 @@
             font-weight: 500;
             margin-right: 0.5rem;
         }
-        input, select, textarea {
+        input, select {
             padding: 0.75rem;
             font-size: 1rem;
             border: 1px solid #ccc;
@@ -44,11 +44,7 @@
             min-width: 200px;
             transition: border-color 0.2s;
         }
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        input:focus, select:focus, textarea:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: #1a73e8;
             box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
@@ -82,12 +78,8 @@
             padding: 1rem;
             background-color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            height: 400px;
+            height: 300px;
             overflow-y: auto;
-            transition: transform 0.2s;
-        }
-        .ai-box:hover {
-            transform: translateY(-2px);
         }
         .ai-box h3 {
             margin: 0 0 1rem;
@@ -102,7 +94,7 @@
             font-style: italic;
             margin-top: 0.5rem;
         }
-        .ai-box .response {
+        .ai-box .response, .ai-box .url {
             font-family: 'Courier New', Courier, monospace;
             animation: typing 0.1s steps(1, end);
         }
@@ -110,17 +102,13 @@
             color: #d32f2f;
             font-style: italic;
         }
-        #dalleBox {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
         #dalleBox img {
             max-width: 100%;
             height: auto;
             border-radius: 4px;
             border: 1px solid #ddd;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
         }
         #errorBox {
             border: 1px solid #d32f2f;
@@ -163,14 +151,13 @@
             text-decoration: underline;
         }
         @media (max-width: 768px) {
-            h1 { font-size: 1.75rem; }
+            h1 { font-size: 1.5rem; }
             .input-section { flex-direction: column; }
-            input, select, textarea, button { width: 100%; }
+            input, select, button { width: 100%; }
             .ai-container { grid-template-columns: 1fr; }
-            .ai-box { height: 300px; }
+            .ai-box { height: 250px; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .ai-box:hover { transform: none; }
             .ai-box .response { animation: none; }
         }
         .sr-only {
@@ -178,7 +165,7 @@
             width: 1px;
             height: 1px;
             padding: 0;
-            margin: - cesarean;
+            margin: -1px;
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
             border: 0;
@@ -186,37 +173,19 @@
     </style>
 </head>
 <body>
-    <h1>AI Prompts with Puter.js</h1>
+    <h1>AI Generator with Puter.js</h1>
     <div id="errorBox" aria-live="assertive"></div>
     <div class="input-section">
-        <label for="modelSelect">Model:</label>
-        <select id="modelSelect" aria-label="Select AI model">
-            <option value="gpt-5-nano">GPT-5 Nano</option>
-            <option value="gpt-4.1">GPT-4.1</option>
-            <option value="o3-mini">O3 Mini</option>
-            <option value="o1-mini">O1 Mini</option>
-            <option value="gpt-4o">GPT-4o</option>
-        </select>
-        <button id="retryBtn" aria-label="Retry with default model">Retry</button>
+        <button id="retryBtn" aria-label="Retry last action">Retry</button>
     </div>
     <div class="input-section">
-        <label for="chatInput" class="sr-only">Ask AI a question</label>
-        <input id="chatInput" type="text" placeholder="Ask AI something (e.g., What are the benefits of exercise?)" aria-label="Ask AI a question">
-        <button id="sendBtn" aria-label="Send chat prompt">Send</button>
+        <label for="chatInput" class="sr-only">Generate text</label>
+        <input id="chatInput" type="text" placeholder="Generate text (e.g., What are the benefits of exercise?)" aria-label="Generate text">
+        <button id="sendBtn" aria-label="Generate text">Generate Text</button>
     </div>
     <div class="input-section">
-        <label for="messagesInput" class="sr-only">Enter message history (JSON)</label>
-        <textarea id="messagesInput" placeholder="Enter message history (JSON, e.g., [{role: 'user', content: 'Write a poem about coding'}])" aria-label="Enter message history (JSON)"></textarea>
-        <button id="sendMessagesBtn" aria-label="Send message history">Send Messages</button>
-    </div>
-    <div class="input-section">
-        <label for="imageInput" class="sr-only">Enter image URL for analysis</label>
-        <input id="imageInput" type="text" placeholder="Enter image URL for analysis (e.g., https://assets.puter.site/doge.jpeg)" aria-label="Enter image URL for analysis">
-        <button id="analyzeImgBtn" aria-label="Analyze image with AI">Analyze Image</button>
-    </div>
-    <div class="input-section">
-        <label for="dalleInput" class="sr-only">Enter image prompt</label>
-        <input id="dalleInput" type="text" placeholder="Enter image prompt (e.g., A futuristic cityscape at night)" aria-label="Enter image prompt">
+        <label for="dalleInput" class="sr-only">Generate image</label>
+        <input id="dalleInput" type="text" placeholder="Generate image (e.g., A futuristic cityscape at night)" aria-label="Generate image">
         <button id="generateImgBtn" aria-label="Generate image with DALL·E">Generate Image</button>
     </div>
     <div class="input-section">
@@ -224,13 +193,12 @@
         <select id="voiceSelect" aria-label="Select TTS voice"></select>
     </div>
     <div class="ai-container">
-        <div class="ai-box" id="responseBox" aria-live="polite" aria-atomic="false"><h3>Response</h3><span class="loading">Processing...</span></div>
-        <div class="ai-box" id="dalleBox" aria-live="polite" aria-atomic="false"><h3>DALL·E</h3><span class="loading">Processing...</span></div>
+        <div class="ai-box" id="responseBox" aria-live="polite" aria-atomic="false"><h3>GPT-5 Nano</h3><span class="loading">Processing...</span></div>
+        <div class="ai-box" id="dalleBox" aria-live="polite" aria-atomic="false"><h3>DALL·E Images</h3><span class="loading">Processing...</span></div>
     </div>
     <footer>
         Powered by <a href="https://developer.puter.com/tutorials/free-unlimited-openai-api/">Puter.js Free, Unlimited OpenAI API</a> and 
-        <a href="https://docs.puter.com/AI/chat/">Puter.js AI Chat Documentation</a>. 
-        Uses the "User Pays" model, allowing developers to integrate AI capabilities like GPT-5, GPT-4o, and DALL·E for free, with users covering usage costs.
+        <a href="https://docs.puter.com/AI/chat/">Puter.js AI Chat Documentation</a>.
     </footer>
 </body>
 </html>
