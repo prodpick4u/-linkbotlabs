@@ -3,174 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puter.js AI Dashboard</title>
+<title>Puter.js AI Chat</title>
 <script src="https://js.puter.com/v2/"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        margin: 0;
-        padding: 20px;
-        background: #f0f4f8;
-        color: #333;
-    }
-    h1 {
-        text-align: center;
-        color: #1a73e8;
-        font-size: 2.4rem;
-        margin-bottom: 1rem;
-    }
-    .section {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 20px auto;
-        max-width: 800px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    input, textarea, button, select {
-        width: 100%;
-        padding: 12px;
-        margin: 8px 0;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-        box-sizing: border-box;
-    }
-    button {
-        background: #1a73e8;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-    button:hover { background: #1557b0; }
-    .output {
-        margin-top: 10px;
-        padding: 12px;
-        background: #e8f0fe;
-        border-radius: 6px;
-        max-height: 400px;
-        overflow-y: auto;
-        font-family: monospace;
-        white-space: pre-wrap;
-    }
-    img {
-        max-width: 100%;
-        border-radius: 6px;
-        margin-top: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+body { font-family:'Inter',sans-serif; background:#f0f4f8; margin:0; padding:20px; color:#333; }
+h1 { text-align:center; color:#1a73e8; margin-bottom:20px; font-size:2.5rem; }
+#chatBox { max-width:700px; margin:0 auto; background:white; padding:20px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.1); }
+#chatOutput { max-height:400px; overflow-y:auto; background:#e8f0fe; padding:15px; border-radius:8px; font-family:monospace; white-space:pre-wrap; scroll-behavior: smooth; }
+input, select, button { width:100%; margin:8px 0; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:1rem; box-sizing:border-box; }
+button { background:#1a73e8; color:white; font-weight:600; cursor:pointer; transition:0.2s; }
+button:hover { background:#1557b0; }
+.user { color:#1a73e8; font-weight:600; margin-top:10px; }
+.ai { color:#333; margin-top:10px; }
+.ai span { display:inline; }
+#controlButtons { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+#controlButtons button { flex:1; }
 </style>
 </head>
 <body>
 
-<h1>Puter.js AI Dashboard</h1>
-
-<div class="section">
-    <h2>Chat with AI</h2>
-    <input id="chatInput" placeholder="Enter prompt for GPT...">
+<h1>Puter.js AI Chat</h1>
+<div id="chatBox">
+    <div id="controlButtons">
+        <button id="sendBtn">Send</button>
+        <button id="clearBtn" style="background:#d32f2f;">Clear Conversation</button>
+    </div>
+    <input id="chatInput" placeholder="Type your message...">
     <select id="modelSelect">
         <option value="gpt-5-nano">GPT-5 Nano</option>
         <option value="gpt-4.1">GPT-4.1</option>
         <option value="o3-mini">O3 Mini</option>
         <option value="gpt-4o">GPT-4o</option>
     </select>
-    <button id="sendBtn">Generate Text</button>
-    <div id="chatOutput" class="output"></div>
-</div>
-
-<div class="section">
-    <h2>Generate Images (DALL-E)</h2>
-    <input id="imageInput" placeholder="Enter prompt for DALL-E...">
-    <button id="generateImgBtn">Generate Image</button>
-    <div id="imageOutput" class="output"></div>
+    <div id="chatOutput"></div>
 </div>
 
 <script>
 const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
 const chatOutput = document.getElementById('chatOutput');
+const sendBtn = document.getElementById('sendBtn');
+const clearBtn = document.getElementById('clearBtn');
 const modelSelect = document.getElementById('modelSelect');
 
-const imageInput = document.getElementById('imageInput');
-const generateImgBtn = document.getElementById('generateImgBtn');
-const imageOutput = document.getElementById('imageOutput');
-
+let conversation = [];
+const synth = window.speechSynthesis;
 let ttsQueue = [];
 let isSpeaking = false;
-const synth = window.speechSynthesis;
 
-// ---- TTS function ----
-function speakText(text) {
-    if (!text) return;
+function playTTS(text) {
+    if(!text) return;
     ttsQueue.push(text);
-    if (isSpeaking) return;
-    const next = () => {
-        if (!ttsQueue.length) { isSpeaking=false; return; }
-        isSpeaking = true;
-        const utter = new SpeechSynthesisUtterance(ttsQueue.shift());
-        utter.onend = () => { next(); };
-        synth.speak(utter);
-    };
-    next();
+    processTTSQueue();
+}
+function processTTSQueue() {
+    if(isSpeaking || !ttsQueue.length) return;
+    isSpeaking = true;
+    const utter = new SpeechSynthesisUtterance(ttsQueue.shift());
+    utter.onend = () => { isSpeaking = false; processTTSQueue(); };
+    synth.speak(utter);
 }
 
-// ---- Safe AI call with streaming ----
-async function askAI(prompt, model) {
-    chatOutput.innerHTML = 'Processing...';
-    try {
-        if(!puter || !puter.ai) throw new Error('Puter.js not loaded.');
+async function sendMessage() {
+    const prompt = chatInput.value.trim();
+    if(!prompt) return alert('Enter a message');
 
-        let fullText = '';
-        const stream = await puter.ai.chat(prompt, { model, stream: true });
+    // Display user message
+    conversation.push({role:'user', content:prompt});
+    chatOutput.innerHTML += `<div class="user">You: ${prompt}</div>`;
+    chatInput.value = '';
+    chatOutput.scrollTop = chatOutput.scrollHeight;
+
+    const model = modelSelect.value;
+    try {
+        const stream = await puter.ai.chat(conversation.map(m=>m.content), { model, stream:true });
+        let aiResponse = '';
+        chatOutput.innerHTML += `<div class="ai">AI: <span></span></div>`;
+        const aiSpan = chatOutput.querySelector('.ai span:last-child');
 
         for await (const part of stream) {
             if(part?.text) {
-                fullText += part.text;
-                chatOutput.innerHTML = fullText.replace(/\n/g,'<br>');
-                speakText(part.text);
+                aiResponse += part.text;
+                aiSpan.innerHTML = aiResponse.replace(/\n/g,'<br>');
+                chatOutput.scrollTop = chatOutput.scrollHeight;
+                playTTS(part.text);
             }
         }
-
-        if(!fullText) {
-            chatOutput.innerHTML = `No response from ${model}.`;
-        }
-
+        conversation.push({role:'ai', content:aiResponse});
     } catch(err) {
-        chatOutput.innerHTML = `Error with ${model}: ${err.message || 'Unknown error'}`;
-        // Retry with gpt-5-nano if not already
-        if(model !== 'gpt-5-nano') {
-            chatOutput.innerHTML += '<br>Retrying with GPT-5 Nano...';
-            await askAI(prompt, 'gpt-5-nano');
-        }
+        chatOutput.innerHTML += `<div class="ai">Error: ${err.message || 'Unknown'}</div>`;
     }
 }
 
-// ---- Image generation ----
-async function generateImage(prompt) {
-    imageOutput.innerHTML = 'Generating image...';
-    try {
-        const img = await puter.ai.txt2img(prompt);
-        imageOutput.innerHTML = '';
-        imageOutput.appendChild(img);
-    } catch(err) {
-        imageOutput.innerHTML = `Error: ${err.message || 'Unknown error'}`;
-    }
+// ---- Clear Conversation ----
+function clearConversation() {
+    conversation = [];
+    chatOutput.innerHTML = '';
+    chatInput.value = '';
+    if(synth.speaking) synth.cancel();
 }
 
-// ---- Event listeners ----
-sendBtn.addEventListener('click', () => {
-    const prompt = chatInput.value.trim();
-    if(!prompt) return alert('Enter a prompt');
-    const model = modelSelect.value;
-    askAI(prompt, model);
-});
-
-generateImgBtn.addEventListener('click', () => {
-    const prompt = imageInput.value.trim();
-    if(!prompt) return alert('Enter image prompt');
-    generateImage(prompt);
-});
+sendBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
+clearBtn.addEventListener('click', clearConversation);
 </script>
 
 </body>
