@@ -189,23 +189,33 @@
     <h1>AI Prompts with Puter.js</h1>
     <div id="errorBox" aria-live="assertive"></div>
     <div class="input-section">
+        <label for="modelSelect">Model:</label>
+        <select id="modelSelect" aria-label="Select AI model">
+            <option value="gpt-5-nano">GPT-5 Nano</option>
+            <option value="gpt-4.1">GPT-4.1</option>
+            <option value="o3-mini">O3 Mini</option>
+            <option value="o1-mini">O1 Mini</option>
+            <option value="gpt-4o">GPT-4o</option>
+        </select>
+    </div>
+    <div class="input-section">
         <label for="chatInput" class="sr-only">Ask AI a question</label>
-        <input id="chatInput" type="text" placeholder="Ask AI something..." aria-label="Ask AI a question">
+        <input id="chatInput" type="text" placeholder="Ask AI something (e.g., What are the benefits of exercise?)" aria-label="Ask AI a question">
         <button id="sendBtn" aria-label="Send chat prompt">Send</button>
     </div>
     <div class="input-section">
         <label for="messagesInput" class="sr-only">Enter message history (JSON)</label>
-        <textarea id="messagesInput" placeholder="Enter message history (JSON, e.g., [{role: 'user', content: 'Hello'}])" aria-label="Enter message history (JSON)"></textarea>
+        <textarea id="messagesInput" placeholder="Enter message history (JSON, e.g., [{role: 'user', content: 'Write a poem about coding'}])" aria-label="Enter message history (JSON)"></textarea>
         <button id="sendMessagesBtn" aria-label="Send message history">Send Messages</button>
     </div>
     <div class="input-section">
         <label for="imageInput" class="sr-only">Enter image URL for analysis</label>
-        <input id="imageInput" type="text" placeholder="Enter image URL for analysis..." aria-label="Enter image URL for analysis">
+        <input id="imageInput" type="text" placeholder="Enter image URL for analysis (e.g., https://assets.puter.site/doge.jpeg)" aria-label="Enter image URL for analysis">
         <button id="analyzeImgBtn" aria-label="Analyze image with AI">Analyze Image</button>
     </div>
     <div class="input-section">
         <label for="dalleInput" class="sr-only">Enter image prompt</label>
-        <input id="dalleInput" type="text" placeholder="Enter image prompt..." aria-label="Enter image prompt">
+        <input id="dalleInput" type="text" placeholder="Enter image prompt (e.g., A futuristic cityscape at night)" aria-label="Enter image prompt">
         <button id="generateImgBtn" aria-label="Generate image with DALL·E">Generate Image</button>
     </div>
     <div class="input-section">
@@ -213,11 +223,8 @@
         <select id="voiceSelect" aria-label="Select TTS voice"></select>
     </div>
     <div class="ai-container">
-        <div class="ai-box" id="claudeBox" aria-live="polite" aria-atomic="false"><h3>Claude</h3><span class="loading">Processing...</span></div>
+        <div class="ai-box" id="responseBox" aria-live="polite" aria-atomic="false"><h3>Response</h3><span class="loading">Processing...</span></div>
         <div class="ai-box" id="dalleBox" aria-live="polite" aria-atomic="false"><h3>DALL·E</h3><span class="loading">Processing...</span></div>
-        <div class="ai-box" id="geminiBox" aria-live="polite" aria-atomic="false"><h3>Gemini</h3><span class="loading">Processing...</span></div>
-        <div class="ai-box" id="gpt5Box" aria-live="polite" aria-atomic="false"><h3>GPT-5</h3><span class="loading">Processing...</span></div>
-        <div class="ai-box" id="grokBox" aria-live="polite" aria-atomic="false"><h3>Grok</h3><span class="loading">Processing...</span></div>
     </div>
     <footer>
         Powered by <a href="https://developer.puter.com/tutorials/free-unlimited-openai-api/">Puter.js Free, Unlimited OpenAI API</a> and 
