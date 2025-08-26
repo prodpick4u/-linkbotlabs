@@ -1,37 +1,38 @@
-<div id="chatBox"><div>🤖 Ready to chat...</div></div>
-<textarea id="userInput"></textarea>
-<button id="sendBtn">Send</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkBotLabs – Smart Shopping Assistant</title>
 
-<script src="https://js.puter.com/v2/"></script>
-<script>
-window.addEventListener('load', () => {
-    const puter = new Puter();
-    const chatBox = document.getElementById('chatBox');
-    const input = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/preview.png">
 
-    function addMessage(text, sender){
-        const div = document.createElement('div');
-        div.textContent = text;
-        div.className = sender;
-        chatBox.appendChild(div);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
+<!-- Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 
-    sendBtn.addEventListener('click', async () => {
-        const query = input.value.trim();
-        if(!query) return;
-        input.value = '';
-        addMessage(query, 'user');
-        addMessage('⏳ Thinking...', 'assistant');
-
-        try {
-            const response = await puter.ai.chat(query, { model: 'gpt-5-nano' });
-            const text = typeof response === 'string' ? response : response?.text ?? 'No response';
-            chatBox.querySelector('.assistant:last-child').textContent = text;
-        } catch (err) {
-            chatBox.querySelector('.assistant:last-child').textContent = '⚠️ Error: ' + err;
-        }
-    });
-});
-</script>
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    margin:0; padding:0;
+    background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    color:white;
+    line-height:1.5;
+  }
+  @keyframes gradientShift {
+    0%{background-position:0% 50%;}
+    25%{background-position:50% 50%;}
+    50%{background-position:100% 50%;}
+    75%{background-position:50% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  header {
+    text-align:center;
+    padding:3rem 1rem;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+  }
+  header h1 { font-size:2.8rem; margin-bottom:1rem; }
+  header p { font-size:1.15rem; opacity:0.9; margin-bottom:0.7rem; }
