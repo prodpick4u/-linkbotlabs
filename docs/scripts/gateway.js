@@ -1,20 +1,19 @@
 const synth = window.speechSynthesis;
 const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
-const messagesInput = document.getElementById('messagesInput');
-const sendMessagesBtn = document.getElementById('sendMessagesBtn');
-const imageInput = document.getElementById('imageInput');
-const analyzeImgBtn = document.getElementById('analyzeImgBtn');
 const dalleInput = document.getElementById('dalleInput');
 const generateImgBtn = document.getElementById('generateImgBtn');
+const productUrls = document.getElementById('productUrls');
+const generateVideoBtn = document.getElementById('generateVideoBtn');
 const voiceSelect = document.getElementById('voiceSelect');
-const modelSelect = document.getElementById('modelSelect');
 const retryBtn = document.getElementById('retryBtn');
 const errorBox = document.getElementById('errorBox');
 const responseBox = document.getElementById('responseBox');
 const dalleBox = document.getElementById('dalleBox');
+const videoBox = document.getElementById('videoBox');
 
 const defaultModel = 'gpt-4o-mini'; // Fallback model
+const appId = 'linkbotlabs'; // Placeholder app ID
 
 // ---- Error Display Function ----
 function displayError(message) {
@@ -73,12 +72,12 @@ function processTTSQueue() {
     synth.speak(utter);
 }
 
-// ---- Text Generation ----
+// ---- Text Generation (Example 1) ----
 async function askAI(prompt, retry = false) {
     if (!prompt) {
-        displayError('Please enter a question.');
+        displayError('Please enter a text prompt.');
         const p = document.createElement('p');
-        p.innerHTML = 'Error: Please enter a question.';
+        p.innerHTML = 'Error: Please enter a text prompt.';
         p.className = 'error';
         responseBox.appendChild(p);
         responseBox.scrollTop = responseBox.scrollHeight;
@@ -99,7 +98,7 @@ async function askAI(prompt, retry = false) {
     const p = document.createElement('p');
     p.className = 'response';
     responseBox.appendChild(p);
-    let model = retry ? defaultModel : (modelSelect.value || 'gpt-5-nano');
+    let model = retry ? defaultModel : 'gpt-5-nano';
     try {
         const stream = await puter.ai.chat(prompt, { model, stream: true });
         let fullText = '';
@@ -122,6 +121,9 @@ async function askAI(prompt, retry = false) {
             p.innerHTML = `Error: No response from ${model}.`;
             p.className = 'error';
             displayError(`No response from ${model}.`);
+        } else {
+            // Store text in puter.kv
+            await puter.kv.set(`${appId}:lastText`, fullText);
         }
     } catch (e) {
         if (!retry) {
@@ -143,147 +145,7 @@ async function askAI(prompt, retry = false) {
     sendBtn.classList.remove('loading');
 }
 
-// ---- Message History ----
-async function askWithMessages(messages, retry = false) {
-    if (!messages || !Array.isArray(messages)) {
-        displayError('Invalid message history. Please enter valid JSON array.');
-        const p = document.createElement('p');
-        p.innerHTML = 'Error: Invalid JSON format for messages.';
-        p.className = 'error';
-        responseBox.appendChild(p);
-        responseBox.scrollTop = responseBox.scrollHeight;
-        return;
-    }
-    if (!window.puter || !window.puter.ai) {
-        displayError('Puter.js failed to load. Check network or script URL: https://js.puter.com/v2/');
-        const p = document.createElement('p');
-        p.innerHTML = 'Error: Puter.js failed to load.';
-        p.className = 'error';
-        responseBox.appendChild(p);
-        responseBox.scrollTop = responseBox.scrollHeight;
-        return;
-    }
-    sendMessagesBtn.disabled = true;
-    sendMessagesBtn.classList.add('loading');
-    responseBox.setAttribute('aria-busy', 'true');
-    const p = document.createElement('p');
-    p.className = 'response';
-    responseBox.appendChild(p);
-    let model = retry ? defaultModel : (modelSelect.value || 'gpt-5-nano');
-    try {
-        const stream = await puter.ai.chat(messages, false, { model, stream: true });
-        let fullText = '';
-        for await (const part of stream) {
-            if (part?.text) {
-                fullText += part.text;
-                p.innerHTML = fullText.replace(/\n/g, '<br>');
-                responseBox.scrollTop = responseBox.scrollHeight;
-                playTTS(part.text);
-            }
-        }
-        if (!fullText && !retry) {
-            p.innerHTML = `Error: No response from ${model}. Retrying with ${defaultModel}.`;
-            p.className = 'error';
-            displayError(`No response from ${model}. Retrying with ${defaultModel}.`);
-            sendMessagesBtn.disabled = false;
-            sendMessagesBtn.classList.remove('loading');
-            return askWithMessages(messages, true); // Retry with default model
-        } else if (!fullText) {
-            p.innerHTML = `Error: No response from ${model}.`;
-            p.className = 'error';
-            displayError(`No response from ${model}.`);
-        }
-    } catch (e) {
-        if (!retry) {
-            p.innerHTML = `Error: ${model} failed. Retrying with ${defaultModel}.`;
-            p.className = 'error';
-            displayError(`${model} failed: ${e.message}. Retrying with ${defaultModel}.`);
-            sendMessagesBtn.disabled = false;
-            sendMessagesBtn.classList.remove('loading');
-            return askWithMessages(messages, true); // Retry with default model
-        } else {
-            displayError(`Retry with ${model} failed: ${e.message}`);
-            p.innerHTML = `Error: Failed to respond - ${e.message}`;
-            p.className = 'error';
-        }
-    }
-    responseBox.setAttribute('aria-busy', 'false');
-    responseBox.scrollTop = responseBox.scrollHeight;
-    sendMessagesBtn.disabled = false;
-    sendMessagesBtn.classList.remove('loading');
-}
-
-// ---- Image Analysis ----
-async function analyzeImage(prompt, imageURL, retry = false) {
-    if (!prompt || !imageURL) {
-        displayError('Please enter both a question and an image URL.');
-        const p = document.createElement('p');
-        p.innerHTML = 'Error: Please enter both a question and an image URL.';
-        p.className = 'error';
-        responseBox.appendChild(p);
-        responseBox.scrollTop = responseBox.scrollHeight;
-        return;
-    }
-    if (!window.puter || !window.puter.ai) {
-        displayError('Puter.js failed to load. Check network or script URL: https://js.puter.com/v2/');
-        const p = document.createElement('p');
-        p.innerHTML = 'Error: Puter.js failed to load.';
-        p.className = 'error';
-        responseBox.appendChild(p);
-        responseBox.scrollTop = responseBox.scrollHeight;
-        return;
-    }
-    analyzeImgBtn.disabled = true;
-    analyzeImgBtn.classList.add('loading');
-    responseBox.setAttribute('aria-busy', 'true');
-    const p = document.createElement('p');
-    p.className = 'response';
-    responseBox.appendChild(p);
-    let model = retry ? defaultModel : (modelSelect.value || 'gpt-5-nano');
-    try {
-        const stream = await puter.ai.chat(prompt, imageURL, false, { model, stream: true });
-        let fullText = '';
-        for await (const part of stream) {
-            if (part?.text) {
-                fullText += part.text;
-                p.innerHTML = fullText.replace(/\n/g, '<br>');
-                responseBox.scrollTop = responseBox.scrollHeight;
-                playTTS(part.text);
-            }
-        }
-        if (!fullText && !retry) {
-            p.innerHTML = `Error: No response from ${model} for image analysis. Retrying with ${defaultModel}.`;
-            p.className = 'error';
-            displayError(`No response from ${model} for image analysis. Retrying with ${defaultModel}.`);
-            analyzeImgBtn.disabled = false;
-            analyzeImgBtn.classList.remove('loading');
-            return analyzeImage(prompt, imageURL, true); // Retry with default model
-        } else if (!fullText) {
-            p.innerHTML = `Error: No response from ${model}.`;
-            p.className = 'error';
-            displayError(`No response from ${model} for image analysis.`);
-        }
-    } catch (e) {
-        if (!retry) {
-            p.innerHTML = `Error: ${model} failed. Retrying with ${defaultModel}.`;
-            p.className = 'error';
-            displayError(`${model} failed: ${e.message}. Retrying with ${defaultModel}.`);
-            analyzeImgBtn.disabled = false;
-            analyzeImgBtn.classList.remove('loading');
-            return analyzeImage(prompt, imageURL, true); // Retry with default model
-        } else {
-            displayError(`Retry with ${model} failed: ${e.message}`);
-            p.innerHTML = `Error: Failed to analyze image - ${e.message}`;
-            p.className = 'error';
-        }
-    }
-    responseBox.setAttribute('aria-busy', 'false');
-    responseBox.scrollTop = responseBox.scrollHeight;
-    analyzeImgBtn.disabled = false;
-    analyzeImgBtn.classList.remove('loading');
-}
-
-// ---- Image Generation ----
+// ---- Image Generation (Example 2) ----
 async function generateImages(prompt, retry = false) {
     if (!prompt) {
         displayError('Please enter an image prompt.');
@@ -306,10 +168,15 @@ async function generateImages(prompt, retry = false) {
     generateImgBtn.disabled = true;
     generateImgBtn.classList.add('loading');
     dalleBox.setAttribute('aria-busy', 'true');
-    dalleBox.innerHTML = '<h3>DALL·E</h3><span class="loading">Processing...</span>';
     try {
         const img = await puter.ai.txt2img(prompt);
+        const imgUrl = img.src; // Get image URL
         dalleBox.appendChild(img);
+        // Store image URL in puter.kv
+        let imageUrls = await puter.kv.get(`${appId}:imageUrls`) || [];
+        if (!Array.isArray(imageUrls)) imageUrls = [];
+        imageUrls.push(imgUrl);
+        await puter.kv.set(`${appId}:imageUrls`, imageUrls);
     } catch (e) {
         if (!retry) {
             displayError(`DALL-E failed: ${e.message}. Retrying.`);
@@ -334,30 +201,71 @@ async function generateImages(prompt, retry = false) {
     generateImgBtn.classList.remove('loading');
 }
 
+// ---- Generate Video ----
+async function generateVideo() {
+    if (!window.puter || !window.puter.ai) {
+        displayError('Puter.js failed to load. Check network or script URL: https://js.puter.com/v2/');
+        const p = document.createElement('p');
+        p.innerHTML = 'Error: Puter.js failed to load.';
+        p.className = 'error';
+        videoBox.appendChild(p);
+        videoBox.scrollTop = videoBox.scrollHeight;
+        return;
+    }
+    generateVideoBtn.disabled = true;
+    generateVideoBtn.classList.add('loading');
+    videoBox.setAttribute('aria-busy', 'true');
+    videoBox.innerHTML = '<h3>Generated Video</h3><span class="loading">Processing...</span>';
+    try {
+        // Get data from puter.kv
+        const scriptText = await puter.kv.get(`${appId}:lastText`) || '';
+        const dalleUrls = await puter.kv.get(`${appId}:imageUrls`) || [];
+        const productUrlsList = productUrls.value.split('\n').filter(url => url.trim());
+
+        // Prepare form data
+        const formData = new FormData();
+        formData.append('urls', JSON.stringify(productUrlsList));
+        formData.append('dalle_urls', JSON.stringify(dalleUrls));
+        formData.append('script', scriptText);
+
+        // Send to Flask endpoint
+        const response = await fetch('/generate_video', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+        if (result.error) {
+            throw new Error(result.error);
+        }
+
+        // Display video
+        const video = document.createElement('video');
+        video.src = `/download/${result.video_file}`;
+        video.controls = true;
+        videoBox.innerHTML = '<h3>Generated Video</h3>';
+        videoBox.appendChild(video);
+    } catch (e) {
+        displayError(`Video generation failed: ${e.message}`);
+        const p = document.createElement('p');
+        p.innerHTML = `Error: Failed to generate video - ${e.message}`;
+        p.className = 'error';
+        videoBox.appendChild(p);
+    }
+    videoBox.setAttribute('aria-busy', 'false');
+    videoBox.scrollTop = videoBox.scrollHeight;
+    generateVideoBtn.disabled = false;
+    generateVideoBtn.classList.remove('loading');
+}
+
 // ---- Retry Mechanism ----
 async function retryLastAction() {
     errorBox.innerHTML = '';
     errorBox.classList.remove('active');
-    modelSelect.value = defaultModel; // Reset to fallback model
-    const lastPrompt = localStorage.getItem('lastPrompt');
-    const lastMessages = localStorage.getItem('lastMessages');
-    const lastImagePrompt = localStorage.getItem('lastImagePrompt');
-    const lastImageURL = localStorage.getItem('lastImageURL');
-    if (lastPrompt) {
-        chatInput.value = lastPrompt;
-        return askAI(lastPrompt, true);
-    } else if (lastMessages) {
-        messagesInput.value = lastMessages;
-        try {
-            const messages = JSON.parse(lastMessages);
-            return askWithMessages(messages, true);
-        } catch (e) {
-            displayError('Invalid JSON for retry.');
-        }
-    } else if (lastImagePrompt && lastImageURL) {
-        chatInput.value = lastImagePrompt;
-        imageInput.value = lastImageURL;
-        return analyzeImage(lastImagePrompt, lastImageURL, true);
+    const lastTextPrompt = await puter.kv.get(`${appId}:lastTextPrompt`);
+    const lastImagePrompt = await puter.kv.get(`${appId}:lastImagePrompt`);
+    if (lastTextPrompt) {
+        chatInput.value = lastTextPrompt;
+        return askAI(lastTextPrompt, true);
     } else if (lastImagePrompt) {
         dalleInput.value = lastImagePrompt;
         return generateImages(lastImagePrompt, true);
@@ -367,118 +275,48 @@ async function retryLastAction() {
 }
 
 // ---- Event Listeners ----
-sendBtn.addEventListener('click', () => {
+sendBtn.addEventListener('click', async () => {
     errorBox.innerHTML = '';
     errorBox.classList.remove('active');
-    localStorage.setItem('lastPrompt', chatInput.value);
-    localStorage.removeItem('lastMessages');
-    localStorage.removeItem('lastImagePrompt');
-    localStorage.removeItem('lastImageURL');
+    await puter.kv.set(`${appId}:lastTextPrompt`, chatInput.value);
+    await puter.kv.del(`${appId}:lastImagePrompt`);
     askAI(chatInput.value);
     chatInput.value = '';
 });
-chatInput.addEventListener('keypress', e => {
+chatInput.addEventListener('keypress', async e => {
     if (e.key === 'Enter') {
         errorBox.innerHTML = '';
         errorBox.classList.remove('active');
-        localStorage.setItem('lastPrompt', chatInput.value);
-        localStorage.removeItem('lastMessages');
-        localStorage.removeItem('lastImagePrompt');
-        localStorage.removeItem('lastImageURL');
+        await puter.kv.set(`${appId}:lastTextPrompt`, chatInput.value);
+        await puter.kv.del(`${appId}:lastImagePrompt`);
         askAI(chatInput.value);
         chatInput.value = '';
     }
 });
 
-sendMessagesBtn.addEventListener('click', () => {
+generateImgBtn.addEventListener('click', async () => {
     errorBox.innerHTML = '';
     errorBox.classList.remove('active');
-    try {
-        const messages = JSON.parse(messagesInput.value);
-        localStorage.setItem('lastMessages', messagesInput.value);
-        localStorage.removeItem('lastPrompt');
-        localStorage.removeItem('lastImagePrompt');
-        localStorage.removeItem('lastImageURL');
-        askWithMessages(messages);
-        messagesInput.value = '';
-    } catch (e) {
-        displayError('Invalid JSON format for messages.');
-        const p = document.createElement('p');
-        p.innerHTML = 'Error: Invalid JSON format for messages.';
-        p.className = 'error';
-        responseBox.appendChild(p);
-        responseBox.scrollTop = responseBox.scrollHeight;
-    }
-});
-messagesInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        errorBox.innerHTML = '';
-        errorBox.classList.remove('active');
-        try {
-            const messages = JSON.parse(messagesInput.value);
-            localStorage.setItem('lastMessages', messagesInput.value);
-            localStorage.removeItem('lastPrompt');
-            localStorage.removeItem('lastImagePrompt');
-            localStorage.removeItem('lastImageURL');
-            askWithMessages(messages);
-            messagesInput.value = '';
-        } catch (e) {
-            displayError('Invalid JSON format for messages.');
-            const p = document.createElement('p');
-            p.innerHTML = 'Error: Invalid JSON format for messages.';
-            p.className = 'error';
-            responseBox.appendChild(p);
-            responseBox.scrollTop = responseBox.scrollHeight;
-        }
-    }
-});
-
-analyzeImgBtn.addEventListener('click', () => {
-    errorBox.innerHTML = '';
-    errorBox.classList.remove('active');
-    localStorage.setItem('lastImagePrompt', chatInput.value);
-    localStorage.setItem('lastImageURL', imageInput.value);
-    localStorage.removeItem('lastPrompt');
-    localStorage.removeItem('lastMessages');
-    analyzeImage(chatInput.value, imageInput.value);
-    chatInput.value = '';
-    imageInput.value = '';
-});
-imageInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') {
-        errorBox.innerHTML = '';
-        errorBox.classList.remove('active');
-        localStorage.setItem('lastImagePrompt', chatInput.value);
-        localStorage.setItem('lastImageURL', imageInput.value);
-        localStorage.removeItem('lastPrompt');
-        localStorage.removeItem('lastMessages');
-        analyzeImage(chatInput.value, imageInput.value);
-        chatInput.value = '';
-        imageInput.value = '';
-    }
-});
-
-generateImgBtn.addEventListener('click', () => {
-    errorBox.innerHTML = '';
-    errorBox.classList.remove('active');
-    localStorage.setItem('lastImagePrompt', dalleInput.value);
-    localStorage.removeItem('lastPrompt');
-    localStorage.removeItem('lastMessages');
-    localStorage.removeItem('lastImageURL');
+    await puter.kv.set(`${appId}:lastImagePrompt`, dalleInput.value);
+    await puter.kv.del(`${appId}:lastTextPrompt`);
     generateImages(dalleInput.value);
     dalleInput.value = '';
 });
-dalleInput.addEventListener('keypress', e => {
+dalleInput.addEventListener('keypress', async e => {
     if (e.key === 'Enter') {
         errorBox.innerHTML = '';
         errorBox.classList.remove('active');
-        localStorage.setItem('lastImagePrompt', dalleInput.value);
-        localStorage.removeItem('lastPrompt');
-        localStorage.removeItem('lastMessages');
-        localStorage.removeItem('lastImageURL');
+        await puter.kv.set(`${appId}:lastImagePrompt`, dalleInput.value);
+        await puter.kv.del(`${appId}:lastTextPrompt`);
         generateImages(dalleInput.value);
         dalleInput.value = '';
     }
+});
+
+generateVideoBtn.addEventListener('click', () => {
+    errorBox.innerHTML = '';
+    errorBox.classList.remove('active');
+    generateVideo();
 });
 
 retryBtn.addEventListener('click', () => {
