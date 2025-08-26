@@ -6,97 +6,81 @@
 <title>Puter.js AI Dashboard</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
-    /* Base */
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Segoe UI', Roboto, sans-serif;
         margin: 0;
         padding: 0;
-        background: #f0f2f5;
+        background: #f0f4f8;
         color: #333;
     }
-
-    h1 {
-        text-align: center;
-        color: #1a73e8;
-        font-size: 2.5rem;
-        margin: 20px 0;
-    }
-
-    h2 {
-        color: #1a73e8;
-        margin-bottom: 10px;
-    }
-
-    .container {
-        max-width: 1000px;
-        margin: 0 auto;
+    header {
+        background: #1a73e8;
+        color: white;
         padding: 20px;
+        text-align: center;
     }
-
+    header h1 {
+        margin: 0;
+        font-size: 2rem;
+    }
+    main {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 0 20px;
+    }
     .section {
-        background: #fff;
-        padding: 25px;
-        margin-bottom: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-
+    .section h2 {
+        margin-top: 0;
+        color: #1a73e8;
+    }
     input, textarea, select, button {
         width: 100%;
-        padding: 12px 15px;
+        padding: 12px;
         margin: 8px 0;
-        border-radius: 8px;
+        border-radius: 6px;
         border: 1px solid #ccc;
         font-size: 1rem;
-        transition: border-color 0.2s;
     }
-
-    input:focus, textarea:focus, select:focus {
-        border-color: #1a73e8;
-        outline: none;
-        box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
-    }
-
     button {
         background: #1a73e8;
-        color: #fff;
+        color: white;
         font-weight: bold;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: 0.2s;
     }
-
     button:hover {
         background: #1557b0;
     }
-
     .output {
-        margin-top: 15px;
+        background: #e9ecef;
         padding: 15px;
-        background: #e6f0ff;
-        border-radius: 10px;
-        min-height: 150px;
+        border-radius: 6px;
         max-height: 400px;
         overflow-y: auto;
-        font-family: 'Courier New', Courier, monospace;
-    }
-
-    .output img {
-        max-width: 100%;
-        border-radius: 8px;
         margin-top: 10px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-
-    @media (max-width: 768px) {
-        h1 { font-size: 2rem; }
+    img {
+        max-width: 100%;
+        border-radius: 6px;
+        margin-top: 10px;
+    }
+    @media (max-width: 600px) {
+        header h1 { font-size: 1.5rem; }
         .section { padding: 15px; }
-        input, textarea, select, button { font-size: 0.95rem; }
     }
 </style>
 </head>
 <body>
-<h1>Puter.js AI Dashboard</h1>
-<div class="container">
+<header>
+    <h1>Puter.js AI Dashboard</h1>
+</header>
+<main>
     <div class="section">
         <h2>Chat with AI (Text)</h2>
         <input id="chatInput" placeholder="Enter prompt for GPT-5 nano...">
@@ -116,50 +100,65 @@
         <button id="generateImgBtn">Generate Image</button>
         <div id="imageOutput" class="output"></div>
     </div>
-</div>
+</main>
 
 <script>
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
-const chatOutput = document.getElementById('chatOutput');
-const modelSelect = document.getElementById('modelSelect');
+document.addEventListener("DOMContentLoaded", async () => {
+    // Wait for Puter.js to load
+    if (!window.puter || !puter.ai) {
+        console.log("Waiting for Puter.js...");
+        await new Promise(resolve => {
+            const interval = setInterval(() => {
+                if (window.puter && puter.ai) {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, 100);
+        });
+    }
 
-const imageInput = document.getElementById('imageInput');
-const generateImgBtn = document.getElementById('generateImgBtn');
-const imageOutput = document.getElementById('imageOutput');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const chatOutput = document.getElementById('chatOutput');
+    const modelSelect = document.getElementById('modelSelect');
 
-// ---- Text Generation ----
-sendBtn.addEventListener('click', async () => {
-    const prompt = chatInput.value.trim();
-    const model = modelSelect.value;
-    if(!prompt) return alert('Please enter a prompt.');
+    const imageInput = document.getElementById('imageInput');
+    const generateImgBtn = document.getElementById('generateImgBtn');
+    const imageOutput = document.getElementById('imageOutput');
 
-    chatOutput.innerHTML = "<em>Processing...</em>";
-    try {
-        const stream = await puter.ai.chat(prompt, { model, stream:true });
-        let fullText = '';
-        for await (const part of stream) {
-            fullText += part?.text || '';
-            chatOutput.innerHTML = fullText.replace(/\n/g,'<br>');
+    // ---- Text Generation ----
+    sendBtn.addEventListener('click', async () => {
+        const prompt = chatInput.value.trim();
+        const model = modelSelect.value;
+        if(!prompt) return alert('Enter a prompt');
+
+        chatOutput.innerHTML = "Processing...";
+        try {
+            const stream = await puter.ai.chat(prompt, { model, stream:true });
+            let fullText = '';
+            for await (const part of stream) {
+                fullText += part?.text || '';
+                chatOutput.innerHTML = fullText.replace(/\n/g,'<br>');
+            }
+        } catch(e) {
+            chatOutput.innerHTML = `Error: ${e.message}`;
         }
-    } catch(e) {
-        chatOutput.innerHTML = `<span style="color:red;">Error: ${e.message}</span>`;
-    }
-});
+    });
 
-// ---- Image Generation ----
-generateImgBtn.addEventListener('click', async () => {
-    const prompt = imageInput.value.trim();
-    if(!prompt) return alert('Please enter an image prompt.');
+    // ---- Image Generation ----
+    generateImgBtn.addEventListener('click', async () => {
+        const prompt = imageInput.value.trim();
+        if(!prompt) return alert('Enter an image prompt');
 
-    imageOutput.innerHTML = "<em>Generating image...</em>";
-    try {
-        const img = await puter.ai.txt2img(prompt);
-        imageOutput.innerHTML = '';
-        imageOutput.appendChild(img);
-    } catch(e) {
-        imageOutput.innerHTML = `<span style="color:red;">Error: ${e.message}</span>`;
-    }
+        imageOutput.innerHTML = "Generating image...";
+        try {
+            const img = await puter.ai.txt2img(prompt);
+            imageOutput.innerHTML = '';
+            imageOutput.appendChild(img);
+        } catch(e) {
+            imageOutput.innerHTML = `Error: ${e.message}`;
+        }
+    });
 });
 </script>
 </body>
