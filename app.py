@@ -11,7 +11,7 @@ app.secret_key = os.getenv("FLASK_SECRET", "supersecretkey")
 TMP_DIR = "/tmp"
 os.makedirs(TMP_DIR, exist_ok=True)
 
-# Helper: download and prepare image
+# Helper: download image from URL
 def download_and_prepare_image(url, filename):
     path = os.path.join(TMP_DIR, filename)
     try:
@@ -25,17 +25,17 @@ def download_and_prepare_image(url, filename):
     except Exception as e:
         raise RuntimeError(f"Failed image: {e}")
 
-# Generate video with optional TTS
+# Generate video
 def generate_video(image_urls, script_text=None, voiceover_path=None, output_filename="output.mp4"):
     image_files = [download_and_prepare_image(url, f"frame_{i}.jpg") for i, url in enumerate(image_urls, 1)]
-
+    
     # FFmpeg input list
     list_file = os.path.join(TMP_DIR, "images.txt")
     with open(list_file, "w") as f:
         for img in image_files:
             f.write(f"file '{img}'\n")
             f.write("duration 3\n")
-        f.write(f"file '{image_files[-1]}'\n")  # last frame hold
+        f.write(f"file '{image_files[-1]}'\n")
 
     video_path = os.path.join(TMP_DIR, output_filename)
     subprocess.run([
@@ -82,7 +82,7 @@ def generate_video(image_urls, script_text=None, voiceover_path=None, output_fil
 # Routes
 @app.route("/")
 def home():
-    return render_template("dashboard.html")  # Place HTML below in templates/dashboard.html
+    return render_template("dashboard.html")
 
 @app.route("/generate_video", methods=["POST"])
 def generate_video_route():
@@ -107,5 +107,5 @@ def download_video(filename):
     return send_from_directory(TMP_DIR, filename, as_attachment=True)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 3000))
+    port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port, debug=True)
