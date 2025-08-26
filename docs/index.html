@@ -52,18 +52,33 @@
   <a href="for_dummies.html" class="btn">📘 For Dummies Guide</a>
 </header>
 
+<!-- ==== Chat Section ==== -->
 <section class="chat-section">
   <div class="chat-container">
     <h2 style="text-align:center; margin-bottom:10px;">💬 AI Assistant</h2>
     <div id="chatBox"><div style="color:#9cf; text-align:center;">🤖 Ready to chat...</div></div>
+
+    <!-- Model Selector -->
+    <div style="margin-bottom:8px; text-align:center;">
+      <label for="modelSelect">Choose AI Model: </label>
+      <select id="modelSelect" style="padding:6px 10px; border-radius:6px; border:none; background:rgba(20,20,20,0.7); color:white;">
+        <option value="gpt-5-nano">GPT-5 Nano</option>
+        <option value="gpt-5">GPT-5</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+        <option value="o3-mini">O3 Mini</option>
+        <option value="o1-mini">O1 Mini</option>
+      </select>
+    </div>
+
     <textarea id="userInput" rows="2" placeholder="Type a message and press Enter..."></textarea>
     <button id="send-btn" class="btn">Send</button>
   </div>
+
   <div style="margin-top:1rem; text-align:center;">
     <p>Try example prompts with different models:</p>
-    <button class="example-btn" onclick="askExample('What are the top kitchen blenders 2025?', 'gpt-5-nano')">Top Kitchen Blenders (gpt-5-nano)</button>
-    <button class="example-btn" onclick="askExample('Write a funny poem about AI', 'gpt-4.1')">Poem (gpt-4.1)</button>
-    <button class="example-btn" onclick="askExample('Explain blockchain in simple terms', 'o3-mini')">Blockchain (o3-mini)</button>
+    <button class="example-btn" onclick="askExample('What are the top kitchen blenders 2025?', 'gpt-5-nano')">Top Kitchen Blenders</button>
+    <button class="example-btn" onclick="askExample('Write a funny poem about AI', 'gpt-4.1')">Poem</button>
+    <button class="example-btn" onclick="askExample('Explain blockchain in simple terms', 'o3-mini')">Blockchain</button>
   </div>
 </section>
 
@@ -128,6 +143,7 @@ const puter = new Puter();
 const chatBox = document.getElementById("chatBox");
 const input = document.getElementById("userInput");
 const sendBtn = document.getElementById("send-btn");
+const modelSelect = document.getElementById("modelSelect");
 
 function addMessage(text, sender){
   const div = document.createElement('div');
@@ -155,7 +171,7 @@ async function sendMessage(){
   addMessage('⏳ Thinking...','assistant');
 
   try{
-    const response = await puter.ai.chat(query, { model:'gpt-5-nano' });
+    const response = await puter.ai.chat(query, { model: modelSelect.value });
     chatBox.querySelector('.assistant:last-child').textContent = response;
   } catch(err){
     chatBox.querySelector('.assistant:last-child').textContent = '⚠️ Error: '+err;
