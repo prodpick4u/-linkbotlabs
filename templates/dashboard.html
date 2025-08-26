@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚀 LinkBotLabs AI Gateway</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<script src="https://js.puter.com/v2/"></script>
+</head>
+<body>
+<div class="container">
+  <h1>🚀 LinkBotLabs AI Gateway</h1>
+  <p>Generate images with DALL·E using Puter.js</p>
+
+  <section>
+    <h2>DALL·E Image Generation</h2>
+    <input type="text" id="dalleInput" placeholder="Describe an image...">
+    <button id="generateBtn">Generate Image</button>
+    <div class="ai-box" id="dalleBox"></div>
+  </section>
+</div>
+
+<script src="{{ url_for('static', filename='gateway.js') }}"></script>
+</body>
+</html>
