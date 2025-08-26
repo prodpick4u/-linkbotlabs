@@ -174,7 +174,85 @@ DOCTYPE html>
     <button type="submit" class="btn">Send</button>
   </form>
 </section>
+<!-- Multi-AI Section -->
+<section>
+  <h2>🤖 Multi-AI Chat & DALL·E Image</h2>
+  <div class="ai-card" style="background: rgba(0,0,0,0.55); padding:1.5rem; border-radius:12px; margin-bottom:2rem;">
+    <h3 style="color:#7b5cf5;">Ask AI Anything</h3>
+    <input type="text" id="chatInput" placeholder="Ask a question..." 
+           style="width:70%; padding:10px; border-radius:6px; border:none; margin-right:10px; background:#374151; color:white;">
+    <button id="sendBtn" style="padding:10px 20px; border:none; border-radius:6px; background:#7b5cf5; color:white; cursor:pointer;">Send</button>
+    <div id="chatBox" class="ai-box" style="max-height:300px; overflow-y:auto; margin-top:15px; padding:10px; border-radius:8px; background:#111827;"></div>
+  </div>
 
+  <div class="ai-card" style="background: rgba(0,0,0,0.55); padding:1.5rem; border-radius:12px;">
+    <h3 style="color:#7b5cf5;">Generate DALL·E Image</h3>
+    <input type="text" id="dalleInput" placeholder="Describe an image..." 
+           style="width:70%; padding:10px; border-radius:6px; border:none; margin-right:10px; background:#374151; color:white;">
+    <button id="generateBtn" style="padding:10px 20px; border:none; border-radius:6px; background:#7b5cf5; color:white; cursor:pointer;">Generate Image</button>
+    <div id="dalleBox" class="ai-box" style="max-height:300px; overflow-y:auto; margin-top:15px; padding:10px; border-radius:8px; background:#111827;"></div>
+  </div>
+</section>
+
+<script src="https://js.puter.com/v2/"></script>
+<script>
+const puter = new Puter({ debug: true });
+
+// Multi-AI Chat
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const chatBox = document.getElementById('chatBox');
+const aiModels = ['gpt-5','claude','gemini','x-ai/grok-4'];
+
+sendBtn.addEventListener('click', askAI);
+chatInput.addEventListener('keypress', e => { if(e.key==='Enter') askAI(); });
+
+async function askAI() {
+    const question = chatInput.value.trim();
+    if(!question) return;
+    chatBox.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
+    chatInput.value = '';
+
+    for(const model of aiModels){
+        const modelBox = document.createElement('p');
+        modelBox.innerHTML = `<strong>${model}:</strong> <span class="streaming">...</span>`;
+        chatBox.appendChild(modelBox);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            const stream = await puter.ai.chat(question, { model, stream: true });
+            const span = modelBox.querySelector('.streaming');
+            span.textContent = '';
+            for await (const chunk of stream) {
+                span.textContent += chunk.text || chunk;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        } catch(e){
+            modelBox.innerHTML = `<strong>${model} Error:</strong> ${e.message}`;
+        }
+    }
+}
+
+// DALL-E Image
+const dalleInput = document.getElementById('dalleInput');
+const generateBtn = document.getElementById('generateBtn');
+const dalleBox = document.getElementById('dalleBox');
+
+generateBtn.addEventListener('click', async () => {
+    const prompt = dalleInput.value.trim();
+    if(!prompt) return;
+
+    dalleBox.innerHTML = '<p>Generating image...</p>';
+
+    try {
+        const img = await puter.ai.txt2img(prompt);
+        dalleBox.innerHTML = '';
+        dalleBox.appendChild(img);
+    } catch(e) {
+        dalleBox.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
+    }
+});
+</script>
 <footer>
   <p>© 2025 LinkBotLabs – Powered by Affiliate Shopping</p>
   <p>Support the project by shopping via <a href="https://www.amazon.com/?tag=mychanneld-20" style="color:#9cf;">Amazon Affiliate Link</a></p>
