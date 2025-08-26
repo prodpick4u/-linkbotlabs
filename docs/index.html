@@ -1,62 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚀 LinkBotLabs AI Hub</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  body { font-family:'Inter',sans-serif; margin:0; padding:1rem; background:#0a0033; color:#fff; line-height:1.5; }
-  h1, h2 { color:#6af; }
-  section { margin-bottom:2rem; padding:1rem; background: rgba(0,0,0,0.5); border-radius:10px; }
-  input { width: 70%; padding:10px; border-radius:5px; border:none; margin-right:5px; }
-  button { padding:10px 15px; border:none; border-radius:5px; background: linear-gradient(135deg,#6a11cb,#2575fc); color:#fff; cursor:pointer; }
-  .ai-box { border:1px solid #666; padding:10px; margin-top:10px; max-height:250px; overflow-y:auto; background: rgba(0,0,0,0.2); border-radius:6px; }
-  .ai-box img { max-width:32%; border-radius:5px; margin:2px; display:inline-block; }
-  .product-card { border:1px solid #444; padding:10px; margin:10px; background:#222; border-radius:6px; display:inline-block; width:200px; vertical-align:top; }
-  .btn { display:inline-block; padding:6px 12px; background:#007bff; color:#fff; text-decoration:none; border-radius:4px; margin-top:5px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompts with Puter.js</title>
+    <script src="https://js.puter.com/v2/"></script>
+    <script src="gateway.js" defer></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; max-width: 1200px; margin: 0 auto; }
+        h1 { text-align: center; }
+        .input-section { display: flex; gap: 10px; margin-bottom: 20px; }
+        input, select { padding: 10px; font-size: 16px; }
+        button { padding: 10px 20px; cursor: pointer; }
+        .ai-container { display: flex; flex-wrap: wrap; gap: 20px; }
+        .ai-box { flex: 1; min-width: 250px; border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
+        .ai-box h3 { margin: 0 0 10px; }
+        #dalleBox img { max-width: 100%; height: auto; margin-bottom: 10px; }
+    </style>
 </head>
 <body>
-
-<h1>🚀 LinkBotLabs AI Hub</h1>
-<p>Ask questions, get product suggestions, generate images, and see affiliate products.</p>
-
-<!-- Affiliate Section -->
-<section>
-  <h2>Affiliate ID</h2>
-  <input type="text" id="affiliateID" placeholder="Enter Affiliate ID">
-  <button id="saveAffiliateBtn">Save</button>
-  <p id="affiliateOutput"></p>
-</section>
-
-<!-- AI Chat Sections -->
-<section>
-  <h2>Multi-AI Chat</h2>
-  <input type="text" id="chatInput" placeholder="Ask something...">
-  <button id="sendBtn">Send</button>
-</section>
-
-<div id="gpt5Box" class="ai-box"><strong>GPT-5:</strong></div>
-<div id="claudeBox" class="ai-box"><strong>Claude:</strong></div>
-<div id="grokBox" class="ai-box"><strong>Grok:</strong></div>
-<div id="geminiBox" class="ai-box"><strong>Gemini:</strong></div>
-
-<!-- DALL·E Section -->
-<section>
-  <h2>DALL·E Image Generation (3 images)</h2>
-  <input type="text" id="dalleInput" placeholder="Describe an image...">
-  <button id="generateImgBtn">Generate Images</button>
-</section>
-<div id="dalleBox" class="ai-box"></div>
-
-<!-- Products Section -->
-<section>
-  <h2>Affiliate Products</h2>
-  <div id="productContainer"></div>
-</section>
-
-<script src="https://js.puter.com/v2/"></script>
-<script src="scripts/gateway.js"></script>
+    <h1>AI Prompts with Puter.js</h1>
+    <div class="input-section">
+        <input id="chatInput" type="text" placeholder="Ask AI something..." style="flex: 1;">
+        <button id="sendBtn">Send</button>
+    </div>
+    <div class="input-section">
+        <input id="dalleInput" type="text" placeholder="Enter image prompt..." style="flex: 1;">
+        <button id="generateImgBtn">Generate Images</button>
+    </div>
+    <div class="input-section">
+        <select id="voiceSelect"></select>
+    </div>
+    <div class="ai-container">
+        <div class="ai-box" id="claudeBox"><h3>Claude</h3></div>
+        <div class="ai-box" id="dalleBox"><h3>DALL·E</h3></div>
+        <div class="ai-box" id="geminiBox"><h3>Gemini</h3></div>
+        <div class="ai-box" id="gpt5Box"><h3>GPT-5</h3></div>
+        <div class="ai-box" id="grokBox"><h3>Grok</h3></div>
+    </div>
 </body>
 </html>
