@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login - LinkBotLabs</title>
+</head>
+<body>
+<h2>Login</h2>
+{% if error %}
+<p style="color:red">{{ error }}</p>
+{% endif %}
+<form method="POST">
+    Email: <input type="email" name="email" required><br>
+    Password: <input type="password" name="password" required><br>
+    <button type="submit">Login</button>
+</form>
+</body>
+</html>

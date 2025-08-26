@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://prodpick4u.github.io/Prodpick4u/sitemap.xml

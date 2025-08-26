@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Generator with Puter.js</title>
+    <script src="https://js.puter.com/v2/"></script>
+    <script src="/gateway.js" defer></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #1a73e8;
+        }
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+        label {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+        input, select, textarea {
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex: 1;
+            min-width: 200px;
+            transition: border-color 0.2s;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
+        }
+        button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .ai-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .ai-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 300px;
+            overflow-y: auto;
+        }
+        .ai-box h3 {
+            margin: 0 0 1rem;
+            font-size: 1.25rem;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        .ai-box[aria-busy="true"] .loading {
+            display: block;
+            color: #666;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        .ai-box .response, .ai-box .url {
+            font-family: 'Courier New', Courier, monospace;
+            animation: typing 0.1s steps(1, end);
+        }
+        .ai-box .error {
+            color: #d32f2f;
+            font-style: italic;
+        }
+        #dalleBox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+        #errorBox {
+            border: 1px solid #d32f2f;
+            border-radius: 8px;
+            padding: 1rem;
+            background-color: #ffebee;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        #errorBox.active {
+            display: block;
+        }
+        #errorBox p {
+            margin: 0.5rem 0;
+            color: #d32f2f;
+            font-style: italic;
+        }
+        .loading {
+            display: none;
+        }
+        button.loading::after {
+            content: " Loading...";
+            font-style: italic;
+        }
+        #videoBox video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        @keyframes typing {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        footer a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.5rem; }
+            .input-section { flex-direction: column; }
+            input, select, textarea, button { width: 100%; }
+            .ai-container { grid-template-columns: 1fr; }
+            .ai-box { height: 250px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ai-box .response { animation: none; }
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI Video Generator with Puter.js</h1>
+    <div id="errorBox" aria-live="assertive"></div>
+    <div class="input-section">
+        <button id="retryBtn" aria-label="Retry last action">Retry</button>
+    </div>
+    <div class="input-section">
+        <label for="chatInput" class="sr-only">Generate text for video subtitles</label>
+        <input id="chatInput" type="text" placeholder="Generate text for subtitles (e.g., What are the benefits of exercise?)" aria-label="Generate text for video subtitles">
+        <button id="sendBtn" aria-label="Generate text">Generate Text</button>
+    </div>
+    <div class="input-section">
+        <label for="dalleInput" class="sr-only">Generate image for video</label>
+        <input id="dalleInput" type="text" placeholder="Generate image for video (e.g., A futuristic cityscape at night)" aria-label="Generate image for video">
+        <button id="generateImgBtn" aria-label="Generate image with DALL·E">Generate Image</button>
+    </div>
+    <div class="input-section">
+        <label for="productUrls" class="sr-only">Product image URLs</label>
+        <textarea id="productUrls" placeholder="Enter product image URLs (one per line)" aria-label="Product image URLs"></textarea>
+        <button id="generateVideoBtn" aria-label="Generate video">Generate Video</button>
+    </div>
+    <div class="input-section">
+        <label for="voiceSelect">Voice:</label>
+        <select id="voiceSelect" aria-label="Select TTS voice"></select>
+    </div>
+    <div class="ai-container">
+        <div class="ai-box" id="responseBox" aria-live="polite" aria-atomic="false"><h3>GPT-5 Nano</h3><span class="loading">Processing...</span></div>
+        <div class="ai-box" id="dalleBox" aria-live="polite" aria-atomic="false"><h3>DALL·E Images</h3><span class="loading">Processing...</span></div>
+        <div class="ai-box" id="videoBox" aria-live="polite" aria-atomic="false"><h3>Generated Video</h3><span class="loading">Processing...</span></div>
+    </div>
+    <footer>
+        Powered by <a href="https://developer.puter.com/tutorials/free-unlimited-openai-api/">Puter.js Free, Unlimited OpenAI API</a> and 
+        <a href="https://docs.puter.com/AI/chat/">Puter.js AI Chat Documentation</a>.
+    </footer>
+</body>
+</html>

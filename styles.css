@@ -1,0 +1,158 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
+
+:root {
+  --color-bg: #f9fafb;                /* Light gray background */
+  --color-card-bg: #ffffff;           /* White cards */
+  --color-primary: #3b82f6;           /* Fresh blue */
+  --color-primary-hover: #60a5fa;     /* Light blue hover */
+  --color-text: #1f2937;              /* Dark gray text */
+  --color-text-muted: #6b7280;        /* Muted gray */
+  --color-price: #10b981;             /* Emerald green */
+  --font-base: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Montserrat', sans-serif;
+
+  /* Accent colors for gradient and hover */
+  --color-accent1: #34d399;  /* Teal */
+  --color-accent2: #3b82f6;  /* Blue */
+  --color-accent3: #f87171;  /* Coral */
+  --color-accent4: #fbbf24;  /* Amber */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-base);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, var(--color-accent1), var(--color-accent2), var(--color-accent3), var(--color-accent4));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.description {
+  color: var(--color-text-muted);
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.products-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* Product Card */
+.product-card {
+  background-color: var(--color-card-bg);
+  border-radius: 16px;
+  padding: 2rem 1.5rem 2.5rem;
+  box-shadow: 0 6px 15px rgba(59, 130, 246, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 2px solid transparent;
+  cursor: pointer;
+  position: relative;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
+  border: 2px solid var(--color-primary-hover);
+}
+
+/* Add a subtle colored glow on hover */
+.product-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(45deg, var(--color-accent1), var(--color-accent2), var(--color-accent3), var(--color-accent4));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.product-card:hover::before {
+  opacity: 0.15;
+}
+
+.product-link {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  margin-bottom: 1rem;
+  z-index: 1;
+  position: relative;
+  transition: color 0.25s ease;
+}
+
+.product-link:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.price {
+  font-weight: 700;
+  color: var(--color-price);
+  font-size: 1.25rem;
+  margin-bottom: 1.2rem;
+  z-index: 1;
+  position: relative;
+}
+
+.description-text {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  flex-grow: 1;
+  z-index: 1;
+  position: relative;
+  line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  body {
+    padding: 1rem 0.5rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  .products-list {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

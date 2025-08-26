@@ -1,0 +1,115 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600&display=swap');
+
+:root {
+  --color-bg: #0a0a0a;           /* dark background */
+  --color-card-bg: #1a1a1a;      /* card background */
+  --color-primary: #00ffaa;      /* bright green for links/buttons */
+  --color-primary-hover: #00cc88;/* darker green hover */
+  --color-text: #ffffff;          /* white main text */
+  --color-text-muted: #cccccc;    /* lighter muted text */
+  --color-price: #10b981;         /* keep emerald green for price */
+  --font-base: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Montserrat', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 0.25rem;
+  color: var(--color-text);
+  letter-spacing: -0.025em;
+}
+
+.description {
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.products-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  background-color: var(--color-card-bg);
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,255,170,0.2);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 12px 25px rgba(0,255,170,0.4);
+}
+
+.product-link {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  margin-bottom: 0.6rem;
+  transition: color 0.25s ease;
+}
+
+.product-link:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.price {
+  font-weight: 700;
+  color: var(--color-price);
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.description-text {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  flex-grow: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  body {
+    padding: 1rem 0.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .products-list {
+    grid-template-columns: 1fr;
+  }
+}

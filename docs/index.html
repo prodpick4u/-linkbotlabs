@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puter.js AI Chat</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+    /* Body & font styling */
+    body {
+        font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+        background-color: #f7f7f8;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    /* Header */
+    h1 {
+        font-size: 2rem;
+        color: #1a73e8;
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    /* Container */
+    .chat-container {
+        width: 90%;
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 40px;
+    }
+
+    /* Conversation box */
+    #conversation {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        min-height: 300px;
+        max-height: 500px;
+        overflow-y: auto;
+        background-color: #f1f3f5;
+        margin-bottom: 15px;
+        font-family: "Courier New", monospace;
+        white-space: pre-wrap;
+    }
+
+    /* Input area */
+    .input-section {
+        display: flex;
+        gap: 10px;
+    }
+    .input-section input {
+        flex: 1;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+    }
+    .input-section button {
+        padding: 12px 20px;
+        background-color: #1a73e8;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .input-section button:hover { background-color: #1557b0; }
+
+    /* Images */
+    .conversation img {
+        max-width: 100%;
+        margin: 8px 0;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    /* Font for user vs AI */
+    .user { color: #1a73e8; font-weight: bold; }
+    .ai { color: #333; font-weight: normal; }
+
+    @media (max-width: 600px) {
+        .input-section { flex-direction: column; }
+        .input-section button { width: 100%; }
+    }
+</style>
+</head>
+<body>
+
+<h1>Puter.js AI Chat</h1>
+
+<div class="chat-container">
+    <div id="conversation" class="conversation"></div>
+    <div class="input-section">
+        <input id="promptInput" placeholder="Type a question or image prompt..." />
+        <button id="sendBtn">Send</button>
+    </div>
+</div>
+
+<script>
+const conversation = document.getElementById('conversation');
+const promptInput = document.getElementById('promptInput');
+const sendBtn = document.getElementById('sendBtn');
+
+// Add message to conversation
+function addMessage(text, type='ai') {
+    const p = document.createElement('div');
+    p.className = type;
+    p.innerHTML = text;
+    conversation.appendChild(p);
+    conversation.scrollTop = conversation.scrollHeight;
+}
+
+// Send prompt to Puter.js AI
+async function sendPrompt(prompt) {
+    if(!prompt) return;
+    addMessage(prompt, 'user');
+    promptInput.value = '';
+    addMessage('…', 'ai'); // placeholder
+
+    try {
+        const lastAI = conversation.querySelector('.ai:last-child');
+        lastAI.innerHTML = ''; // clear placeholder
+
+        // Decide if prompt is image or text
+        const isImagePrompt = prompt.toLowerCase().startsWith('image:') || prompt.includes('draw') || prompt.includes('generate image');
+
+        if(isImagePrompt) {
+            // Image generation
+            const img = await puter.ai.txt2img(prompt);
+            lastAI.appendChild(img);
+        } else {
+            // Text generation
+            const stream = await puter.ai.chat(prompt, { model: 'gpt-5-nano', stream: true });
+            let fullText = '';
+            for await (const part of stream) {
+                fullText += part?.text || '';
+                lastAI.innerHTML = fullText.replace(/\n/g, '<br>');
+            }
+        }
+
+    } catch(e) {
+        addMessage(`Error: ${e.message}`, 'ai');
+    }
+}
+
+// Send button or Enter
+sendBtn.addEventListener('click', () => sendPrompt(promptInput.value));
+promptInput.addEventListener('keypress', (e) => {
+    if(e.key === 'Enter') sendPrompt(promptInput.value);
+});
+</script>
+
+</body>
+</html>

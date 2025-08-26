@@ -1,0 +1,15 @@
+# Web framework
+Flask==3.1.2
+
+# Text-to-speech (optional, if using gTTS locally)
+gTTS==2.5.4
+
+# Image handling
+Pillow==11.3.0
+
+# HTTP requests & web scraping
+requests==2.32.5
+beautifulsoup4==4.13.4
+
+# Environment variables
+python-dotenv==1.1.1

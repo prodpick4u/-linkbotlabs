@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Generate Script - LinkBotLabs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://js.puter.com/v2/"></script>
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        background-color: #f4f6f8;
+        color: #333;
+    }
+    header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 20px 0;
+        text-align: center;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    main {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    input[type="text"], textarea {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        width: 100%;
+    }
+    textarea {
+        height: 200px;
+        resize: vertical;
+    }
+    button {
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    .error {
+        color: #ff4d4f;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .logout {
+        display: block;
+        margin: 30px auto 0;
+        text-align: center;
+        color: #ff4d4f;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .logout:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+<header>
+    <h1>Generate TikTok Script</h1>
+</header>
+<main>
+    <div class="error" id="error"></div>
+    <form id="scriptForm">
+        <label for="product_url">Product URL:</label>
+        <input type="text" name="product_url" id="product_url" placeholder="Enter product page URL" required>
+        <button type="submit">Generate Script</button>
+    </form>
+
+    <h2>Generated Script:</h2>
+    <textarea id="output_text" readonly></textarea>
+</main>
+<a href="/dashboard" class="logout">Back to Dashboard</a>
+
+<script>
+document.getElementById('scriptForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const url = document.getElementById('product_url').value.trim();
+    const errorEl = document.getElementById('error');
+    const outputEl = document.getElementById('output_text');
+    errorEl.textContent = '';
+    outputEl.value = '';
+
+    if(!url){
+        errorEl.textContent = '❌ Please enter a product URL.';
+        return;
+    }
+
+    try {
+        const prompt = `Write an engaging TikTok-style narration for the product page: ${url}. Highlight benefits, visuals, and call-to-action. Max 1600 characters.`;
+
+        // Call Puter.js AI
+        const response = await puter.ai.chat(prompt, { model: "gpt-5-nano" });
+
+        outputEl.value = response;
+
+    } catch (err) {
+        console.error(err);
+        errorEl.textContent = '❌ Failed to generate script. Please try again.';
+    }
+});
+</script>
+</body>
+</html>

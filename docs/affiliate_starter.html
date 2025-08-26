@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkBotLabs Affiliate Demo & AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://js.puter.com/v2/"></script>
+<style>
+body { font-family:'Inter',sans-serif; background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f); background-size:400% 400%; animation:gradientShift 20s ease infinite; color:#fff; padding:2rem; text-align:center; }
+@keyframes gradientShift {0%{background-position:0% 50%;}25%{background-position:50% 50%;}50%{background-position:100% 50%;}75%{background-position:50% 50%;}100%{background-position:0% 50%;}}
+.glass { background:rgba(0,0,0,0.5); backdrop-filter:blur(10px); padding:20px; border-radius:12px; margin-bottom:20px; }
+input, button { padding:10px; margin:5px; border-radius:6px; border:none; font-size:14px; }
+button { background:linear-gradient(135deg,#6a11cb,#2575fc); color:#fff; font-weight:600; cursor:pointer; }
+button:hover { opacity:0.85; }
+.output { margin-top:10px; color:#0f0; font-weight:600; }
+button:disabled { opacity:0.5; cursor:not-allowed; }
+.ai-products { display:flex; flex-wrap:wrap; justify-content:center; gap:1rem; margin-top:1.5rem; }
+.ai-card { background: rgba(0,0,0,0.55); padding:1rem; border-radius:8px; width:220px; text-align:center; }
+.ai-card img { width:100%; border-radius:6px; margin-bottom:0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>🔑 LinkBotLabs Affiliate Demo</h1>
+<p>Everything below is visible for demo purposes. Enter your access code to activate affiliate features and AI product generation.</p>
+
+<div class="glass">
+  <label>Access Code:
+    <input type="text" id="accessCode" placeholder="Enter your code">
+  </label>
+  <button id="unlockBtn">Unlock Access</button>
+  <div id="accessOutput" class="output"></div>
+</div>
+
+<div id="affiliateForm" class="glass">
+  <p>Register your Affiliate ID to automatically append your tag to product links.</p>
+  <label>Affiliate ID:
+    <input type="text" id="affiliateID" placeholder="Your Affiliate ID">
+  </label>
+  <button id="registerBtn" disabled>Register Affiliate</button>
+  <div id="affiliateOutput" class="output"></div>
+</div>
+
+<section class="glass" id="aiSection">
+<h2>🤖 AI Product & Trend Assistant</h2>
+<p>Ask our AI about trending products or reviews. Buttons are disabled until access is granted.</p>
+<button id="aiBtn" disabled>Ask AI a Question</button>
+
+<div class="ai-products" id="aiProducts"></div>
+</section>
+
+<script>
+let AFFILIATE_TAG = localStorage.getItem('affiliateTag') || "";
+const VALID_CODES = ["starter123","user456","demo789"];
+
+// ==== Unlock Access ====
+document.getElementById('unlockBtn').addEventListener('click', ()=>{
+  const code = document.getElementById('accessCode').value.trim();
+  const output = document.getElementById('accessOutput');
+  if(VALID_CODES.includes(code)){
+    output.innerText = "✅ Access granted! You can now register your Affiliate ID and use AI features.";
+    document.getElementById('registerBtn').disabled = false;
+    document.getElementById('aiBtn').disabled = false;
+  } else {
+    output.innerText = "❌ Invalid code. Contact developer if you just purchased a product.";
+  }
+});
+
+// ==== Register Affiliate ====
+document.getElementById('registerBtn').addEventListener('click', ()=>{
+  const tag = document.getElementById('affiliateID').value.trim();
+  if(tag){
+    AFFILIATE_TAG = tag;
+    localStorage.setItem('affiliateTag', tag);
+    document.getElementById("affiliateOutput").innerText = `✅ Affiliate ID "${tag}" saved! All product links now include this tag.`;
+    alert(`Your affiliate tag "${tag}" is now active!`);
+    generateAIProducts("Trending");
+  }
+});
+
+// ==== AI Chat ====
+document.getElementById('aiBtn').addEventListener('click', async ()=>{
+  if(!AFFILIATE_TAG) { alert("Enter a valid access code and register affiliate first."); return; }
+  const question = prompt("🤖 Ask a product question or request trending recommendations:");
+  if(!question) return;
+  try{
+    const response = await puter.ai.chat(question, {model:"gpt-5"});
+    alert("AI Response:\n\n" + response.text);
+  } catch(e){ alert("AI failed to respond, try again."); }
+});
+
+// ==== AI Product Generation ====
+const aiProductsContainer = document.getElementById('aiProducts');
+async function generateAIProducts(category = "Trending"){
+  if(!AFFILIATE_TAG) return; // must have affiliate ID
+  aiProductsContainer.innerHTML = "";
+  try{
+    const response = await puter.ai.chat(
+      `Generate 5 trending Amazon products for ${category} category, JSON format [{name, link}]`,
+      {model:"gpt-5"}
+    );
+    let products = [];
+    try{ products = JSON.parse(response.text); } 
+    catch{ products = Array.from({length:5},(_,i)=>({name:`${category} Product ${i+1}`, link:"#"})); }
+
+    for(const p of products){
+      const card = document.createElement('div');
+      card.className = "ai-card";
+      try{
+        const imgEl = await puter.ai.txt2img(`High-quality photo of ${p.name}, realistic, white background, professional lighting`, {model:"dall-e"});
+        imgEl.style.width="100%"; imgEl.style.borderRadius="6px";
+        card.appendChild(imgEl);
+      } catch(e){
+        const fallbackImg = document.createElement('img');
+        fallbackImg.src = "https://via.placeholder.com/220x140.png?text=Product";
+        card.appendChild(fallbackImg);
+      }
+      const title = document.createElement('h4'); title.innerText = p.name;
+      card.appendChild(title);
+      const btn = document.createElement('a');
+      btn.href = p.link + (p.link.includes('?') ? '&' : '?') + 'tag=' + AFFILIATE_TAG;
+      btn.className = "btn"; btn.innerText = "Buy Now";
+      card.appendChild(btn);
+      aiProductsContainer.appendChild(card);
+    }
+  } catch(err){ console.warn("AI product fetch failed.", err); }
+}
+</script>
+</body>
+</html>

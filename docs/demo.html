@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkBotLabs Demo – Multi-AI Shopping & TTS</title>
+<link rel="icon" href="https://raw.githubusercontent.com/prodpick4u/linkbotlabs/main/docs/9950FA69-865E-4707-AB91-B7CB65C501BF.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+<style>
+body { font-family:'Inter',sans-serif; margin:0; padding:2rem; color:#fff;
+  background: linear-gradient(-45deg,#0a0033,#3b007f,#1a1aff,#6f00ff);
+  background-size: 400% 400%; animation: gradientShift 15s ease infinite; }
+@keyframes gradientShift {0%{background-position:0% 50%;}25%{background-position:50% 50%;}50%{background-position:100% 50%;}75%{background-position:50% 50%;}100%{background-position:0% 50%;}}
+h1,h2 { color:#9cf; text-align:center; }
+h1 { font-size:2.5rem; margin-bottom:1rem; }
+p { line-height:1.5; }
+.glass { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border-radius:12px; padding:20px; margin-bottom:2rem; }
+input, button, select { width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none; }
+input, select { background: rgba(20,20,20,0.7); color:#fff; }
+button { background: linear-gradient(135deg,#6a11cb,#2575fc); color:#fff; font-weight:bold; cursor:pointer; }
+button:hover { opacity:0.85; }
+.output { background:rgba(0,0,0,0.7); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap; }
+.section-title { font-size:1.5rem; margin-bottom:1rem; text-align:center; }
+.chat-box { background: rgba(0,0,0,0.6); padding:15px; border-radius:8px; max-height:300px; overflow-y:auto; margin-bottom:10px; }
+.chat-input { display:flex; gap:5px; }
+.chat-input input { flex:1; }
+.product-card { background: rgba(255,255,255,0.1); padding:10px; margin:8px 0; border-radius:8px; }
+.product-card a { color:#0ff; font-weight:bold; text-decoration:none; }
+.product-card button { margin-top:5px; }
+.ai-response { margin-left:10px; color:#ffdd57; }
+.ai-consensus { color:#00ffcc; font-weight:bold; margin-top:5px; }
+</style>
+</head>
+<body>
+
+<h1>🚀 LinkBotLabs Demo – Multi-AI Powered</h1>
+<p style="text-align:center;">AI-powered product suggestions, reviews, and TTS using GPT-5, Claude, Grok, Gemini, and more.</p>
+
+<!-- Voice Selector -->
+<div class="glass" style="text-align:center;">
+<label>Select TTS Voice:</label>
+<select id="voiceSelect"></select>
+</div>
+
+<!-- Keyless Demo -->
+<div class="glass">
+<h2 class="section-title">🗝️ Demo Products</h2>
+<p>Select a category to see AI-suggested products with multi-AI reviews and TTS preview.</p>
+<label>Category:
+<select id="categorySelect">
+<option value="">--Choose a Category--</option>
+<option value="health">Health</option>
+<option value="beauty">Beauty</option>
+<option value="kitchen">Kitchen</option>
+<option value="tech">Tech</option>
+</select>
+</label>
+<div id="klOutput" class="output"></div>
+</div>
+
+<!-- AI Q&A Bot -->
+<div class="glass">
+<h2 class="section-title">🤖 Ask the Multi-AI Bot</h2>
+<div id="chatBox" class="chat-box"></div>
+<div class="chat-input">
+<input type="text" id="chatInput" placeholder="Ask about products, reviews, or AI...">
+<button id="sendBtn">Send</button>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/puter.js@latest/dist/puter.min.js"></script>
+<script>
+const puter = new Puter({ debug:true });
+
+// ==== TTS ====
+let synth = window.speechSynthesis;
+function populateVoiceSelects(){
+  let voices = synth.getVoices();
+  if(!voices.length){ setTimeout(populateVoiceSelects,100); return; }
+  voices = voices.filter(v=>v.lang.startsWith('en'));
+  const select = document.querySelector('#voiceSelect');
+  select.innerHTML='';
+  voices.forEach(v=>{
+    const opt = document.createElement('option');
+    opt.value=v.name; opt.textContent=v.name+' ('+v.lang+')';
+    select.appendChild(opt);
+  });
+  select.value = voices.find(v=>v.name.includes('Samantha'))?.name || voices[0].name;
+}
+if(speechSynthesis.onvoiceschanged!==undefined){ speechSynthesis.onvoiceschanged=populateVoiceSelects; } 
+else { populateVoiceSelects(); }
+
+function playTTS(text){
+  if(synth.speaking) synth.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  const selectedVoice = document.querySelector('#voiceSelect').value;
+  utter.voice = synth.getVoices().find(v=>v.name===selectedVoice) || synth.getVoices()[0];
+  synth.speak(utter);
+}
+
+// ==== Multi-AI Call & Consensus ====
+async function multiAiCall(prompt){
+  const models = ['gpt-5','claude','grok','gemini'];
+  const results = await Promise.all(models.map(async model=>{
+    try{
+      const res = await puter.ai.chat(prompt,{ model });
+      return { model, text: res.text.trim() };
+    } catch(err){ console.error(model+' failed:',err); return { model, text:'' }; }
+  }));
+  return results;
+}
+
+function getConsensus(responses){
+  const allTexts = responses.map(r=>r.text.split(/[\.\!\?]/).map(s=>s.trim()).filter(Boolean)).flat();
+  const freq = {};
+  allTexts.forEach(s=>freq[s]=(freq[s]||0)+1);
+  const consensus = Object.entries(freq).filter(([s,c])=>c>1).map(([s])=>s);
+  return consensus.join('. ') + (consensus.length?'.':'');
+}
+
+// ==== Keyless Demo ====
+document.getElementById('categorySelect').addEventListener('change', async e=>{
+  const category = e.target.value;
+  if(!category){ document.getElementById('klOutput').innerHTML=''; return; }
+  const prompt = `Generate 3 trending products in the "${category}" category for Amazon affiliates. Format as JSON array with title, url, price, description.`;
+  try{
+    const response = await puter.ai.chat(prompt,{ model:"gpt-5" });
+    const products = JSON.parse(response.text);
+    let html='';
+    products.forEach((p,idx)=>{
+      html += `<div class="product-card">
+        🛒 <a href="${p.url}?tag=mychanneld-20" target="_blank">${p.title}</a>
+        <p>Price: ${p.price}</p>
+        <p>${p.description}</p>
+        <div id="klReviewText${idx}" class="ai-response">Generating...</div>
+        <button onclick="playTTS(document.getElementById('klReviewText${idx}').textContent)">🔊 Play TTS</button>
+        <button onclick="synth.cancel()">⏹ Stop TTS</button>
+      </div>`;
+    });
+    document.getElementById('klOutput').innerHTML = html;
+
+    products.forEach(async(p,idx)=>{
+      const reviews = await multiAiCall(`Write a short persuasive SEO review for "${p.title}"`);
+      const consensusText = getConsensus(reviews);
+      document.getElementById(`klReviewText${idx}`).innerHTML = 
+        reviews.map(r=>`<p><strong>${r.model}:</strong> ${r.text}</p>`).join('') +
+        (consensusText?`<p class="ai-consensus">Consensus: ${consensusText}</p>`:'');
+    });
+  } catch(err){ console.error(err); alert("AI fetch failed."); }
+});
+
+// ==== Multi-AI Chatbot ====
+const chatBox = document.getElementById('chatBox');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+
+async function askBot(){
+  const input = chatInput.value.trim();
+  if(!input) return;
+  
+  const userP = document.createElement('p'); userP.style.color="#0f0"; userP.textContent="You: "+input;
+  chatBox.appendChild(userP);
+
+  try{
+    const responses = await multiAiCall(input);
+    const consensusText = getConsensus(responses);
+    const botHtml = responses.map(r=>`<p><strong>${r.model}:</strong> ${r.text}</p>`).join('') +
+                    (consensusText?`<p class="ai-consensus">Consensus: ${consensusText}</p>`:'');
+    const botP = document.createElement('div'); botP.innerHTML = botHtml;
+    chatBox.appendChild(botP);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+    playTTS(consensusText || responses[0].text);
+
+  } catch(err){ console.error(err); alert("AI bot failed."); }
+
+  chatInput.value='';
+}
+
+sendBtn.addEventListener('click', askBot);
+chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askBot(); });
+</script>
+</body>
+</html>

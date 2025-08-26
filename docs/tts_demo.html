@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prodpick4u – TTS Demo & How-To</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" />
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    margin:0; padding:0;
+    background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    color:white;
+    line-height:1.6;
+  }
+  @keyframes gradientShift {
+    0%{background-position:0% 50%;}
+    25%{background-position:50% 50%;}
+    50%{background-position:100% 50%;}
+    75%{background-position:50% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  header { text-align:center; padding:2rem 1rem; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px);}
+  header h1 { font-size:2.5rem; margin-bottom:0.5rem; }
+  header p { font-size:1rem; opacity:0.9; margin-bottom:0.5rem; }
+  section { padding:2rem 1rem; max-width:1000px; margin:auto; }
+  h2 { font-size:2rem; color:#9cf; margin-bottom:1rem; }
+  .btn { display:inline-block; margin:0.5rem; padding:0.6rem 1.2rem; background: linear-gradient(135deg,#6a11cb,#2575fc); color:white; text-decoration:none; border-radius:6px; font-weight:600; transition:0.3s;}
+  .btn:hover { opacity:0.85; }
+  .link-box { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem; margin-top:1rem;}
+  iframe { border-radius:8px; margin-bottom:1rem; width:100%; height:350px; }
+  .category-box { background: rgba(0,0,0,0.5); padding:1rem; border-radius:8px; margin:0.5rem; display:inline-block; min-width:120px; text-align:center; transition: transform 0.2s, background 0.3s; }
+  .category-box:hover { transform: scale(1.05); background: rgba(75,0,150,0.7);}
+  #tts-text { background: rgba(0,0,0,0.3); padding:1rem; border-radius:8px; min-height:80px; margin-top:0.5rem; line-height:1.4; white-space:pre-wrap;}
+  form input, form select, form button { margin:0.3rem 0; padding:0.6rem; border-radius:5px; border:none; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>🚀 Prodpick4u – TTS & Revenue Funnel Demo</h1>
+<p>Discover how our AI tool converts products into videos, boosts SEO, and generates revenue for affiliates, bloggers, developers, and side hustlers.</p>
+<p><strong>Step-by-step guide included. Desktop demo downloadable. Multilingual support (English/Thai).</strong></p>
+<a href="demo.html" class="btn">Try Mobile Demo</a>
+<a href="https://drive.google.com/file/d/1Ddjrvj8ObpGZVcnVv0n2idZcPAFBOS4Z/view?usp=drivesdk" class="btn">Download Desktop Demo</a>
+</header>
+
+<section>
+<h2>📖 How This Funnel Works</h2>
+<p>Prodpick4u automates product selection, content creation, SEO optimization, and video production. Users can generate Amazon affiliate videos, share them on YouTube, and earn revenue efficiently. Benefits include:</p>
+<ul>
+<li>SEO-friendly product reviews</li>
+<li>Influencer and affiliate monetization</li>
+<li>Blogging and side-hustle support</li>
+<li>Developer and end-user automation</li>
+</ul>
+</section>
+
+<section>
+<h2>🔑 API Key Setup</h2>
+<p><strong>Amazon API Key:</strong></p>
+<ol>
+<li>Sign up at <a href="https://affiliate-program.amazon.com/" target="_blank" style="color:#9cf;">Amazon Affiliate Program</a>.</li>
+<li>Access Product Advertising API keys in your account settings.</li>
+<li>Copy keys into Prodpick4u desktop app to enable full search.</li>
+</ol>
+<p><strong>YouTube API Key:</strong></p>
+<ol>
+<li>Go to <a href="https://console.developers.google.com/" target="_blank" style="color:#9cf;">Google Cloud Console</a>.</li>
+<li>Create a new project → enable YouTube Data API v3.</li>
+<li>Generate API key and paste into Prodpick4u desktop app.</li>
+</ol>
+</section>
+
+<section>
+<h2>🎙️ TTS Demo</h2>
+<label for="voice-select">Choose Voice:</label>
+<select id="voice-select">
+<option value="en-US-female">American Female</option>
+<option value="en-US-male">Afro-American Male</option>
+<option value="th-TH-female">Thai Female</option>
+</select>
+<button onclick="playTTS()" class="btn">Play TTS</button>
+<button onclick="stopTTS()" class="btn">Stop</button>
+<div id="tts-text"></div>
+<script>
+let synth = window.speechSynthesis;
+let utter = null;
+function playTTS(){
+  if(synth.speaking){ synth.cancel(); }
+  let text = "Welcome to Prodpick4u! This tool lets you create automated Amazon product reviews and videos. Select your voice and watch the text highlight as it reads.";
+  let voiceName = document.getElementById('voice-select').value;
+  utter = new SpeechSynthesisUtterance(text);
+  utter.lang = voiceName.includes('th')?'th-TH':'en-US';
+  utter.rate = 0.9;
+  synth.speak(utter);
+  let i=0;
+  let interval = setInterval(()=>{
+    if(i<=text.length){ document.getElementById('tts-text').textContent=text.substring(0,i); i++; }
+    else clearInterval(interval);
+  },20);
+}
+function stopTTS(){ if(synth.speaking) synth.cancel(); }
+</script>
+</section>
+
+<section>
+<h2>📺 Video Examples</h2>
+<iframe src="https://www.youtube.com/embed/abhg_bRxaSQ?si=6xKfhlGM3njQyWmm" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/xqklIC2kgHA?si=QaB2hGDuv0_risIQ" allowfullscreen></iframe>
+<p>These videos show automated product-to-video generation using Prodpick4u.</p>
+</section>
+
+<section>
+<h2>📂 Categories & Shop With Us</h2>
+<div class="category-boxes">
+<a class="category-box" href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
+<a class="category-box" href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
+<a class="category-box" href="https://www.amazon.com/s?k=blender&tag=mychanneld-20">🥤 Blenders</a>
+<a class="category-box" href="https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20">🍚 Rice Cookers</a>
+<a class="category-box" href="https://www.amazon.com/s?k=headphones&tag=mychanneld-20">🎧 Headphones</a>
+<a class="category-box" href="https://www.amazon.com/s?k=kitchen+products&tag=mychanneld-20">🍳 Kitchen Tools</a>
+<a class="category-box" href="https://www.amazon.com/s?k=tech&tag=mychanneld-20">💻 Tech Gadgets</a>
+</div>
+<p>Support your developer and earn credit toward the full tool purchase!</p>
+</section>
+
+<section>
+<h2>💬 User Feedback</h2>
+<p>“Amazing tool for bloggers and affiliates, saves hours!” – Early Tester</p>
+<p>“Love how easy it is to automate product videos.” – Beta User</p>
+</section>
+
+<section>
+<h2>📧 Contact Us</h2>
+<p>Send your questions directly. Your email will remain private.</p>
+<form onsubmit="event.preventDefault(); alert('Thank you! Your message has been sent.');">
+<input type="email" placeholder="Your email" required>
+<button type="submit" class="btn">Send</button>
+</form>
+</section>
+
+<footer>
+<p>© 2025 Prodpick4u – Powered by Affiliate Shopping</p>
+<p>Support via our Amazon links: <a href="https://www.amazon.com/?tag=mychanneld-20" style="color:#9cf;">Amazon Affiliate Link</a></p>
+</footer>
+
+</body>
+</html>
