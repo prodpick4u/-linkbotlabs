@@ -58,6 +58,13 @@ button:hover { opacity:0.85; }
                     <option value="claude-4">Claude 4</option>
                     <option value="grok-1">Grok 1</option>
                 </select>
+                <!-- Add this inside your Chat tab, above input -->
+<label for="modelSelect">Select AI Model:</label>
+<select id="modelSelect">
+  <option value="gpt-5">GPT-5</option>
+  <option value="claude-4">Claude 4</option>
+  <option value="grok-1">Grok 1</option>
+</select>
                 <input type="text" id="qaInput" placeholder="Ask a question...">
                 <button id="qaBtn">Ask</button>
                 <button id="clearChatBtn">Clear Chat</button>
