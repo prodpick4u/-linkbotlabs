@@ -3,129 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puter.js AI Demo - Interactive</title>
+    <title>Puter.js AI Examples</title>
+    <script src="https://js.puter.com/v2/"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background: #1a1a1a;
-            color: #f0f0f0;
-        }
-        section {
-            margin-bottom: 40px;
-            padding: 20px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            background: #2c2c2c;
-        }
-        input, button, textarea {
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #555;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #ffcc00;
-            color: #000;
-            font-weight: bold;
-            cursor: pointer;
-            width: auto;
-            margin-top: 10px;
-        }
-        img {
-            max-width: 100%;
-            display: block;
-            margin-top: 10px;
-        }
-        h2 {
-            margin-top: 0;
-            color: #ffcc00;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; background: #1a1a1a; color: #f0f0f0; }
+        section { margin-bottom: 40px; padding: 20px; border: 1px solid #444; border-radius: 8px; background: #2c2c2c; }
+        h2 { margin-top: 0; color: #ffcc00; }
     </style>
 </head>
 <body>
-    <h1>Puter.js AI Demo - Interactive</h1>
+    <h1>Puter.js AI Code Examples</h1>
 
-    <!-- Example 1: Chat with GPT-4.1 nano -->
+    <!-- Example 1: GPT-5 Nano Text Generation -->
     <section>
-        <h2>Chat with GPT-4.1 nano</h2>
-        <textarea id="p6_chatInput" rows="2" placeholder="Type your question here..."></textarea>
-        <button id="p6_chatBtn">Send</button>
-        <div id="p6_chat1"></div>
+        <h2>Example 1: GPT-5 Nano Text Generation</h2>
+        <script>
+            puter.ai.chat("What are the benefits of exercise?", { model: "gpt-5-nano" })
+                .then(response => {
+                    puter.print(response);
+                });
+        </script>
     </section>
 
-    <!-- Example 2: Chat about an image -->
+    <!-- Example 2: DALL·E 3 Image Generation -->
     <section>
-        <h2>Chat about an image</h2>
-        <input id="p6_imageUrl" type="text" placeholder="Enter image URL..." value="https://assets.puter.site/doge.jpeg">
-        <textarea id="p6_imagePrompt" rows="2" placeholder="Type your prompt here...">What do you see?</textarea>
-        <button id="p6_imageBtn">Analyze Image</button>
-        <div id="p6_chat2"></div>
+        <h2>Example 2: DALL·E 3 Image Generation</h2>
+        <script>
+            puter.ai.txt2img("A futuristic cityscape at night")
+                .then(imageElement => {
+                    document.body.appendChild(imageElement);
+                });
+        </script>
     </section>
 
-    <!-- Example 3: Generate an image using DALL·E 3 -->
+    <!-- Example 3: Analyze Images -->
     <section>
-        <h2>Generate an image</h2>
-        <textarea id="p6_imgPrompt" rows="2" placeholder="Describe the image you want...">A picture of a cat.</textarea>
-        <button id="p6_imgBtn">Generate</button>
-        <div id="p6_imgOutput"></div>
+        <h2>Example 3: Image Analysis</h2>
+        <script>
+            puter.ai.chat(
+                "What do you see in this image?", 
+                "https://assets.puter.site/doge.jpeg",
+                { model: "gpt-5-nano" }
+            )
+            .then(response => {
+                puter.print(response);
+            });
+        </script>
     </section>
 
-    <!-- Example 4: Stream chat with Claude -->
+    <!-- Example 4: Use Different Models -->
     <section>
-        <h2>Stream chat with Claude</h2>
-        <textarea id="p6_claudeInput" rows="2" placeholder="Type your question here...">Tell me in detail what Rick and Morty is all about.</textarea>
-        <button id="p6_claudeBtn">Ask Claude</button>
-        <div id="p6_chat4"></div>
-    </section>
-
-    <!-- Puter.js script at the bottom -->
-    <script src="https://js.puter.com/v2/"></script>
-    <script>
-        // Wait until Puter.js is loaded
-        window.addEventListener('load', () => {
-            
-            // GPT Chat
-            document.getElementById('p6_chatBtn').addEventListener('click', () => {
-                const input = document.getElementById('p6_chatInput').value;
-                puter.ai.chat(input).then(resp => {
-                    document.getElementById('p6_chat1').innerHTML = resp;
+        <h2>Example 4: Multiple OpenAI Models</h2>
+        <script>
+            const models = ["gpt-4.1", "o3-mini", "o1-mini", "gpt-4o"];
+            models.forEach(model => {
+                puter.ai.chat(
+                    "Write a short poem about coding",
+                    { model }
+                ).then(response => {
+                    puter.print(`<h3>Using ${model}</h3>`);
+                    puter.print(response);
                 });
             });
+        </script>
+    </section>
 
-            // Image Chat
-            document.getElementById('p6_imageBtn').addEventListener('click', () => {
-                const url = document.getElementById('p6_imageUrl').value;
-                const prompt = document.getElementById('p6_imagePrompt').value;
-                puter.ai.chat(prompt, url).then(resp => {
-                    document.getElementById('p6_chat2').innerHTML = resp;
-                });
-            });
-
-            // DALL·E Image Generation
-            document.getElementById('p6_imgBtn').addEventListener('click', () => {
-                const prompt = document.getElementById('p6_imgPrompt').value;
-                const output = document.getElementById('p6_imgOutput');
-                output.innerHTML = ''; // clear previous image
-                puter.ai.txt2img(prompt, true).then((image) => {
-                    output.appendChild(image);
-                });
-            });
-
-            // Claude Streaming Chat
-            document.getElementById('p6_claudeBtn').addEventListener('click', async () => {
-                const prompt = document.getElementById('p6_claudeInput').value;
-                const chatDiv = document.getElementById('p6_chat4');
-                chatDiv.innerHTML = ''; // clear previous response
-                const resp = await puter.ai.chat(prompt, {model: 'claude', stream: true});
-                for await (const part of resp) {
-                    if(part?.text) chatDiv.innerHTML += part.text.replaceAll('\n', '<br>');
+    <!-- Example 5: Stream Long Responses -->
+    <section>
+        <h2>Example 5: Streaming Responses</h2>
+        <script>
+            async function streamResponse() {
+                const response = await puter.ai.chat(
+                    "Explain the theory of relativity in detail", 
+                    {stream: true, model: "gpt-5-nano"}
+                );
+                for await (const part of response) {
+                    puter.print(part?.text);
                 }
-            });
-
-        });
-    </script>
+            }
+            streamResponse();
+        </script>
+    </section>
 </body>
 </html>
