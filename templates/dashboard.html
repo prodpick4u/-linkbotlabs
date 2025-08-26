@@ -1,144 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LinkBotLabs AI Video Generator</title>
-<script src="https://js.puter.com/v2/"></script>
-<style>
-body { font-family: Arial; background: #f0f2f5; padding: 20px; }
-.container { max-width:700px; margin:auto; background:white; padding:20px; border-radius:8px; }
-input,textarea{width:100%; padding:10px; margin:5px 0 15px 0; border-radius:4px;border:1px solid #ccc;}
-button{padding:10px 20px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;margin-top:10px;}
-button:hover{background:#0056b3;}
-video,img{width:100%;margin-top:15px;border-radius:6px;}
-#error{color:red;}
-#success{color:green;}
-#dalle_images img{margin-bottom:10px;}
-#progressContainer{margin:10px 0; display:none;}
-#progressBarContainer{background:#eee; border-radius:4px; overflow:hidden; height:25px;}
-#progressBar{background:#28a745; width:0%; height:100%; text-align:center; color:white; line-height:25px;}
-</style>
-</head>
-<body>
-<div class="container">
-<h2>🎬 LinkBotLabs AI Video Generator</h2>
-<div id="error"></div>
-<div id="success"></div>
+const synth = window.speechSynthesis;
 
-<label>Product URLs</label>
-<input type="text" id="urls" placeholder="https://example.com/product1, ...">
+// ---- Voice Selector ----
+function populateVoiceSelect(){
+    let voices = synth.getVoices();
+    if(!voices.length){ setTimeout(populateVoiceSelect,100); return; }
+    voices = voices.filter(v=>v.lang.startsWith('en'));
+    const select = document.querySelector('#voiceSelect');
+    select.innerHTML = '';
+    voices.forEach(v=>{
+        const opt = document.createElement('option');
+        opt.value = v.name; 
+        opt.textContent = v.name + ' (' + v.lang + ')';
+        select.appendChild(opt);
+    });
+    select.value = voices[0]?.name;
+}
+if(speechSynthesis.onvoiceschanged!==undefined){ 
+    speechSynthesis.onvoiceschanged = populateVoiceSelect; 
+} else { 
+    populateVoiceSelect(); 
+}
 
-<label>Optional Script</label>
-<textarea id="script" rows="4" placeholder="Leave blank to auto-generate"></textarea>
+// ---- TTS ----
+function playTTS(text){
+    if(synth.speaking) synth.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.voice = synth.getVoices().find(v=>v.name === document.querySelector('#voiceSelect').value);
+    synth.speak(utter);
+}
 
-<label>Optional DALL·E 3 Image Prompt</label>
-<input type="text" id="dalle_prompt" placeholder="e.g., 'Modern kitchen with kettle'">
-<button type="button" id="generateDalleBtn">Generate Image</button>
-<div id="dalle_images"></div>
+// ---- Multi-AI Chat ----
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
 
-<div id="progressContainer">
-    <div id="progressBarContainer">
-        <div id="progressBar">0%</div>
-    </div>
-    <p id="progressText"></p>
-</div>
+const aiBoxes = {
+    'gpt-5': document.getElementById('gpt5Box'),
+    'claude': document.getElementById('claudeBox'),
+    'grok': document.getElementById('grokBox'),
+    'gemini': document.getElementById('geminiBox'),
+    'dalle': document.getElementById('dalleBox')
+};
 
-<button type="button" id="generateVideoBtn">Generate Video</button>
-<video id="video_preview" controls style="display:none;"></video>
-</div>
+if(sendBtn){
+    sendBtn.addEventListener('click', askAI);
+    chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askAI(); });
+}
 
-<script>
-let dalleImages = [];
-let generatingImage = false;
+async function askAI(){
+    const question = chatInput.value.trim();
+    if(!question) return;
+    chatInput.value='';
 
-// Smooth progress animation
-function smoothProgress(start, end, duration, text){
-    return new Promise(resolve=>{
-        const bar=document.getElementById('progressBar');
-        const txt=document.getElementById('progressText');
-        let startTime=performance.now();
-        function step(now){
-            let elapsed=now-startTime;
-            let progress=start + (end-start)*(elapsed/duration);
-            if(progress>end) progress=end;
-            bar.style.width=progress+'%';
-            bar.textContent=Math.round(progress)+'%';
-            txt.textContent=text;
-            if(progress<end) requestAnimationFrame(step);
-            else resolve();
+    for(const model of ['gpt-5','claude','grok','gemini']){
+        try{
+            const response = await puter.ai.chat(`Answer clearly: "${question}"`, { model });
+            const text = response.text || response;
+            if(aiBoxes[model]){
+                aiBoxes[model].innerHTML += `<p>${text}</p>`;
+                aiBoxes[model].scrollTop = aiBoxes[model].scrollHeight;
+                playTTS(text);
+            }
+        } catch(e){ console.warn(model + " failed", e); }
+    }
+
+    // DALL-E box
+    try{
+        const imgEl = await puter.ai.txt2img(question);
+        if(aiBoxes['dalle']){
+            aiBoxes['dalle'].appendChild(imgEl);
+            aiBoxes['dalle'].scrollTop = aiBoxes['dalle'].scrollHeight;
         }
-        requestAnimationFrame(step);
+    } catch(e){ console.warn("DALL-E failed", e); }
+}
+
+// ---- Affiliate Registration ----
+const saveAffiliateBtn = document.getElementById('saveAffiliateBtn');
+if(saveAffiliateBtn){
+    saveAffiliateBtn.addEventListener('click', ()=>{
+        const tag = document.getElementById('affiliateID').value.trim();
+        if(tag){
+            localStorage.setItem('affiliateTag', tag);
+            document.getElementById('affiliateOutput').innerText = `✅ Affiliate ID "${tag}" saved!`;
+        }
     });
 }
 
-// Generate DALL-E image
-document.getElementById('generateDalleBtn').addEventListener('click', async()=>{
-    const prompt=document.getElementById('dalle_prompt').value.trim();
-    if(!prompt) return alert('Enter a prompt');
-    if(generatingImage) return alert('Please wait...');
-    generatingImage=true;
+// ---- Generate Products ----
+async function generateProducts(category="Trending"){
+    const container = document.getElementById('productContainer');
+    if(!container) return;
+    container.innerHTML = "";
+    const affiliateTag = localStorage.getItem('affiliateTag') || "";
     try{
-        await smoothProgress(0,20,1000,'Generating DALL·E image...');
-        const imgEl=await puter.ai.txt2img(prompt);
-        document.getElementById('dalle_images').appendChild(imgEl);
-        dalleImages.push(imgEl.src);
-        await smoothProgress(20,30,500,'✅ Image ready');
-    }catch(err){console.error(err); alert('❌ Failed to generate image.');}
-    finally{generatingImage=false;}
-});
+        const response = await puter.ai.chat(
+            `Generate 5 trending Amazon products for ${category} category, JSON format [{name, link}]`,
+            { model: "gpt-5" }
+        );
+        let products = [];
+        try{ products = JSON.parse(response.text); } 
+        catch{ products = Array.from({length:5},(_,i)=>({name:`${category} Product ${i+1}`, link:"#"})); }
 
-// Generate Video
-document.getElementById('generateVideoBtn').addEventListener('click', async()=>{
-    const errorEl=document.getElementById('error');
-    const successEl=document.getElementById('success');
-    const videoEl=document.getElementById('video_preview');
-    errorEl.textContent=''; successEl.textContent='';
-    videoEl.style.display='none'; videoEl.src='';
-
-    const urls=document.getElementById('urls').value.split(',').map(u=>u.trim()).filter(Boolean);
-    if(!urls.length){errorEl.textContent='❌ Please enter at least one URL.'; return;}
-
-    const scriptTextOrig=document.getElementById('script').value.trim();
-    document.getElementById('progressContainer').style.display='block';
-    let scriptText=scriptTextOrig;
-
-    try{
-        await smoothProgress(30,40,500,'✅ URLs confirmed');
-
-        // Script
-        if(!scriptText){
-            await smoothProgress(40,55,1000,'Generating script...');
-            scriptText=await puter.ai.chat(`Write TikTok-style narration for these products: ${urls.join(', ')}`, {model:"gpt-5-nano"});
+        for(const p of products){
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            const title = document.createElement('h4'); title.innerText = p.name; card.appendChild(title);
+            const btn = document.createElement('a'); 
+            btn.href = p.link + (p.link.includes('?')?'&':'?') + 'tag=' + affiliateTag; 
+            btn.innerText = "Buy Now"; 
+            btn.className = "btn"; 
+            card.appendChild(btn);
+            container.appendChild(card);
         }
-        await smoothProgress(55,60,500,'✅ Script ready');
+    } catch(err){ console.warn("Product generation failed", err); }
+}
 
-        // TTS
-        await smoothProgress(60,75,1500,'Generating voiceover...');
-        const ttsBlob=await puter.ai.tts(scriptText,{voice:"alloy"});
-        const ttsFile=new File([ttsBlob],"voice.mp3",{type:"audio/mpeg"});
-        await smoothProgress(75,80,500,'✅ Voiceover ready');
-
-        // Send to backend
-        const formData=new FormData();
-        formData.append("urls",JSON.stringify([...urls,...dalleImages]));
-        formData.append("script",scriptText);
-        formData.append("voiceover",ttsFile);
-        await smoothProgress(80,90,500,'Uploading to backend...');
-        const response=await fetch('/generate_video',{method:'POST',body:formData});
-        const data=await response.json();
-
-        if(data.video_file){
-            await smoothProgress(90,100,500,'✅ Video generated!');
-            successEl.textContent='✅ Video generated!';
-            videoEl.src=`/download/${data.video_file}`;
-            videoEl.style.display='block';
-        }else{
-            errorEl.textContent='❌ Video generation failed: '+(data.error||'Unknown error');
-            await smoothProgress(0,0,0,'');
-        }
-    }catch(err){console.error(err); errorEl.textContent='❌ Failed to generate video.'; await smoothProgress(0,0,0,'');}
-});
-</script>
-</body>
-</html>
+// Call product generation on load
+generateProducts();
