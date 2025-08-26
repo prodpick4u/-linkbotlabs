@@ -3,83 +3,186 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puter.js Modern Chat</title>
-<script src="https://js.puter.com/v2/"></script>
+<title>LinkBotLabs – Smart Shopping Assistant</title>
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="/preview.png">
+
+<!-- Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+
 <style>
-body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; margin:0; padding:20px; background:#f0f4f8; }
-h1 { text-align:center; color:#1a73e8; margin-bottom:20px; }
-.chat-container { max-width:800px; margin:0 auto; background:white; border-radius:10px; padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.1); display:flex; flex-direction:column; }
-#messages { flex:1; overflow-y:auto; max-height:400px; margin-bottom:12px; padding:10px; background:#e8f0fe; border-radius:6px; }
-.message { padding:10px; border-radius:6px; margin:5px 0; max-width:80%; word-wrap:break-word; }
-.user { background:#1a73e8; color:white; align-self:flex-end; }
-.ai { background:#dbe9ff; color:#000; align-self:flex-start; }
-input, select, button { width:100%; padding:12px; margin:5px 0; border-radius:6px; border:1px solid #ccc; box-sizing:border-box; font-size:1rem; }
-button { background:#1a73e8; color:white; font-weight:bold; cursor:pointer; transition:background 0.2s; }
-button:hover { background:#1557b0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    margin:0; padding:0;
+    background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    color:white;
+    line-height:1.5;
+  }
+  @keyframes gradientShift {
+    0%{background-position:0% 50%;}
+    25%{background-position:50% 50%;}
+    50%{background-position:100% 50%;}
+    75%{background-position:50% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  header {
+    text-align:center;
+    padding:3rem 1rem;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+  }
+  header h1 { font-size:2.8rem; margin-bottom:1rem; }
+  header p { font-size:1.15rem; opacity:0.9; margin-bottom:0.7rem; }
+  .btn {
+    display:inline-block; margin:0.4rem; padding:0.7rem 1.3rem;
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color:white; text-decoration:none; border-radius:6px;
+    font-weight:600; transition:0.3s;
+    font-size:0.95rem;
+  }
+  .btn:hover { opacity:0.85; }
+  section { padding:2.5rem 1rem; text-align:center; max-width:1100px; margin:auto; }
+  h2 { font-size:1.9rem; margin-bottom:1.3rem; color:#9cf; }
+  .categories { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem; }
+  .categories a {
+    flex:1 1 140px; max-width:180px; background: rgba(0,0,0,0.55);
+    padding:0.8rem; border-radius:8px; color:white; font-weight:600;
+    text-decoration:none; transition: transform 0.2s, background 0.3s;
+    font-size:0.9rem;
+  }
+  .categories a:hover {
+    transform: scale(1.05);
+    background: rgba(75,0,150,0.7);
+  }
+  .video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    margin-bottom:1rem;
+  }
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius:8px;
+  }
+  .link-box {
+    display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem; margin-bottom:1.5rem;
+  }
+  footer {
+    background: rgba(0,0,0,0.4);
+    text-align:center; padding:1.5rem 1rem; font-size:0.9rem;
+  }
+  .contact-form input[type="email"] {
+    padding:8px; width:250px; border-radius:5px; border:none; margin-right:8px;
+  }
+  .contact-form button { padding:8px 14px; }
+  .comments p {
+    background: rgba(0,0,0,0.5); padding:0.8rem 1rem; border-radius:6px;
+    margin-bottom:0.7rem;
+    text-align:left;
+    max-width:700px;
+    margin-left:auto; margin-right:auto;
+  }
 </style>
 </head>
 <body>
 
-<h1>Puter.js Modern Chat</h1>
+<header>
+  <img src="preview.png" alt="LinkBotLabs Preview" style="max-width:200px; display:block; margin:0 auto 1rem;">
+  <h1>🚀 Welcome to LinkBotLabs</h1>
+  <p><strong>AI-powered tool to pick the best Amazon products & generate automated reviews and videos</strong></p>
+  <p>Save time, boost sales, and explore full automation when desktop version launches soon!</p>
 
-<div class="chat-container">
-    <div id="messages"></div>
-    <select id="modelSelect">
-        <option value="gpt-5">GPT-5</option>
-        <option value="gpt-5-nano">GPT-5 Nano</option>
-        <option value="grok">Grok</option>
-        <option value="claude">Claude</option>
-        <option value="gemini">Gemini</option>
-    </select>
-    <input id="userInput" placeholder="Type your message here...">
-    <button id="sendBtn">Send</button>
-</div>
+  <a href="affiliate_starter.html" class="btn">🎁 Start Your Free 1-Week Affiliate Page</a>
+  <a href="demo.html" class="btn">Try Demo</a>
+  <a href="products.html" class="btn">🛒 View All Products</a>
+  <a href="for_dummies.html" class="btn">📘 For Dummies Guide</a>
+  <a href="https://drive.google.com/uc?export=download&id=1xwD_gDLZyPKLMmZY6UfAej6ZvMBjrzal" class="btn">📦 Download Desktop Demo (ZIP)</a>
+  <a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" target="_blank" class="btn">💼 Hire Me on Fiverr</a>
+  <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" class="btn">📝 Visit Our Blog</a>
+</header>
 
-<script>
-const messagesDiv = document.getElementById('messages');
-const input = document.getElementById('userInput');
-const modelSelect = document.getElementById('modelSelect');
-const sendBtn = document.getElementById('sendBtn');
+<section>
+  <h2>📖 About the Tool</h2>
+  <p>LinkBotLabs simplifies your Amazon shopping and affiliate revenue creation.  
+     Input your product keyword, get optimized reviews, TTS scripts, and automated video outputs.  
+     Benefits include faster product selection, professional content generation, and the ability to earn commission by sharing products.</p>
+  <p>New users can start with our <strong>For Dummies</strong> guide to get simple step-by-step instructions on using LinkBotLabs effectively.</p>
+</section>
 
-let conversation = []; // stores message history
+<section>
+  <h2>📺 How It Works</h2>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
+  </div>
+  <p>Watch how LinkBotLabs generates content and videos from a product in seconds.</p>
+</section>
 
-function appendMessage(text, sender) {
-    const div = document.createElement('div');
-    div.className = 'message ' + sender;
-    div.innerHTML = text.replace(/\n/g,'<br>');
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-}
+<section>
+  <h2>🔗 Quick Links to All Pages</h2>
+  <div class="link-box">
+    <a href="affiliate_starter.html" class="btn">Affiliate Starter Page</a>
+    <a href="demo.html" class="btn">Online Demo</a>
+    <a href="products.html" class="btn">All Products</a>
+    <a href="for_dummies.html" class="btn">For Dummies Guide</a>
+    <a href="https://drive.google.com/uc?export=download&id=1xwD_gDLZyPKLMmZY6UfAej6ZvMBjrzal" class="btn">Desktop Demo (ZIP)</a>
+    <a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" target="_blank" class="btn">Hire Me on Fiverr</a>
+    <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" class="btn">📝 Visit Our Blog</a>
+  </div>
+</section>
 
-// ---- Send message ----
-async function sendMessage() {
-    const prompt = input.value.trim();
-    if(!prompt) return;
-    appendMessage(prompt, 'user');
-    input.value = '';
-    conversation.push({ role:'user', content: prompt });
+<section>
+  <h2>📂 Categories – Shop & Support</h2>
+  <p>Support the developer and earn credit for the full launch. Click a category to shop via Amazon with our affiliate links:</p>
+  <div class="categories">
+    <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
+    <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
+    <a href="https://www.amazon.com/s?k=blender&tag=mychanneld-20">🥤 Blenders</a>
+    <a href="https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20">🍚 Rice Cookers</a>
+    <a href="https://www.amazon.com/s?k=headphones&tag=mychanneld-20">🎧 Headphones</a>
+    <a href="https://www.amazon.com/s?k=kitchen+products&tag=mychanneld-20">🍳 Kitchen Tools</a>
+    <a href="https://www.amazon.com/s?k=tech&tag=mychanneld-20">💻 Tech Gadgets</a>
+  </div>
+</section>
 
-    const model = modelSelect.value;
-    appendMessage('Processing...', 'ai');
+<section>
+  <h2>📺 Product to Video Automation</h2>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/qwfACbh93M0?si=uofVyp2kyYV7EU-H" allowfullscreen></iframe>
+  </div>
+  <p>See the end-to-end process: product → review script → TTS → fully automated video generation.</p>
+</section>
 
-    try {
-        const aiDiv = messagesDiv.querySelector('.ai:last-child');
-        const stream = await puter.ai.chat(conversation.map(m => m.content).join('\n'), { model, stream:true });
-        let fullText = '';
-        for await (const part of stream) {
-            fullText += part?.text || '';
-            aiDiv.innerHTML = fullText.replace(/\n/g,'<br>');
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-        conversation.push({ role:'ai', content: fullText });
-    } catch(e) {
-        appendMessage('Error: ' + e.message, 'ai');
-    }
-}
+<section>
+  <h2>💬 Customer Comments</h2>
+  <div class="comments">
+    <p>“This tool saves me hours every week. Truly amazing!” – Early Tester</p>
+    <p>“Automated reviews and video generation is a game-changer. Can’t wait for the full version.” – Beta User</p>
+  </div>
+</section>
 
-sendBtn.addEventListener('click', sendMessage);
-input.addEventListener('keypress', e => { if(e.key === 'Enter') sendMessage(); });
-</script>
+<section>
+  <h2>📧 Contact Us</h2>
+  <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+    <input type="email" placeholder="Your email" required>
+    <button type="submit" class="btn">Send</button>
+  </form>
+</section>
+
+<footer>
+  <p>© 2025 LinkBotLabs – Powered by Affiliate Shopping</p>
+  <p>Support the project by shopping via <a href="https://www.amazon.com/?tag=mychanneld-20" style="color:#9cf;">Amazon Affiliate Link</a></p>
+  <p>Read more insights on our <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" style="color:#9cf;">Blog</a></p>
+  <p>👉 Need custom automation or affiliate solutions?  
+    <a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" target="_blank" class="btn">💼 Work With Me on Fiverr</a>
+  </p>
+</footer>
 
 </body>
 </html>
