@@ -3,21 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LinkBotLabs Demo – Multi-AI Shopping & TTS</title>
-<link rel="icon" href="https://raw.githubusercontent.com/prodpick4u/linkbotlabs/main/docs/9950FA69-865E-4707-AB91-B7CB65C501BF.png">
+<title>LinkBotLabs Demo – Smart Shopping & TTS</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 <style>
-body { font-family:'Inter',sans-serif; margin:0; padding:2rem; color:#fff;
+body {
+  font-family:'Inter',sans-serif;
+  margin:0; padding:2rem;
+  color:#fff;
   background: linear-gradient(-45deg,#0a0033,#3b007f,#1a1aff,#6f00ff);
-  background-size: 400% 400%; animation: gradientShift 15s ease infinite; }
-@keyframes gradientShift {0%{background-position:0% 50%;}25%{background-position:50% 50%;}50%{background-position:100% 50%;}75%{background-position:50% 50%;}100%{background-position:0% 50%;}}
-h1,h2 { color:#9cf; text-align:center; }
-h1 { font-size:2.5rem; margin-bottom:1rem; }
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+@keyframes gradientShift {
+  0%{background-position:0% 50%;}
+  25%{background-position:50% 50%;}
+  50%{background-position:100% 50%;}
+  75%{background-position:50% 50%;}
+  100%{background-position:0% 50%;}
+}
+h1,h2 { color:#9cf; }
+h1 { text-align:center; font-size:2.5rem; margin-bottom:1rem; }
 p { line-height:1.5; }
-.glass { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border-radius:12px; padding:20px; margin-bottom:2rem; }
-input, button, select { width:100%; padding:10px; margin:6px 0; border-radius:5px; border:none; }
+.glass {
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:2rem;
+}
+input, button, select {
+  width:100%;
+  padding:10px;
+  margin:6px 0;
+  border-radius:5px;
+  border:none;
+}
 input, select { background: rgba(20,20,20,0.7); color:#fff; }
-button { background: linear-gradient(135deg,#6a11cb,#2575fc); color:#fff; font-weight:bold; cursor:pointer; }
+button {
+  background: #6a11cb;
+  background: linear-gradient(135deg,#6a11cb,#2575fc);
+  color:#fff;
+  font-weight:bold;
+  cursor:pointer;
+}
 button:hover { opacity:0.85; }
 .output { background:rgba(0,0,0,0.7); padding:15px; border-radius:8px; margin-top:15px; color:#0f0; white-space:pre-wrap; }
 .section-title { font-size:1.5rem; margin-bottom:1rem; text-align:center; }
@@ -27,14 +55,12 @@ button:hover { opacity:0.85; }
 .product-card { background: rgba(255,255,255,0.1); padding:10px; margin:8px 0; border-radius:8px; }
 .product-card a { color:#0ff; font-weight:bold; text-decoration:none; }
 .product-card button { margin-top:5px; }
-.ai-response { margin-left:10px; color:#ffdd57; }
-.ai-consensus { color:#00ffcc; font-weight:bold; margin-top:5px; }
 </style>
 </head>
 <body>
 
-<h1>🚀 LinkBotLabs Demo – Multi-AI Powered</h1>
-<p style="text-align:center;">AI-powered product suggestions, reviews, and TTS using GPT-5, Claude, Grok, Gemini, and more.</p>
+<h1>🚀 LinkBotLabs Demo</h1>
+<p style="text-align:center;">Short mobile demo only. Full desktop version enables full video generation & YouTube uploads. Keyholders & keyless demos below.</p>
 
 <!-- Voice Selector -->
 <div class="glass" style="text-align:center;">
@@ -42,17 +68,32 @@ button:hover { opacity:0.85; }
 <select id="voiceSelect"></select>
 </div>
 
-<!-- Keyless Demo -->
+<!-- Keyholders Demo Box -->
 <div class="glass">
-<h2 class="section-title">🗝️ Demo Products</h2>
-<p>Select a category to see AI-suggested products with multi-AI reviews and TTS preview.</p>
+<h2 class="section-title">🔑 Keyholders Demo</h2>
+<p>Enter your Amazon Affiliate Key, API Key, and keyword. Max 3 searches per session.</p>
+<form id="keyholdersForm">
+<label>Amazon Affiliate Tag:
+  <input id="khAffiliate" type="text" placeholder="mychanneld-20" required>
+</label>
+<label>Amazon API Key:
+  <input id="khApiKey" type="text" placeholder="AKIA..." required>
+</label>
+<label>Keyword:
+  <input id="khKeyword" type="text" placeholder="e.g. blender" required>
+</label>
+<button type="submit">Generate Demo</button>
+</form>
+<div id="khOutput" class="output"></div>
+</div>
+
+<!-- Keyless Demo Box -->
+<div class="glass">
+<h2 class="section-title">🗝️ Keyless Demo</h2>
+<p>Select a category to see products with clickable links, SEO review, and TTS preview.</p>
 <label>Category:
 <select id="categorySelect">
 <option value="">--Choose a Category--</option>
-<option value="health">Health</option>
-<option value="beauty">Beauty</option>
-<option value="kitchen">Kitchen</option>
-<option value="tech">Tech</option>
 </select>
 </label>
 <div id="klOutput" class="output"></div>
@@ -60,125 +101,173 @@ button:hover { opacity:0.85; }
 
 <!-- AI Q&A Bot -->
 <div class="glass">
-<h2 class="section-title">🤖 Ask the Multi-AI Bot</h2>
+<h2 class="section-title">🤖 Ask the Bot</h2>
 <div id="chatBox" class="chat-box"></div>
 <div class="chat-input">
-<input type="text" id="chatInput" placeholder="Ask about products, reviews, or AI...">
-<button id="sendBtn">Send</button>
+<input type="text" id="chatInput" placeholder="Ask about the tool, API keys, or workflow...">
+<button onclick="askBot()">Send</button>
 </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/puter.js@latest/dist/puter.min.js"></script>
 <script>
-const puter = new Puter({ debug:true });
+// ====== Fallback Products ======
+const AFFILIATE_TAG = "mychanneld-20";
 
-// ==== TTS ====
+const FALLBACK_PRODUCTS = {
+  "health":[
+    {"title":"Fitbit Charge 5 Advanced Fitness & Health Tracker","url":"https://amzn.to/45zc4k1","price":"$129.95","description":"Fitness tracker with built-in GPS and health metrics."},
+    {"title":"Theragun Elite Handheld Percussive Therapy Device","url":"https://amzn.to/463BPYL","price":"$299.00","description":"Professional-grade percussive therapy device for deep muscle treatment and recovery."},
+    {"title":"Methylene Blue","url":"https://amzn.to/4ldkJwL","price":"Varies","description":"Supplement researched for mitochondrial support and cognitive function."},
+    {"title":"Irish Sea Moss","url":"https://www.amazon.com/dp/B0CTMJYZ73?tag=mychanneld-20","price":"Varies","description":"Rich in iodine and essential minerals for immune and thyroid support."},
+    {"title":"Shilajit","url":"https://amzn.to/4li6vuC","price":"Varies","description":"Ancient herbal resin used to boost energy, vitality, and performance."}
+  ],
+  "beauty":[
+    {"title":"Revlon One-Step Hair Dryer And Volumizer Hot Air Brush","url":"https://amzn.to/3HIHhrw","price":"$59.99","description":"Hair styling tool for drying and volumizing."},
+    {"title":"Olay Regenerist Micro-Sculpting Cream Face Moisturizer","url":"https://amzn.to/45zc4k1","price":"$25.99","description":"Anti-aging facial moisturizer."},
+    {"title":"Neutrogena Makeup Remover Cleansing Towelettes","url":"https://amzn.to/3UAEOSX","price":"$9.99","description":"Gentle wipes for makeup removal."},
+    {"title":"Maybelline Lash Sensational Washable Mascara","url":"https://amzn.to/4oHMpgn","price":"$7.99","description":"Volumizing mascara with buildable formula."},
+    {"title":"CeraVe Hydrating Facial Cleanser","url":"https://amzn.to/4mI68uu","price":"$14.99","description":"Gentle face cleanser for normal to dry skin."}
+  ],
+  "kitchen":[
+    {"title":"Instant Pot Duo 7-in-1 Electric Pressure Cooker","url":"https://amzn.to/4oD8b50","price":"$89.00","description":"Multi-functional pressure cooker for quick meals."},
+    {"title":"Lodge Cast Iron Skillet","url":"https://amzn.to/47igIUx","price":"$24.99","description":"Durable pre-seasoned cast iron pan for searing, sautéing, baking, and more."},
+    {"title":"Breville The Smart Oven Air Fryer","url":"https://amzn.to/45lPvxL","price":"$279.95","description":"Countertop convection oven with air frying, roasting, and baking capabilities."},
+    {"title":"KitchenAid Artisan Tilt-Head Stand Mixer","url":"https://amzn.to/45lPCJH","price":"$379.99","description":"Versatile stand mixer perfect for baking, whipping, and kneading."},
+    {"title":"Cuisinart 14-Cup Food Processor","url":"https://amzn.to/3UgiUEs","price":"$149.95","description":"Powerful food processor for chopping, slicing, and shredding."},
+    {"title":"Ninja Foodi 9-in-1 Pressure Cooker and Air Fryer","url":"https://amzn.to/3H8Olh3","price":"$199.99","description":"Multi-cooker with air frying, pressure cooking, steaming, and baking."},
+    {"title":"NutriBullet Pro High-Speed Blender/Mixer System","url":"https://amzn.to/47eVzKT","price":"$89.99","description":"Compact blender for smoothies, shakes, and nutrient extraction."},
+    {"title":"Hydro Flask Stainless Steel Water Bottle","url":"https://amzn.to/4myBCTZ","price":"$39.95","description":"Vacuum insulated bottle keeps drinks cold or hot for hours."},
+    {"title":"COSORI Air Fryer Max XL 5.8QT","url":"https://amzn.to/3XYZABC","price":"$119.99","description":"Large capacity air fryer with digital controls for healthy cooking."},
+    {"title":"Vitamix Explorian Blender E310","url":"https://amzn.to/3ZYX123","price":"$349.95","description":"Professional-quality blender for smoothies, soups, and sauces."}
+  ],
+  "tech":[
+    {"title":"Apple AirPods Pro (2nd Generation)","url":"https://amzn.to/3UAYMx7","price":"$249.00","description":"Premium ANC, deep spatial audio, seamless Apple ecosystem, and excellent build quality."},
+    {"title":"Samsung Galaxy Buds FE (Fan Edition)","url":"https://amzn.to/4m6BhIh","price":"$99.99","description":"Reliable ANC earbuds for Android users."},
+    {"title":"Anker Soundcore P20i","url":"https://amzn.to/4mqytoV","price":"$29.99","description":"Budget wireless earbuds."},
+    {"title":"Samsung T7 Portable SSD 1TB","url":"https://amzn.to/3J1xAor","price":"$139.99","description":"Fast external solid state drive."},
+    {"title":"Logitech MX Master 3S Wireless Mouse","url":"https://amzn.to/4oFWA4T","price":"$99.99","description":"Ergonomic wireless mouse with high-precision tracking."},
+    {"title":"Sony WH-1000XM4 Wireless Noise-Canceling Headphones","url":"https://amzn.to/3V5ToC2","price":"$199.99","description":"Industry-leading noise-canceling headphones with long battery life."},
+    {"title":"Kindle Paperwhite (2024)","url":"https://amzn.to/4mTKZOd","price":"$159.99","description":"Waterproof e-reader with high-resolution 7-inch display."}
+  ]
+};
+
+// ====== Populate Keyless Category Dropdown ======
+const categorySelect = document.getElementById('categorySelect');
+Object.keys(FALLBACK_PRODUCTS).forEach(cat=>{
+  const opt = document.createElement('option');
+  opt.value = cat;
+  opt.textContent = cat.charAt(0).toUpperCase()+cat.slice(1);
+  categorySelect.appendChild(opt);
+});
+
+// ====== Generate dynamic SEO review ======
+function generateSEOReview(name, keyword){
+  return `${name} is a premium product for anyone looking for ${keyword}. Exceptional quality, reliability, and design enhance everyday use. Perfect for gifting or personal use. Experience the benefits today and elevate your routine with ${name}.`;
+}
+
+// ====== TTS ======
 let synth = window.speechSynthesis;
+let utter;
+let typingInterval;
+
 function populateVoiceSelects(){
   let voices = synth.getVoices();
   if(!voices.length){ setTimeout(populateVoiceSelects,100); return; }
-  voices = voices.filter(v=>v.lang.startsWith('en'));
-  const select = document.querySelector('#voiceSelect');
-  select.innerHTML='';
+  voices = voices.filter(v => v.lang.startsWith('en'));
+  const select = document.getElementById('voiceSelect');
+  select.innerHTML = '';
   voices.forEach(v=>{
     const opt = document.createElement('option');
-    opt.value=v.name; opt.textContent=v.name+' ('+v.lang+')';
+    opt.value = v.name;
+    opt.textContent = v.name + ' (' + v.lang + ')';
     select.appendChild(opt);
   });
   select.value = voices.find(v=>v.name.includes('Samantha'))?.name || voices[0].name;
 }
-if(speechSynthesis.onvoiceschanged!==undefined){ speechSynthesis.onvoiceschanged=populateVoiceSelects; } 
-else { populateVoiceSelects(); }
+if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoiceSelects;
+} else { populateVoiceSelects(); }
 
-function playTTS(text){
-  if(synth.speaking) synth.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  const selectedVoice = document.querySelector('#voiceSelect').value;
-  utter.voice = synth.getVoices().find(v=>v.name===selectedVoice) || synth.getVoices()[0];
+function playTTS(text, spanId){
+  stopTTS();
+  utter = new SpeechSynthesisUtterance(text);
+  const voices = synth.getVoices().filter(v=>v.lang.startsWith('en'));
+  const selectedVoice = document.getElementById('voiceSelect').value;
+  utter.voice = voices.find(v=>v.name===selectedVoice) || voices[0];
   synth.speak(utter);
+  startTyping(text, spanId);
 }
 
-// ==== Multi-AI Call & Consensus ====
-async function multiAiCall(prompt){
-  const models = ['gpt-5','claude','grok','gemini'];
-  const results = await Promise.all(models.map(async model=>{
-    try{
-      const res = await puter.ai.chat(prompt,{ model });
-      return { model, text: res.text.trim() };
-    } catch(err){ console.error(model+' failed:',err); return { model, text:'' }; }
-  }));
-  return results;
-}
+function stopTTS(){ if(synth.speaking) synth.cancel(); clearInterval(typingInterval); }
+function startTyping(text, spanId){ clearInterval(typingInterval); const span=document.getElementById(spanId); let i=0; span.textContent=''; typingInterval=setInterval(()=>{ if(i<text.length){ span.textContent+=text.charAt(i); i++; } else clearInterval(typingInterval); },25); }
 
-function getConsensus(responses){
-  const allTexts = responses.map(r=>r.text.split(/[\.\!\?]/).map(s=>s.trim()).filter(Boolean)).flat();
-  const freq = {};
-  allTexts.forEach(s=>freq[s]=(freq[s]||0)+1);
-  const consensus = Object.entries(freq).filter(([s,c])=>c>1).map(([s])=>s);
-  return consensus.join('. ') + (consensus.length?'.':'');
-}
+// ====== Keyholders Demo ======
+let khTries = 0;
+const maxKhTries = 3;
 
-// ==== Keyless Demo ====
-document.getElementById('categorySelect').addEventListener('change', async e=>{
-  const category = e.target.value;
-  if(!category){ document.getElementById('klOutput').innerHTML=''; return; }
-  const prompt = `Generate 3 trending products in the "${category}" category for Amazon affiliates. Format as JSON array with title, url, price, description.`;
-  try{
-    const response = await puter.ai.chat(prompt,{ model:"gpt-5" });
-    const products = JSON.parse(response.text);
-    let html='';
-    products.forEach((p,idx)=>{
-      html += `<div class="product-card">
-        🛒 <a href="${p.url}?tag=mychanneld-20" target="_blank">${p.title}</a>
-        <p>Price: ${p.price}</p>
-        <p>${p.description}</p>
-        <div id="klReviewText${idx}" class="ai-response">Generating...</div>
-        <button onclick="playTTS(document.getElementById('klReviewText${idx}').textContent)">🔊 Play TTS</button>
-        <button onclick="synth.cancel()">⏹ Stop TTS</button>
-      </div>`;
-    });
-    document.getElementById('klOutput').innerHTML = html;
-
-    products.forEach(async(p,idx)=>{
-      const reviews = await multiAiCall(`Write a short persuasive SEO review for "${p.title}"`);
-      const consensusText = getConsensus(reviews);
-      document.getElementById(`klReviewText${idx}`).innerHTML = 
-        reviews.map(r=>`<p><strong>${r.model}:</strong> ${r.text}</p>`).join('') +
-        (consensusText?`<p class="ai-consensus">Consensus: ${consensusText}</p>`:'');
-    });
-  } catch(err){ console.error(err); alert("AI fetch failed."); }
+document.getElementById('keyholdersForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  if(khTries>=maxKhTries){ alert("Keyholders demo locked. Max tries reached."); return; }
+  khTries++;
+  const kw = document.getElementById('khKeyword').value.trim().toLowerCase();
+  const affiliate = document.getElementById('khAffiliate').value.trim() || AFFILIATE_TAG;
+  const categoryProducts = FALLBACK_PRODUCTS[kw] || [].flatMap(Object.values(FALLBACK_PRODUCTS));
+  const product = categoryProducts[0];
+  const review = generateSEOReview(product.title, kw);
+  document.getElementById('khOutput').innerHTML = `
+    <div class="product-card">
+      🛒 <a href="${product.url}?tag=${affiliate}" target="_blank">${product.title}</a>
+      <p>Price: ${product.price}</p>
+      <p>${product.description}</p>
+      📝 SEO Review: <span id="khReviewText"></span><br>
+      <button onclick="playTTS('${review}','khReviewText')">🔊 Play TTS</button>
+      <button onclick="stopTTS()">⏹ Stop TTS</button>
+      <a href="${product.url}?tag=${affiliate}" target="_blank"><button>View Product</button></a>
+    </div>
+  `;
+  startTyping(review,'khReviewText');
 });
 
-// ==== Multi-AI Chatbot ====
-const chatBox = document.getElementById('chatBox');
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
+// ====== Keyless Demo ======
+categorySelect.addEventListener('change', e=>{
+  const cat = e.target.value;
+  if(!cat){ document.getElementById('klOutput').innerHTML=''; return; }
+  const products = FALLBACK_PRODUCTS[cat] || [];
+  let html = '';
+  products.forEach((p,idx)=>{
+    const review = generateSEOReview(p.title, cat);
+    html += `
+      <div class="product-card">
+        🛒 <a href="${p.url}?tag=${AFFILIATE_TAG}" target="_blank">${p.title}</a>
+        <p>Price: ${p.price}</p>
+        <p>${p.description}</p>
+        📝 SEO Review: <span id="klReviewText${idx}"></span><br>
+        <button onclick="playTTS('${review}','klReviewText${idx}')">🔊 Play TTS</button>
+        <button onclick="stopTTS()">⏹ Stop TTS</button>
+        <a href="${p.url}?tag=${AFFILIATE_TAG}" target="_blank"><button>View Product</button></a>
+      </div>
+    `;
+  });
+  document.getElementById('klOutput').innerHTML = html;
+});
 
-async function askBot(){
-  const input = chatInput.value.trim();
+// ====== AI Q&A Bot ======
+const chatBox=document.getElementById('chatBox');
+function askBot(){
+  const input=document.getElementById('chatInput').value.trim();
   if(!input) return;
-  
-  const userP = document.createElement('p'); userP.style.color="#0f0"; userP.textContent="You: "+input;
-  chatBox.appendChild(userP);
-
-  try{
-    const responses = await multiAiCall(input);
-    const consensusText = getConsensus(responses);
-    const botHtml = responses.map(r=>`<p><strong>${r.model}:</strong> ${r.text}</p>`).join('') +
-                    (consensusText?`<p class="ai-consensus">Consensus: ${consensusText}</p>`:'');
-    const botP = document.createElement('div'); botP.innerHTML = botHtml;
-    chatBox.appendChild(botP);
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-    playTTS(consensusText || responses[0].text);
-
-  } catch(err){ console.error(err); alert("AI bot failed."); }
-
-  chatInput.value='';
+  const p=document.createElement('p'); p.style.color="#0f0"; p.textContent="You: "+input; chatBox.appendChild(p);
+  const answer=document.createElement('p'); answer.style.color="#9cf"; answer.textContent="Bot: "+generateBotAnswer(input); chatBox.appendChild(answer);
+  chatBox.scrollTop=chatBox.scrollHeight; document.getElementById('chatInput').value='';
 }
-
-sendBtn.addEventListener('click', askBot);
-chatInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askBot(); });
+function generateBotAnswer(question){
+  question = question.toLowerCase();
+  if(question.includes("amazon")) return "You can get your Amazon API key by signing up as an affiliate and generating your Product Advertising API keys.";
+  if(question.includes("youtube")) return "YouTube API key can be obtained from Google Cloud Console. Enable YouTube Data API v3, then generate the key.";
+  if(question.includes("seo")) return "The tool automatically generates SEO-friendly reviews and content for your product keywords.";
+  if(question.includes("video")) return "LinkBotLabs converts product data into automated YouTube videos ready for upload.";
+  return "This tool helps affiliates, bloggers, and side hustlers create automated product content and revenue streams. Check the Dummies page for detailed steps.";
+}
 </script>
 </body>
 </html>
