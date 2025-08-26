@@ -3,89 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚀 LinkBotLabs AI Gateway</title>
+<title>🚀 LinkBotLabs AI Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
   body { font-family:'Inter',sans-serif; margin:0; padding:1rem; background:#0a0033; color:#fff; line-height:1.5; }
   h1, h2 { color:#6af; }
   section { margin-bottom:2rem; padding:1rem; background: rgba(0,0,0,0.5); border-radius:10px; }
-  input { width: 80%; padding:10px; border-radius:5px; border:none; margin-right:5px; }
+  input { width: 70%; padding:10px; border-radius:5px; border:none; margin-right:5px; }
   button { padding:10px 15px; border:none; border-radius:5px; background: linear-gradient(135deg,#6a11cb,#2575fc); color:#fff; cursor:pointer; }
   .ai-box { border:1px solid #666; padding:10px; margin-top:10px; max-height:250px; overflow-y:auto; background: rgba(0,0,0,0.2); border-radius:6px; }
-  .ai-box img { max-width:100%; border-radius:5px; margin-top:5px; }
+  .ai-box img { max-width:32%; border-radius:5px; margin:2px; display:inline-block; }
+  .product-card { border:1px solid #444; padding:10px; margin:10px; background:#222; border-radius:6px; display:inline-block; width:200px; vertical-align:top; }
+  .btn { display:inline-block; padding:6px 12px; background:#007bff; color:#fff; text-decoration:none; border-radius:4px; margin-top:5px; }
 </style>
 </head>
 <body>
 
-<h1>🚀 LinkBotLabs AI Gateway</h1>
-<p>Ask questions, get product suggestions, and generate TTS from multi-AI models.</p>
+<h1>🚀 LinkBotLabs AI Hub</h1>
+<p>Ask questions, get product suggestions, generate images, and see affiliate products.</p>
 
-<!-- AI Sections -->
+<!-- Affiliate Section -->
 <section>
-  <h2>GPT-5</h2>
-  <div class="ai-box" id="gpt5Box"></div>
-  <input type="text" id="gpt5Input" placeholder="Ask GPT-5...">
-  <button onclick="askModel('gpt-5', 'gpt5Box', 'gpt5Input')">Send</button>
+  <h2>Affiliate ID</h2>
+  <input type="text" id="affiliateID" placeholder="Enter Affiliate ID">
+  <button id="saveAffiliateBtn">Save</button>
+  <p id="affiliateOutput"></p>
 </section>
 
+<!-- AI Chat Sections -->
 <section>
-  <h2>Claude</h2>
-  <div class="ai-box" id="claudeBox"></div>
-  <input type="text" id="claudeInput" placeholder="Ask Claude...">
-  <button onclick="askModel('claude', 'claudeBox', 'claudeInput')">Send</button>
+  <h2>Multi-AI Chat</h2>
+  <input type="text" id="chatInput" placeholder="Ask something...">
+  <button id="sendBtn">Send</button>
 </section>
 
-<section>
-  <h2>Grok</h2>
-  <div class="ai-box" id="grokBox"></div>
-  <input type="text" id="grokInput" placeholder="Ask Grok...">
-  <button onclick="askModel('grok', 'grokBox', 'grokInput')">Send</button>
-</section>
+<div id="gpt5Box" class="ai-box"><strong>GPT-5:</strong></div>
+<div id="claudeBox" class="ai-box"><strong>Claude:</strong></div>
+<div id="grokBox" class="ai-box"><strong>Grok:</strong></div>
+<div id="geminiBox" class="ai-box"><strong>Gemini:</strong></div>
 
+<!-- DALL·E Section -->
 <section>
-  <h2>Gemini</h2>
-  <div class="ai-box" id="geminiBox"></div>
-  <input type="text" id="geminiInput" placeholder="Ask Gemini...">
-  <button onclick="askModel('gemini', 'geminiBox', 'geminiInput')">Send</button>
-</section>
-
-<section>
-  <h2>DALL-E Image Generation</h2>
-  <div class="ai-box" id="dalleBox"></div>
+  <h2>DALL·E Image Generation (3 images)</h2>
   <input type="text" id="dalleInput" placeholder="Describe an image...">
-  <button onclick="generateImage()">Generate Image</button>
+  <button id="generateImgBtn">Generate Images</button>
+</section>
+<div id="dalleBox" class="ai-box"></div>
+
+<!-- Products Section -->
+<section>
+  <h2>Affiliate Products</h2>
+  <div id="productContainer"></div>
 </section>
 
 <script src="https://js.puter.com/v2/"></script>
-<script>
-  // Ask a text model
-  async function askModel(model, boxId, inputId) {
-    const query = document.getElementById(inputId).value.trim();
-    const box = document.getElementById(boxId);
-    if(!query) return;
-    box.innerHTML = 'Loading...';
-    try {
-      const res = await puter.ai.chat(query, { model });
-      box.innerHTML = res.text || res; // Use res.text if available
-    } catch(e) {
-      box.innerHTML = 'Error: ' + e.message;
-    }
-  }
-
-  // Generate DALL-E image
-  async function generateImage() {
-    const prompt = document.getElementById('dalleInput').value.trim();
-    const box = document.getElementById('dalleBox');
-    if(!prompt) return;
-    box.innerHTML = 'Generating...';
-    try {
-      const img = await puter.ai.txt2img(prompt);
-      box.innerHTML = '';
-      box.appendChild(img);
-    } catch(e) {
-      box.innerHTML = 'Error: ' + e.message;
-    }
-  }
-</script>
+<script src="scripts/gateway.js"></script>
 </body>
 </html>
