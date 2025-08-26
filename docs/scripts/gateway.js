@@ -2,6 +2,8 @@ const synth = window.speechSynthesis;
 const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendBtn');
 const voiceSelect = document.getElementById('voiceSelect');
+const dalleInput = document.getElementById('dalleInput');
+const generateImgBtn = document.getElementById('generateImgBtn');
 
 const aiBoxes = {
     'claude': document.getElementById('claudeBox'),
@@ -12,10 +14,10 @@ const aiBoxes = {
 };
 
 const models = {
-    'claude': 'claude-sonnet-4',
-    'gemini': 'gemini-2.0-flash',
-    'gpt-5': 'gpt-5',
-    'grok': 'grok-beta'
+    'claude': 'claude-3.5-sonnet', // Updated to a supported Claude model
+    'gemini': 'gemini-2.0-flash', // Kept as is, assuming supported
+    'gpt-5': 'gpt-5-nano', // Updated to a supported OpenAI model
+    'grok': 'x-ai/grok-4' // Updated to a supported Grok model
 };
 
 // ---- Voice Selector ----
@@ -66,7 +68,26 @@ function processTTSQueue() {
 
 // ---- Multi-AI Chat with Streaming ----
 async function askAI(question) {
-    if (!question) return;
+    if (!question) {
+        Object.values(aiBoxes).forEach(box => {
+            const p = document.createElement('p');
+            p.innerHTML = 'Error: Please enter a question.';
+            p.className = 'error';
+            box.appendChild(p);
+            box.scrollTop = box.scrollHeight;
+        });
+        return;
+    }
+    if (!window.puter || !window.puter.ai) {
+        Object.values(aiBoxes).forEach(box => {
+            const p = document.createElement('p');
+            p.innerHTML = 'Error: Puter.js failed to load. Check network or script URL.';
+            p.className = 'error';
+            box.appendChild(p);
+            box.scrollTop = box.scrollHeight;
+        });
+        return;
+    }
     sendBtn.disabled = true;
     sendBtn.classList.add('loading');
     const modelKeys = Object.keys(models).sort();
@@ -75,6 +96,7 @@ async function askAI(question) {
         const box = aiBoxes[key];
         box.setAttribute('aria-busy', 'true');
         const p = document.createElement('p');
+        p.className = 'response';
         box.appendChild(p);
         try {
             const stream = await puter.ai.chat(`Answer clearly: "${question}"`, { model, stream: true });
@@ -84,36 +106,62 @@ async function askAI(question) {
                     fullText += part.text;
                     p.innerHTML = fullText.replace(/\n/g, '<br>');
                     box.scrollTop = box.scrollHeight;
-                    playTTS(part.text); // Speak each chunk
+                    playTTS(part.text);
                 }
+            }
+            if (!fullText) {
+                p.innerHTML = `Error: No response from ${key}.`;
+                p.className = 'error';
             }
         } catch (e) {
             console.warn(`${key} failed`, e);
-            p.innerHTML = `Error: ${key} failed to respond.`;
+            p.innerHTML = `Error: ${key} failed to respond - ${e.message}`;
+            p.className = 'error';
         }
         box.setAttribute('aria-busy', 'false');
+        box.scrollTop = box.scrollHeight;
     }
     sendBtn.disabled = false;
     sendBtn.classList.remove('loading');
 }
 
-// ---- DALL·E 3 Images ----
+// ---- DALL·E 3 Images (Example 2 from Tutorial) ----
 async function generateImages(prompt) {
+    if (!prompt) {
+        const p = document.createElement('p');
+        p.innerHTML = 'Error: Please enter an image prompt.';
+        p.className = 'error';
+        aiBoxes['dalle'].appendChild(p);
+        aiBoxes['dalle'].scrollTop = aiBoxes['dalle'].scrollHeight;
+        return;
+    }
+    if (!window.puter || !window.puter.ai) {
+        const p = document.createElement('p');
+        p.innerHTML = 'Error: Puter.js failed to load. Check network or script URL.';
+        p.className = 'error';
+        aiBoxes['dalle'].appendChild(p);
+        aiBoxes['dalle'].scrollTop = aiBoxes['dalle'].scrollHeight;
+        return;
+    }
+    generateImgBtn.disabled = true;
+    generateImgBtn.classList.add('loading');
     const box = aiBoxes['dalle'];
     box.setAttribute('aria-busy', 'true');
-    box.innerHTML = '<h3>DALL·E</h3>';
-    for (let i = 0; i < 3; i++) {
-        try {
-            const img = await puter.ai.txt2img(prompt);
-            box.appendChild(img);
-        } catch (e) {
-            console.warn('DALL-E failed', e);
-            const p = document.createElement('p');
-            p.innerHTML = 'Error: Failed to generate image.';
-            box.appendChild(p);
-        }
+    box.innerHTML = '<h3>DALL·E</h3><span class="loading">Processing...</span>';
+    try {
+        const img = await puter.ai.txt2img(prompt);
+        box.appendChild(img);
+    } catch (e) {
+        console.warn('DALL-E failed', e);
+        const p = document.createElement('p');
+        p.innerHTML = `Error: Failed to generate image - ${e.message}`;
+        p.className = 'error';
+        box.appendChild(p);
     }
     box.setAttribute('aria-busy', 'false');
+    box.scrollTop = box.scrollHeight;
+    generateImgBtn.disabled = false;
+    generateImgBtn.classList.remove('loading');
 }
 
 // ---- Event Listeners ----
@@ -128,6 +176,13 @@ chatInput.addEventListener('keypress', e => {
     }
 });
 
-document.getElementById('generateImgBtn').addEventListener('click', () => {
-    generateImages(document.getElementById('dalleInput').value);
+generateImgBtn.addEventListener('click', () => {
+    generateImages(dalleInput.value);
+    dalleInput.value = '';
+});
+dalleInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') {
+        generateImages(dalleInput.value);
+        dalleInput.value = '';
+    }
 });
