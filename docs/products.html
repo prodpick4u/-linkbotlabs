@@ -3,27 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LinkBotLabs Product Page</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
-<link rel="stylesheet" href="assets/style.css">
+<title>Linkbotlabs Product Hub</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://js.puter.com/v2/"></script>
+<style>
+  body { font-family: Arial, sans-serif; margin:0; background:#f8f9fa; color:#222; }
+  header { background:#3b0ca3; color:#fff; padding:20px; text-align:center; font-size:1.8em; font-weight:bold; }
+  .categories { display:flex; flex-wrap:wrap; justify-content:center; padding:20px; gap:15px; }
+  .cat-box { flex:1 1 150px; padding:20px; text-align:center; color:#fff; font-weight:bold; border-radius:10px; cursor:pointer; transition:transform 0.2s; }
+  .cat-box:hover { transform:scale(1.05); }
+  .cat-tech { background:#007bff; }
+  .cat-kitchen { background:#28a745; }
+  .cat-beauty { background:#e83e8c; }
+  .cat-fitness { background:#fd7e14; }
+  .cat-home { background:#6f42c1; }
+  main { padding:20px; max-width:1200px; margin:auto; }
+  h2 { margin-top:40px; border-bottom:2px solid #ddd; padding-bottom:5px; }
+  .product-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; margin-top:20px; }
+  .product-card { background:#fff; border:1px solid #ddd; border-radius:8px; padding:15px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+  .product-card img { max-width:100%; border-radius:6px; }
+  .product-card a { display:inline-block; margin-top:10px; padding:8px 14px; background:#007bff; color:#fff; text-decoration:none; border-radius:5px; }
+  .product-card a:hover { background:#0056b3; }
+</style>
 </head>
 <body>
 
-<h1>🛍️ Products</h1>
-<p>Affiliate-linked products are automatically tagged with your Affiliate ID.</p>
+<header>🛍️ Linkbotlabs Product Hub</header>
 
-<div id="productContainer" class="product-grid"></div>
+<!-- Categories -->
+<section class="categories">
+  <div class="cat-box cat-tech" onclick="loadCategory('tech')">Tech</div>
+  <div class="cat-box cat-kitchen" onclick="loadCategory('kitchen')">Kitchen</div>
+  <div class="cat-box cat-beauty" onclick="loadCategory('beauty')">Beauty</div>
+  <div class="cat-box cat-fitness" onclick="loadCategory('fitness')">Fitness</div>
+  <div class="cat-box cat-home" onclick="loadCategory('home')">Home</div>
+</section>
 
-<script src="https://js.puter.com/v2/"></script>
-<script src="scripts/gateway.js"></script>
+<main>
+  <h2>🔥 Best Sellers This Week</h2>
+  <div id="weekly" class="product-grid"></div>
+
+  <h2>⚡ Daily Hot Picks</h2>
+  <div id="daily" class="product-grid"></div>
+
+  <h2>⭐ My Top Picks</h2>
+  <div id="topPicks" class="product-grid"></div>
+
+  <h2>📝 Reviews & Recommendations</h2>
+  <div id="reviews" class="product-grid"></div>
+</main>
+
 <script>
-  // Load products with saved affiliate tag
-  const AFFILIATE_TAG = localStorage.getItem('affiliateTag') || "";
-  if(AFFILIATE_TAG){
-    generateProducts("Trending", AFFILIATE_TAG);
-  } else {
-    document.getElementById('productContainer').innerHTML = "<p>Please register an Affiliate ID on the AI Gateway first.</p>";
+// Example Temu + Amazon category fallback links
+const CATEGORY_LINKS = {
+  tech: "https://www.amazon.com/s?k=tech&tag=YOURTAG-20",
+  kitchen: "https://www.amazon.com/s?k=kitchen&tag=YOURTAG-20",
+  beauty: "https://www.amazon.com/s?k=beauty&tag=YOURTAG-20",
+  fitness: "https://www.temu.com/fitness.html",
+  home: "https://www.temu.com/home.html"
+};
+
+// Clicking category = redirect
+function loadCategory(cat){
+  window.open(CATEGORY_LINKS[cat], "_blank");
+}
+
+// ---- AI Populating Content ----
+async function fillProducts(){
+  const sections = {
+    weekly: "Top 5 best sellers this week",
+    daily: "Top 5 trending daily hot products",
+    topPicks: "My top 5 personal product picks",
+    reviews: "Short reviews and recommendations for 5 popular items"
+  };
+
+  for(const [id, prompt] of Object.entries(sections)){
+    try{
+      const res = await puter.ai.chat(
+        `Generate ${prompt} in JSON format: 
+         [{"title":"Product Name","img":"https://...","description":"short desc","url":"https://amazon.com/..."}]`,
+        { model: "gpt-5" }
+      );
+      let products = [];
+      try { products = JSON.parse(res.text); }
+      catch { products = []; }
+
+      renderProducts(id, products);
+    } catch(e){ console.error("AI failed for", id, e); }
   }
+}
+
+function renderProducts(sectionId, products){
+  const container = document.getElementById(sectionId);
+  container.innerHTML = "";
+  products.forEach(p=>{
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${p.img || 'https://via.placeholder.com/200'}" alt="${p.title}">
+      <h3>${p.title}</h3>
+      <p>${p.description||""}</p>
+      <a href="${p.url}" target="_blank">Buy Now</a>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Auto-fill on load
+fillProducts();
 </script>
 </body>
 </html>
