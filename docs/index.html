@@ -42,10 +42,12 @@
             border-radius: 4px;
             flex: 1;
             min-width: 200px;
+            transition: border-color 0.2s;
         }
         input:focus, select:focus {
-            outline: 2px solid #1a73e8;
-            outline-offset: 2px;
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 5px rgba(26, 115, 232, 0.3);
         }
         button {
             padding: 0.75rem 1.5rem;
@@ -90,11 +92,19 @@
             border-bottom: 1px solid #eee;
             padding-bottom: 0.5rem;
         }
-        .ai-box[aria-busy="true"]::after {
-            content: "|";
-            display: inline-block;
-            animation: blink 0.8s step-end infinite;
-            margin-left: 0.2rem;
+        .ai-box[aria-busy="true"] .loading {
+            display: block;
+            color: #666;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        .ai-box .response {
+            font-family: 'Courier New', Courier, monospace;
+            animation: typing 0.1s steps(1, end);
+        }
+        .ai-box .error {
+            color: #d32f2f;
+            font-style: italic;
         }
         #dalleBox {
             display: flex;
@@ -108,12 +118,29 @@
             border: 1px solid #ddd;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
-        .loading::after {
+        .loading {
+            display: none;
+        }
+        button.loading::after {
             content: " Loading...";
             font-style: italic;
         }
-        @keyframes blink {
-            50% { opacity: 0; }
+        @keyframes typing {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        footer a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
         @media (max-width: 768px) {
             h1 { font-size: 1.75rem; }
@@ -124,7 +151,7 @@
         }
         @media (prefers-reduced-motion: reduce) {
             .ai-box:hover { transform: none; }
-            .ai-box[aria-busy="true"]::after { animation: none; }
+            .ai-box .response { animation: none; }
         }
         .sr-only {
             position: absolute;
@@ -155,11 +182,15 @@
         <select id="voiceSelect" aria-label="Select TTS voice"></select>
     </div>
     <div class="ai-container">
-        <div class="ai-box" id="claudeBox" aria-live="polite"><h3>Claude</h3></div>
-        <div class="ai-box" id="dalleBox" aria-live="polite"><h3>DALL·E</h3></div>
-        <div class="ai-box" id="geminiBox" aria-live="polite"><h3>Gemini</h3></div>
-        <div class="ai-box" id="gpt5Box" aria-live="polite"><h3>GPT-5</h3></div>
-        <div class="ai-box" id="grokBox" aria-live="polite"><h3>Grok</h3></div>
+        <div class="ai-box" id="claudeBox" aria-live="polite" aria-atomic="false"><h3>Claude</h3><span class="loading">Processing...</span></div>
+        <div class="ai-box" id="dalleBox" aria-live="polite" aria-atomic="false"><h3>DALL·E</h3><span class="loading">Processing...</span></div>
+        <div class="ai-box" id="geminiBox" aria-live="polite" aria-atomic="false"><h3>Gemini</h3><span class="loading">Processing...</span></div>
+        <div class="ai-box" id="gpt5Box" aria-live="polite" aria-atomic="false"><h3>GPT-5</h3><span class="loading">Processing...</span></div>
+        <div class="ai-box" id="grokBox" aria-live="polite" aria-atomic="false"><h3>Grok</h3><span class="loading">Processing...</span></div>
     </div>
+    <footer>
+        Powered by <a href="https://developer.puter.com/tutorials/free-unlimited-openai-api/">Puter.js Free, Unlimited OpenAI API</a>. 
+        Uses the "User Pays" model, allowing developers to integrate AI capabilities like GPT-5, GPT-4o, and DALL·E for free, with users covering usage costs.
+    </footer>
 </body>
 </html>
