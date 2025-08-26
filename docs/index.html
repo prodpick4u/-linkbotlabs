@@ -3,34 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puter.js AI Chat</title>
+<title>Puter.js AI Chat & Images</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        margin:0; padding:20px;
+        font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+        margin: 0;
+        padding: 20px;
         background: #f0f4f8;
         color: #333;
     }
     h1 {
-        text-align:center;
-        color:#1a73e8;
-        font-size:2.2rem;
-        margin-bottom:1rem;
+        text-align: center;
+        color: #1a73e8;
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
     }
-    .chat-section {
+    #chatContainer {
         max-width: 800px;
         margin: 0 auto;
-    }
-    #chatBox {
         background: white;
         border-radius: 10px;
-        padding: 15px;
-        max-height: 500px;
-        overflow-y: auto;
+        padding: 20px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    #chatBox {
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 10px;
+        background: #e8f0fe;
+        font-family: monospace;
+        white-space: pre-wrap;
         margin-bottom: 10px;
-        font-family: 'Courier New', Courier, monospace;
     }
     input, select, button {
         width: 100%;
@@ -49,19 +55,16 @@
         transition: background 0.2s;
     }
     button:hover { background: #1557b0; }
-    .message { margin: 8px 0; }
-    .user { font-weight: bold; color: #1a73e8; }
-    .ai { font-weight: bold; color: #1557b0; }
-    .error { color: red; font-style: italic; }
+    img { max-width: 100%; border-radius: 6px; margin-top: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 </style>
 </head>
 <body>
 
-<h1>Puter.js AI Chat</h1>
+<h1>Puter.js AI Chat & Images</h1>
 
-<div class="chat-section">
+<div id="chatContainer">
     <div id="chatBox"></div>
-    <input id="chatInput" placeholder="Type your question...">
+    <input id="userInput" placeholder="Type your question or image prompt...">
     <select id="modelSelect">
         <option value="gpt-5-nano">GPT-5 Nano</option>
         <option value="gpt-4.1">GPT-4.1</option>
@@ -69,54 +72,71 @@
         <option value="gpt-4o">GPT-4o</option>
     </select>
     <button id="sendBtn">Send</button>
+    <button id="imageBtn">Generate Image</button>
 </div>
 
 <script>
 const chatBox = document.getElementById('chatBox');
-const chatInput = document.getElementById('chatInput');
+const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
+const imageBtn = document.getElementById('imageBtn');
 const modelSelect = document.getElementById('modelSelect');
 
-async function appendMessage(sender, text) {
+function appendMessage(text, isError=false) {
     const p = document.createElement('div');
-    p.className = 'message ' + sender;
-    p.innerHTML = `<strong>${sender === 'user' ? 'You' : 'AI'}:</strong> ${text}`;
+    p.innerHTML = text;
+    if(isError) p.style.color = 'red';
     chatBox.appendChild(p);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-async function sendMessage() {
-    const prompt = chatInput.value.trim();
-    if(!prompt) return;
+// ---- Text Chat ----
+sendBtn.addEventListener('click', async () => {
+    const prompt = userInput.value.trim();
     const model = modelSelect.value;
-
-    await appendMessage('user', prompt);
-    chatInput.value = '';
+    if(!prompt) return alert('Enter a prompt');
+    appendMessage(`<b>You:</b> ${prompt}`);
+    userInput.value = '';
     
-    const loadingMsg = document.createElement('div');
-    loadingMsg.className = 'message ai';
-    loadingMsg.textContent = 'Processing...';
-    chatBox.appendChild(loadingMsg);
-    chatBox.scrollTop = chatBox.scrollHeight;
-
     try {
-        let fullText = '';
         const stream = await puter.ai.chat(prompt, { model, stream:true });
+        let fullText = '';
+        const p = document.createElement('div');
+        p.innerHTML = `<b>${model}:</b> `;
+        chatBox.appendChild(p);
         for await (const part of stream) {
-            fullText += part?.text || '';
-            loadingMsg.textContent = fullText;
-            chatBox.scrollTop = chatBox.scrollHeight;
+            if(part?.text){
+                fullText += part.text;
+                p.innerHTML = `<b>${model}:</b> ${fullText.replace(/\n/g,'<br>')}`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
         }
-        if(!fullText) throw new Error('No response from model');
     } catch(e) {
-        loadingMsg.className = 'message error';
-        loadingMsg.textContent = `Error: ${e.message || 'Unknown error'}`;
+        appendMessage(`Error: ${e.message}`, true);
     }
-}
+});
 
-sendBtn.addEventListener('click', sendMessage);
-chatInput.addEventListener('keypress', e => {
-    if(e.key === 'Enter') sendMessage();
+// ---- Image Generation ----
+imageBtn.addEventListener('click', async () => {
+    const prompt = userInput.value.trim();
+    if(!prompt) return alert('Enter an image prompt');
+    appendMessage(`<b>Image Prompt:</b> ${prompt}`);
+    userInput.value = '';
+    
+    try {
+        const img = await puter.ai.txt2img(prompt);
+        chatBox.appendChild(img);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    } catch(e) {
+        appendMessage(`Error: ${e.message}`, true);
+    }
+});
+
+// ---- Enter key support ----
+userInput.addEventListener('keypress', e => {
+    if(e.key === 'Enter'){
+        sendBtn.click();
+    }
 });
 </script>
 
