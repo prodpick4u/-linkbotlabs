@@ -14,7 +14,7 @@ body {
 .container { max-width:1200px; margin:auto; padding:1rem; }
 h1, h2 { text-align:center; color:#9cf; }
 .ai-box { background: rgba(255,255,255,0.05); padding:1rem; border-radius:8px; max-height:300px; overflow-y:auto; margin-top:0.5rem; }
-input, textarea { width:100%; padding:0.5rem; margin:0.5rem 0; border-radius:5px; border:none; }
+input, textarea, select { width:100%; padding:0.5rem; margin:0.5rem 0; border-radius:5px; border:none; }
 button { padding:0.6rem 1.2rem; border:none; border-radius:5px; background:linear-gradient(135deg,#6a11cb,#2575fc); color:white; cursor:pointer; }
 button:hover { opacity:0.85; }
 .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:1000; }
@@ -52,8 +52,15 @@ button:hover { opacity:0.85; }
         <!-- Chat Tab -->
         <div id="chatTab" class="tab-content active">
             <section>
+                <label>Select AI Model:</label>
+                <select id="modelSelect">
+                    <option value="gpt-5">GPT-5</option>
+                    <option value="claude-4">Claude 4</option>
+                    <option value="grok-1">Grok 1</option>
+                </select>
                 <input type="text" id="qaInput" placeholder="Ask a question...">
                 <button id="qaBtn">Ask</button>
+                <button id="clearChatBtn">Clear Chat</button>
                 <div class="ai-box" id="qaBox"></div>
             </section>
         </div>
@@ -117,6 +124,67 @@ tabs.forEach(tab=>{
         document.getElementById(tab.dataset.tab).classList.add('active');
     });
 });
+
+// Initialize Puter AI after dashboard unlock
+function initPuterAI() {
+    const puter = new Puter({ debug:true });
+
+    // --- Chat / Q&A ---
+    const qaInput = document.getElementById('qaInput');
+    const qaBtn = document.getElementById('qaBtn');
+    const qaBox = document.getElementById('qaBox');
+    const modelSelect = document.getElementById('modelSelect');
+    const clearChatBtn = document.getElementById('clearChatBtn');
+
+    qaBtn.addEventListener('click', askQuestion);
+    qaInput.addEventListener('keypress', e=>{ if(e.key==='Enter') askQuestion(); });
+    clearChatBtn.addEventListener('click', ()=>{ qaBox.innerHTML=''; });
+
+    async function askQuestion() {
+        const question = qaInput.value.trim();
+        if(!question) return;
+
+        qaBox.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
+        qaInput.value='';
+
+        const span = document.createElement('p');
+        span.innerHTML = `<strong>AI:</strong> <span class="streaming">...</span>`;
+        qaBox.appendChild(span);
+        qaBox.scrollTop = qaBox.scrollHeight;
+
+        try{
+            const selectedModel = modelSelect.value;
+            const stream = await puter.ai.chat(question, { model: selectedModel, stream:true });
+            const streamingSpan = span.querySelector('.streaming');
+            streamingSpan.textContent = '';
+            for await (const chunk of stream) {
+                streamingSpan.textContent += chunk.text || chunk;
+                qaBox.scrollTop = qaBox.scrollHeight;
+            }
+        } catch(e){
+            span.innerHTML = `<strong>AI Error:</strong> ${e.message}`;
+        }
+    }
+
+    // --- DALL-E ---
+    const dalleInput = document.getElementById('dalleInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const dalleBox = document.getElementById('dalleBox');
+
+    generateBtn.addEventListener('click', async () => {
+        const prompt = dalleInput.value.trim();
+        if(!prompt) return;
+        dalleBox.innerHTML = '<p>Generating image...</p>';
+        try{
+            const img = await puter.ai.txt2img(prompt);
+            dalleBox.innerHTML='';
+            dalleBox.appendChild(img);
+        } catch(e){
+            dalleBox.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
+        }
+    });
+}
 </script>
+
 </body>
 </html>
