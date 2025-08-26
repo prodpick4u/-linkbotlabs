@@ -1,13 +1,13 @@
 body {
   font-family: Arial, sans-serif;
   background: #f0f0f0;
-  color: #1f2937;
   margin: 0;
   padding: 2rem;
+  color: #1f2937;
 }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   background: #fff;
   padding: 2rem;
@@ -15,24 +15,34 @@ body {
   box-shadow: 0 6px 18px rgba(0,0,0,0.1);
 }
 
-h1 {
-  color: #3b82f6;
-  text-align: center;
-}
+h1 { color: #3b82f6; text-align: center; }
+h2 { color: #1f2937; margin-top: 2rem; }
 
-input {
-  width: 80%;
-  padding: 0.5rem;
-  margin-right: 0.5rem;
-}
-
+input { width: 70%; padding: 0.5rem; margin-right: 0.5rem; }
 button {
   padding: 0.5rem 1rem;
   background: #3b82f6;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.ai-box {
+  margin-top: 1rem;
+  background: #eef2ff;
+  padding: 1rem;
+  border-radius: 8px;
+  min-height: 50px;
+}
+
+.ai-box p {
+  margin: 0.5rem 0;
+}
+
+.streaming {
+  font-style: italic;
+  color: #3b82f6;
 }
 
 .ai-box img {
