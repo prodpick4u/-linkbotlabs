@@ -5,45 +5,94 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Puter.js AI Chat</title>
 <script src="https://js.puter.com/v2/"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-body { font-family:'Inter',sans-serif; background:#f0f4f8; margin:0; padding:20px; color:#333; }
-h1 { text-align:center; color:#1a73e8; margin-bottom:20px; font-size:2.5rem; }
-#chatBox { max-width:700px; margin:0 auto; background:white; padding:20px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.1); }
-#chatOutput { max-height:400px; overflow-y:auto; background:#e8f0fe; padding:15px; border-radius:8px; font-family:monospace; white-space:pre-wrap; scroll-behavior: smooth; }
-input, select, button { width:100%; margin:8px 0; padding:12px; border-radius:8px; border:1px solid #ccc; font-size:1rem; box-sizing:border-box; }
-button { background:#1a73e8; color:white; font-weight:600; cursor:pointer; transition:0.2s; }
-button:hover { background:#1557b0; }
-.user { color:#1a73e8; font-weight:600; margin-top:10px; }
-.ai { color:#333; margin-top:10px; }
-.ai span { display:inline; }
-#controlButtons { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
-#controlButtons button { flex:1; }
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+#chatContainer {
+    width: 100%;
+    max-width: 700px;
+    margin: 40px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+#chatOutput {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #e8f0fe;
+    font-family: monospace;
+    white-space: pre-wrap;
+    scroll-behavior: smooth;
+}
+.message { margin-bottom: 12px; }
+.user { color: #1a73e8; font-weight: 600; }
+.ai { color: #333; }
+#inputArea {
+    display: flex;
+    gap: 8px;
+    padding: 10px 20px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+}
+#chatInput {
+    flex: 1;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+#sendBtn {
+    padding: 12px 20px;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+#sendBtn:hover { background: #1557b0; }
+#modelSelect {
+    margin-left: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
 </style>
 </head>
 <body>
 
-<h1>Puter.js AI Chat</h1>
-<div id="chatBox">
-    <div id="controlButtons">
-        <button id="sendBtn">Send</button>
-        <button id="clearBtn" style="background:#d32f2f;">Clear Conversation</button>
-    </div>
-    <input id="chatInput" placeholder="Type your message...">
-    <select id="modelSelect">
-        <option value="gpt-5-nano">GPT-5 Nano</option>
-        <option value="gpt-4.1">GPT-4.1</option>
-        <option value="o3-mini">O3 Mini</option>
-        <option value="gpt-4o">GPT-4o</option>
-    </select>
+<div id="chatContainer">
     <div id="chatOutput"></div>
+    <div id="inputArea">
+        <input id="chatInput" placeholder="Type your message..." />
+        <select id="modelSelect">
+            <option value="gpt-5-nano">GPT-5 Nano</option>
+            <option value="gpt-4.1">GPT-4.1</option>
+            <option value="o3-mini">O3 Mini</option>
+            <option value="gpt-4o">GPT-4o</option>
+        </select>
+        <button id="sendBtn">Send</button>
+    </div>
 </div>
 
 <script>
 const chatInput = document.getElementById('chatInput');
-const chatOutput = document.getElementById('chatOutput');
 const sendBtn = document.getElementById('sendBtn');
-const clearBtn = document.getElementById('clearBtn');
+const chatOutput = document.getElementById('chatOutput');
 const modelSelect = document.getElementById('modelSelect');
 
 let conversation = [];
@@ -66,46 +115,43 @@ function processTTSQueue() {
 
 async function sendMessage() {
     const prompt = chatInput.value.trim();
-    if(!prompt) return alert('Enter a message');
+    if(!prompt) return;
+    chatInput.value = '';
 
     // Display user message
     conversation.push({role:'user', content:prompt});
-    chatOutput.innerHTML += `<div class="user">You: ${prompt}</div>`;
-    chatInput.value = '';
+    const userDiv = document.createElement('div');
+    userDiv.className = 'message user';
+    userDiv.textContent = `You: ${prompt}`;
+    chatOutput.appendChild(userDiv);
     chatOutput.scrollTop = chatOutput.scrollHeight;
 
     const model = modelSelect.value;
+    const aiDiv = document.createElement('div');
+    aiDiv.className = 'message ai';
+    aiDiv.textContent = 'AI: ...';
+    chatOutput.appendChild(aiDiv);
+
     try {
         const stream = await puter.ai.chat(conversation.map(m=>m.content), { model, stream:true });
-        let aiResponse = '';
-        chatOutput.innerHTML += `<div class="ai">AI: <span></span></div>`;
-        const aiSpan = chatOutput.querySelector('.ai span:last-child');
-
+        let fullText = '';
+        aiDiv.textContent = 'AI: ';
         for await (const part of stream) {
             if(part?.text) {
-                aiResponse += part.text;
-                aiSpan.innerHTML = aiResponse.replace(/\n/g,'<br>');
+                fullText += part.text;
+                aiDiv.textContent = 'AI: ' + fullText;
                 chatOutput.scrollTop = chatOutput.scrollHeight;
                 playTTS(part.text);
             }
         }
-        conversation.push({role:'ai', content:aiResponse});
+        conversation.push({role:'ai', content:fullText});
     } catch(err) {
-        chatOutput.innerHTML += `<div class="ai">Error: ${err.message || 'Unknown'}</div>`;
+        aiDiv.textContent = `AI Error: ${err.message || 'Unknown error'}`;
     }
-}
-
-// ---- Clear Conversation ----
-function clearConversation() {
-    conversation = [];
-    chatOutput.innerHTML = '';
-    chatInput.value = '';
-    if(synth.speaking) synth.cancel();
 }
 
 sendBtn.addEventListener('click', sendMessage);
 chatInput.addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
-clearBtn.addEventListener('click', clearConversation);
 </script>
 
 </body>
