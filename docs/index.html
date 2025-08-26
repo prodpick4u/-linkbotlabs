@@ -124,7 +124,6 @@
 </footer>
 
 <script>
-<script>
 const puter = new Puter();
 const chatBox = document.getElementById("chatBox");
 const input = document.getElementById("userInput");
@@ -157,7 +156,6 @@ async function sendMessage(){
 
   try{
     const response = await puter.ai.chat(query, { model:'gpt-5-nano' });
-    // response is already a string
     chatBox.querySelector('.assistant:last-child').textContent = response;
   } catch(err){
     chatBox.querySelector('.assistant:last-child').textContent = '⚠️ Error: '+err;
@@ -183,7 +181,7 @@ input.addEventListener('keypress', (e)=>{
     sendMessage();
   }
 });
+</script>
 
-  </script>
 </body>
 </html>
