@@ -7,36 +7,159 @@
     <script src="https://js.puter.com/v2/"></script>
     <script src="gateway.js" defer></script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; max-width: 1200px; margin: 0 auto; }
-        h1 { text-align: center; }
-        .input-section { display: flex; gap: 10px; margin-bottom: 20px; }
-        input, select { padding: 10px; font-size: 16px; }
-        button { padding: 10px 20px; cursor: pointer; }
-        .ai-container { display: flex; flex-wrap: wrap; gap: 20px; }
-        .ai-box { flex: 1; min-width: 250px; border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; }
-        .ai-box h3 { margin: 0 0 10px; }
-        #dalleBox img { max-width: 100%; height: auto; margin-bottom: 10px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #1a73e8;
+        }
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+        label {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+        input, select {
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex: 1;
+            min-width: 200px;
+        }
+        input:focus, select:focus {
+            outline: 2px solid #1a73e8;
+            outline-offset: 2px;
+        }
+        button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #1557b0;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .ai-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .ai-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            height: 400px;
+            overflow-y: auto;
+            transition: transform 0.2s;
+        }
+        .ai-box:hover {
+            transform: translateY(-2px);
+        }
+        .ai-box h3 {
+            margin: 0 0 1rem;
+            font-size: 1.25rem;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        .ai-box[aria-busy="true"]::after {
+            content: "|";
+            display: inline-block;
+            animation: blink 0.8s step-end infinite;
+            margin-left: 0.2rem;
+        }
+        #dalleBox {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        #dalleBox img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .loading::after {
+            content: " Loading...";
+            font-style: italic;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.75rem; }
+            .input-section { flex-direction: column; }
+            input, select, button { width: 100%; }
+            .ai-container { grid-template-columns: 1fr; }
+            .ai-box { height: 300px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .ai-box:hover { transform: none; }
+            .ai-box[aria-busy="true"]::after { animation: none; }
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
     </style>
 </head>
 <body>
     <h1>AI Prompts with Puter.js</h1>
     <div class="input-section">
-        <input id="chatInput" type="text" placeholder="Ask AI something..." style="flex: 1;">
-        <button id="sendBtn">Send</button>
+        <label for="chatInput" class="sr-only">Ask AI a question</label>
+        <input id="chatInput" type="text" placeholder="Ask AI something..." aria-label="Ask AI a question">
+        <button id="sendBtn" aria-label="Send chat prompt">Send</button>
     </div>
     <div class="input-section">
-        <input id="dalleInput" type="text" placeholder="Enter image prompt..." style="flex: 1;">
-        <button id="generateImgBtn">Generate Images</button>
+        <label for="dalleInput" class="sr-only">Enter image prompt</label>
+        <input id="dalleInput" type="text" placeholder="Enter image prompt..." aria-label="Enter image prompt">
+        <button id="generateImgBtn" aria-label="Generate images with DALL·E">Generate Images</button>
     </div>
     <div class="input-section">
-        <select id="voiceSelect"></select>
+        <label for="voiceSelect">Voice:</label>
+        <select id="voiceSelect" aria-label="Select TTS voice"></select>
     </div>
     <div class="ai-container">
-        <div class="ai-box" id="claudeBox"><h3>Claude</h3></div>
-        <div class="ai-box" id="dalleBox"><h3>DALL·E</h3></div>
-        <div class="ai-box" id="geminiBox"><h3>Gemini</h3></div>
-        <div class="ai-box" id="gpt5Box"><h3>GPT-5</h3></div>
-        <div class="ai-box" id="grokBox"><h3>Grok</h3></div>
+        <div class="ai-box" id="claudeBox" aria-live="polite"><h3>Claude</h3></div>
+        <div class="ai-box" id="dalleBox" aria-live="polite"><h3>DALL·E</h3></div>
+        <div class="ai-box" id="geminiBox" aria-live="polite"><h3>Gemini</h3></div>
+        <div class="ai-box" id="gpt5Box" aria-live="polite"><h3>GPT-5</h3></div>
+        <div class="ai-box" id="grokBox" aria-live="polite"><h3>Grok</h3></div>
     </div>
 </body>
 </html>
