@@ -1,18 +1,21 @@
-// --- Initialize Puter after password ---
+// --- Initialize Puter and all AI interactions ---
 function initPuterAI() {
     const puter = new Puter({ debug: true });
 
-    // --- Q&A / Search ---
+    // --- Chat / Q&A ---
     const qaInput = document.getElementById('qaInput');
     const qaBtn = document.getElementById('qaBtn');
     const qaBox = document.getElementById('qaBox');
+    const modelSelect = document.getElementById('modelSelect');
 
     qaBtn.addEventListener('click', askQuestion);
     qaInput.addEventListener('keypress', e => { if(e.key==='Enter') askQuestion(); });
 
     async function askQuestion() {
         const question = qaInput.value.trim();
-        if(!question) return;
+        if (!question) return;
+
+        const selectedModel = modelSelect.value || 'gpt-5';
 
         qaBox.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
         qaInput.value='';
@@ -23,10 +26,10 @@ function initPuterAI() {
         qaBox.scrollTop = qaBox.scrollHeight;
 
         try {
-            // --- Try streaming first ---
             let stream;
             try {
-                stream = await puter.ai.chat(question, { model: 'gpt-5', stream:true });
+                // Attempt streaming first
+                stream = await puter.ai.chat(question, { model: selectedModel, stream:true });
                 const streamingSpan = span.querySelector('.streaming');
                 streamingSpan.textContent = '';
                 for await (const chunk of stream) {
@@ -34,17 +37,16 @@ function initPuterAI() {
                     qaBox.scrollTop = qaBox.scrollHeight;
                 }
             } catch(err) {
-                // --- Fallback to non-streaming mode ---
-                const response = await puter.ai.chat(question);
+                // Fallback to non-streaming mode
+                const response = await puter.ai.chat(question, { model: selectedModel });
                 span.querySelector('.streaming').textContent = response.text || response;
             }
-
         } catch(e) {
-            span.innerHTML = `<strong>AI Error:</strong> ${e.message}`;
+            span.innerHTML = `<strong>AI Error:</strong> ${e.message}<br>Try selecting another model.`;
         }
     }
 
-    // --- DALL-E Image ---
+    // --- DALL-E Image Generation ---
     const dalleInput = document.getElementById('dalleInput');
     const generateBtn = document.getElementById('generateBtn');
     const dalleBox = document.getElementById('dalleBox');
@@ -56,7 +58,7 @@ function initPuterAI() {
         dalleBox.innerHTML = '<p>Generating image...</p>';
 
         try {
-            const img = await puter.ai.txt2img(prompt);
+            const img = await puter.ai.txt2img(prompt); // You can also specify model here if needed
             dalleBox.innerHTML = '';
             dalleBox.appendChild(img);
         } catch(e) {
@@ -64,22 +66,3 @@ function initPuterAI() {
         }
     });
 }
-
-// --- Password Overlay Handling ---
-const correctPassword = "supersecret";
-const overlay = document.getElementById('passwordOverlay');
-const input = document.getElementById('dashboardPassword');
-const btn = document.getElementById('submitPassword');
-const dashboard = document.getElementById('dashboardContent');
-
-btn.addEventListener('click', () => {
-    if(input.value === correctPassword){
-        overlay.style.display='none';
-        dashboard.style.display='block';
-        initPuterAI(); // Initialize Puter after login
-    } else {
-        document.getElementById('pwError').style.display='block';
-        input.value='';
-    }
-});
-input.addEventListener('keypress', e => { if(e.key==='Enter') btn.click(); });
