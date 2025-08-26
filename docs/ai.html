@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puter.js Demo - Page 6</title>
+    <title>Puter.js AI Demo - Interactive</title>
     <script src="https://js.puter.com/v2/"></script>
     <style>
         body {
@@ -19,6 +19,22 @@
             border-radius: 8px;
             background: #2c2c2c;
         }
+        input, button, textarea {
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #ffcc00;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            width: auto;
+            margin-top: 10px;
+        }
         img {
             max-width: 100%;
             display: block;
@@ -31,57 +47,76 @@
     </style>
 </head>
 <body>
-    <h1>Puter.js Demo - Page 6</h1>
+    <h1>Puter.js AI Demo - Interactive</h1>
 
     <!-- Example 1: Chat with GPT-4.1 nano -->
     <section>
         <h2>Chat with GPT-4.1 nano</h2>
+        <textarea id="p6_chatInput" rows="2" placeholder="Type your question here..."></textarea>
+        <button onclick="askGPT()">Send</button>
         <div id="p6_chat1"></div>
         <script>
-            puter.ai.chat(`What is life?`).then(resp => {
-                document.getElementById('p6_chat1').innerHTML = resp;
-            });
+            function askGPT() {
+                const input = document.getElementById('p6_chatInput').value;
+                puter.ai.chat(input).then(resp => {
+                    document.getElementById('p6_chat1').innerHTML = resp;
+                });
+            }
         </script>
     </section>
 
     <!-- Example 2: Chat about an image -->
     <section>
         <h2>Chat about an image</h2>
-        <img src="https://assets.puter.site/doge.jpeg" alt="Doge">
+        <input id="p6_imageUrl" type="text" placeholder="Enter image URL..." value="https://assets.puter.site/doge.jpeg">
+        <textarea id="p6_imagePrompt" rows="2" placeholder="Type your prompt here...">What do you see?</textarea>
+        <button onclick="askImage()">Analyze Image</button>
         <div id="p6_chat2"></div>
         <script>
-            puter.ai.chat(`What do you see?`, `https://assets.puter.site/doge.jpeg`).then(resp => {
-                document.getElementById('p6_chat2').innerHTML = resp;
-            });
+            function askImage() {
+                const url = document.getElementById('p6_imageUrl').value;
+                const prompt = document.getElementById('p6_imagePrompt').value;
+                puter.ai.chat(prompt, url).then(resp => {
+                    document.getElementById('p6_chat2').innerHTML = resp;
+                });
+            }
         </script>
     </section>
 
     <!-- Example 3: Generate an image using DALL·E 3 -->
     <section>
         <h2>Generate an image</h2>
+        <textarea id="p6_imgPrompt" rows="2" placeholder="Describe the image you want...">A picture of a cat.</textarea>
+        <button onclick="generateImage()">Generate</button>
         <div id="p6_imgOutput"></div>
         <script>
-            puter.ai.txt2img('A picture of a cat.', true).then((image) => {
-                document.getElementById('p6_imgOutput').appendChild(image);
-            });
+            function generateImage() {
+                const prompt = document.getElementById('p6_imgPrompt').value;
+                puter.ai.txt2img(prompt, true).then((image) => {
+                    const output = document.getElementById('p6_imgOutput');
+                    output.innerHTML = ''; // clear previous image
+                    output.appendChild(image);
+                });
+            }
         </script>
     </section>
 
     <!-- Example 4: Stream chat with Claude -->
     <section>
         <h2>Stream chat with Claude</h2>
+        <textarea id="p6_claudeInput" rows="2" placeholder="Type your question here...">Tell me in detail what Rick and Morty is all about.</textarea>
+        <button onclick="askClaude()">Ask Claude</button>
         <div id="p6_chat4"></div>
         <script>
-        (async () => {
-            const resp = await puter.ai.chat(
-                'Tell me in detail what Rick and Morty is all about.', 
-                {model: 'claude', stream: true }
-            );
-            const chatDiv = document.getElementById('p6_chat4');
-            for await ( const part of resp ) {
-                if(part?.text) chatDiv.innerHTML += part.text.replaceAll('\n', '<br>');
+            async function askClaude() {
+                const prompt = document.getElementById('p6_claudeInput').value;
+                const chatDiv = document.getElementById('p6_chat4');
+                chatDiv.innerHTML = ''; // clear previous response
+                const resp = await puter.ai.chat(prompt, {model: 'claude', stream: true });
+                for await (const part of resp) {
+                    if(part?.text) chatDiv.innerHTML += part.text.replaceAll('\n', '<br>');
+                }
             }
-        })();
         </script>
     </section>
 
