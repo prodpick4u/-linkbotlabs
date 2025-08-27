@@ -1,4 +1,4 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -78,10 +78,17 @@ DOCTYPE html>
     background: rgba(0,0,0,0.4);
     text-align:center; padding:1.5rem 1rem; font-size:0.9rem;
   }
-  .contact-form input[type="email"] {
-    padding:8px; width:250px; border-radius:5px; border:none; margin-right:8px;
+  .contact-form input,
+  .contact-form textarea {
+    padding:10px; width:250px; border-radius:5px; border:none; margin:5px 0;
+    background:#222; color:white;
   }
-  .contact-form button { padding:8px 14px; }
+  .contact-form button {
+    padding:10px 16px; border:none; border-radius:6px;
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    color:white; font-weight:600; cursor:pointer;
+  }
+  .contact-form button:hover { opacity:0.85; }
   .comments p {
     background: rgba(0,0,0,0.5); padding:0.8rem 1rem; border-radius:6px;
     margin-bottom:0.7rem;
@@ -134,10 +141,7 @@ DOCTYPE html>
     <a href="https://drive.google.com/uc?export=download&id=1xwD_gDLZyPKLMmZY6UfAej6ZvMBjrzal" class="btn">Desktop Demo (ZIP)</a>
     <a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" target="_blank" class="btn">Hire Me on Fiverr</a>
     <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" class="btn">📝 Visit Our Blog</a>
-    <!-- Add this wherever you want the link to appear on your front page -->
-<a href="ai.html" style="color:#ffcc00; text-decoration:none; font-weight:bold;">
-    Go to AI Demo Page
-</a>
+    <a href="ai.html" style="color:#ffcc00; text-decoration:none; font-weight:bold;">Go to AI Demo Page</a>
   </div>
 </section>
 
@@ -171,13 +175,39 @@ DOCTYPE html>
   </div>
 </section>
 
+<!-- 📧 Contact Form (EmailJS wired) -->
 <section>
   <h2>📧 Contact Us</h2>
-  <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
-    <input type="email" placeholder="Your email" required>
-    <button type="submit" class="btn">Send</button>
+  <form id="contact-form" class="contact-form">
+    <input type="text" name="from_name" placeholder="Your name" required><br>
+    <input type="email" name="reply_to" placeholder="Your email" required><br>
+    <textarea name="message" placeholder="Your message" rows="4" required></textarea><br>
+    <button type="submit">Send Message</button>
   </form>
+  <p id="form-status" style="margin-top:10px; font-size:0.9rem; color:#ffe169;"></p>
 </section>
+
+<!-- EmailJS script -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("uMBWBshmzlvZ8v52yJO"); // ✅ Public key
+  })();
+
+  document.getElementById("contact-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    emailjs.sendForm("service_pzzseh7", "bceEcXpLIRDpJxOHM", this)
+      .then(function() {
+        document.getElementById("form-status").innerText = "✅ Message sent successfully!";
+        document.getElementById("contact-form").reset();
+      }, function(error) {
+        document.getElementById("form-status").innerText = "❌ Failed to send. Please try again.";
+        console.error("EmailJS Error:", error);
+      });
+  });
+</script>
+
 <!-- Multi-AI Section -->
 <section>
   <h2>🤖 Multi-AI Chat & DALL·E Image</h2>
@@ -257,6 +287,7 @@ generateBtn.addEventListener('click', async () => {
     }
 });
 </script>
+
 <footer>
   <p>© 2025 LinkBotLabs – Powered by Affiliate Shopping</p>
   <p>Support the project by shopping via <a href="https://www.amazon.com/?tag=mychanneld-20" style="color:#9cf;">Amazon Affiliate Link</a></p>
