@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -78,17 +78,10 @@
     background: rgba(0,0,0,0.4);
     text-align:center; padding:1.5rem 1rem; font-size:0.9rem;
   }
-  .contact-form input,
-  .contact-form textarea {
-    padding:10px; width:250px; border-radius:5px; border:none; margin:5px 0;
-    background:#222; color:white;
+  .contact-form input[type="email"] {
+    padding:8px; width:250px; border-radius:5px; border:none; margin-right:8px;
   }
-  .contact-form button {
-    padding:10px 16px; border:none; border-radius:6px;
-    background: linear-gradient(135deg,#6a11cb,#2575fc);
-    color:white; font-weight:600; cursor:pointer;
-  }
-  .contact-form button:hover { opacity:0.85; }
+  .contact-form button { padding:8px 14px; }
   .comments p {
     background: rgba(0,0,0,0.5); padding:0.8rem 1rem; border-radius:6px;
     margin-bottom:0.7rem;
@@ -141,7 +134,6 @@
     <a href="https://drive.google.com/uc?export=download&id=1xwD_gDLZyPKLMmZY6UfAej6ZvMBjrzal" class="btn">Desktop Demo (ZIP)</a>
     <a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" target="_blank" class="btn">Hire Me on Fiverr</a>
     <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" class="btn">📝 Visit Our Blog</a>
-    <a href="ai.html" style="color:#ffcc00; text-decoration:none; font-weight:bold;">Go to AI Demo Page</a>
   </div>
 </section>
 
@@ -175,118 +167,13 @@
   </div>
 </section>
 
-<!-- 📧 Contact Form (EmailJS wired) -->
 <section>
   <h2>📧 Contact Us</h2>
-  <form id="contact-form" class="contact-form">
-    <input type="text" name="from_name" placeholder="Your name" required><br>
-    <input type="email" name="reply_to" placeholder="Your email" required><br>
-    <textarea name="message" placeholder="Your message" rows="4" required></textarea><br>
-    <button type="submit">Send Message</button>
+  <form class="contact-form" onsubmit="event.preventDefault(); alert('Thank you! We will contact you soon.');">
+    <input type="email" placeholder="Your email" required>
+    <button type="submit" class="btn">Send</button>
   </form>
-  <p id="form-status" style="margin-top:10px; font-size:0.9rem; color:#ffe169;"></p>
 </section>
-
-<!-- EmailJS script -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-  (function(){
-    emailjs.init("uMBWBshmzlvZ8v52yJO"); // ✅ Public key
-  })();
-
-  document.getElementById("contact-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    emailjs.sendForm("service_pzzseh7", "bceEcXpLIRDpJxOHM", this)
-      .then(function() {
-        document.getElementById("form-status").innerText = "✅ Message sent successfully!";
-        document.getElementById("contact-form").reset();
-      }, function(error) {
-        document.getElementById("form-status").innerText = "❌ Failed to send. Please try again.";
-        console.error("EmailJS Error:", error);
-      });
-  });
-</script>
-
-<!-- Multi-AI Section -->
-<section>
-  <h2>🤖 Multi-AI Chat & DALL·E Image</h2>
-  <div class="ai-card" style="background: rgba(0,0,0,0.55); padding:1.5rem; border-radius:12px; margin-bottom:2rem;">
-    <h3 style="color:#7b5cf5;">Ask AI Anything</h3>
-    <input type="text" id="chatInput" placeholder="Ask a question..." 
-           style="width:70%; padding:10px; border-radius:6px; border:none; margin-right:10px; background:#374151; color:white;">
-    <button id="sendBtn" style="padding:10px 20px; border:none; border-radius:6px; background:#7b5cf5; color:white; cursor:pointer;">Send</button>
-    <div id="chatBox" class="ai-box" style="max-height:300px; overflow-y:auto; margin-top:15px; padding:10px; border-radius:8px; background:#111827;"></div>
-  </div>
-
-  <div class="ai-card" style="background: rgba(0,0,0,0.55); padding:1.5rem; border-radius:12px;">
-    <h3 style="color:#7b5cf5;">Generate DALL·E Image</h3>
-    <input type="text" id="dalleInput" placeholder="Describe an image..." 
-           style="width:70%; padding:10px; border-radius:6px; border:none; margin-right:10px; background:#374151; color:white;">
-    <button id="generateBtn" style="padding:10px 20px; border:none; border-radius:6px; background:#7b5cf5; color:white; cursor:pointer;">Generate Image</button>
-    <div id="dalleBox" class="ai-box" style="max-height:300px; overflow-y:auto; margin-top:15px; padding:10px; border-radius:8px; background:#111827;"></div>
-  </div>
-</section>
-
-<script src="https://js.puter.com/v2/"></script>
-<script>
-const puter = new Puter({ debug: true });
-
-// Multi-AI Chat
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
-const chatBox = document.getElementById('chatBox');
-const aiModels = ['gpt-5','claude','gemini','x-ai/grok-4'];
-
-sendBtn.addEventListener('click', askAI);
-chatInput.addEventListener('keypress', e => { if(e.key==='Enter') askAI(); });
-
-async function askAI() {
-    const question = chatInput.value.trim();
-    if(!question) return;
-    chatBox.innerHTML += `<p><strong>You:</strong> ${question}</p>`;
-    chatInput.value = '';
-
-    for(const model of aiModels){
-        const modelBox = document.createElement('p');
-        modelBox.innerHTML = `<strong>${model}:</strong> <span class="streaming">...</span>`;
-        chatBox.appendChild(modelBox);
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        try {
-            const stream = await puter.ai.chat(question, { model, stream: true });
-            const span = modelBox.querySelector('.streaming');
-            span.textContent = '';
-            for await (const chunk of stream) {
-                span.textContent += chunk.text || chunk;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        } catch(e){
-            modelBox.innerHTML = `<strong>${model} Error:</strong> ${e.message}`;
-        }
-    }
-}
-
-// DALL-E Image
-const dalleInput = document.getElementById('dalleInput');
-const generateBtn = document.getElementById('generateBtn');
-const dalleBox = document.getElementById('dalleBox');
-
-generateBtn.addEventListener('click', async () => {
-    const prompt = dalleInput.value.trim();
-    if(!prompt) return;
-
-    dalleBox.innerHTML = '<p>Generating image...</p>';
-
-    try {
-        const img = await puter.ai.txt2img(prompt);
-        dalleBox.innerHTML = '';
-        dalleBox.appendChild(img);
-    } catch(e) {
-        dalleBox.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
-    }
-});
-</script>
 
 <footer>
   <p>© 2025 LinkBotLabs – Powered by Affiliate Shopping</p>
