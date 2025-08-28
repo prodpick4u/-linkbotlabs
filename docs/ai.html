@@ -1,126 +1,426 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AI Demo - GPT-4 Nano</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Playground</title>
   <script src="https://js.puter.com/v2/"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#111; color:#eee; }
-    header { background:#4b0082; padding:15px; text-align:center; font-size:18px; font-weight:bold; }
-    #chat-container { max-width:800px; margin:20px auto; background:#1a1a2e; padding:15px; border-radius:10px; }
-    #chat-box { border:1px solid #444; height:300px; overflow-y:auto; padding:10px; background:#000; }
-    #user-input { width:80%; padding:10px; margin-top:10px; border:none; border-radius:5px; }
-    #send-btn { padding:10px 15px; border:none; border-radius:5px; background:#4b0082; color:#fff; cursor:pointer; }
-    #overlay, #password-overlay {
-      position: fixed; top:0; left:0; right:0; bottom:0;
-      background: rgba(0,0,0,0.95); color:#fff; display:none;
-      align-items:center; justify-content:center; text-align:center; z-index:1000;
-      flex-direction: column;
-      font-family: Arial, sans-serif;
+    :root {
+      --glass: rgba(0,0,0,0.35);
+      --stroke: rgba(255,255,255,0.12);
+      --text:#fff;
+      --muted:#cfcfcf;
+      --accent:#ffe169;
     }
-    #overlay button, #password-overlay button {
-      margin-top: 15px; padding:12px 20px; background:#ff9900; border:none; border-radius:8px; cursor:pointer;
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      padding: 24px;
+      color: var(--text);
+      background: radial-gradient(1200px 1200px at 10% -10%, #111 0%, #000 60%, #000 100%);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
     }
-    #models { max-width:800px; margin:20px auto; background:#222; padding:15px; border-radius:10px; }
-    #models h2 { margin-top:0; }
-    .model { margin-bottom:10px; }
+    h1 { margin: 0 0 18px 0; font-weight: 700; letter-spacing: .2px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+    .card {
+      grid-column: span 12;
+      background: var(--glass);
+      border: 1px solid var(--stroke);
+      border-radius: 14px;
+      padding: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    @media (min-width: 900px) {
+      .card { grid-column: span 6; }
+    }
+    label {
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      margin: 8px 0 6px;
+    }
+    textarea, input, select {
+      width: 100%;
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--stroke);
+      border-radius: 10px;
+      padding: 10px 12px;
+      outline: none;
+      caret-color: var(--text);
+    }
+    textarea { min-height: 84px; resize: vertical; }
+    button {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background: var(--accent);
+      color:#000;
+      font-weight:700;
+      border:0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor:pointer;
+      margin-top: 10px;
+    }
+    .output {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--stroke);
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    img.gen {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
   </style>
 </head>
 <body>
-  <header>
-    Free Demo: You’re testing <span style="color:#ff0;">ChatGPT-4 Nano</span>.
-  </header>
+  <h1>AI Playground</h1>
+  <div class="grid">
 
-  <div id="chat-container">
-    <div id="chat-box"></div>
-    <input type="text" id="user-input" placeholder="Type your message...">
-    <button id="send-btn">Send</button>
+    <!-- IMAGE GENERATION -->
+    <div class="card" id="card-imggen">
+      <h2 style="margin:0 0 6px">Image Generation</h2>
+      <div class="hint">Generate images from text (DALL·E via Puter.js).</div>
+
+      <label for="imggen-model">Model</label>
+      <select id="imggen-model">
+        <option value="dalle">DALL·E 3 (default)</option>
+      </select>
+
+      <label for="imggen-prompt">Image Prompt</label>
+      <textarea id="imggen-prompt" placeholder="e.g., A futuristic cityscape at night with neon rain"></textarea>
+
+      <label for="imggen-count">Number of Images</label>
+      <select id="imggen-count">
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+
+      <button id="imggen-run">Generate</button>
+      <div class="output" id="imggen-out"></div>
+    </div>
+
   </div>
 
-  <div id="models">
-    <h2>Available AI Models with Upgrade</h2>
-    <div class="model"><b>OpenAI API</b>: GPT-5, GPT-4o, GPT-4.1, GPT-4.5, o1, o3, o4, DALL-E</div>
-    <div class="model"><b>Claude API</b>: Claude 4 Sonnet & Opus</div>
-    <div class="model"><b>DeepSeek API</b>: Chat + Reasoner</div>
-    <div class="model"><b>Gemini API</b>: Gemini 2.0 Flash, Gemini 2.5 Pro, Gemini 1.5 Flash</div>
-    <div class="model"><b>Grok API</b>: Latest xAI LLM</div>
-    <div class="model"><b>Text-to-Speech API</b>: Convert text to realistic speech</div>
-  </div>
+<script>
+/* ---------- Helpers ---------- */
+function putText(el, text) {
+  el.innerHTML = (text ?? '').toString();
+}
+function appendText(el, text) {
+  el.innerHTML += (text ?? '').toString();
+}
 
-  <!-- Overlay for demo expiration -->
-  <div id="overlay">
-    <h1>Demo Expired</h1>
-    <p>Your 5-minute demo has ended.</p>
-    <p>Pay $12 to continue and access the full demo.</p>
-    <!-- PayPal Buy Now Button -->
-    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-      <input type="hidden" name="cmd" value="_xclick">
-      <input type="hidden" name="business" value="YOUR_PAYPAL_EMAIL@example.com">
-      <input type="hidden" name="item_name" value="GPT Demo Access">
-      <input type="hidden" name="amount" value="12.00">
-      <input type="hidden" name="currency_code" value="USD">
-      <input type="hidden" name="return" value="https://puter.com/sign-in?redirect=https://brave-morning-5979.puter.site/">
-      <input type="hidden" name="cancel_return" value="https://prodpick4u.github.io/-linkbotlabs/ai.html">
-      <input type="submit" value="Pay $12 & Continue">
-    </form>
-  </div>
+/* ---------- IMAGE GENERATION (Multiple Images + Reset Fix) ---------- */
+document.getElementById('imggen-run').addEventListener('click', async () => {
+  const prompt = document.getElementById('imggen-prompt').value.trim();
+  const out = document.getElementById('imggen-out');
+  const count = parseInt(document.getElementById('imggen-count').value, 10) || 1;
 
-  <!-- Admin password overlay -->
-  <div id="password-overlay">
-    <h1>Enter Admin Password</h1>
-    <input type="password" id="admin-pass" placeholder="Password">
-    <button id="pass-btn">Unlock Demo</button>
-  </div>
+  if (!prompt) {
+    putText(out, 'Please enter an image prompt.');
+    return;
+  }
 
-  <script>
-    const chatBox = document.getElementById('chat-box');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
-    const demoOverlay = document.getElementById('overlay');
-    const passwordOverlay = document.getElementById('password-overlay');
-    const adminPass = document.getElementById('admin-pass');
-    const passBtn = document.getElementById('pass-btn');
+  putText(out, 'Generating…');
+  out.innerHTML = '';
 
-    // Chat send function
-    async function sendMessage() {
-      const message = userInput.value.trim();
-      if (!message) return;
-      chatBox.innerHTML += `<div><b>You:</b> ${message}</div>`;
-      userInput.value = "";
-
-      try {
-        const response = await puter.ai.chat.completions.create({
-          model: "gpt-4-nano",
-          messages: [{ role: "user", content: message }]
-        });
-        const reply = response.choices[0].message.content;
-        chatBox.innerHTML += `<div><b>AI:</b> ${reply}</div>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      } catch {
-        chatBox.innerHTML += `<div><b>AI:</b> Error: Unable to respond.</div>`;
-      }
+  for (let i = 0; i < count; i++) {
+    try {
+      const imgEl = await puter.ai.txt2img(prompt);
+      imgEl.classList.add('gen');
+      out.appendChild(imgEl);
+    } catch (e) {
+      const errorMsg = document.createElement('div');
+      errorMsg.classList.add('hint');
+      errorMsg.textContent = `Image ${i + 1} failed: ${e?.message ?? 'Unknown error'}`;
+      out.appendChild(errorMsg);
     }
+  }
+});
+</script>
+</body>
+</html>!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Playground</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+  :root { --glass: rgba(0,0,0,0.35); --stroke: rgba(255,255,255,0.12); --text:#fff; --muted:#cfcfcf; --accent:#ffe169; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; padding: 24px; color: var(--text);
+    background: radial-gradient(1200px 1200px at 10% -10%, #111 0%, #000 60%, #000 100%);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  }
+  h1 { margin: 0 0 18px 0; font-weight: 700; letter-spacing: .2px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 18px;
+  }
+  .card {
+    grid-column: span 12;
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+  @media (min-width: 900px) {
+    .card { grid-column: span 6; }
+  }
+  label { display:block; font-size: 12px; color: var(--muted); margin: 8px 0 6px; }
+  textarea, input, select {
+    width: 100%; color: var(--text); background: rgba(255,255,255,0.06);
+    border: 1px solid var(--stroke); border-radius: 10px; padding: 10px 12px;
+    outline: none; caret-color: var(--text);
+  }
+  textarea { min-height: 84px; resize: vertical; }
+  button {
+    display:inline-flex; align-items:center; gap:8px;
+    background: var(--accent); color:#000; font-weight:700; border:0;
+    border-radius: 10px; padding: 10px 14px; cursor:pointer; margin-top: 10px;
+  }
+  .output {
+    margin-top: 12px; padding: 12px; border-radius: 10px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--stroke);
+    white-space: pre-wrap; word-wrap: break-word;
+  }
+  img.gen { max-width: 100%; height: auto; display: block; border-radius: 10px; margin-top: 10px; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+  <h1>AI Playground</h1>
+  <div class="grid">
 
-    sendBtn.addEventListener("click", sendMessage);
-    userInput.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
+    <!-- CHAT / Q&A -->
+    <div class="card" id="card-chat">
+      <h2 style="margin:0 0 6px">Chat / Q&amp;A</h2>
+      <div class="hint">Ask anything. Choose a chat model (includes <strong>GPT-4.1-nano</strong>).</div>
+      <label for="chat-model">Model</label>
+      <select id="chat-model">
+        <option value="gpt-4.1-nano" selected>GPT-4.1-nano (fast & light)</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+        <option value="gpt-4.1-mini">GPT-4.1-mini</option>
+        <option value="gpt-4o">GPT-4o</option>
+        <option value="gpt-4o-mini">GPT-4o-mini</option>
+        <option value="gpt-5">GPT-5</option>
+        <option value="gpt-5-mini">GPT-5-mini</option>
+        <option value="gpt-5-nano">GPT-5-nano</option>
+        <option value="gpt-5-chat-latest">GPT-5 chat (latest)</option>
+        <option value="o1">o1</option>
+        <option value="o1-mini">o1-mini</option>
+        <option value="o1-pro">o1-pro</option>
+        <option value="o3">o3</option>
+        <option value="o3-mini">o3-mini</option>
+        <option value="o4-mini">o4-mini</option>
+        <option value="claude-sonnet-4">Claude Sonnet 4</option>
+        <option value="claude-opus-4">Claude Opus 4</option>
+        <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
+        <option value="claude-3-7-opus">Claude 3.7 Opus</option>
+        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+        <option value="google/gemini-2.5-pro-exp-03-25:free">Gemini 2.5 Pro (exp)</option>
+        <option value="google/gemini-flash-1.5-8b">Gemini 1.5 Flash (8B)</option>
+        <option value="x-ai/grok-4">Grok 4</option>
+        <option value="x-ai/grok-3">Grok 3</option>
+        <option value="x-ai/grok-3-mini">Grok 3 Mini</option>
+        <option value="x-ai/grok-2-1212">Grok 2 (1212)</option>
+      </select>
 
-    // Timer: show overlay after 5 minutes
-    const demoTime = 5 * 60 * 1000; // 5 minutes
-    setTimeout(() => {
-      demoOverlay.style.display = 'flex';
-    }, demoTime);
+      <label for="chat-prompt">Prompt</label>
+      <textarea id="chat-prompt" placeholder="e.g., Explain quantum computing in simple terms"></textarea>
+      <button id="chat-run">Run</button>
+      <div class="output" id="chat-out"></div>
+    </div>
 
-    // Admin password unlock
-    const ADMIN_PASSWORD = "DSHORTADMIN"; // Change to your secret
-    passBtn.addEventListener('click', () => {
-      if (adminPass.value === ADMIN_PASSWORD) {
-        demoOverlay.style.display = 'none';
-        passwordOverlay.style.display = 'none';
-        alert('Demo unlocked! You can continue testing.');
-      } else {
-        alert('Incorrect password.');
-      }
-    });
-  </script>
+    <!-- IMAGE GENERATION -->
+    <div class="card" id="card-imggen">
+      <h2 style="margin:0 0 6px">Image Generation</h2>
+      <div class="hint">Generate an image from text (DALL·E via Puter.js).</div>
+      <label for="imggen-model">Model</label>
+      <select id="imggen-model">
+        <option value="dalle">DALL·E 3 (default)</option>
+      </select>
+
+      <label for="imggen-prompt">Image Prompt</label>
+      <textarea id="imggen-prompt" placeholder="e.g., A futuristic cityscape at night with neon rain"></textarea>
+      <button id="imggen-run">Generate</button>
+      <div class="output" id="imggen-out"></div>
+    </div>
+
+    <!-- IMAGE ANALYSIS -->
+    <div class="card" id="card-vision">
+      <h2 style="margin:0 0 6px">Image Analysis</h2>
+      <div class="hint">Paste an image URL and ask a question about it.</div>
+      <label for="vision-model">Model</label>
+      <select id="vision-model">
+        <option value="gpt-4o" selected>GPT-4o (vision)</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+        <option value="gpt-4.1-nano">GPT-4.1-nano</option>
+        <option value="gpt-5-nano">GPT-5-nano</option>
+        <option value="claude-sonnet-4">Claude Sonnet 4</option>
+        <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
+        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+        <option value="google/gemini-flash-1.5-8b">Gemini 1.5 Flash (8B)</option>
+        <option value="x-ai/grok-4">Grok 4</option>
+      </select>
+
+      <label for="vision-url">Image URL</label>
+      <input id="vision-url" placeholder="https://… (direct image link)" />
+
+      <label for="vision-prompt">Prompt</label>
+      <textarea id="vision-prompt">What do you see in this image?</textarea>
+      <button id="vision-run">Analyze</button>
+      <div class="output" id="vision-out"></div>
+    </div>
+
+    <!-- STREAMING LONG RESPONSES -->
+    <div class="card" id="card-stream">
+      <h2 style="margin:0 0 6px">Streaming (Long Responses)</h2>
+      <div class="hint">See responses arrive in real-time.</div>
+      <label for="stream-model">Model</label>
+      <select id="stream-model">
+        <option value="gpt-4.1-nano" selected>GPT-4.1-nano</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+        <option value="gpt-4o">GPT-4o</option>
+        <option value="gpt-5-nano">GPT-5-nano</option>
+        <option value="o3-mini">o3-mini</option>
+        <option value="o1-mini">o1-mini</option>
+        <option value="claude-sonnet-4">Claude Sonnet 4</option>
+        <option value="claude-opus-4">Claude Opus 4</option>
+        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+        <option value="x-ai/grok-4">Grok 4</option>
+      </select>
+
+      <label for="stream-prompt">Prompt</label>
+      <textarea id="stream-prompt">Explain the theory of relativity in detail.</textarea>
+      <button id="stream-run">Stream</button>
+      <div class="output" id="stream-out"></div>
+    </div>
+
+  </div>
+
+<script>
+/* ---------- Helpers ---------- */
+function putText(el, text) {
+  el.innerHTML = (text ?? '').toString();
+}
+function appendText(el, text) {
+  el.innerHTML += (text ?? '').toString();
+}
+function normalizeNonStream(resp) {
+  if (typeof resp === 'string') return resp;
+  if (resp?.output_text) return resp.output_text; // ✅ Fix for Puter.js
+  if (resp?.text) return resp.text;
+  if (resp?.message?.content) {
+    if (Array.isArray(resp.message.content)) {
+      const first = resp.message.content[0];
+      return typeof first === 'string'
+        ? first
+        : (first?.text ?? JSON.stringify(resp.message.content));
+    }
+    return typeof resp.message.content === 'string'
+      ? resp.message.content
+      : JSON.stringify(resp.message.content);
+  }
+  return JSON.stringify(resp ?? {});
+}
+
+/* ---------- CHAT ---------- */
+document.getElementById('chat-run').addEventListener('click', async () => {
+  const model = document.getElementById('chat-model').value;
+  const prompt = document.getElementById('chat-prompt').value.trim();
+  const out = document.getElementById('chat-out');
+  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
+  putText(out, 'Thinking…');
+  try {
+    const resp = await puter.ai.chat(prompt, { model });
+    putText(out, normalizeNonStream(resp));
+  } catch (e) {
+    putText(out, 'Error: ' + (e?.message ?? e));
+  }
+});
+
+/* ---------- IMAGE GENERATION ---------- */
+document.getElementById('imggen-run').addEventListener('click', async () => {
+  const prompt = document.getElementById('imggen-prompt').value.trim();
+  const out = document.getElementById('imggen-out');
+  if (!prompt) { putText(out, 'Please enter an image prompt.'); return; }
+  putText(out, 'Generating…');
+  out.innerHTML = '';
+  try {
+    const imgEl = await puter.ai.txt2img(prompt);
+    imgEl.classList.add('gen');
+    out.appendChild(imgEl);
+  } catch (e) {
+    putText(out, 'Error: ' + (e?.message ?? e));
+  }
+});
+
+/* ---------- IMAGE ANALYSIS ---------- */
+document.getElementById('vision-run').addEventListener('click', async () => {
+  const model = document.getElementById('vision-model').value;
+  const url = document.getElementById('vision-url').value.trim();
+  const prompt = document.getElementById('vision-prompt').value.trim();
+  const out = document.getElementById('vision-out');
+  if (!url) { putText(out, 'Please paste a direct image URL.'); return; }
+  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
+  putText(out, 'Analyzing image…');
+  try {
+    const resp = await puter.ai.chat(prompt, url, { model });
+    putText(out, normalizeNonStream(resp));
+  } catch (e) {
+    putText(out, 'Error: ' + (e?.message ?? e));
+  }
+});
+
+/* ---------- STREAMING ---------- */
+document.getElementById('stream-run').addEventListener('click', async () => {
+  const model = document.getElementById('stream-model').value;
+  const prompt = document.getElementById('stream-prompt').value.trim();
+  const out = document.getElementById('stream-out');
+  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
+  putText(out, '');
+  try {
+    const stream = await puter.ai.chat(prompt, { model, stream: true });
+    for await (const part of stream) {
+      if (part?.output_text) appendText(out, part.output_text.replaceAll('\n','<br>'));
+      else if (part?.text) appendText(out, part.text.replaceAll('\n','<br>'));
+    }
+  } catch (e) {
+    putText(out, 'Error: ' + (e?.message ?? e));
+  }
+});
+</script>
 </body>
 </html>
