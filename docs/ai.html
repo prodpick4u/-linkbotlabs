@@ -2,104 +2,124 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AI Demo - GPT-4.1 Nano</title>
+  <title>AI Demo - GPT-4 Nano</title>
   <script src="https://js.puter.com/v2/"></script>
   <style>
-    body { font-family: Arial, sans-serif; background: #111; color: #eee; margin:0; padding:0;}
-    header { background: #4b0082; padding: 15px; text-align: center; font-size: 18px; font-weight: bold;}
-    #chat-container { max-width: 800px; margin: 20px auto; background: #1a1a2e; padding: 15px; border-radius: 10px;}
-    #chat-out { border:1px solid #444; background:#000; min-height:200px; padding:10px; overflow-y:auto;}
-    #chat-prompt { width:70%; padding:10px; border-radius:5px; border:none;}
-    #chat-run { padding:10px 15px; border:none; border-radius:5px; background:#4b0082; color:#fff; cursor:pointer;}
-    /* DEMO OVERLAY */
-    #demo-overlay {
-      display:none; position:fixed; top:0; left:0; right:0; bottom:0;
-      background: rgba(0,0,0,0.95); color:#fff; z-index:1000;
-      display:flex; align-items:center; justify-content:center; text-align:center;
-      flex-direction:column; font-family: Arial, sans-serif;
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#111; color:#eee; }
+    header { background:#4b0082; padding:15px; text-align:center; font-size:18px; font-weight:bold; }
+    #chat-container { max-width:800px; margin:20px auto; background:#1a1a2e; padding:15px; border-radius:10px; }
+    #chat-box { border:1px solid #444; height:300px; overflow-y:auto; padding:10px; background:#000; }
+    #user-input { width:80%; padding:10px; margin-top:10px; border:none; border-radius:5px; }
+    #send-btn { padding:10px 15px; border:none; border-radius:5px; background:#4b0082; color:#fff; cursor:pointer; }
+    #overlay, #password-overlay {
+      position: fixed; top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.95); color:#fff; display:none;
+      align-items:center; justify-content:center; text-align:center; z-index:1000;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
     }
-    #demo-overlay button {
-      margin-top: 10px; padding:12px 20px; font-size:16px; border:none; border-radius:8px; cursor:pointer;
+    #overlay button, #password-overlay button {
+      margin-top: 15px; padding:12px 20px; background:#ff9900; border:none; border-radius:8px; cursor:pointer;
     }
-    #pay-btn { background:#ff9900; }
-    #close-btn { background:#444; }
+    #models { max-width:800px; margin:20px auto; background:#222; padding:15px; border-radius:10px; }
+    #models h2 { margin-top:0; }
+    .model { margin-bottom:10px; }
   </style>
 </head>
 <body>
-  <header>Free Demo: GPT-4.1 Nano Chat. Upgrade for full access!</header>
+  <header>
+    Free Demo: You’re testing <span style="color:#ff0;">ChatGPT-4 Nano</span>.
+  </header>
 
   <div id="chat-container">
-    <select id="chat-model">
-      <option value="gpt-4.1-nano">GPT-4.1-nano (fast & light)</option>
-      <!-- Add other models if needed -->
-    </select>
-    <br><br>
-    <textarea id="chat-prompt" placeholder="Type your message..."></textarea>
-    <button id="chat-run">Run</button>
-    <div id="chat-out"></div>
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="Type your message...">
+    <button id="send-btn">Send</button>
   </div>
 
-  <!-- DEMO OVERLAY -->
-  <div id="demo-overlay">
+  <div id="models">
+    <h2>Available AI Models with Upgrade</h2>
+    <div class="model"><b>OpenAI API</b>: GPT-5, GPT-4o, GPT-4.1, GPT-4.5, o1, o3, o4, DALL-E</div>
+    <div class="model"><b>Claude API</b>: Claude 4 Sonnet & Opus</div>
+    <div class="model"><b>DeepSeek API</b>: Chat + Reasoner</div>
+    <div class="model"><b>Gemini API</b>: Gemini 2.0 Flash, Gemini 2.5 Pro, Gemini 1.5 Flash</div>
+    <div class="model"><b>Grok API</b>: Latest xAI LLM</div>
+    <div class="model"><b>Text-to-Speech API</b>: Convert text to realistic speech</div>
+  </div>
+
+  <!-- Overlay for demo expiration -->
+  <div id="overlay">
     <h1>Demo Expired</h1>
-    <p>Your 5-minute demo has ended. Pay $12 via PayPal to continue.</p>
-    <button id="pay-btn">Pay $12 & Continue</button>
-    <button id="close-btn">Exit Demo</button>
+    <p>Your 5-minute demo has ended.</p>
+    <p>Pay $12 to continue and access the full demo.</p>
+    <!-- PayPal Buy Now Button -->
+    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+      <input type="hidden" name="cmd" value="_xclick">
+      <input type="hidden" name="business" value="YOUR_PAYPAL_EMAIL@example.com">
+      <input type="hidden" name="item_name" value="GPT Demo Access">
+      <input type="hidden" name="amount" value="12.00">
+      <input type="hidden" name="currency_code" value="USD">
+      <input type="hidden" name="return" value="https://puter.com/sign-in?redirect=https://brave-morning-5979.puter.site/">
+      <input type="hidden" name="cancel_return" value="https://prodpick4u.github.io/-linkbotlabs/ai.html">
+      <input type="submit" value="Pay $12 & Continue">
+    </form>
+  </div>
+
+  <!-- Admin password overlay -->
+  <div id="password-overlay">
+    <h1>Enter Admin Password</h1>
+    <input type="password" id="admin-pass" placeholder="Password">
+    <button id="pass-btn">Unlock Demo</button>
   </div>
 
   <script>
-    const chatOut = document.getElementById('chat-out');
-    const chatPrompt = document.getElementById('chat-prompt');
-    const chatRun = document.getElementById('chat-run');
-    const chatModel = document.getElementById('chat-model');
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const demoOverlay = document.getElementById('overlay');
+    const passwordOverlay = document.getElementById('password-overlay');
+    const adminPass = document.getElementById('admin-pass');
+    const passBtn = document.getElementById('pass-btn');
 
-    function putText(outEl, text) {
-      outEl.innerHTML = text;
-    }
+    // Chat send function
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+      chatBox.innerHTML += `<div><b>You:</b> ${message}</div>`;
+      userInput.value = "";
 
-    function normalizeNonStream(resp) {
-      if(typeof resp==='string') return resp;
-      if(resp.output) return resp.output;
-      return JSON.stringify(resp);
-    }
-
-    // ---------- CHAT ----------
-    chatRun.addEventListener('click', async () => {
-      const model = chatModel.value;
-      const prompt = chatPrompt.value.trim();
-      if(!prompt) { putText(chatOut,'Please enter a prompt.'); return; }
-      putText(chatOut,'Thinking…');
       try {
-        const resp = await puter.ai.chat(prompt, { model });
-        putText(chatOut, normalizeNonStream(resp));
-      } catch(e) {
-        putText(chatOut, 'Error: ' + (e?.message ?? e));
+        const response = await puter.ai.chat.completions.create({
+          model: "gpt-4-nano",
+          messages: [{ role: "user", content: message }]
+        });
+        const reply = response.choices[0].message.content;
+        chatBox.innerHTML += `<div><b>AI:</b> ${reply}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch {
+        chatBox.innerHTML += `<div><b>AI:</b> Error: Unable to respond.</div>`;
       }
-    });
-
-    // ---------- 5-MINUTE DEMO TIMER ----------
-    const demoDuration = 5 * 60 * 1000; // 5 minutes
-    if (!localStorage.getItem('demoStart')) {
-      localStorage.setItem('demoStart', Date.now());
     }
-    const demoStart = parseInt(localStorage.getItem('demoStart'),10);
-    const elapsed = Date.now() - demoStart;
 
+    sendBtn.addEventListener("click", sendMessage);
+    userInput.addEventListener("keypress", e => { if (e.key === "Enter") sendMessage(); });
+
+    // Timer: show overlay after 5 minutes
+    const demoTime = 5 * 60 * 1000; // 5 minutes
     setTimeout(() => {
-      const overlay = document.getElementById('demo-overlay');
-      overlay.style.display = 'flex';
-      // disable chat
-      chatRun.disabled = true;
-      chatPrompt.disabled = true;
-    }, Math.max(0, demoDuration - elapsed));
+      demoOverlay.style.display = 'flex';
+    }, demoTime);
 
-    // Overlay buttons
-    document.getElementById('pay-btn').addEventListener('click', () => {
-      window.location.href = 'https://brave-morning-5979.puter.site/';
-    });
-    document.getElementById('close-btn').addEventListener('click', () => {
-      const overlay = document.getElementById('demo-overlay');
-      overlay.innerHTML = '<h2>Demo Ended</h2><p>Refresh to restart or pay to continue.</p>';
+    // Admin password unlock
+    const ADMIN_PASSWORD = "DSHORTADMIN"; // Change to your secret
+    passBtn.addEventListener('click', () => {
+      if (adminPass.value === ADMIN_PASSWORD) {
+        demoOverlay.style.display = 'none';
+        passwordOverlay.style.display = 'none';
+        alert('Demo unlocked! You can continue testing.');
+      } else {
+        alert('Incorrect password.');
+      }
     });
   </script>
 </body>
