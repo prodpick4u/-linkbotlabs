@@ -54,16 +54,9 @@
       padding: 15px;
       border-radius: 10px;
     }
-    #models h2 {
-      margin-top: 0;
-    }
-    .model {
-      margin-bottom: 10px;
-    }
-    .upgrade {
-      text-align: center;
-      margin: 20px;
-    }
+    #models h2 { margin-top: 0; }
+    .model { margin-bottom: 10px; }
+    .upgrade { text-align: center; margin: 20px; }
     .upgrade button {
       background: #ff9900;
       border: none;
@@ -145,14 +138,18 @@
       chatBox.innerHTML += `<div><b>You:</b> ${message}</div>`;
       userInput.value = "";
 
-      const response = await puter.ai.chat.completions.create({
-        model: "gpt-4-nano",
-        messages: [{ role: "user", content: message }]
-      });
-
-      const reply = response.choices[0].message.content;
-      chatBox.innerHTML += `<div><b>AI:</b> ${reply}</div>`;
-      chatBox.scrollTop = chatBox.scrollHeight;
+      try {
+        const response = await puter.ai.chat({
+          model: "gpt-4-nano",
+          input: message
+        });
+        const reply = response.output || "No response from AI.";
+        chatBox.innerHTML += `<div><b>AI:</b> ${reply}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (err) {
+        console.error(err);
+        chatBox.innerHTML += `<div style="color:red;"><b>Error:</b> AI not responding.</div>`;
+      }
     }
 
     sendBtn.addEventListener("click", sendMessage);
@@ -160,10 +157,15 @@
       if (e.key === "Enter") sendMessage();
     });
 
-    // Timer: 10 minutes
+    // Persistent 10-minute demo timer
+    if (!localStorage.getItem('demoStart')) {
+      localStorage.setItem('demoStart', Date.now());
+    }
+    const demoStart = parseInt(localStorage.getItem('demoStart'), 10);
+    const elapsed = Date.now() - demoStart;
     setTimeout(() => {
       document.getElementById("overlay").style.display = "flex";
-    }, 10 * 60 * 1000);
+    }, Math.max(0, 10*60*1000 - elapsed));
   </script>
 </body>
 </html>
