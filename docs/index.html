@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LinkBotLabs – Smart Shopping Assistant</title>
 
-<link rel="icon" type="image/png" href="preview.png">
+<link rel="icon" type="image/png" href="/preview.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
 
 <style>
@@ -15,7 +15,8 @@
     background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f);
     background-size: 400% 400%;
     animation: gradientShift 20s ease infinite;
-    color:white; line-height:1.5;
+    color:white;
+    line-height:1.5;
   }
   @keyframes gradientShift {
     0%{background-position:0% 50%;}
@@ -48,39 +49,35 @@
     font-size:1rem;
   }
   .categories a:hover { transform: scale(1.08); background: rgba(75,0,150,0.7); }
-  .video-container { position: relative; width: 100%; padding-bottom: 56.25%; margin-bottom:1rem; }
-  .video-container iframe { position: absolute; top:0; left:0; width:100%; height:100%; border-radius:10px; }
-  footer { background: rgba(0,0,0,0.5); text-align:center; padding:2rem 1rem; font-size:0.9rem; }
-  .contact-form input, .contact-form textarea { padding:10px; width:250px; border-radius:6px; border:none; margin:5px 0; }
+  .video-container {
+    position: relative; width: 100%; padding-bottom: 56.25%; margin-bottom:1rem;
+  }
+  .video-container iframe {
+    position: absolute; top:0; left:0; width:100%; height:100%; border-radius:10px;
+  }
+  footer {
+    background: rgba(0,0,0,0.5); text-align:center; padding:2rem 1rem; font-size:0.9rem;
+  }
+  .contact-form input, .contact-form textarea {
+    padding:10px; width:250px; border-radius:6px; border:none; margin:5px 0;
+  }
   .contact-form button { padding:10px 18px; border-radius:6px; border:none; cursor:pointer; background:#ffe169; color:#000; font-weight:700; }
-
-  /* Floating social bar */
-  .social-bar {
-    position: fixed; top: 50%; right: 10px; transform: translateY(-50%);
-    display: flex; flex-direction: column; gap: 10px; z-index: 999;
-  }
-  .social-bar a {
-    display: block; width: 40px; height: 40px;
-    background: #ffe169; color: #000; text-align: center; line-height: 40px;
-    border-radius: 50%; font-weight: bold; text-decoration: none; transition: transform 0.2s;
-  }
-  .social-bar a:hover { transform: scale(1.2); }
-
-  /* AI Playground styles */
-  #ai-playground textarea { width:100%; max-width:600px; }
-  #ai-playground select, #ai-playground button { padding:10px; border-radius:6px; margin-top:0.5rem; }
-  #ai-response { margin-top:1rem; padding:1rem; background:rgba(0,0,0,0.4); border-radius:8px; min-height:60px; text-align:left; }
 </style>
 </head>
 <body>
 
 <header>
-  <img src="preview.png" alt="LinkBotLabs Logo" style="max-width:200px; display:block; margin:0 auto 1rem;">
+  <img src="preview.png" alt="LinkBotLabs Preview" style="max-width:200px; display:block; margin:0 auto 1rem;">
   <h1>🚀 Welcome to LinkBotLabs</h1>
   <p><strong>AI-powered shopping, reviews, and video automation tools</strong></p>
   <p>Test our AI Playground + Desktop Demo (no key required!)</p>
-  <a href="for_dummies.html" class="btn" style="background:linear-gradient(135deg,#4CAF50,#2E7D32); font-size:1.2rem;">📘 For Dummies – Start Here</a>
-  <a href="products.html" class="btn" style="background:linear-gradient(135deg,#9C27B0,#4A148C); font-size:1.2rem;">🛒 Affiliate Product Page</a>
+<a href="for_dummies.html" class="btn" style="background:linear-gradient(135deg,#4CAF50,#2E7D32); font-size:1.2rem;">
+  📘 For Dummies – Start Here
+</a>
+
+<a href="products.html" class="btn" style="background:linear-gradient(135deg,#9C27B0,#4A148C); font-size:1.2rem;">
+  🛒 Affiliate Product Page
+</a>
   <a href="ai.html" class="btn">🤖 Try AI Playground (Demo)</a>
   <a href="https://drive.google.com/uc?export=download&id=1xwD_gDLZyPKLMmZY6UfAej6ZvMBjrzal" class="btn">📦 Download Desktop Demo (ZIP)</a>
   <a href="affiliate_starter.html" class="btn">🎁 Free Affiliate Starter Page</a>
@@ -89,32 +86,13 @@
 
 <section>
   <h2>📖 About the Tool</h2>
-  <p>LinkBotLabs gives you full <strong>product search, description writing, review scripts, and video automation</strong>.<br>
-     Download the desktop demo ZIP, extract & run – no key needed.<br>
-     Share our affiliate page to earn <strong>commissions together</strong> on every sale!</p>
-</section>
-
-<section id="ai-playground">
-  <h2>🤖 AI Playground – Try Multiple Models</h2>
-  <p>Type a prompt and pick an AI model. Hear responses spoken aloud!</p>
-
-  <select id="ai-model">
-    <option value="gpt-5-mini">GPT-5 Mini</option>
-    <option value="gpt-4o-mini">GPT-4o Mini</option>
-    <option value="google/gemini-2.5-pro">Google Gemini 2.5 Pro</option>
-    <option value="claude-3-7-opus">Claude 3.7 Opus</option>
-    <option value="meta-llama/llama-3.3-70b-instruct">LLaMA 3.3 70B</option>
-    <option value="mistral-large-latest">Mistral Large</option>
-    <option value="x-ai/grok-3">Grok 3</option>
-  </select><br>
-  <textarea id="prompt" rows="4" placeholder="Type your prompt here..."></textarea><br>
-  <button id="ask-ai" class="btn">Ask AI</button>
-
-  <div id="ai-response"></div>
+  <p>LinkBotLabs gives you full **product search, description writing, review scripts, and video automation**.  
+     Download the desktop demo ZIP, extract & run – no key needed.  
+     Share our affiliate page to earn **commissions together** on every sale!</p>
 </section>
 
 <section>
-  <h2>📺 AI Playground + Automation Video</h2>
+  <h2>📺 AI Playground + Automation</h2>
   <div class="video-container">
     <iframe src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
   </div>
@@ -144,62 +122,33 @@
   <p id="form-status" style="margin-top:10px; font-size:0.9rem; color:#ffe169;"></p>
 </section>
 
+<!-- EmailJS script -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("uMBWBshmzlvZ8v52yJO"); // ✅ Public key
+  })();
+
+  document.getElementById("contact-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    emailjs.sendForm("service_pzzseh7", "bceEcXpLIRDpJxOHM", this)
+      .then(function() {
+        document.getElementById("form-status").innerText = "✅ Message sent successfully!";
+        document.getElementById("contact-form").reset();
+      }, function(error) {
+        document.getElementById("form-status").innerText = "❌ Failed to send. Please try again.";
+        console.error("EmailJS Error:", error);
+      });
+  });
+</script>
+</section>
+
 <footer>
   <p>© 2025 LinkBotLabs – Affiliate Shopping Automation</p>
   <p>👉 Partner with us and earn commissions via the <a href="affiliate_starter.html" style="color:#ffe169;">Affiliate Page</a></p>
-  <p>Follow us: 
-    <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">TikTok @linkbotlabs</a> | 
-    <a href="https://www.youtube.com/@linkbotlabs" target="_blank">YouTube @linkbotlabs</a> | 
-    <a href="https://www.facebook.com/share/16s38ySipj/?mibextid=wwXIfr" target="_blank">Facebook</a>
-  </p>
   <p><a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" class="btn">💼 Work With Me on Fiverr</a></p>
 </footer>
-
-<!-- Floating Social Bar -->
-<div class="social-bar">
-  <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">T</a>
-  <a href="https://www.youtube.com/@linkbotlabs" target="_blank">Y</a>
-  <a href="https://www.facebook.com/share/16s38ySipj/?mibextid=wwXIfr" target="_blank">F</a>
-</div>
-
-<!-- EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-  (function(){ emailjs.init("uMBWBshmzlvZ8v52yJO"); })();
-  document.getElementById("contact-form").addEventListener("submit", function(e){
-    e.preventDefault();
-    emailjs.sendForm("service_pzzseh7","bceEcXpLIRDpJxOHM",this)
-      .then(()=>{ document.getElementById("form-status").innerText="✅ Message sent successfully!"; this.reset(); },
-            err=>{ document.getElementById("form-status").innerText="❌ Failed to send."; console.error(err); });
-  });
-</script>
-
-<!-- AI Playground Script -->
-<script>
-async function speakText(text) {
-  if('speechSynthesis' in window){
-    const u = new SpeechSynthesisUtterance(text);
-    speechSynthesis.speak(u);
-  }
-}
-document.getElementById("ask-ai").addEventListener("click", async ()=>{
-  const model = document.getElementById("ai-model").value;
-  const prompt = document.getElementById("prompt").value.trim();
-  const respEl = document.getElementById("ai-response");
-  if(!prompt) return alert("Please type a prompt!");
-  respEl.innerHTML = "💬 Generating response...";
-  try{
-    const res = await fetch(`https://puter.com/api/v1/ask?model=${model}&prompt=${encodeURIComponent(prompt)}`)
-      .then(r=>r.json());
-    const answer = res?.text || "⚠️ No response received.";
-    respEl.innerHTML = `<strong>${model}:</strong> ${answer}`;
-    speakText(answer);
-  }catch(err){
-    console.error(err);
-    respEl.innerHTML = "❌ Error getting AI response.";
-  }
-});
-</script>
 
 </body>
 </html>
