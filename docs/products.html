@@ -98,6 +98,9 @@ Price Compare & Affiliate Showcase – Amazon & Temu Kitchen Products. If you sh
     </div>
 </div>
 
+<!-- Puter.js -->
+<script src="https://js.puter.com/v2/"></script>
+
 <script>
 // ===== Affiliate tag =====
 let AFFILIATE_TAG = "mychanneld-20";
@@ -141,26 +144,54 @@ const TEMU_PRODUCTS = {
 // ===== Helper =====
 function withTag(url){return url.includes("?")?`${url}&tag=${AFFILIATE_TAG}`:`${url}?tag=${AFFILIATE_TAG}`;}
 
-// ===== Display kitchen products =====
+// ===== Display kitchen products with GPT button =====
 function displayKitchen(){
     const amazonGrid = document.getElementById('amazon-kitchen');
     const temuGrid = document.getElementById('temu-kitchen');
     amazonGrid.innerHTML = '';
     temuGrid.innerHTML = '';
 
-    AMAZON_PRODUCTS.kitchen.forEach(p=>{
+    function createCard(p, isAmazon=true){
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = `<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.description}</div><a href="${withTag(p.url)}" target="_blank" class="view-btn">Click for Info</a>`;
-        amazonGrid.appendChild(card);
-    });
+        card.innerHTML = `
+            <div class="product-title">${p.title}</div>
+            <div class="product-price">${p.price}</div>
+            <div class="product-desc">${p.description}</div>
+            <a href="${isAmazon ? withTag(p.url) : p.url}" target="_blank" class="view-btn">Click for Info</a>
+            <button class="view-btn" style="margin-top:10px; background:#00bfff;" onclick="askGPT(this, '${p.title}', '${p.description}')">Ask GPT-4 NANO about this product</button>
+            <div class="gpt-response" style="margin-top:8px; background: rgba(255,255,255,0.1); padding:8px; border-radius:6px;"></div>
+        `;
+        return card;
+    }
 
-    TEMU_PRODUCTS.kitchen.forEach(p=>{
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.description}</div><a href="${p.url}" target="_blank" class="view-btn">Click for Info</a>`;
-        temuGrid.appendChild(card);
-    });
+    AMAZON_PRODUCTS.kitchen.forEach(p=> amazonGrid.appendChild(createCard(p, true)));
+    TEMU_PRODUCTS.kitchen.forEach(p=> temuGrid.appendChild(createCard(p, false)));
+}
+
+// ===== GPT-4 NANO function =====
+async function askGPT(btn, title, desc){
+    const responseDiv = btn.nextElementSibling;
+    responseDiv.innerText = "Thinking...";
+
+    try {
+        const response = await puter.chat({
+            model: "gpt-4-nano",
+            messages: [
+                {role:"system", content:"You are a helpful product description assistant."},
+                {role:"user", content:`Give an in-depth, detailed description of the product: ${title} - ${desc}`}
+            ]
+        });
+
+        const gptText = response.choices[0].message.content;
+        responseDiv.innerText = gptText;
+
+        const utterance = new SpeechSynthesisUtterance(gptText);
+        speechSynthesis.speak(utterance);
+    } catch(err) {
+        responseDiv.innerText = "Error: Unable to get GPT description.";
+        console.error(err);
+    }
 }
 
 // ===== Dropdown category click =====
@@ -168,32 +199,39 @@ document.getElementById('amazon-categories').addEventListener('change', e=>{
     const category = e.target.value;
     window.open(`https://www.amazon.co.uk/s?i=popular&rh=n%3A${category}`, '_blank');
 });
-
 document.getElementById('temu-categories').addEventListener('change', e=>{
     const category = e.target.value;
     window.open(`https://www.temu.com/uk/category/${category}`, '_blank');
 });
 
-// ===== Search not applied yet but can filter kitchen if needed =====
+// ===== Search filter =====
 document.getElementById('searchBox').addEventListener('input', e=>{
     const term = e.target.value.toLowerCase();
-    const filterCards = (grid, products)=>{
+    const filterCards = (grid, products, isAmazon=true)=>{
         grid.innerHTML = '';
         products.forEach(p=>{
             if(p.title.toLowerCase().includes(term)){
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.innerHTML = `<div class="product-title">${p.title}</div><div class="product-price">${p.price}</div><div class="product-desc">${p.description}</div><a href="${p.url}" target="_blank" class="view-btn">Click for Info</a>`;
+                card.innerHTML = `
+                    <div class="product-title">${p.title}</div>
+                    <div class="product-price">${p.price}</div>
+                    <div class="product-desc">${p.description}</div>
+                    <a href="${isAmazon ? withTag(p.url) : p.url}" target="_blank" class="view-btn">Click for Info</a>
+                    <button class="view-btn" style="margin-top:10px; background:#00bfff;" onclick="askGPT(this, '${p.title}', '${p.description}')">Ask GPT-4 NANO about this product</button>
+                    <div class="gpt-response" style="margin-top:8px; background: rgba(255,255,255,0.1); padding:8px; border-radius:6px;"></div>
+                `;
                 grid.appendChild(card);
             }
         });
     };
-    filterCards(document.getElementById('amazon-kitchen'), AMAZON_PRODUCTS.kitchen);
-    filterCards(document.getElementById('temu-kitchen'), TEMU_PRODUCTS.kitchen);
+    filterCards(document.getElementById('amazon-kitchen'), AMAZON_PRODUCTS.kitchen, true);
+    filterCards(document.getElementById('temu-kitchen'), TEMU_PRODUCTS.kitchen, false);
 });
 
 // ===== Initial render =====
 displayKitchen();
 </script>
+
 </body>
 </html>
