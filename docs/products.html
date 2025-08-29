@@ -1,228 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>LinkBotLabs Products</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      background: #0d0d1a;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
+<title>LinkBotLabs Products</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background: #0d0d1a;
+    color: #fff;
+    margin: 0;
+    padding: 20px;
+  }
 
-    h1 { text-align: center; color: turquoise; margin-bottom: 20px; }
-    .affiliate-banner { background: #0077b6; color: #fff; padding: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; border-radius: 6px; }
-    
-    .voice-controls { text-align: center; margin-bottom: 20px; }
-    .voice-controls select, .voice-controls button { padding: 5px 10px; font-size: 16px; margin-right: 10px; }
+  h1 { text-align: center; color: turquoise; margin-bottom: 20px; }
+  .affiliate-banner { background: #0077b6; color: #fff; padding: 12px; text-align: center; font-weight: bold; margin-bottom: 20px; border-radius: 6px; }
 
-    .category { margin: 40px 0; }
-    .category h2 { color: #9d4edd; border-bottom: 2px solid turquoise; padding-bottom: 5px; }
+  .voice-controls { text-align: center; margin-bottom: 20px; }
+  .voice-controls select, .voice-controls button { padding: 5px 10px; font-size: 16px; margin-right: 10px; }
 
-    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+  .category { margin: 40px 0; }
+  .category h2 { color: #9d4edd; border-bottom: 2px solid turquoise; padding-bottom: 5px; }
 
-    .product-card {
-      background: #1a1a2e;
-      border: 1px solid #3a3a5d;
-      border-radius: 10px;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s;
-      position: relative;
-    }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
 
-    .product-card:hover { transform: translateY(-5px); border-color: turquoise; }
+  .product-card {
+    background: #1a1a2e;
+    border: 1px solid #3a3a5d;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+    position: relative;
+  }
 
-    .product-card button { transform: scale(0.95); opacity: 0.8; transition: transform 0.25s ease, opacity 0.25s ease; margin-top: 6px; }
-    .product-card:hover button { transform: scale(1.05); opacity: 1; }
+  .product-card:hover { transform: translateY(-5px); border-color: turquoise; }
 
-    .product-title { font-size: 18px; font-weight: 600; margin: 8px 0; }
-    .product-price { color: turquoise; font-weight: bold; margin: 4px 0; }
-    .product-desc { font-size: 16px; font-family: 'Segoe UI', sans-serif; line-height: 1.5; color: #ccc; margin-bottom: 8px; }
+  .product-title { font-size: 18px; font-weight: 600; margin: 8px 0; }
+  .product-price { color: turquoise; font-weight: bold; margin: 4px 0; }
+  .product-desc { font-size: 16px; font-family: 'Segoe UI', sans-serif; line-height: 1.5; color: #ccc; margin-bottom: 8px; }
 
-    .chat-box { min-height: 100px; border-radius: 6px; padding: 8px; border: 1px solid #3a3a5d; background: #111; color: #fff; font-family: monospace; resize: vertical; display: none; overflow-y: auto; }
+  .buttons-vertical { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+  .buttons-vertical button, .buttons-vertical select {
+    background: linear-gradient(to right, #00b4d8, #0096c7);
+    color: #0d0d1a;
+    border: none;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .buttons-vertical button:hover { transform: scale(1.05); opacity: 1; }
 
-    .chat-box-buttons { display: flex; gap: 6px; margin-top: 6px; }
+  .chat-bubble-container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 250px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #3a3a5d;
+    background: #111;
+    font-family: monospace;
+    margin-top: 10px;
+  }
 
-    .bubble { padding: 8px 12px; border-radius: 12px; margin: 6px 0; max-width: 80%; opacity: 0; transform: translateY(20px); transition: all 0.3s ease; word-wrap: break-word; }
-    .user-bubble { background: #00b4d8; color: #0d0d1a; align-self: flex-end; text-align: right; }
-    .ai-bubble { background: #9d4edd; color: #fff; align-self: flex-start; text-align: left; }
-    .bubble.show { opacity: 1; transform: translateY(0); }
+  .bubble { padding: 8px 12px; border-radius: 12px; margin: 6px 0; max-width: 80%; opacity: 0; transform: translateY(20px); transition: all 0.3s ease; word-wrap: break-word; }
+  .user-bubble { background: #00b4d8; color: #0d0d1a; align-self: flex-end; text-align: right; }
+  .ai-bubble { background: #9d4edd; color: #fff; align-self: flex-start; text-align: left; }
+  .bubble.show { opacity: 1; transform: translateY(0); }
 
-    .socials { position: fixed; top: 50%; left: 10px; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; }
-    .socials a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: turquoise; border-radius: 50%; color: #0d0d1a; font-weight: bold; text-decoration: none; transition: 0.3s; }
-    .socials a:hover { background: #9d4edd; color: #fff; }
-  </style>
+  /* Pop-out AI overlay */
+  .ai-popup {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    z-index: 9999;
+  }
+  .ai-popup-header { display: flex; justify-content: space-between; align-items: center; color: turquoise; font-size: 20px; margin-bottom: 10px; }
+  .ai-popup-header button { background: #9d4edd; color: #fff; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+  .ai-popup-chat { flex: 1; overflow-y: auto; border: 1px solid #3a3a5d; border-radius: 6px; padding: 10px; background: #111; }
+  .ai-popup-controls { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+  .ai-popup-controls button, .ai-popup-controls select { padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(to right, #00b4d8, #0096c7); color: #0d0d1a; }
+
+  .socials { position: fixed; top: 50%; left: 10px; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; }
+  .socials a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: turquoise; border-radius: 50%; color: #0d0d1a; font-weight: bold; text-decoration: none; transition: 0.3s; }
+  .socials a:hover { background: #9d4edd; color: #fff; }
+</style>
 </head>
 <body>
-  <div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
-  <h1>✨ LinkBotLabs Product Picks ✨</h1>
+<div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
+<h1>✨ LinkBotLabs Product Picks ✨</h1>
 
-  <div class="voice-controls">
-    <label>Select Voice:</label>
-    <select id="voiceSelect"></select>
-    <button id="stopTTS">⏹ Stop</button>
+<div class="voice-controls">
+  <label>Select Voice:</label>
+  <select id="voiceSelect"></select>
+  <button id="stopTTS">⏹ Stop</button>
+</div>
+
+<div id="content"></div>
+
+<!-- AI Popup -->
+<div id="aiPopup" class="ai-popup">
+  <div class="ai-popup-header">
+    <span>💬 AI Chat</span>
+    <button id="closeAIPopup">✖ Close</button>
   </div>
-
-  <div id="content"></div>
-
-  <div class="socials">
-    <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">TT</a>
-    <a href="https://x.com/linkbotlabs" target="_blank">X</a>
-    <a href="https://youtube.com/@linkbotlabs" target="_blank">YT</a>
-    <a href="https://facebook.com/linkbotlabs" target="_blank">FB</a>
+  <div id="aiPopupChat" class="ai-popup-chat"></div>
+  <div class="ai-popup-controls">
+    <button id="popupRunBtn">▶️ Run</button>
+    <button id="popupResetBtn">🔄 Reset</button>
+    <button id="popupListenBtn">🔊 Listen</button>
+    <select id="popupVoiceSelect"></select>
   </div>
+</div>
 
-  <script src="https://js.puter.com/v2/"></script>
-  <script>
-    const content = document.getElementById("content");
+<div class="socials">
+  <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">TT</a>
+  <a href="https://x.com/linkbotlabs" target="_blank">X</a>
+  <a href="https://youtube.com/@linkbotlabs" target="_blank">YT</a>
+  <a href="https://facebook.com/linkbotlabs" target="_blank">FB</a>
+</div>
 
-    // Affiliate ID
-    function getAffiliateId() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("aff_id") || null;
-    }
-    const affiliateId = getAffiliateId();
-    if (affiliateId) {
-      const banner = document.getElementById("affiliate-banner");
-      banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
-      banner.style.display = "block";
-    }
+<script src="https://js.puter.com/v2/"></script>
+<script>
+const content = document.getElementById("content");
+const affiliateId = new URLSearchParams(window.location.search).get("aff_id") || null;
+if(affiliateId) {
+  const banner = document.getElementById("affiliate-banner");
+  banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
+  banner.style.display = "block";
+}
 
-    // TTS setup
-    let synth = window.speechSynthesis;
-    let utter;
-    function populateVoiceSelects() {
-      let voices = synth.getVoices();
-      if (!voices.length) { setTimeout(populateVoiceSelects, 100); return; }
-      const select = document.getElementById('voiceSelect');
-      select.innerHTML = '';
-      voices.forEach(v => {
-        const opt = document.createElement('option');
-        opt.value = v.name;
-        opt.textContent = v.name + ' (' + v.lang + ')';
-        select.appendChild(opt);
-      });
-    }
-    if (speechSynthesis.onvoiceschanged !== undefined) populateVoiceSelects();
-    else populateVoiceSelects();
+// Speech setup
+let synth = window.speechSynthesis;
+let utter;
+function populateVoiceSelects() {
+  let voices = synth.getVoices();
+  if (!voices.length) { setTimeout(populateVoiceSelects, 100); return; }
+  const selects = [document.getElementById('voiceSelect'), document.getElementById('popupVoiceSelect')];
+  selects.forEach(sel => {
+    sel.innerHTML = '';
+    voices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = `${v.name} (${v.lang})`;
+      sel.appendChild(opt);
+    });
+  });
+}
+if (speechSynthesis.onvoiceschanged !== undefined) populateVoiceSelects();
+else populateVoiceSelects();
 
-    function playTTS(text, selectId='voiceSelect') {
-      if (synth.speaking) synth.cancel();
-      utter = new SpeechSynthesisUtterance(text);
-      const selectedVoice = document.getElementById(selectId).value;
-      utter.voice = synth.getVoices().find(v => v.name === selectedVoice) || synth.getVoices()[0];
-      synth.speak(utter);
-    }
-    document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
+function playTTS(text, selectElem) {
+  if (synth.speaking) synth.cancel();
+  utter = new SpeechSynthesisUtterance(text);
+  const selectedVoice = selectElem.value;
+  utter.voice = synth.getVoices().find(v => v.name === selectedVoice) || synth.getVoices()[0];
+  synth.speak(utter);
+}
+document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
 
-    // Chat bubble helper
-    function addBubble(container, text, type='user') {
-      const bubble = document.createElement('div');
-      bubble.className = `bubble ${type}-bubble`;
-      bubble.textContent = text;
-      container.appendChild(bubble);
-      container.scrollTop = container.scrollHeight;
-      requestAnimationFrame(() => bubble.classList.add('show'));
-    }
+// Chat bubble helper
+function addBubble(container, text, type='user') {
+  const bubble = document.createElement('div');
+  bubble.className = `bubble ${type}-bubble`;
+  bubble.textContent = text;
+  container.appendChild(bubble);
+  container.scrollTop = container.scrollHeight;
+  requestAnimationFrame(() => bubble.classList.add('show'));
+}
 
-    // Load products
-    async function loadProducts() {
-      try {
-        const res = await fetch("products.json?cachebust=" + Date.now());
-        const data = await res.json();
-        renderProducts(data);
-      } catch (e) {
-        content.innerHTML = `<p style="color:red;text-align:center;">❌ Failed to load products.</p>`;
-      }
-    }
+// AI Popup controls
+const aiPopup = document.getElementById('aiPopup');
+const aiPopupChat = document.getElementById('aiPopupChat');
+const closeAIPopup = document.getElementById('closeAIPopup');
+const popupRunBtn = document.getElementById('popupRunBtn');
+const popupResetBtn = document.getElementById('popupResetBtn');
+const popupListenBtn = document.getElementById('popupListenBtn');
+const popupVoiceSelect = document.getElementById('popupVoiceSelect');
 
-    function renderProducts(data) {
-      content.innerHTML = "";
-      for (const [category, items] of Object.entries(data)) {
-        const section = document.createElement("div");
-        section.className = "category";
-        section.innerHTML = `<h2>${category}</h2><div class="products-grid"></div>`;
-        const grid = section.querySelector(".products-grid");
+closeAIPopup.onclick = () => aiPopup.style.display = 'none';
 
-        items.forEach(p => {
-          const card = document.createElement("div");
-          card.className = "product-card";
+// Load products
+async function loadProducts() {
+  try {
+    const res = await fetch("products.json?cachebust=" + Date.now());
+    const data = await res.json();
+    renderProducts(data);
+  } catch(e) {
+    content.innerHTML = `<p style="color:red;text-align:center;">❌ Failed to load products.</p>`;
+  }
+}
 
-          card.innerHTML = `
-            <h3 class="product-title">${p.title}</h3>
-            <p class="product-price">${p.price}</p>
-            <p class="product-desc">${p.description}</p>
-            <button class="product-btn view-btn">🛒 Click to View</button>
-            <button class="product-btn ask-btn">💬 Ask GPT-4 Nano</button>
-            <textarea class="chat-box" placeholder="Type your question here..."></textarea>
-            <div class="chat-box-buttons">
-              <button class="product-btn run-btn">▶️ Run</button>
-              <button class="product-btn reset-btn">🔄 Reset</button>
-              <button class="product-btn tts-btn">🔊 Listen</button>
-              <select class="product-btn voice-btn"></select>
-            </div>
-          `;
+function renderProducts(data) {
+  content.innerHTML = "";
+  for(const [category, items] of Object.entries(data)){
+    const section = document.createElement("div");
+    section.className = "category";
+    section.innerHTML = `<h2>${category}</h2><div class="products-grid"></div>`;
+    const grid = section.querySelector(".products-grid");
 
-          const chatBox = card.querySelector(".chat-box");
-          const runBtn = card.querySelector(".run-btn");
-          const resetBtn = card.querySelector(".reset-btn");
-          const ttsBtn = card.querySelector(".tts-btn");
-          const voiceSelect = card.querySelector(".voice-btn");
+    items.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card";
 
-          // Populate voice select per card
-          synth.getVoices().forEach(v=>{
-            const opt = document.createElement('option');
-            opt.value = v.name;
-            opt.textContent = v.name + ' (' + v.lang + ')';
-            voiceSelect.appendChild(opt);
-          });
+      const buttonsDiv = document.createElement('div');
+      buttonsDiv.className = 'buttons-vertical';
+      buttonsDiv.innerHTML = `
+        <button class="view-btn">🛒 Click to View</button>
+        <button class="ask-btn">💬 Ask GPT-4 Nano</button>
+      `;
 
-          // Affiliate link
-          card.querySelector(".view-btn").onclick = () => {
-            let link = p.url;
-            if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
-            window.open(link, "_blank");
-          };
+      card.innerHTML = `
+        <h3 class="product-title">${p.title}</h3>
+        <p class="product-price">${p.price}</p>
+        <p class="product-desc">${p.description}</p>
+      `;
+      card.appendChild(buttonsDiv);
+      grid.appendChild(card);
 
-          // Show/Hide chat box
-          card.querySelector(".ask-btn").onclick = () => {
-            chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
-          };
+      // Affiliate link
+      card.querySelector(".view-btn").onclick = () => {
+        let link = p.url;
+        if(affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
+        window.open(link, "_blank");
+      };
 
-          // Run button: send last line to GPT
-          runBtn.onclick = async () => {
-            const lines = chatBox.value.split("\n");
-            const userText = lines[lines.length-1];
-            if (!userText.trim()) return;
-            addBubble(chatBox, userText, 'user');
-            const response = await puter.ai.chat(userText);
-            addBubble(chatBox, response, 'ai');
-            playTTS(response, voiceSelect.id);
-          };
+      // AI Pop-out
+      card.querySelector(".ask-btn").onclick = () => {
+        aiPopup.style.display = 'flex';
+        aiPopupChat.innerHTML = '';
+      };
 
-          // Reset button
-          resetBtn.onclick = () => { chatBox.value = ""; chatBox.innerHTML = ""; };
+    });
 
-          // TTS button
-          ttsBtn.onclick = () => {
-            const text = chatBox.value || p.description;
-            playTTS(text, voiceSelect.id);
-          };
+    content.appendChild(section);
+  }
+}
 
-          grid.appendChild(card);
-        });
+// Popup AI functionality
+popupRunBtn.onclick = async () => {
+  const lastUser = prompt("Enter your question for AI:");
+  if(!lastUser) return;
+  addBubble(aiPopupChat, lastUser, 'user');
+  const response = await puter.ai.chat(lastUser);
+  addBubble(aiPopupChat, response, 'ai');
+  playTTS(response, popupVoiceSelect);
+};
+popupResetBtn.onclick = () => aiPopupChat.innerHTML = '';
+popupListenBtn.onclick = () => {
+  const lastBubble = aiPopupChat.querySelector('.ai-bubble:last-child');
+  if(lastBubble) playTTS(lastBubble.textContent, popupVoiceSelect);
+};
 
-        content.appendChild(section);
-      }
-    }
-
-    loadProducts();
-  </script>
+loadProducts();
+</script>
 </body>
 </html>
