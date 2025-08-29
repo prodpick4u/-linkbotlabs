@@ -1,343 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LinkBotLabs Products</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    background: #0d0d1a;
-    color: #fff;
-    margin: 0;
-    padding: 20px;
-  }
+  <meta charset="UTF-8">
+  <title>LinkBotLabs Products</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      background: #0d0d1a;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
 
-  h1 { text-align: center; color: turquoise; margin-bottom: 20px; }
+    h1 {
+      text-align: center;
+      color: turquoise;
+      margin-bottom: 20px;
+    }
 
-  .affiliate-banner {
-    background: #0077b6;
-    color: #fff;
-    padding: 12px;
-    text-align: center;
-    font-weight: bold;
-    margin-bottom: 20px;
-    border-radius: 6px;
-  }
+    .affiliate-banner {
+      background: #0077b6;
+      color: #fff;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+      border-radius: 6px;
+    }
 
-  .voice-controls, .model-controls {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  .voice-controls select, .voice-controls button,
-  .model-controls select {
-    padding: 5px 10px;
-    font-size: 16px;
-    margin-right: 10px;
-  }
+    .voice-controls, .model-select {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-  .category { margin: 40px 0; }
-  .category h2 {
-    color: #9d4edd;
-    border-bottom: 2px solid turquoise;
-    padding-bottom: 5px;
-  }
+    .voice-controls select, .voice-controls button, .model-select select {
+      padding: 5px 10px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
 
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
-  }
+    .category {
+      margin: 40px 0;
+    }
 
-  .product-card {
-    background: #1a1a2e;
-    border: 1px solid #3a3a5d;
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.2s;
-  }
-  .product-card:hover { transform: translateY(-5px); border-color: turquoise; }
+    .category h2 {
+      color: #9d4edd;
+      border-bottom: 2px solid turquoise;
+      padding-bottom: 5px;
+    }
 
-  .product-title { font-size: 20px; font-weight: 600; margin: 8px 0; }
-  .product-price { color: turquoise; font-weight: bold; margin: 4px 0; }
-  .product-desc { font-size: 16px; color: #ccc; margin-bottom: 8px; }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+    }
 
-  /* Blue buttons restored */
-  .product-btn {
-    margin-top: 10px;
-    padding: 10px;
-    background: linear-gradient(180deg, #0077b6 0%, #00b4d8 100%);
-    border: none;
-    border-radius: 6px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-  }
-  .product-btn:hover {
-    background: linear-gradient(180deg, #00b4d8 0%, #0077b6 100%);
-  }
+    .product-card {
+      background: #1a1a2e;
+      border: 1px solid #3a3a5d;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s;
+    }
 
-  .chat-container { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; max-height: 300px; overflow-y: auto; }
-  .chat-bubble {
-    padding: 10px 12px;
-    border-radius: 10px;
-    max-width: 100%;
-    font-family: monospace;
-    word-wrap: break-word;
-    animation: fadeIn 0.3s ease-in;
-  }
-  .user-bubble { background: #ffcc00; color: #000; align-self: flex-end; } /* User = yellow */
-  .ai-bubble { background: #40e0d0; color: #000; align-self: flex-start; } /* AI = turquoise */
+    .product-card:hover {
+      transform: translateY(-5px);
+      border-color: turquoise;
+    }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+    .product-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 10px 0;
+    }
 
-  .chat-box {
-    margin-top: 8px;
-    padding: 8px;
-    background: #111;
-    color: #fff;
-    border-radius: 6px;
-    min-height: 40px;
-    outline: none;
-    width: 100%;
-  }
+    .product-price {
+      color: turquoise;
+      font-weight: bold;
+      margin: 6px 0;
+    }
 
-  /* Mobile adjustments */
-  @media (max-width: 768px) {
-    .products-grid { grid-template-columns: 1fr; }
-    .product-card { padding: 15px; }
-  }
+    .product-desc {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #ccc;
+      margin-bottom: 12px;
+    }
 
-  /* Social buttons */
-  .socials {
-    position: fixed; top: 50%; left: 10px;
-    transform: translateY(-50%);
-    display: flex; flex-direction: column; gap: 12px;
-    z-index: 1000;
-  }
-  .socials a {
-    display: flex; align-items: center; justify-content: center;
-    width: 40px; height: 40px;
-    background: turquoise; border-radius: 50%; color: #0d0d1a;
-    font-weight: bold; text-decoration: none; transition: 0.3s;
-  }
-  .socials a:hover { background: #9d4edd; color: #fff; }
-</style>
+    .product-btn {
+      margin-top: 10px;
+      padding: 12px;
+      background: linear-gradient(135deg, #0077b6, #00b4d8);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .product-btn:hover {
+      background: linear-gradient(135deg, #00b4d8, #0077b6);
+    }
+
+    .chat-box-container {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-box {
+      min-height: 150px;
+      border-radius: 12px;
+      padding: 10px;
+      border: 1px solid #3a3a5d;
+      background: #111;
+      font-family: monospace;
+      color: #fff;
+      overflow-y: auto;
+      outline: none;
+      white-space: pre-wrap;
+      caret-color: turquoise;
+    }
+
+    .chat-box:empty::before {
+      content: attr(placeholder);
+      color: #666;
+    }
+
+    .chat-box:focus::before {
+      content: '';
+    }
+
+    .chat-bubble {
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      max-width: 80%;
+      word-wrap: break-word;
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    .user-bubble {
+      background: #0077b6;
+      align-self: flex-end;
+      color: #fff;
+    }
+
+    .ai-bubble {
+      background: #9d4edd;
+      align-self: flex-start;
+      color: #fff;
+    }
+
+    .typing-bubble::after {
+      content: '...';
+      display: inline-block;
+      margin-left: 5px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .socials {
+      position: fixed;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .socials a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: turquoise;
+      border-radius: 50%;
+      color: #0d0d1a;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .socials a:hover {
+      background: #9d4edd;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
+  <header style="text-align:center; padding: 15px; background:#111;">
+    <img src="img_splash.jpg" alt="LinkBotLabs Logo" style="max-width:180px; display:block; margin:0 auto;">
+    <h1>✨ LinkBotLabs Product Picks ✨</h1>
+  </header>
 
-<header style="text-align:center; padding: 15px; background:#111;">
-  <img src="img_splash.jpg" alt="LinkBotLabs Logo" style="max-width:180px; display:block; margin:0 auto;">
-  <h1>✨ LinkBotLabs Product Picks ✨</h1>
-</header>
+  <div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
 
-<div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
+  <div class="voice-controls">
+    <label>Select Voice:</label>
+    <select id="voiceSelect"></select>
+    <button id="stopTTS">⏹ Stop</button>
+  </div>
 
-<div class="voice-controls">
-  <label>Select Voice:</label>
-  <select id="voiceSelect"></select>
-  <button id="stopTTS">⏹ Stop</button>
-</div>
+  <div class="model-select">
+    <label>Select GPT Model:</label>
+    <select id="modelSelect">
+      <option value="gpt-5-mini">GPT-5 Mini</option>
+      <option value="gpt-5">GPT-5</option>
+      <option value="gpt-4o-mini">GPT-4o Mini</option>
+      <option value="gpt-4-1-mini">GPT-4.1 Mini</option>
+      <option value="gpt-5-nano">GPT-5 Nano</option>
+    </select>
+  </div>
 
-<div class="model-controls">
-  <label>Select AI Model:</label>
-  <select id="modelSelect"></select>
-</div>
+  <div id="content"></div>
 
-<div id="content"></div>
+  <div class="socials">
+    <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">TT</a>
+    <a href="https://x.com/linkbotlabs" target="_blank">X</a>
+    <a href="https://youtube.com/@linkbotlabs" target="_blank">YT</a>
+    <a href="https://facebook.com/linkbotlabs" target="_blank">FB</a>
+  </div>
 
-<div class="socials">
-  <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">TT</a>
-  <a href="https://x.com/linkbotlabs" target="_blank">X</a>
-  <a href="https://youtube.com/@linkbotlabs" target="_blank">YT</a>
-  <a href="https://facebook.com/linkbotlabs" target="_blank">FB</a>
-</div>
+  <script src="https://js.puter.com/v2/"></script>
+  <script>
+    const content = document.getElementById("content");
+    const modelSelect = document.getElementById("modelSelect");
 
-<script src="https://js.puter.com/v2/"></script>
-<script>
-const content = document.getElementById("content");
-const modelSelect = document.getElementById("modelSelect");
+    function getAffiliateId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("aff_id") || null;
+    }
+    const affiliateId = getAffiliateId();
+    if (affiliateId) {
+      const banner = document.getElementById("affiliate-banner");
+      banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
+      banner.style.display = "block";
+    }
 
-// Load AI models
-async function loadAIModels() {
-  try {
-    const res = await fetch("document.json?cachebust=" + Date.now());
-    const models = await res.json();
-    modelSelect.innerHTML = "";
-    models.forEach(model => {
-      const opt = document.createElement("option");
-      opt.value = model;
-      opt.textContent = model;
-      modelSelect.appendChild(opt);
-    });
-  } catch (error) {
-    console.error("Failed to load AI models:", error);
-    const opt = document.createElement("option");
-    opt.value = "";
-    opt.textContent = "Failed to load models";
-    modelSelect.appendChild(opt);
-  }
-}
-loadAIModels();
-
-// Affiliate banner
-function getAffiliateId() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("aff_id") || null;
-}
-const affiliateId = getAffiliateId();
-if (affiliateId) {
-  const banner = document.getElementById("affiliate-banner");
-  banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
-  banner.style.display = "block";
-}
-
-// TTS
-let synth = window.speechSynthesis;
-let utter;
-function populateVoiceSelects() {
-  let voices = synth.getVoices();
-  if (!voices.length) { setTimeout(populateVoiceSelects, 100); return; }
-  const select = document.getElementById('voiceSelect');
-  select.innerHTML = '';
-  voices.forEach(v => {
-    const opt = document.createElement('option');
-    opt.value = v.name;
-    opt.textContent = v.name + ' (' + v.lang + ')';
-    select.appendChild(opt);
-  });
-}
-if (speechSynthesis.onvoiceschanged !== undefined) populateVoiceSelects();
-else populateVoiceSelects();
-
-function playTTS(text) {
-  if (synth.speaking) synth.cancel();
-  utter = new SpeechSynthesisUtterance(text);
-  const selectedVoice = document.getElementById('voiceSelect').value;
-  utter.voice = synth.getVoices().find(v => v.name === selectedVoice) || synth.getVoices()[0];
-  synth.speak(utter);
-}
-document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
-
-// Load products
-async function loadProducts() {
-  try {
-    const res = await fetch("products.json?cachebust=" + Date.now());
-    const data = await res.json();
-    renderProducts(data);
-  } catch (e) {
-    content.innerHTML = `<p style="color:red;text-align:center;">❌ Failed to load products.</p>`;
-  }
-}
-
-// Typing effect
-async function typeAIResponse(container, text) {
-  const bubble = document.createElement("div");
-  bubble.className = "chat-bubble ai-bubble";
-  container.appendChild(bubble);
-  let i = 0;
-  while (i < text.length) {
-    bubble.textContent += text[i];
-    i++;
-    await new Promise(r => setTimeout(r, 20));
-    container.scrollTop = container.scrollHeight;
-  }
-  playTTS(text);
-}
-
-// Render products
-function renderProducts(data) {
-  content.innerHTML = "";
-  for (const [category, items] of Object.entries(data)) {
-    const section = document.createElement("div");
-    section.className = "category";
-    section.innerHTML = `<h2>${category}</h2><div class="products-grid"></div>`;
-    const grid = section.querySelector(".products-grid");
-
-    items.forEach(p => {
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <h3 class="product-title">${p.title}</h3>
-        <p class="product-price">${p.price}</p>
-        <p class="product-desc">${p.description}</p>
-        <button class="product-btn view-btn">🛒 Click to View</button>
-        <div class="chat-container"></div>
-        <div contenteditable="true" class="chat-box" placeholder="Ask AI about this product..."></div>
-      `;
-      const chatContainer = card.querySelector(".chat-container");
-      const chatBox = card.querySelector(".chat-box");
-
-      card.querySelector(".view-btn").onclick = () => {
-        let link = p.url;
-        if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
-        window.open(link, "_blank");
-      };
-
-      chatBox.addEventListener("keydown", async (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          const userText = chatBox.innerText.trim();
-          if (!userText) return;
-          const userBubble = document.createElement("div");
-          userBubble.className = "chat-bubble user-bubble";
-          userBubble.textContent = userText;
-          chatContainer.appendChild(userBubble);
-          chatBox.innerText = "";
-          chatContainer.scrollTop = chatContainer.scrollHeight;
-
-          try {
-            if (!window.puter || !puter.ai) throw new Error("Puter AI not loaded yet!");
-            const selectedModel = modelSelect.value || "gpt-5-mini";
-            const response = await puter.ai.chat(userText, { model: selectedModel });
-            await typeAIResponse(chatContainer, response);
-          } catch(err) {
-            console.error("AI Error:", err);
-            const errBubble = document.createElement("div");
-            errBubble.className = "chat-bubble ai-bubble";
-            errBubble.textContent = "❌ AI response failed. Try again.";
-            chatContainer.appendChild(errBubble);
-          }
-        }
+    // TTS setup
+    let synth = window.speechSynthesis;
+    let utter;
+    function populateVoiceSelects() {
+      let voices = synth.getVoices();
+      if (!voices.length) { setTimeout(populateVoiceSelects, 100); return; }
+      const select = document.getElementById('voiceSelect');
+      select.innerHTML = '';
+      voices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        opt.textContent = v.name + ' (' + v.lang + ')';
+        select.appendChild(opt);
       });
+    }
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoiceSelects;
+    } else populateVoiceSelects();
 
-      grid.appendChild(card);
-    });
+    function playTTS(text) {
+      if (synth.speaking) synth.cancel();
+      utter = new SpeechSynthesisUtterance(text);
+      const selectedVoice = document.getElementById('voiceSelect').value;
+      utter.voice = synth.getVoices().find(v => v.name === selectedVoice) || synth.getVoices()[0];
+      synth.speak(utter);
+    }
+    document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
 
-    content.appendChild(section);
-  }
-}
+    async function loadProducts() {
+      try {
+        const res = await fetch("products.json?cachebust=" + Date.now());
+        const data = await res.json();
+        renderProducts(data);
+      } catch (e) {
+        content.innerHTML = `<p style="color:red;text-align:center;">❌ Failed to load products.</p>`;
+      }
+    }
 
-loadProducts();
-</script>
+    async function typeAIResponse(container, text) {
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble ai-bubble typing-bubble";
+      container.appendChild(bubble);
+      container.scrollTop = container.scrollHeight;
 
-<!-- Floating Console -->
-<script>
-(function(){
-  const box = document.createElement("div");
-  box.style.cssText = "position:fixed;bottom:10px;right:10px;max-width:260px;max-height:160px;overflow:auto;background:#111;color:#0f0;font-size:11px;padding:6px;border-radius:6px;font-family:monospace;z-index:9999;opacity:0.9";
-  document.body.appendChild(box);
+      let i = 0;
+      while (i < text.length) {
+        bubble.textContent = text.slice(0, i + 1);
+        container.scrollTop = container.scrollHeight;
+        i++;
+        await new Promise(r => setTimeout(r, 20)); // typing speed
+      }
 
-  const oldLog = console.log;
-  console.log = function(...args) {
-    oldLog.apply(console, args);
-    const msg = document.createElement("div");
-    msg.textContent = args.map(a => {
-      try { return JSON.stringify(a); }
-      catch(e){ return String(a); }
-    }).join(" ");
-    box.appendChild(msg);
-    box.scrollTop = box.scrollHeight;
-  };
-})();
-</script>
+      bubble.classList.remove("typing-bubble");
+      playTTS(text);
+    }
+
+    function renderProducts(data) {
+      content.innerHTML = "";
+      for (const [category, items] of Object.entries(data)) {
+        const section = document.createElement("div");
+        section.className = "category";
+        section.innerHTML = `<h2>${category}</h2><div class="products-grid"></div>`;
+        const grid = section.querySelector(".products-grid");
+
+        items.forEach(p => {
+          const card = document.createElement("div");
+          card.className = "product-card";
+
+          card.innerHTML = `
+            <h3 class="product-title">${p.title}</h3>
+            <p class="product-price">${p.price}</p>
+            <p class="product-desc">${p.description}</p>
+            <button class="product-btn view-btn">🛒 Click to View</button>
+            <button class="product-btn ask-btn">💬 Ask AI</button>
+            <div class="chat-box-container" style="display:none;">
+              <div class="chat-box" contenteditable="true" placeholder="Type your question here..."></div>
+            </div>
+            <button class="product-btn tts-btn">🔊 Listen</button>
+          `;
+
+          const viewBtn = card.querySelector(".view-btn");
+          const askBtn = card.querySelector(".ask-btn");
+          const chatContainer = card.querySelector(".chat-box-container");
+          const chatBox = card.querySelector(".chat-box");
+          const ttsBtn = card.querySelector(".tts-btn");
+
+          let typingUserBubble = null;
+
+          viewBtn.onclick = () => {
+            let link = p.url;
+            if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
+            window.open(link, "_blank");
+          };
+
+          askBtn.onclick = () => {
+            chatContainer.style.display = chatContainer.style.display === "none" ? "flex" : "none";
+          };
+
+          chatBox.addEventListener("input", () => {
+            if (!typingUserBubble) {
+              typingUserBubble = document.createElement("div");
+              typingUserBubble.className = "chat-bubble user-bubble";
+              chatContainer.appendChild(typingUserBubble);
+            }
+            typingUserBubble.textContent = chatBox.innerText;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          });
+
+          chatBox.addEventListener("keydown", async (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              const userText = chatBox.innerText.trim();
+              if (!userText) return;
+
+              typingUserBubble.textContent = userText;
+              typingUserBubble = null;
+              chatBox.innerText = "";
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+
+              const model = modelSelect.value;
+              const response = await puter.ai.chat(userText, { model });
+              await typeAIResponse(chatContainer, response);
+            }
+          });
+
+          ttsBtn.onclick = () => {
+            const text = chatBox.innerText || p.description;
+            playTTS(text);
+          };
+
+          grid.appendChild(card);
+        });
+
+        content.appendChild(section);
+      }
+    }
+
+    loadProducts();
+  </script>
 </body>
 </html>
