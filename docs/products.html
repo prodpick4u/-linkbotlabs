@@ -306,5 +306,21 @@ function renderProducts(data) {
 
 loadProducts();
 </script>
+  <script>
+(function(){
+  const box = document.createElement("div");
+  box.style.cssText = "position:fixed;bottom:10px;right:10px;max-width:250px;max-height:150px;overflow:auto;background:#111;color:#0f0;font-size:11px;padding:6px;border-radius:6px;font-family:monospace;z-index:9999;opacity:0.9";
+  document.body.appendChild(box);
+
+  const oldLog = console.log;
+  console.log = function(...args) {
+    oldLog.apply(console, args);
+    const msg = document.createElement("div");
+    msg.textContent = args.map(a => (typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
+    box.appendChild(msg);
+    box.scrollTop = box.scrollHeight;
+  };
+})();
+</script>
 </body>
 </html>
