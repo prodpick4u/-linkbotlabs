@@ -111,7 +111,6 @@
       margin-top: 12px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
     }
 
     .chat-box {
@@ -131,6 +130,7 @@
     .chat-box:empty::before {
       content: attr(placeholder);
       color: #666;
+      pointer-events: none;
     }
 
     .chat-box:focus::before {
@@ -138,25 +138,24 @@
     }
 
     .chat-bubble {
+      display: block;
       padding: 8px 12px;
       border-radius: 12px;
       margin-bottom: 6px;
       max-width: 80%;
       word-wrap: break-word;
-      opacity: 0;
-      animation: fadeIn 0.3s forwards;
+      background: #9d4edd;
+      color: #fff;
     }
 
     .user-bubble {
       background: #0077b6;
       align-self: flex-end;
-      color: #fff;
     }
 
     .ai-bubble {
       background: #9d4edd;
       align-self: flex-start;
-      color: #fff;
     }
 
     .typing-bubble::after {
@@ -169,10 +168,6 @@
     @keyframes blink {
       0%, 50%, 100% { opacity: 1; }
       25%, 75% { opacity: 0; }
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
     }
 
     .socials {
@@ -239,6 +234,7 @@
     <a href="https://facebook.com/linkbotlabs" target="_blank">FB</a>
   </div>
 
+  <!-- Final Script -->
   <script src="https://js.puter.com/v2/"></script>
   <script>
     const content = document.getElementById("content");
@@ -255,7 +251,7 @@
       banner.style.display = "block";
     }
 
-    // TTS setup
+    // TTS
     let synth = window.speechSynthesis;
     let utter;
     function populateVoiceSelects() {
@@ -293,22 +289,19 @@
       }
     }
 
-    async function typeAIResponse(container, text) {
+    async function typeAIResponse(chatBox, text) {
       const bubble = document.createElement("div");
       bubble.className = "chat-bubble ai-bubble typing-bubble";
-      container.appendChild(bubble);
-      container.scrollTop = container.scrollHeight;
-
-      let i = 0;
-      while (i < text.length) {
+      chatBox.appendChild(bubble);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      for (let i = 0; i < text.length; i++) {
         bubble.textContent = text.slice(0, i + 1);
-        container.scrollTop = container.scrollHeight;
-        i++;
-        await new Promise(r => setTimeout(r, 20)); // typing speed
+        chatBox.scrollTop = chatBox.scrollHeight;
+        await new Promise(r => setTimeout(r, 20));
       }
-
       bubble.classList.remove("typing-bubble");
       playTTS(text);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
 
     function renderProducts(data) {
@@ -341,8 +334,6 @@
           const chatBox = card.querySelector(".chat-box");
           const ttsBtn = card.querySelector(".tts-btn");
 
-          let typingUserBubble = null;
-
           viewBtn.onclick = () => {
             let link = p.url;
             if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
@@ -350,18 +341,13 @@
           };
 
           askBtn.onclick = () => {
-            chatContainer.style.display = chatContainer.style.display === "none" ? "flex" : "none";
-          };
-
-          chatBox.addEventListener("input", () => {
-            if (!typingUserBubble) {
-              typingUserBubble = document.createElement("div");
-              typingUserBubble.className = "chat-bubble user-bubble";
-              chatContainer.appendChild(typingUserBubble);
+            const isHidden = chatContainer.style.display === "none";
+            chatContainer.style.display = isHidden ? "flex" : "none";
+            if (isHidden) {
+              chatBox.focus();
+              chatBox.scrollTop = chatBox.scrollHeight;
             }
-            typingUserBubble.textContent = chatBox.innerText;
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          });
+          };
 
           chatBox.addEventListener("keydown", async (e) => {
             if (e.key === "Enter" && !e.shiftKey) {
@@ -369,20 +355,28 @@
               const userText = chatBox.innerText.trim();
               if (!userText) return;
 
-              typingUserBubble.textContent = userText;
-              typingUserBubble = null;
-              chatBox.innerText = "";
-              chatContainer.scrollTop = chatContainer.scrollHeight;
+              const userBubble = document.createElement("div");
+              userBubble.className = "chat-bubble user-bubble";
+              userBubble.textContent = userText;
+              chatBox.appendChild(userBubble);
+
+              chatBox.innerHTML = "";
+              chatBox.scrollTop = chatBox.scrollHeight;
 
               const model = modelSelect.value;
               const response = await puter.ai.chat(userText, { model });
-              await typeAIResponse(chatContainer, response);
+              await typeAIResponse(chatBox, response);
             }
           });
 
           ttsBtn.onclick = () => {
-            const text = chatBox.innerText || p.description;
-            playTTS(text);
+            const aiBubbles = chatBox.querySelectorAll(".ai-bubble");
+            if (aiBubbles.length === 0) {
+              playTTS(p.description);
+              return;
+            }
+            const lastAIBubble = aiBubbles[aiBubbles.length - 1];
+            playTTS(lastAIBubble.textContent);
           };
 
           grid.appendChild(card);
