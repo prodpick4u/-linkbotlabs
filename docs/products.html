@@ -66,10 +66,11 @@
   .product-price { color: turquoise; font-weight: bold; margin: 4px 0; }
   .product-desc { font-size: 16px; color: #ccc; margin-bottom: 8px; }
 
+  /* Blue buttons restored */
   .product-btn {
     margin-top: 10px;
     padding: 10px;
-    background: linear-gradient(135deg, #0077b6, #00b4d8);
+    background: linear-gradient(180deg, #0077b6 0%, #00b4d8 100%);
     border: none;
     border-radius: 6px;
     color: white;
@@ -77,7 +78,9 @@
     cursor: pointer;
     width: 100%;
   }
-  .product-btn:hover { background: linear-gradient(135deg, #00b4d8, #0077b6); }
+  .product-btn:hover {
+    background: linear-gradient(180deg, #00b4d8 0%, #0077b6 100%);
+  }
 
   .chat-container { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; max-height: 300px; overflow-y: auto; }
   .chat-bubble {
@@ -291,9 +294,18 @@ function renderProducts(data) {
           chatBox.innerText = "";
           chatContainer.scrollTop = chatContainer.scrollHeight;
 
-          const selectedModel = modelSelect.value || "gpt-5-mini";
-          const response = await puter.ai.chat(userText, { model: selectedModel });
-          await typeAIResponse(chatContainer, response);
+          try {
+            if (!window.puter || !puter.ai) throw new Error("Puter AI not loaded yet!");
+            const selectedModel = modelSelect.value || "gpt-5-mini";
+            const response = await puter.ai.chat(userText, { model: selectedModel });
+            await typeAIResponse(chatContainer, response);
+          } catch(err) {
+            console.error("AI Error:", err);
+            const errBubble = document.createElement("div");
+            errBubble.className = "chat-bubble ai-bubble";
+            errBubble.textContent = "❌ AI response failed. Try again.";
+            chatContainer.appendChild(errBubble);
+          }
         }
       });
 
@@ -318,7 +330,10 @@ loadProducts();
   console.log = function(...args) {
     oldLog.apply(console, args);
     const msg = document.createElement("div");
-    msg.textContent = args.map(a => (typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
+    msg.textContent = args.map(a => {
+      try { return JSON.stringify(a); }
+      catch(e){ return String(a); }
+    }).join(" ");
     box.appendChild(msg);
     box.scrollTop = box.scrollHeight;
   };
