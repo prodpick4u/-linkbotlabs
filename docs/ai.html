@@ -1,178 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
   <title>AI Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://js.puter.com/v2/"></script>
+  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
   <style>
     body {
-      background: #0f0f0f;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
       margin: 0;
       padding: 20px;
     }
-    h1 {
-      text-align: center;
-      color: turquoise;
-      margin-bottom: 20px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
+    h1 { text-align: center; }
+    .grid { display: grid; gap: 20px; max-width: 600px; margin: auto; }
     .card {
-      background: rgba(20, 20, 40, 0.85);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 15px turquoise;
+      background: #222;
+      padding: 15px;
+      border-radius: 8px;
     }
-    input, button, select {
+    input, textarea, button, select {
       width: 100%;
-      margin: 8px 0;
       padding: 10px;
+      margin-top: 10px;
       border-radius: 6px;
       border: none;
-      font-size: 1em;
     }
-    button {
-      background: turquoise;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    #chatBox {
-      background: #111;
-      border-radius: 8px;
+    button { background: turquoise; color: #000; font-weight: bold; cursor: pointer; }
+    #chatBox, #streamBox {
+      background: #000;
       padding: 10px;
-      height: 200px;
+      border-radius: 8px;
+      height: 150px;
       overflow-y: auto;
+      margin-top: 10px;
+      font-family: monospace;
+      white-space: pre-wrap;
     }
-    .bubble-user {
-      background: #007bff;
-      padding: 8px 12px;
-      border-radius: 12px;
-      margin: 5px;
-      text-align: right;
-    }
-    .bubble-ai {
-      background: #444;
-      padding: 8px 12px;
-      border-radius: 12px;
-      margin: 5px;
-      text-align: left;
-    }
+    .bubble-user { color: #0ff; margin: 4px 0; }
+    .bubble-ai { color: #ff0; margin: 4px 0; }
   </style>
 </head>
 <body>
-  <!-- ✅ Eruda Debug Console for iOS -->
-  <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-  <script>
-    eruda.init();
-    console.log("✅ Eruda console loaded - tap the bubble (bottom-right) on iOS to debug");
-  </script>
-
-  <h1>AI Playground</h1>
+  <h1>⚡ AI Playground</h1>
 
   <div class="grid">
-    <!-- Chat Card -->
+    <!-- Chat -->
     <div class="card">
-      <h2>💬 Chat with AI</h2>
-      <input type="text" id="chatInput" placeholder="Ask me anything...">
-      <button onclick="runChat()">Ask</button>
+      <h2>💬 Chat</h2>
+      <input id="chatInput" placeholder="Say something...">
+      <button onclick="runChat()">Send</button>
       <div id="chatBox"></div>
     </div>
 
-    <!-- Image Generation -->
+    <!-- Image Generator -->
     <div class="card">
-      <h2>🎨 Image Generator</h2>
-      <input type="text" id="imgPrompt" placeholder="Describe an image...">
+      <h2>🖼️ Image Generator</h2>
+      <input id="imgPrompt" placeholder="Describe an image...">
       <button onclick="runImage()">Generate</button>
       <div id="imgResult"></div>
     </div>
 
     <!-- Vision -->
     <div class="card">
-      <h2>👀 Vision</h2>
-      <input type="file" id="visionFile">
+      <h2>👁️ Vision</h2>
+      <input type="file" id="visionFile" accept="image/*">
       <button onclick="runVision()">Analyze</button>
       <div id="visionResult"></div>
     </div>
 
-    <!-- Stream -->
+    <!-- Streaming -->
     <div class="card">
-      <h2>⚡ Streaming Demo</h2>
-      <input type="text" id="streamInput" placeholder="Stream prompt...">
+      <h2>📡 Streaming Chat</h2>
+      <input id="streamInput" placeholder="Stream prompt...">
       <button onclick="runStream()">Start Stream</button>
       <div id="streamBox"></div>
     </div>
   </div>
 
-  <script>
-    // Chat
-    async function runChat() {
-      const input = document.getElementById("chatInput").value.trim();
-      if (!input) return;
-      const chatBox = document.getElementById("chatBox");
-      chatBox.innerHTML += `<div class="bubble-user">${input}</div>`;
-      try {
-        const response = await puter.ai.chat(input, { model: "gpt-4o-mini" });
-        const text = response.output || "Error: no response.";
-        chatBox.innerHTML += `<div class="bubble-ai">${text}</div>`;
-      } catch (e) {
-        chatBox.innerHTML += `<div class="bubble-ai">⚠️ ${e.message}</div>`;
-      }
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+<script>
+// Enable Eruda console
+eruda.init();
 
-    // Image Generator
-    async function runImage() {
-      const prompt = document.getElementById("imgPrompt").value.trim();
-      if (!prompt) return;
-      const resDiv = document.getElementById("imgResult");
-      resDiv.innerHTML = "⏳ Generating...";
-      try {
-        const res = await puter.ai.imggen(prompt);
-        resDiv.innerHTML = `<img src="${res.url}" style="max-width:100%; border-radius:8px;">`;
-      } catch (e) {
-        resDiv.innerHTML = "⚠️ Error generating image.";
-      }
-    }
+/* ================= CHAT ================= */
+async function runChat() {
+  const input = document.getElementById("chatInput").value.trim();
+  if (!input) return;
+  const chatBox = document.getElementById("chatBox");
+  chatBox.innerHTML += `<div class="bubble-user">${input}</div>`;
+  try {
+    const response = await puter.ai.chat(input, { model: "gpt-4o-mini" });
+    console.log("AI Chat Response:", response);   // log raw
+    const text = response.output || "Error: no response.";
+    chatBox.innerHTML += `<div class="bubble-ai">${text}</div>`;
+  } catch (e) {
+    console.error("Chat error:", e);
+    chatBox.innerHTML += `<div class="bubble-ai">⚠️ ${e.message}</div>`;
+  }
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
-    // Vision
-    async function runVision() {
-      const fileInput = document.getElementById("visionFile");
-      if (!fileInput.files.length) return;
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onload = async function() {
-        try {
-          const res = await puter.ai.vision(reader.result);
-          document.getElementById("visionResult").innerText = res.output;
-        } catch (e) {
-          document.getElementById("visionResult").innerText = "⚠️ Error analyzing image.";
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+/* ================= IMAGE GEN ================= */
+async function runImage() {
+  const prompt = document.getElementById("imgPrompt").value.trim();
+  if (!prompt) return;
+  const resDiv = document.getElementById("imgResult");
+  resDiv.innerHTML = "⏳ Generating...";
+  try {
+    const res = await puter.ai.imggen(prompt);
+    console.log("ImageGen Response:", res);
+    resDiv.innerHTML = `<img src="${res.url}" style="max-width:100%; border-radius:8px;">`;
+  } catch (e) {
+    console.error("Image error:", e);
+    resDiv.innerHTML = "⚠️ Error generating image.";
+  }
+}
 
-    // Stream
-    async function runStream() {
-      const prompt = document.getElementById("streamInput").value.trim();
-      if (!prompt) return;
-      const box = document.getElementById("streamBox");
-      box.innerText = "";
-      try {
-        const stream = await puter.ai.chat(prompt, { model: "gpt-4o-mini", stream: true });
-        for await (const chunk of stream) {
-          box.innerText += chunk.output;
-        }
-      } catch (e) {
-        box.innerText = "⚠️ Streaming error: " + e.message;
-      }
+/* ================= VISION ================= */
+async function runVision() {
+  const fileInput = document.getElementById("visionFile");
+  if (!fileInput.files.length) return;
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+  reader.onload = async function() {
+    try {
+      const res = await puter.ai.vision(reader.result);
+      console.log("Vision Response:", res);
+      document.getElementById("visionResult").innerText = res.output;
+    } catch (e) {
+      console.error("Vision error:", e);
+      document.getElementById("visionResult").innerText = "⚠️ Error analyzing image.";
     }
-  </script>
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ================= STREAM ================= */
+async function runStream() {
+  const prompt = document.getElementById("streamInput").value.trim();
+  if (!prompt) return;
+  const box = document.getElementById("streamBox");
+  box.innerText = "";
+  try {
+    const stream = await puter.ai.chat(prompt, { model: "gpt-4o-mini", stream: true });
+    console.log("Streaming started with prompt:", prompt);
+    for await (const chunk of stream) {
+      console.log("Stream chunk:", chunk);
+      box.innerText += chunk.output;
+    }
+  } catch (e) {
+    console.error("Stream error:", e);
+    box.innerText = "⚠️ Streaming error: " + e.message;
+  }
+}
+</script>
 </body>
 </html>
