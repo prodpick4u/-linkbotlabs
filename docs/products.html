@@ -30,12 +30,12 @@
       border-radius: 6px;
     }
 
-    .voice-controls {
+    .voice-controls, .model-select {
       text-align: center;
       margin-bottom: 20px;
     }
 
-    .voice-controls select, .voice-controls button {
+    .voice-controls select, .voice-controls button, .model-select select {
       padding: 5px 10px;
       font-size: 16px;
       margin-right: 10px;
@@ -53,15 +53,15 @@
 
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
     }
 
     .product-card {
       background: #1a1a2e;
       border: 1px solid #3a3a5d;
-      border-radius: 10px;
-      padding: 15px;
+      border-radius: 12px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       transition: transform 0.2s;
@@ -73,31 +73,30 @@
     }
 
     .product-title {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
-      margin: 8px 0;
+      margin: 10px 0;
     }
 
     .product-price {
       color: turquoise;
       font-weight: bold;
-      margin: 4px 0;
+      margin: 6px 0;
     }
 
-    .product-desc, .chat-box {
+    .product-desc {
       font-size: 16px;
-      font-family: 'Segoe UI', sans-serif;
       line-height: 1.5;
       color: #ccc;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .product-btn {
       margin-top: 10px;
-      padding: 10px;
+      padding: 12px;
       background: linear-gradient(135deg, #0077b6, #00b4d8);
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       color: white;
       font-weight: bold;
       cursor: pointer;
@@ -108,16 +107,72 @@
       background: linear-gradient(135deg, #00b4d8, #0077b6);
     }
 
+    .chat-box-container {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
     .chat-box {
-      min-height: 100px;
-      border-radius: 6px;
-      padding: 8px;
+      min-height: 150px;
+      border-radius: 12px;
+      padding: 10px;
       border: 1px solid #3a3a5d;
       background: #111;
-      color: #fff;
       font-family: monospace;
-      resize: vertical;
-      display: none;
+      color: #fff;
+      overflow-y: auto;
+      outline: none;
+      white-space: pre-wrap;
+      caret-color: turquoise;
+    }
+
+    .chat-box:empty::before {
+      content: attr(placeholder);
+      color: #666;
+    }
+
+    .chat-box:focus::before {
+      content: '';
+    }
+
+    .chat-bubble {
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      max-width: 80%;
+      word-wrap: break-word;
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    .user-bubble {
+      background: #0077b6;
+      align-self: flex-end;
+      color: #fff;
+    }
+
+    .ai-bubble {
+      background: #9d4edd;
+      align-self: flex-start;
+      color: #fff;
+    }
+
+    .typing-bubble::after {
+      content: '...';
+      display: inline-block;
+      margin-left: 5px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      25%, 75% { opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
     .socials {
@@ -151,13 +206,12 @@
   </style>
 </head>
 <body>
-    <header style="text-align:center; padding: 15px; background:#111;">
-    <img src="img_splash.jpg" alt="LinkBotLabs Logo" 
-         style="max-width:180px; display:block; margin:0 auto;">
+  <header style="text-align:center; padding: 15px; background:#111;">
+    <img src="img_splash.jpg" alt="LinkBotLabs Logo" style="max-width:180px; display:block; margin:0 auto;">
     <h1>✨ LinkBotLabs Product Picks ✨</h1>
-  </header
+  </header>
+
   <div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
-  <h1>✨ LinkBotLabs Product Picks ✨</h1>
 
   <div class="voice-controls">
     <label>Select Voice:</label>
@@ -165,9 +219,19 @@
     <button id="stopTTS">⏹ Stop</button>
   </div>
 
+  <div class="model-select">
+    <label>Select GPT Model:</label>
+    <select id="modelSelect">
+      <option value="gpt-5-mini">GPT-5 Mini</option>
+      <option value="gpt-5">GPT-5</option>
+      <option value="gpt-4o-mini">GPT-4o Mini</option>
+      <option value="gpt-4-1-mini">GPT-4.1 Mini</option>
+      <option value="gpt-5-nano">GPT-5 Nano</option>
+    </select>
+  </div>
+
   <div id="content"></div>
 
-  <!-- Social buttons -->
   <div class="socials">
     <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">TT</a>
     <a href="https://x.com/linkbotlabs" target="_blank">X</a>
@@ -178,8 +242,8 @@
   <script src="https://js.puter.com/v2/"></script>
   <script>
     const content = document.getElementById("content");
+    const modelSelect = document.getElementById("modelSelect");
 
-    // Affiliate ID
     function getAffiliateId() {
       const params = new URLSearchParams(window.location.search);
       return params.get("aff_id") || null;
@@ -208,9 +272,7 @@
     }
     if (speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = populateVoiceSelects;
-    } else {
-      populateVoiceSelects();
-    }
+    } else populateVoiceSelects();
 
     function playTTS(text) {
       if (synth.speaking) synth.cancel();
@@ -221,7 +283,6 @@
     }
     document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
 
-    // Load products
     async function loadProducts() {
       try {
         const res = await fetch("products.json?cachebust=" + Date.now());
@@ -230,6 +291,24 @@
       } catch (e) {
         content.innerHTML = `<p style="color:red;text-align:center;">❌ Failed to load products.</p>`;
       }
+    }
+
+    async function typeAIResponse(container, text) {
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble ai-bubble typing-bubble";
+      container.appendChild(bubble);
+      container.scrollTop = container.scrollHeight;
+
+      let i = 0;
+      while (i < text.length) {
+        bubble.textContent = text.slice(0, i + 1);
+        container.scrollTop = container.scrollHeight;
+        i++;
+        await new Promise(r => setTimeout(r, 20)); // typing speed
+      }
+
+      bubble.classList.remove("typing-bubble");
+      playTTS(text);
     }
 
     function renderProducts(data) {
@@ -249,43 +328,60 @@
             <p class="product-price">${p.price}</p>
             <p class="product-desc">${p.description}</p>
             <button class="product-btn view-btn">🛒 Click to View</button>
-            <button class="product-btn ask-btn">💬 Ask GPT-4 Nano</button>
-            <textarea class="chat-box" placeholder="Type your question here..."></textarea>
+            <button class="product-btn ask-btn">💬 Ask AI</button>
+            <div class="chat-box-container" style="display:none;">
+              <div class="chat-box" contenteditable="true" placeholder="Type your question here..."></div>
+            </div>
             <button class="product-btn tts-btn">🔊 Listen</button>
           `;
 
-          // Affiliate link
-          card.querySelector(".view-btn").onclick = () => {
+          const viewBtn = card.querySelector(".view-btn");
+          const askBtn = card.querySelector(".ask-btn");
+          const chatContainer = card.querySelector(".chat-box-container");
+          const chatBox = card.querySelector(".chat-box");
+          const ttsBtn = card.querySelector(".tts-btn");
+
+          let typingUserBubble = null;
+
+          viewBtn.onclick = () => {
             let link = p.url;
             if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
             window.open(link, "_blank");
           };
 
-          // Show/Hide chat box
-          const askBtn = card.querySelector(".ask-btn");
-          const chatBox = card.querySelector(".chat-box");
           askBtn.onclick = () => {
-            chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
+            chatContainer.style.display = chatContainer.style.display === "none" ? "flex" : "none";
           };
 
-          // GPT chat
+          chatBox.addEventListener("input", () => {
+            if (!typingUserBubble) {
+              typingUserBubble = document.createElement("div");
+              typingUserBubble.className = "chat-bubble user-bubble";
+              chatContainer.appendChild(typingUserBubble);
+            }
+            typingUserBubble.textContent = chatBox.innerText;
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          });
+
           chatBox.addEventListener("keydown", async (e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
-              const lines = chatBox.value.split("\n");
-              const userText = lines[lines.length-1];
-              if (!userText.trim()) return;
-              const response = await puter.ai.chat(userText);
-              chatBox.value += `\nGPT-4 Nano: ${response}`;
-              chatBox.scrollTop = chatBox.scrollHeight;
-              // Play TTS for AI response
-              playTTS(response);
+              const userText = chatBox.innerText.trim();
+              if (!userText) return;
+
+              typingUserBubble.textContent = userText;
+              typingUserBubble = null;
+              chatBox.innerText = "";
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+
+              const model = modelSelect.value;
+              const response = await puter.ai.chat(userText, { model });
+              await typeAIResponse(chatContainer, response);
             }
           });
 
-          // TTS button reads current AI chat text
-          card.querySelector(".tts-btn").onclick = () => {
-            const text = chatBox.value || p.description;
+          ttsBtn.onclick = () => {
+            const text = chatBox.innerText || p.description;
             playTTS(text);
           };
 
