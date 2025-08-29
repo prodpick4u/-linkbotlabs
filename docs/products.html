@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Product Catalog - LinkBotLabs</title>
+  <title>AI Product Hub – Multi-AI Powered</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://js.puter.com/v2/"></script>
   <style>
     body {
@@ -12,21 +13,18 @@
       background: linear-gradient(135deg, #0d0d0d, #1a1a2e, #4b0082);
       color: #fff;
     }
-
     h1 {
       text-align: center;
-      font-size: 2.2em;
-      margin-top: 10px;
-      color: turquoise;
+      font-size: 2.4em;
+      color: #40e0d0;
+      margin-bottom: 15px;
     }
-
     .products-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 25px;
-      margin-top: 30px;
+      margin: 20px 0;
     }
-
     .product-card {
       background: rgba(30, 30, 50, 0.9);
       border-radius: 12px;
@@ -38,39 +36,33 @@
     .product-card:hover {
       transform: translateY(-5px);
     }
-
     .product-title {
-      font-size: 1.2em;
+      font-size: 1.3em;
+      color: #40e0d0;
       margin-bottom: 10px;
-      color: turquoise;
     }
-
     .product-price {
       font-weight: bold;
       margin: 10px 0;
-      color: #fff;
     }
-
     .product-desc {
-      font-size: 0.9em;
+      font-size: 0.95em;
       opacity: 0.85;
     }
-
     .product-btn {
-      background: turquoise;
+      background: #40e0d0;
       border: none;
       padding: 12px 18px;
       margin-top: 15px;
       border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
-      transition: 0.3s;
+      transition: background 0.3s, transform 0.2s;
     }
     .product-btn:hover {
       background: #00e0e0;
+      transform: scale(1.05);
     }
-
-    /* Floating socials */
     .social-floating {
       position: fixed;
       top: 50%;
@@ -83,20 +75,23 @@
     }
     .social-floating a {
       font-size: 24px;
-      text-decoration: none;
-      color: turquoise;
-      transition: 0.3s;
+      color: #40e0d0;
+      transition: color 0.3s, transform 0.3s;
     }
     .social-floating a:hover {
       color: white;
+      transform: scale(1.2);
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 2em; }
+      .social-floating { right: 8px; }
     }
   </style>
 </head>
 <body>
-  <h1>Product Catalog</h1>
-  <div id="productsGrid" class="products-grid"></div>
+  <h1>AI Product Hub – Multi-AI Powered</h1>
+  <div id="productsGrid" class="products-grid">Loading products...</div>
 
-  <!-- Floating Socials -->
   <div class="social-floating">
     <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">🎵</a>
     <a href="https://x.com/linkbotlabs" target="_blank">𝕏</a>
@@ -106,33 +101,35 @@
 
   <script>
     async function loadProducts() {
-      const res = await fetch("products.json");
-      const products = await res.json();
-      const grid = document.getElementById("productsGrid");
+      try {
+        const res = await fetch("products.json");
+        const products = await res.json();
+        const grid = document.getElementById("productsGrid");
+        grid.innerHTML = "";
 
-      products.forEach(p => {
-        const card = document.createElement("div");
-        card.className = "product-card";
+        products.forEach(p => {
+          const card = document.createElement("div");
+          card.className = "product-card";
+          card.innerHTML = `
+            <div class="product-title">${p.title}</div>
+            <div class="product-price">${p.price}</div>
+            <div class="product-desc">${p.description}</div>
+            <button class="product-btn">🛒 Click to View & Listen</button>
+          `;
 
-        card.innerHTML = `
-          <h2 class="product-title">${p.title}</h2>
-          <p class="product-price">${p.price}</p>
-          <p class="product-desc">${p.description}</p>
-          <button class="product-btn">🛒 Click to View & Listen</button>
-        `;
+          card.querySelector(".product-btn").onclick = () => {
+            const text = `${p.title}. Price: ${p.price}. ${p.description}`;
+            playVoice(text);
+            window.open(p.url, "_blank");
+          };
 
-        const btn = card.querySelector("button");
-        btn.onclick = () => {
-          const text = `${p.title}. Price: ${p.price}. ${p.description}`;
-          playVoice(text);
-          window.open(p.url, "_blank");
-        };
-
-        grid.appendChild(card);
-      });
+          grid.appendChild(card);
+        });
+      } catch (e) {
+        console.error("Failed to load products:", e);
+      }
     }
 
-    // Use Puter AI TTS (natural sounding)
     async function playVoice(text) {
       if (window.currentAudio) {
         window.currentAudio.pause();
