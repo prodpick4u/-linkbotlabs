@@ -88,8 +88,8 @@
     word-wrap: break-word;
     animation: fadeIn 0.3s ease-in;
   }
-  .user-bubble { background: #d0e6ff; color: #000; align-self: flex-end; }
-  .ai-bubble { background: #40e0d0; color: #000; align-self: flex-start; }
+  .user-bubble { background: #ffcc00; color: #000; align-self: flex-end; } /* User = yellow */
+  .ai-bubble { background: #40e0d0; color: #000; align-self: flex-start; } /* AI = turquoise */
 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(5px); }
@@ -163,7 +163,7 @@
 const content = document.getElementById("content");
 const modelSelect = document.getElementById("modelSelect");
 
-// Load AI models from document.json
+// Load AI models
 async function loadAIModels() {
   try {
     const res = await fetch("document.json?cachebust=" + Date.now());
@@ -306,10 +306,12 @@ function renderProducts(data) {
 
 loadProducts();
 </script>
-  <script>
+
+<!-- Floating Console -->
+<script>
 (function(){
   const box = document.createElement("div");
-  box.style.cssText = "position:fixed;bottom:10px;right:10px;max-width:250px;max-height:150px;overflow:auto;background:#111;color:#0f0;font-size:11px;padding:6px;border-radius:6px;font-family:monospace;z-index:9999;opacity:0.9";
+  box.style.cssText = "position:fixed;bottom:10px;right:10px;max-width:260px;max-height:160px;overflow:auto;background:#111;color:#0f0;font-size:11px;padding:6px;border-radius:6px;font-family:monospace;z-index:9999;opacity:0.9";
   document.body.appendChild(box);
 
   const oldLog = console.log;
