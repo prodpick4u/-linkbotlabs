@@ -123,18 +123,6 @@
       font-family: monospace;
       color: #fff;
       overflow-y: auto;
-      outline: none;
-      white-space: pre-wrap;
-      caret-color: turquoise;
-    }
-
-    .chat-box:empty::before {
-      content: attr(placeholder);
-      color: #666;
-    }
-
-    .chat-box:focus::before {
-      content: '';
     }
 
     .chat-bubble {
@@ -143,8 +131,6 @@
       margin-bottom: 6px;
       max-width: 80%;
       word-wrap: break-word;
-      opacity: 0;
-      animation: fadeIn 0.3s forwards;
     }
 
     .user-bubble {
@@ -157,22 +143,6 @@
       background: #9d4edd;
       align-self: flex-start;
       color: #fff;
-    }
-
-    .typing-bubble::after {
-      content: '...';
-      display: inline-block;
-      margin-left: 5px;
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      0%, 50%, 100% { opacity: 1; }
-      25%, 75% { opacity: 0; }
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; }
     }
 
     .socials {
@@ -293,24 +263,6 @@
       }
     }
 
-    async function typeAIResponse(container, text) {
-      const bubble = document.createElement("div");
-      bubble.className = "chat-bubble ai-bubble typing-bubble";
-      container.appendChild(bubble);
-      container.scrollTop = container.scrollHeight;
-
-      let i = 0;
-      while (i < text.length) {
-        bubble.textContent = text.slice(0, i + 1);
-        container.scrollTop = container.scrollHeight;
-        i++;
-        await new Promise(r => setTimeout(r, 20)); // typing speed
-      }
-
-      bubble.classList.remove("typing-bubble");
-      playTTS(text);
-    }
-
     function renderProducts(data) {
       content.innerHTML = "";
       for (const [category, items] of Object.entries(data)) {
@@ -330,7 +282,7 @@
             <button class="product-btn view-btn">🛒 Click to View</button>
             <button class="product-btn ask-btn">💬 Ask AI</button>
             <div class="chat-box-container" style="display:none;">
-              <div class="chat-box" contenteditable="true" placeholder="Type your question here..."></div>
+              <div class="chat-box" contenteditable="true"></div>
             </div>
             <button class="product-btn tts-btn">🔊 Listen</button>
           `;
@@ -340,8 +292,6 @@
           const chatContainer = card.querySelector(".chat-box-container");
           const chatBox = card.querySelector(".chat-box");
           const ttsBtn = card.querySelector(".tts-btn");
-
-          let typingUserBubble = null;
 
           viewBtn.onclick = () => {
             let link = p.url;
@@ -353,30 +303,30 @@
             chatContainer.style.display = chatContainer.style.display === "none" ? "flex" : "none";
           };
 
-          chatBox.addEventListener("input", () => {
-            if (!typingUserBubble) {
-              typingUserBubble = document.createElement("div");
-              typingUserBubble.className = "chat-bubble user-bubble";
-              chatContainer.appendChild(typingUserBubble);
-            }
-            typingUserBubble.textContent = chatBox.innerText;
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          });
-
           chatBox.addEventListener("keydown", async (e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               const userText = chatBox.innerText.trim();
               if (!userText) return;
 
-              typingUserBubble.textContent = userText;
-              typingUserBubble = null;
+              const userBubble = document.createElement("div");
+              userBubble.className = "chat-bubble user-bubble";
+              userBubble.textContent = userText;
+              chatContainer.appendChild(userBubble);
+
               chatBox.innerText = "";
               chatContainer.scrollTop = chatContainer.scrollHeight;
 
               const model = modelSelect.value;
               const response = await puter.ai.chat(userText, { model });
-              await typeAIResponse(chatContainer, response);
+
+              const aiBubble = document.createElement("div");
+              aiBubble.className = "chat-bubble ai-bubble";
+              aiBubble.textContent = response;
+              chatContainer.appendChild(aiBubble);
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+
+              playTTS(response);
             }
           });
 
