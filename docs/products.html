@@ -15,6 +15,17 @@
     h1 {
       text-align: center;
       color: turquoise;
+      margin-bottom: 20px;
+    }
+
+    .affiliate-banner {
+      background: #0077b6;
+      color: #fff;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+      border-radius: 6px;
     }
 
     .category {
@@ -38,21 +49,14 @@
       border: 1px solid #3a3a5d;
       border-radius: 10px;
       padding: 15px;
+      display: flex;
+      flex-direction: column;
       transition: transform 0.2s;
     }
 
     .product-card:hover {
       transform: translateY(-5px);
       border-color: turquoise;
-    }
-
-    .product-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: contain;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      background: #111;
     }
 
     .product-title {
@@ -70,11 +74,11 @@
     .product-desc {
       font-size: 14px;
       color: #ccc;
+      margin-bottom: 8px;
     }
 
     .product-btn {
-      display: block;
-      margin-top: 12px;
+      margin-top: 10px;
       padding: 10px;
       background: linear-gradient(135deg, #0077b6, #00b4d8);
       border: none;
@@ -89,28 +93,20 @@
       background: linear-gradient(135deg, #00b4d8, #0077b6);
     }
 
-    /* Skeletons */
-    .skeleton {
-      background: #2a2a3d;
-      border-radius: 10px;
-      padding: 15px;
-      animation: shimmer 1.5s infinite linear;
-    }
-    .skeleton img,
-    .skeleton .line {
-      background: linear-gradient(90deg, #2a2a3d 25%, #3a3a5d 50%, #2a2a3d 75%);
-      background-size: 200% 100%;
+    .chat-box {
+      margin-top: 10px;
+      width: 100%;
+      min-height: 100px;
       border-radius: 6px;
-      margin: 10px 0;
-    }
-    .skeleton img { width: 100%; height: 180px; }
-    .skeleton .line { height: 14px; width: 80%; }
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
+      padding: 8px;
+      border: 1px solid #3a3a5d;
+      background: #111;
+      color: #fff;
+      font-family: monospace;
+      resize: vertical;
+      display: none;
     }
 
-    /* Floating Socials */
     .socials {
       position: fixed;
       top: 50%;
@@ -120,20 +116,21 @@
       flex-direction: column;
       gap: 12px;
     }
+
     .socials a {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 40px;
       height: 40px;
       background: turquoise;
       border-radius: 50%;
       color: #0d0d1a;
       font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       text-decoration: none;
       transition: 0.3s;
     }
+
     .socials a:hover {
       background: #9d4edd;
       color: #fff;
@@ -141,6 +138,7 @@
   </style>
 </head>
 <body>
+  <div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
   <h1>✨ LinkBotLabs Product Picks ✨</h1>
   <div id="content"></div>
 
@@ -156,18 +154,22 @@
   <script>
     const content = document.getElementById("content");
 
-    function showSkeletons() {
-      content.innerHTML = "";
-      for (let i = 0; i < 6; i++) {
-        const skel = document.createElement("div");
-        skel.className = "skeleton";
-        skel.innerHTML = `<img><div class="line"></div><div class="line"></div>`;
-        content.appendChild(skel);
-      }
+    // Get affiliate ID from URL
+    function getAffiliateId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("aff_id") || null;
+    }
+
+    const affiliateId = getAffiliateId();
+
+    // Show affiliate banner if ID exists
+    if (affiliateId) {
+      const banner = document.getElementById("affiliate-banner");
+      banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
+      banner.style.display = "block";
     }
 
     async function loadProducts() {
-      showSkeletons();
       try {
         const res = await fetch("products.json?cachebust=" + Date.now());
         const data = await res.json();
@@ -188,34 +190,50 @@
         items.forEach(p => {
           const card = document.createElement("div");
           card.className = "product-card";
+
           card.innerHTML = `
-            <img src="${p.img || 'https://via.placeholder.com/200x180?text=No+Image'}" alt="${p.title}">
             <h3 class="product-title">${p.title}</h3>
             <p class="product-price">${p.price}</p>
             <p class="product-desc">${p.description}</p>
-            <button class="product-btn">🛒 Click to View & Listen</button>
+            <button class="product-btn view-btn">🛒 Click to View</button>
+            <button class="product-btn ask-btn">💬 Ask GPT-4 Nano</button>
+            <textarea class="chat-box" placeholder="Type your question here..."></textarea>
           `;
-          card.querySelector("button").onclick = () => {
-            const speech = `${p.title}. Price: ${p.price}. ${p.description}`;
-            playVoice(speech);
-            window.open(p.url, "_blank");
+
+          // Open affiliate link on click
+          card.querySelector(".view-btn").onclick = () => {
+            let link = p.url;
+            if (affiliateId) {
+              link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
+            }
+            window.open(link, "_blank");
           };
+
+          // Show/Hide chat box
+          const askBtn = card.querySelector(".ask-btn");
+          const chatBox = card.querySelector(".chat-box");
+          askBtn.onclick = () => {
+            chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
+          };
+
+          // Handle GPT chat
+          chatBox.addEventListener("keydown", async (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              const lines = chatBox.value.split("\n");
+              const userText = lines[lines.length-1];
+              if (!userText.trim()) return;
+              const response = await puter.ai.chat(userText);
+              chatBox.value += `\nGPT-4 Nano: ${response}`;
+              chatBox.scrollTop = chatBox.scrollHeight;
+            }
+          });
+
           grid.appendChild(card);
         });
 
         content.appendChild(section);
       }
-    }
-
-    // Voice output
-    async function playVoice(text) {
-      if (window.currentAudio) {
-        window.currentAudio.pause();
-        window.currentAudio = null;
-      }
-      const audio = await puter.ai.speak(text);
-      window.currentAudio = audio;
-      audio.play();
     }
 
     loadProducts();
