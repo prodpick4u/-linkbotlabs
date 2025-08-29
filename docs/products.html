@@ -1,274 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product Catalog</title>
-<style>
-body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(135deg, #f4f4f9, #e9edf5);
-  color: #333;
-  padding: 20px;
-  max-width: 900px;
-  margin: auto;
-}
+  <meta charset="UTF-8">
+  <title>Product Catalog - LinkBotLabs</title>
+  <script src="https://js.puter.com/v2/"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #0d0d0d, #1a1a2e, #4b0082);
+      color: #fff;
+    }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 2em;
-  color: #2c3e50;
-}
+    h1 {
+      text-align: center;
+      font-size: 2.2em;
+      margin-top: 10px;
+      color: turquoise;
+    }
 
-select {
-  display: block;
-  padding: 14px;
-  margin: 15px auto;
-  width: 100%;
-  max-width: 500px;
-  font-size: 1.1em;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #fff;
-}
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
 
-select:focus {
-  border-color: #007bff;
-  outline: none;
-}
+    .product-card {
+      background: rgba(30, 30, 50, 0.9);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(0, 247, 255, 0.2);
+      transition: transform 0.3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
 
-.product-info {
-  margin: 20px auto;
-  padding: 20px;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
+    .product-title {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: turquoise;
+    }
 
-.product-info strong {
-  font-size: 1.2em;
-  color: #2c3e50;
-  display: block;
-  margin-bottom: 8px;
-}
+    .product-price {
+      font-weight: bold;
+      margin: 10px 0;
+      color: #fff;
+    }
 
-button.more-info, .more-info {
-  margin-top: 12px;
-  display: inline-block;
-  padding: 12px 18px;
-  background: #007bff;
-  color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.3s;
-  font-size: 1em;
-  border: none;
-}
+    .product-desc {
+      font-size: 0.9em;
+      opacity: 0.85;
+    }
 
-button.more-info:hover, .more-info:hover {
-  background: #0056b3;
-}
+    .product-btn {
+      background: turquoise;
+      border: none;
+      padding: 12px 18px;
+      margin-top: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .product-btn:hover {
+      background: #00e0e0;
+    }
 
-#aiDesc {
-  margin-top: 10px;
-  font-style: italic;
-  color: #555;
-}
-
-/* Category background colors */
-.category-Health { background-color: #ffefef; }
-.category-Beauty { background-color: #fff0f6; }
-.category-Kitchen { background-color: #fff9e6; }
-.category-Tech { background-color: #f0f6ff; }
-.category-Outdoors { background-color: #f0fff0; }
-.category-Household { background-color: #f9f9f9; }
-.category-HomeDecor { background-color: #f5f0ff; }
-
-/* Responsive */
-@media (max-width: 600px) {
-  body {
-    padding: 15px;
-  }
-
-  h1 {
-    font-size: 1.6em;
-  }
-
-  select {
-    font-size: 1em;
-    padding: 12px;
-    max-width: 100%;
-  }
-
-  .product-info {
-    padding: 16px;
-  }
-
-  button.more-info, .more-info {
-    width: 100%;
-    text-align: center;
-    font-size: 1.05em;
-  }
-}
-</style>
-<script src="https://js.puter.com/v2/"></script>
+    /* Floating socials */
+    .social-floating {
+      position: fixed;
+      top: 50%;
+      right: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transform: translateY(-50%);
+      z-index: 999;
+    }
+    .social-floating a {
+      font-size: 24px;
+      text-decoration: none;
+      color: turquoise;
+      transition: 0.3s;
+    }
+    .social-floating a:hover {
+      color: white;
+    }
+  </style>
 </head>
 <body>
+  <h1>Product Catalog</h1>
+  <div id="productsGrid" class="products-grid"></div>
 
-<h1>Product Catalog</h1>
+  <!-- Floating Socials -->
+  <div class="social-floating">
+    <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">🎵</a>
+    <a href="https://x.com/linkbotlabs" target="_blank">𝕏</a>
+    <a href="https://www.youtube.com/@linkbotlabs" target="_blank">▶️</a>
+    <a href="https://facebook.com/linkbotlabs" target="_blank">📘</a>
+  </div>
 
-<select id="categorySelect">
-  <option value="">Select a category</option>
-  <option value="Health">Health</option>
-  <option value="Beauty">Beauty</option>
-  <option value="Kitchen">Kitchen</option>
-  <option value="Tech">Tech</option>
-  <option value="Outdoors">Outdoors</option>
-  <option value="Household">Household</option>
-  <option value="HomeDecor">Home Decor</option>
-</select>
+  <script>
+    async function loadProducts() {
+      const res = await fetch("products.json");
+      const products = await res.json();
+      const grid = document.getElementById("productsGrid");
 
-<select id="productSelect" disabled>
-  <option value="">Select a product</option>
-</select>
+      products.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "product-card";
 
-<div id="productDetails"></div>
+        card.innerHTML = `
+          <h2 class="product-title">${p.title}</h2>
+          <p class="product-price">${p.price}</p>
+          <p class="product-desc">${p.description}</p>
+          <button class="product-btn">🛒 Click to View & Listen</button>
+        `;
 
-<script>
-const AFFILIATE_TAG = "mychanneld-20";
+        const btn = card.querySelector("button");
+        btn.onclick = () => {
+          const text = `${p.title}. Price: ${p.price}. ${p.description}`;
+          playVoice(text);
+          window.open(p.url, "_blank");
+        };
 
-// Affiliate link handler
-function applyAffiliate(url){
-  try {
-    const ref = document.referrer;
-    if(ref.includes("starter")) {
-      if(url.includes("amazon.com") && !url.includes(`tag=${AFFILIATE_TAG}`)){
-        return url.includes("?") ? `${url}&tag=${AFFILIATE_TAG}` : `${url}?tag=${AFFILIATE_TAG}`;
-      }
-    }
-  } catch(e){}
-  return url;
-}
-
-// Products
-const PRODUCTS = {
-  Health: [
-    {title:"Fitbit Charge 5", url:"https://amzn.to/45zc4k1", price:"$129.95", description:"Fitness tracker with built-in GPS and health metrics."},
-    {title:"Theragun Elite", url:"https://amzn.to/463BPYL", price:"$299.00", description:"Percussive therapy device for muscle recovery."},
-    {title:"Methylene Blue", url:"https://amzn.to/4ldkJwL", price:"Varies", description:"Supplement for mitochondrial support."},
-    {title:"Irish Sea Moss", url:`https://www.amazon.com/dp/B0CTMJYZ73?tag=${AFFILIATE_TAG}`, price:"Varies", description:"Supports immune and thyroid health."},
-    {title:"Shilajit", url:"https://amzn.to/4li6vuC", price:"Varies", description:"Boosts energy and vitality."}
-  ],
-  Beauty: [
-    {title:"Revlon Hair Dryer Brush", url:"https://amzn.to/3HIHhrw", price:"$59.99", description:"Hair styling tool for drying and volumizing."},
-    {title:"Olay Regenerist Cream", url:"https://amzn.to/3HwMhQ8", price:"$25.99", description:"Anti-aging facial moisturizer."},
-    {title:"Neutrogena Wipes", url:"https://amzn.to/3UAEOSX", price:"$9.99", description:"Gentle makeup remover wipes."},
-    {title:"Maybelline Mascara", url:"https://amzn.to/4oHMpgn", price:"$7.99", description:"Volumizing mascara with buildable formula."},
-    {title:"CeraVe Cleanser", url:"https://amzn.to/4mI68uu", price:"$14.99", description:"Gentle facial cleanser for dry skin."}
-  ],
-  Kitchen: [
-    {title:"Instant Pot Duo", url:"https://amzn.to/4oLDhqU", price:"$89.00", description:"7-in-1 multi-functional pressure cooker."},
-    {title:"Lodge Cast Iron Skillet", url:"https://amzn.to/4oKl7WG", price:"$24.99", description:"Durable pre-seasoned cast iron pan."},
-    {title:"Breville Smart Oven Air Fryer", url:"https://amzn.to/47BJoYI", price:"$279.95", description:"Countertop convection oven with air fryer."},
-    {title:"KitchenAid Stand Mixer", url:"https://amzn.to/3HHSZmj", price:"$379.99", description:"Versatile mixer for baking."}
-  ],
-  Tech: [
-    {title:"Apple AirPods Pro 2nd Gen", url:"https://amzn.to/3UAYMx7", price:"$249.00", description:"Premium ANC earbuds with deep spatial audio."},
-    {title:"Samsung Galaxy Buds FE", url:"https://amzn.to/4m6BhIh", price:"$99.99", description:"Reliable ANC earbuds for Android."},
-    {title:"Anker Soundcore P20i", url:"https://amzn.to/4mqytoV", price:"$29.99", description:"Budget wireless earbuds."}
-  ],
-  Outdoors: [
-    {title:"Coleman Sundome Tent", url:"https://amzn.to/4myC9oX", price:"$99.99", description:"Easy setup camping tent."},
-    {title:"LifeStraw Water Filter", url:"https://amzn.to/4m3CoIw", price:"$19.97", description:"Portable water purifier."}
-  ],
-  Household: [
-    {title:"iRobot Roomba 694", url:"https://amzn.to/4flpTp8", price:"$249.99", description:"Smart robot vacuum."},
-    {title:"Dyson V8 Vacuum", url:"https://amzn.to/4fll1QY", price:"$399.99", description:"Powerful cordless vacuum."}
-  ],
-  HomeDecor: [
-    {title:"Amethyst Crystal Tree", url:`https://www.amazon.com/dp/B0B8QWN9NT?tag=${AFFILIATE_TAG}`, price:"$39.95", description:"Handcrafted crystal tree symbolizing peace."},
-    {title:"Linon Sherpa Office Chair", url:`https://www.amazon.com/dp/B083TRV28M?tag=${AFFILIATE_TAG}`, price:"$129.99", description:"Ivory sherpa office chair."}
-  ],
-  Kitchen_TEMU: [
-    {title:"Multi Rice Cooker", url:"https://share.temu.com/jwZL6Tbh2SB", price:"Check Temu UK", description:"Versatile rice cooker."},
-    {title:"Foldable Kettle", url:"https://share.temu.com/GZe6nSeHcEB", price:"Check Temu UK", description:"Compact foldable kettle."}
-  ]
-};
-
-const categorySelect = document.getElementById('categorySelect');
-const productSelect = document.getElementById('productSelect');
-const productDetails = document.getElementById('productDetails');
-
-// Speech
-let currentUtterance = null;
-function speak(text) {
-  window.speechSynthesis.cancel();
-  currentUtterance = new SpeechSynthesisUtterance(text);
-  currentUtterance.rate = 1;
-  window.speechSynthesis.speak(currentUtterance);
-}
-function toggleSpeech(title, price, desc) {
-  if (window.speechSynthesis.speaking) {
-    window.speechSynthesis.cancel();
-  } else {
-    speak(`${title}. Price: ${price}. ${desc}`);
-  }
-}
-
-// Populate product list
-categorySelect.addEventListener('change', () => {
-  const cat = categorySelect.value;
-  productSelect.innerHTML = '<option value="">Select a product</option>';
-  productDetails.innerHTML = '';
-  if(!cat){ productSelect.disabled = true; return; }
-  productSelect.disabled = false;
-  Object.keys(PRODUCTS).forEach(key => {
-    if(key === cat || key.startsWith(cat+"_")) {
-      PRODUCTS[key].forEach((p, idx) => {
-        const opt = document.createElement('option');
-        opt.value = key + "|" + idx;
-        opt.textContent = p.title;
-        productSelect.appendChild(opt);
+        grid.appendChild(card);
       });
     }
-  });
-});
 
-// Show product details
-productSelect.addEventListener('change', () => {
-  const val = productSelect.value;
-  if(!val){ productDetails.innerHTML = ''; return; }
-  const [cat, idx] = val.split("|");
-  const p = PRODUCTS[cat][parseInt(idx)];
-  const finalURL = applyAffiliate(p.url);
-  productDetails.innerHTML = `
-    <div class="product-info category-${cat}">
-      <strong>${p.title}</strong>
-      Price: ${p.price}<br>
-      <a href="${finalURL}" target="_blank">Buy Here</a><br>
-      Description: ${p.description}<br>
-      <button class="more-info" onclick="toggleSpeech('${p.title}', '${p.price}', '${p.description}')">🔊 Play / Pause Voice</button>
-      <span class="more-info" onclick="moreInfo('${p.title}','${p.description}')">More Information</span>
-      <div id="aiDesc"></div>
-    </div>
-  `;
-  moreInfo(p.title, p.description, true);
-});
-
-// AI description
-function moreInfo(title, desc, auto=false){
-  puter.ai.chat(`Provide a more detailed description of: ${title}. Current description: ${desc}`)
-  .then(response => {
-    if(auto){
-      document.getElementById('aiDesc').textContent = response;
-    } else {
-      puter.print(response);
+    // Use Puter AI TTS (natural sounding)
+    async function playVoice(text) {
+      if (window.currentAudio) {
+        window.currentAudio.pause();
+        window.currentAudio = null;
+      } else {
+        const audio = await puter.ai.speak(text);
+        window.currentAudio = audio;
+        audio.play();
+      }
     }
-  });
-}
-</script>
 
+    loadProducts();
+  </script>
 </body>
 </html>
