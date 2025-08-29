@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LinkBotLabs Products</title>
 <style>
   body {
@@ -78,8 +79,7 @@
   }
   .product-btn:hover { background: linear-gradient(135deg, #00b4d8, #0077b6); }
 
-  /* Chat bubbles */
-  .chat-container { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .chat-container { margin-top: 10px; display: flex; flex-direction: column; gap: 6px; max-height: 300px; overflow-y: auto; }
   .chat-bubble {
     padding: 10px 12px;
     border-radius: 10px;
@@ -96,9 +96,20 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Mobile pop-out */
+  .chat-box {
+    margin-top: 8px;
+    padding: 8px;
+    background: #111;
+    color: #fff;
+    border-radius: 6px;
+    min-height: 40px;
+    outline: none;
+    width: 100%;
+  }
+
+  /* Mobile adjustments */
   @media (max-width: 768px) {
-    .chat-container { max-height: 300px; overflow-y: auto; }
+    .products-grid { grid-template-columns: 1fr; }
     .product-card { padding: 15px; }
   }
 
@@ -107,6 +118,7 @@
     position: fixed; top: 50%; left: 10px;
     transform: translateY(-50%);
     display: flex; flex-direction: column; gap: 12px;
+    z-index: 1000;
   }
   .socials a {
     display: flex; align-items: center; justify-content: center;
@@ -151,14 +163,27 @@
 const content = document.getElementById("content");
 const modelSelect = document.getElementById("modelSelect");
 
-// Models list
-const models = ["gpt-5-mini","gpt-5-nano","gpt-4-1-mini","gpt-4o-mini"];
-models.forEach(m => {
-  const opt = document.createElement("option");
-  opt.value = m;
-  opt.textContent = m;
-  modelSelect.appendChild(opt);
-});
+// Load AI models from document.json
+async function loadAIModels() {
+  try {
+    const res = await fetch("document.json?cachebust=" + Date.now());
+    const models = await res.json();
+    modelSelect.innerHTML = "";
+    models.forEach(model => {
+      const opt = document.createElement("option");
+      opt.value = model;
+      opt.textContent = model;
+      modelSelect.appendChild(opt);
+    });
+  } catch (error) {
+    console.error("Failed to load AI models:", error);
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "Failed to load models";
+    modelSelect.appendChild(opt);
+  }
+}
+loadAIModels();
 
 // Affiliate banner
 function getAffiliateId() {
@@ -210,12 +235,11 @@ async function loadProducts() {
   }
 }
 
-// Typing effect for AI response
+// Typing effect
 async function typeAIResponse(container, text) {
   const bubble = document.createElement("div");
   bubble.className = "chat-bubble ai-bubble";
   container.appendChild(bubble);
-
   let i = 0;
   while (i < text.length) {
     bubble.textContent += text[i];
@@ -238,7 +262,6 @@ function renderProducts(data) {
     items.forEach(p => {
       const card = document.createElement("div");
       card.className = "product-card";
-
       card.innerHTML = `
         <h3 class="product-title">${p.title}</h3>
         <p class="product-price">${p.price}</p>
@@ -247,25 +270,20 @@ function renderProducts(data) {
         <div class="chat-container"></div>
         <div contenteditable="true" class="chat-box" placeholder="Ask AI about this product..."></div>
       `;
-
       const chatContainer = card.querySelector(".chat-container");
       const chatBox = card.querySelector(".chat-box");
 
-      // Affiliate link
       card.querySelector(".view-btn").onclick = () => {
         let link = p.url;
         if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
         window.open(link, "_blank");
       };
 
-      // AI chat input
       chatBox.addEventListener("keydown", async (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           const userText = chatBox.innerText.trim();
           if (!userText) return;
-
-          // Show user bubble
           const userBubble = document.createElement("div");
           userBubble.className = "chat-bubble user-bubble";
           userBubble.textContent = userText;
@@ -273,9 +291,8 @@ function renderProducts(data) {
           chatBox.innerText = "";
           chatContainer.scrollTop = chatContainer.scrollHeight;
 
-          // AI response
-          const model = modelSelect.value;
-          const response = await puter.ai.chat(userText, { model });
+          const selectedModel = modelSelect.value || "gpt-5-mini";
+          const response = await puter.ai.chat(userText, { model: selectedModel });
           await typeAIResponse(chatContainer, response);
         }
       });
