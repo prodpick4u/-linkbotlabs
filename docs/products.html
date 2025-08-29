@@ -5,7 +5,9 @@
   <title>LinkBotLabs Products</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
       background: #0d0d1a;
       color: #fff;
       margin: 0;
@@ -26,6 +28,17 @@
       font-weight: bold;
       margin-bottom: 20px;
       border-radius: 6px;
+    }
+
+    .voice-controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .voice-controls select, .voice-controls button {
+      padding: 5px 10px;
+      font-size: 16px;
+      margin-right: 10px;
     }
 
     .category {
@@ -60,8 +73,8 @@
     }
 
     .product-title {
-      font-size: 16px;
-      color: #fff;
+      font-size: 18px;
+      font-weight: 600;
       margin: 8px 0;
     }
 
@@ -71,8 +84,10 @@
       margin: 4px 0;
     }
 
-    .product-desc {
-      font-size: 14px;
+    .product-desc, .chat-box {
+      font-size: 16px;
+      font-family: 'Segoe UI', sans-serif;
+      line-height: 1.5;
       color: #ccc;
       margin-bottom: 8px;
     }
@@ -94,8 +109,6 @@
     }
 
     .chat-box {
-      margin-top: 10px;
-      width: 100%;
       min-height: 100px;
       border-radius: 6px;
       padding: 8px;
@@ -140,6 +153,13 @@
 <body>
   <div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
   <h1>✨ LinkBotLabs Product Picks ✨</h1>
+
+  <div class="voice-controls">
+    <label>Select Voice:</label>
+    <select id="voiceSelect"></select>
+    <button id="stopTTS">⏹ Stop</button>
+  </div>
+
   <div id="content"></div>
 
   <!-- Social buttons -->
@@ -154,28 +174,56 @@
   <script>
     const content = document.getElementById("content");
 
-    // Get affiliate ID from URL
+    // Affiliate ID
     function getAffiliateId() {
       const params = new URLSearchParams(window.location.search);
       return params.get("aff_id") || null;
     }
-
     const affiliateId = getAffiliateId();
-
-    // Show affiliate banner if ID exists
     if (affiliateId) {
       const banner = document.getElementById("affiliate-banner");
-      banner.textContent = Welcome! Your affiliate ID: ${affiliateId};
+      banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
       banner.style.display = "block";
     }
 
+    // TTS setup
+    let synth = window.speechSynthesis;
+    let utter;
+    function populateVoiceSelects() {
+      let voices = synth.getVoices();
+      if (!voices.length) { setTimeout(populateVoiceSelects, 100); return; }
+      const select = document.getElementById('voiceSelect');
+      select.innerHTML = '';
+      voices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        opt.textContent = v.name + ' (' + v.lang + ')';
+        select.appendChild(opt);
+      });
+    }
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoiceSelects;
+    } else {
+      populateVoiceSelects();
+    }
+
+    function playTTS(text) {
+      if (synth.speaking) synth.cancel();
+      utter = new SpeechSynthesisUtterance(text);
+      const selectedVoice = document.getElementById('voiceSelect').value;
+      utter.voice = synth.getVoices().find(v => v.name === selectedVoice) || synth.getVoices()[0];
+      synth.speak(utter);
+    }
+    document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
+
+    // Load products
     async function loadProducts() {
       try {
         const res = await fetch("products.json?cachebust=" + Date.now());
         const data = await res.json();
         renderProducts(data);
       } catch (e) {
-        content.innerHTML = <p style="color:red;text-align:center;">❌ Failed to load products.</p>;
+        content.innerHTML = `<p style="color:red;text-align:center;">❌ Failed to load products.</p>`;
       }
     }
 
@@ -184,28 +232,27 @@
       for (const [category, items] of Object.entries(data)) {
         const section = document.createElement("div");
         section.className = "category";
-        section.innerHTML = <h2>${category}</h2><div class="products-grid"></div>;
+        section.innerHTML = `<h2>${category}</h2><div class="products-grid"></div>`;
         const grid = section.querySelector(".products-grid");
 
         items.forEach(p => {
           const card = document.createElement("div");
           card.className = "product-card";
 
-          card.innerHTML = 
+          card.innerHTML = `
             <h3 class="product-title">${p.title}</h3>
             <p class="product-price">${p.price}</p>
             <p class="product-desc">${p.description}</p>
             <button class="product-btn view-btn">🛒 Click to View</button>
             <button class="product-btn ask-btn">💬 Ask GPT-4 Nano</button>
             <textarea class="chat-box" placeholder="Type your question here..."></textarea>
-          ;
+            <button class="product-btn tts-btn">🔊 Listen</button>
+          `;
 
-          // Open affiliate link on click
+          // Affiliate link
           card.querySelector(".view-btn").onclick = () => {
             let link = p.url;
-            if (affiliateId) {
-              link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
-            }
+            if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
             window.open(link, "_blank");
           };
 
@@ -216,7 +263,7 @@
             chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
           };
 
-          // Handle GPT chat
+          // GPT chat
           chatBox.addEventListener("keydown", async (e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
@@ -224,10 +271,18 @@
               const userText = lines[lines.length-1];
               if (!userText.trim()) return;
               const response = await puter.ai.chat(userText);
-              chatBox.value += \nGPT-4 Nano: ${response};
+              chatBox.value += `\nGPT-4 Nano: ${response}`;
               chatBox.scrollTop = chatBox.scrollHeight;
+              // Play TTS for AI response
+              playTTS(response);
             }
           });
+
+          // TTS button reads current AI chat text
+          card.querySelector(".tts-btn").onclick = () => {
+            const text = chatBox.value || p.description;
+            playTTS(text);
+          };
 
           grid.appendChild(card);
         });
