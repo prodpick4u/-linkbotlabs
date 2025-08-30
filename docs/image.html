@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puter Image Generator - Demo</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+  body { font-family: 'Segoe UI', sans-serif; margin:0; padding:20px; background:#0d0d1a; color:#fff; }
+  h1,h2 { text-align:center; }
+  .box { background: rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin:15px 0; }
+  input, select { width:100%; padding:8px; margin-top:5px; border-radius:6px; border:none; }
+  button { background:#ff007a; border:none; color:#fff; padding:10px 16px; border-radius:6px; cursor:pointer; margin-top:10px; }
+  button:hover { background:#e60070; }
+  #generatedImages img { max-width:100%; margin:10px 0; border-radius:6px; display:block; }
+  .splash { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px; z-index:1000; }
+</style>
+</head>
+<body>
+
+<!-- DEMO SPLASH -->
+<div id="demoSplash" class="splash" style="display:flex;">
+  <h1>🎉 Welcome to Playground Demo</h1>
+  <p>You have <b>60 minutes</b> of free AI playtime.</p>
+  <button onclick="closeDemoSplash()">Start Generating 🚀</button>
+</div>
+
+<div class="box">
+  <h2>🖼 Generate AI Images</h2>
+  <label>Prompt:</label>
+  <input id="imgPrompt" placeholder="Describe the image...">
+  
+  <label>Model:</label>
+  <select id="imgModel">
+    <option value="dall-e-3">DALL·E 3</option>
+    <option value="stable-diffusion-2">Stable Diffusion 2</option>
+    <option value="midjourney">MidJourney</option>
+  </select>
+
+  <label>Width (px):</label>
+  <input id="imgWidth" type="number" placeholder="512">
+
+  <label>Height (px):</label>
+  <input id="imgHeight" type="number" placeholder="512">
+
+  <label>Seed (optional):</label>
+  <input id="imgSeed" placeholder="Random seed number">
+
+  <label><input type="checkbox" id="removeWatermark"> Remove Watermark</label>
+
+  <button onclick="genImage()">Generate Image</button>
+  <button onclick="clearImages()">Clear All</button>
+
+  <div id="generatedImages"></div>
+</div>
+
+<script>
+// Demo Lock Timer (1 hour)
+let demoTime = 60*60*1000; // 1 hour in ms
+setTimeout(()=>{document.getElementById('demoSplash').style.display='flex'; alert("Demo ended! Please support the developer to continue.");}, demoTime);
+
+function closeDemoSplash(){
+  document.getElementById('demoSplash').style.display='none';
+}
+
+// Image generation
+async function genImage(){
+  const prompt = document.getElementById("imgPrompt").value.trim();
+  const model = document.getElementById("imgModel").value;
+  const width = parseInt(document.getElementById("imgWidth").value) || 512;
+  const height = parseInt(document.getElementById("imgHeight").value) || 512;
+  const seed = document.getElementById("imgSeed").value || undefined;
+  const removeWM = document.getElementById("removeWatermark").checked;
+  const out = document.getElementById("generatedImages");
+
+  out.innerHTML = "⏳ Generating...";
+  try {
+    const imgSrc = await puter.ai.txt2img(prompt, {model, width, height, seed, removeWatermark: removeWM});
+
+    const imgEl = document.createElement("img");
+    imgEl.src = imgSrc;
+
+    const dlBtn = document.createElement("button");
+    dlBtn.textContent = "💾 Download";
+    dlBtn.onclick = () => {
+      const a = document.createElement("a");
+      a.href = imgSrc;
+      a.download = "AI_Image.png";
+      a.click();
+    };
+
+    const container = document.createElement("div");
+    container.appendChild(imgEl);
+    container.appendChild(dlBtn);
+
+    out.prepend(container);
+    out.innerHTML = "";
+  } catch(err) {
+    out.innerHTML = "❌ Error generating image.";
+    console.error(err);
+  }
+}
+
+function clearImages(){
+  document.getElementById("generatedImages").innerHTML = "";
+}
+</script>
+
+</body>
+</html>
