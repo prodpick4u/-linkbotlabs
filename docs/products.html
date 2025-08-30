@@ -111,8 +111,10 @@
 <script src="https://js.puter.com/v2/"></script>
 <script>
 const content = document.getElementById("content");
+let synth = window.speechSynthesis;
+let utter;
 
-// Affiliate ID
+// ✅ Affiliate ID
 function getAffiliateId() {
   const params = new URLSearchParams(window.location.search);
   return params.get("aff_id") || null;
@@ -124,18 +126,13 @@ if (affiliateId) {
   banner.style.display = "block";
 }
 
-<script>
-let synth = window.speechSynthesis;
-let utter;
-
-// Populate voice dropdown
+// ✅ Populate voice dropdown
 function populateVoiceSelects() {
   const select = document.getElementById('voiceSelect');
   if (!select) return;
 
   let voices = synth.getVoices();
   if (!voices.length) {
-    // Try again shortly until voices are available
     setTimeout(populateVoiceSelects, 250);
     return;
   }
@@ -155,32 +152,15 @@ function populateVoiceSelects() {
   if (moirai) {
     select.value = moirai.name;
   } else {
-    select.selectedIndex = 0; // fallback first voice
+    select.selectedIndex = 0;
   }
 }
-
-// Keep retrying until voices appear
 if (typeof speechSynthesis !== "undefined") {
   speechSynthesis.onvoiceschanged = populateVoiceSelects;
   populateVoiceSelects();
 }
 
-// Speak text
-function playTTS(text) {
-  if (synth.speaking) synth.cancel();
-  utter = new SpeechSynthesisUtterance(text);
-  const selectedVoice = document.getElementById('voiceSelect').value;
-  const chosen = synth.getVoices().find(v => v.name === selectedVoice);
-  if (chosen) utter.voice = chosen;
-  synth.speak(utter);
-}
-
-document.getElementById('stopTTS').onclick = () => {
-  if (synth.speaking) synth.cancel();
-};
-</script>
-}
-
+// ✅ Play TTS
 function playTTS(text) {
   if (synth.speaking) synth.cancel();
   utter = new SpeechSynthesisUtterance(text);
@@ -188,9 +168,13 @@ function playTTS(text) {
   utter.voice = synth.getVoices().find(v => v.name === selectedVoice) || synth.getVoices()[0];
   synth.speak(utter);
 }
-document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
 
-// Load products
+// ✅ Stop TTS
+document.getElementById('stopTTS').onclick = () => {
+  if (synth.speaking) synth.cancel();
+};
+
+// ✅ Load products
 async function loadProducts() {
   try {
     const res = await fetch("products.json?cachebust=" + Date.now());
@@ -230,14 +214,14 @@ function renderProducts(data) {
         window.open(link, "_blank");
       };
 
-      // Show/Hide chat box
+      // Toggle chat box
       const askBtn = card.querySelector(".ask-btn");
       const chatBox = card.querySelector(".chat-box");
       askBtn.onclick = () => {
         chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
       };
 
-      // Run button for GPT chat
+      // Run GPT button
       const runBtn = document.createElement("button");
       runBtn.textContent = "▶ Run";
       runBtn.className = "product-btn run-btn";
@@ -253,7 +237,7 @@ function renderProducts(data) {
         playTTS(response);
       };
 
-      // TTS button reads current chat or description
+      // TTS button
       card.querySelector(".tts-btn").onclick = () => {
         const text = chatBox.value || p.description;
         playTTS(text);
