@@ -1,0 +1,55 @@
+/* Mobile responsiveness for AI Playground */
+@media (max-width: 768px) {
+
+  body {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  header, footer {
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  main {
+    padding: 10px;
+  }
+
+  .box {
+    margin: 10px 0;
+    padding: 12px;
+  }
+
+  input, select, button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  /* Splash screens adjustments */
+  .splash {
+    padding: 15px;
+  }
+  .splash h1 {
+    font-size: 1.8em;
+  }
+
+  /* Optional: Make AI output boxes scrollable on small screens */
+  #chatOutput, #imgResult, #analysisResult, #streamOutput {
+    overflow-x: auto;
+    word-wrap: break-word;
+  }
+
+  /* Buttons larger for touch screens */
+  button {
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  /* Footer text smaller and wrapped */
+  footer p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+}
