@@ -13,13 +13,14 @@
   .box { background:#1a1a2e; padding:15px; margin:15px 0; border-radius:8px; }
   input, select, button { padding:10px; margin:5px 0; width:100%; max-width:100%; }
   .splash { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; z-index:9999; padding:20px; }
+  a { color:#4fc3f7; text-decoration:none; }
 </style>
 </head>
 <body>
 
 <header>
   <h1>🚀 AI Playground by LinkBotLabs</h1>
-  <p>Powered by <a href="https://puter.com" target="_blank" style="color:#4fc3f7;">Puter.com</a></p>
+  <p>Powered by <a href="https://puter.com" target="_blank">Puter.com</a></p>
 </header>
 
 <!-- DEMO SPLASH -->
@@ -32,7 +33,7 @@
 <!-- DONATION SPLASH -->
 <div id="donationSplash" class="splash" style="display:none;">
   <h1>💖 Playground Playtime Unlocked</h1>
-  <p>Your demo has ended. To keep exploring, support us with a small donation.</p>
+  <p>Your demo has ended. Support us to keep exploring:</p>
   <a href="https://wise.com/pay/me/davids14542" target="_blank">
     <button>Donate & Unlock</button>
   </a>
@@ -42,7 +43,9 @@
       <li>Unlimited AI Playground access</li>
       <li>Chat + Speech + Analysis tools</li>
       <li>Cloud hosting + Virtual desktop + Apps</li>
-      <li>ZIP download of this Playground: <a href="https://raw.githubusercontent.com/prodpick4u/-linkbotlabs/refs/heads/main/docs/ai-starter.html" target="_blank">Download ZIP</a></li>
+      <li>ZIP download of this Playground: 
+        <a href="https://raw.githubusercontent.com/prodpick4u/-linkbotlabs/refs/heads/main/docs/ai-starter.html" target="_blank">Download ZIP</a>
+      </li>
     </ul>
   </div>
 </div>
@@ -74,7 +77,7 @@
 </main>
 
 <footer>
-  <p>Powered by <a href="https://puter.com" target="_blank" style="color:#4fc3f7;">Puter.com</a></p>
+  <p>Powered by <a href="https://puter.com" target="_blank">Puter.com</a> | Special thanks to Puter for support</p>
 </footer>
 
 <script>
@@ -85,10 +88,18 @@ let demoStart;
 document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("startDemoBtn");
   if(startBtn){
-    startBtn.addEventListener("click", () => {
-      closeDemoSplash();
-    });
+    startBtn.addEventListener("click", closeDemoSplash);
   }
+
+  // Wait until puter.ai is loaded
+  const chatBtn = document.querySelector("button[onclick='runChat()']");
+  chatBtn.disabled = true;
+  const interval = setInterval(() => {
+    if (window.puter && puter.ai && puter.ai.chat) {
+      chatBtn.disabled = false;
+      clearInterval(interval);
+    }
+  }, 200);
 });
 
 function closeDemoSplash(){
@@ -101,6 +112,7 @@ function closeDemoSplash(){
 function checkDemo(){
   if(Date.now() - demoStart > demoTime){
     document.getElementById("donationSplash").style.display="flex";
+    document.getElementById("playground").style.display="none";
   }
 }
 
@@ -128,16 +140,26 @@ function updateModelInfo() {
 }
 
 /* --- Chat Function --- */
-async function runChat(){
+async function runChat() {
   const input = document.getElementById("chatInput").value.trim();
   const model = document.getElementById("chatModel").value;
   const out = document.getElementById("chatOutput");
-  if(!input) return alert("Please enter a question!");
+
+  if (!input) return alert("Please enter a question!");
   out.innerHTML = "⏳ Thinking...";
+
   try {
-    const reply = await puter.ai.chat(input, { model });
-    out.innerHTML = `<b>${model} says:</b><br>${reply}`;
-  } catch(err) {
+    if (!window.puter || !puter.ai || !puter.ai.chat) throw new Error("Puter AI not loaded");
+
+    const reply = await puter.ai.chat(input, {
+      model: model,
+      temperature: 0.7,
+      max_tokens: 500
+    });
+
+    out.innerHTML = `<b>${model} says:</b><br>${reply.text || reply}`;
+  } catch (err) {
+    console.error(err);
     out.innerHTML = "❌ Error: " + (err.message || err);
   }
 }
