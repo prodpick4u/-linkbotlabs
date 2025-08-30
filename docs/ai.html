@@ -20,9 +20,6 @@
 <header>
   <h1>🚀 AI Playground by LinkBotLabs</h1>
   <p>Powered by <a href="https://puter.com" target="_blank" style="color:#4fc3f7;">Puter.com</a></p>
-  <a href="image.html" class="btn" style="background:linear-gradient(135deg,#ff007a,#e60070); font-size:1.2rem;">
-    🖼️ AI Image Generator
-  </a>
 </header>
 
 <!-- DEMO SPLASH -->
@@ -47,17 +44,17 @@
   <div class="box">
     <h2>💬 Chat AI</h2>
     <select id="chatModel" onchange="updateModelInfo()">
-      <option value="gpt-5-mini">💨 GPT-5 Mini</option>
-      <option value="gpt-5">🚀 GPT-5</option>
-      <option value="gpt-4o-mini">⚡ GPT-4o Mini</option>
-      <option value="gpt-4.1-nano">🧩 GPT-4.1 Nano</option>
-      <option value="claude-1">🤖 Claude 1</option>
-      <option value="claude-2">🧠 Claude 2</option>
-      <option value="gemini-1">🌟 Gemini 1</option>
-      <option value="gemini-1.5">💡 Gemini 1.5</option>
-      <option value="grok-3.5">💬 Grok 3.5</option>
-      <option value="grok-4">📈 Grok 4</option>
-      <option value="deep-seek">🔍 Deep Seek</option>
+      <option value="gpt-5-mini">GPT-5 Mini</option>
+      <option value="gpt-5">GPT-5</option>
+      <option value="gpt-4o-mini">GPT-4o Mini</option>
+      <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
+      <option value="claude-1">Claude 1</option>
+      <option value="claude-2">Claude 2</option>
+      <option value="gemini-1">Gemini 1</option>
+      <option value="gemini-1.5">Gemini 1.5</option>
+      <option value="grok-3.5">Grok 3.5</option>
+      <option value="grok-4">Grok 4</option>
+      <option value="deep-seek">Deep Seek</option>
     </select>
     <p id="modelInfo" style="font-size:0.9em; color:#ccc; margin-top:5px;">Select a model to see details</p>
     <input id="chatInput" placeholder="Ask me anything...">
@@ -69,17 +66,17 @@
   <div class="box">
     <h2>📹 AI Streaming</h2>
     <select id="streamModel" onchange="updateStreamInfo()">
-      <option value="gpt-5-mini">💨 GPT-5 Mini</option>
-      <option value="gpt-5">🚀 GPT-5</option>
-      <option value="gpt-4o-mini">⚡ GPT-4o Mini</option>
-      <option value="gpt-4.1-nano">🧩 GPT-4.1 Nano</option>
-      <option value="claude-1">🤖 Claude 1</option>
-      <option value="claude-2">🧠 Claude 2</option>
-      <option value="gemini-1">🌟 Gemini 1</option>
-      <option value="gemini-1.5">💡 Gemini 1.5</option>
-      <option value="grok-3.5">💬 Grok 3.5</option>
-      <option value="grok-4">📈 Grok 4</option>
-      <option value="deep-seek">🔍 Deep Seek</option>
+      <option value="gpt-5-mini">GPT-5 Mini</option>
+      <option value="gpt-5">GPT-5</option>
+      <option value="gpt-4o-mini">GPT-4o Mini</option>
+      <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
+      <option value="claude-1">Claude 1</option>
+      <option value="claude-2">Claude 2</option>
+      <option value="gemini-1">Gemini 1</option>
+      <option value="gemini-1.5">Gemini 1.5</option>
+      <option value="grok-3.5">Grok 3.5</option>
+      <option value="grok-4">Grok 4</option>
+      <option value="deep-seek">Deep Seek</option>
     </select>
     <p id="streamInfo" style="font-size:0.9em; color:#ccc; margin-top:5px;">Select a model to see details</p>
     <input id="streamInput" placeholder="Ask your AI...">
@@ -100,7 +97,7 @@ let demoStart = Date.now();
 
 function closeDemoSplash(){
   document.getElementById("demoSplash").style.display="none";
-  setInterval(checkDemo, 10000); // check every 10 seconds
+  setInterval(checkDemo, 10000); // check every 10 seconds for demo end
 }
 
 function checkDemo(){
@@ -117,27 +114,39 @@ const modelDescriptions = {
   "gpt-4.1-nano": "GPT-4.1 Nano: Ultra-small, fast AI.",
   "claude-1": "Claude 1: Helpful AI assistant by Anthropic.",
   "claude-2": "Claude 2: More advanced Claude with reasoning.",
-  "gemini-1": "Gemini 1: Google’s AI, balanced for creativity and reasoning.",
+  "gemini-1": "Google Gemini 1: Balanced for creativity and reasoning.",
   "gemini-1.5": "Gemini 1.5: Improved Gemini with extended knowledge.",
   "grok-3.5": "Grok 3.5: Conversational AI for Slack and general tasks.",
   "grok-4": "Grok 4: More advanced Grok AI.",
   "deep-seek": "Deep Seek: Analytical AI for data and insights."
 };
 
+/* --- Update Info --- */
 function updateModelInfo() {
   const select = document.getElementById("chatModel");
-  const model = select.value;
-  const label = select.options[select.selectedIndex].text;
-  document.getElementById("modelInfo").textContent = modelDescriptions[model] || "";
-  document.getElementById("chatInput").placeholder = `Ask ${label} anything...`;
+  document.getElementById("modelInfo").textContent = modelDescriptions[select.value] || "";
 }
-
 function updateStreamInfo() {
   const select = document.getElementById("streamModel");
-  const model = select.value;
-  const label = select.options[select.selectedIndex].text;
-  document.getElementById("streamInfo").textContent = modelDescriptions[model] || "";
-  document.getElementById("streamInput").placeholder = `Prompt ${label} for streaming...`;
+  document.getElementById("streamInfo").textContent = modelDescriptions[select.value] || "";
+}
+
+/* --- Normalize Puter AI Response --- */
+function normalize(resp) {
+  if (typeof resp === "string") return resp;
+  if (resp?.output_text) return resp.output_text;
+  if (resp?.text) return resp.text;
+  if (resp?.message?.content) {
+    if (Array.isArray(resp.message.content)) {
+      return typeof resp.message.content[0] === "string"
+        ? resp.message.content[0]
+        : resp.message.content[0]?.text ?? JSON.stringify(resp.message.content);
+    }
+    return typeof resp.message.content === "string"
+      ? resp.message.content
+      : JSON.stringify(resp.message.content);
+  }
+  return JSON.stringify(resp ?? {});
 }
 
 /* --- Chat Function --- */
@@ -149,7 +158,7 @@ async function runChat(){
   out.innerHTML = "⏳ Thinking...";
   try {
     const reply = await puter.ai.chat(input, { model });
-    out.innerHTML = `<b>${model} says:</b><br>${reply}`;
+    out.innerHTML = `<b>${model} says:</b><br>${normalize(reply)}`;
   } catch(err) {
     out.innerHTML = "❌ Error: " + (err.message || err);
   }
@@ -159,17 +168,20 @@ async function runChat(){
 document.getElementById("streamBtn").addEventListener("click", async () => {
   const prompt = document.getElementById("streamInput").value.trim();
   const model = document.getElementById("streamModel").value;
-  const streamOutput = document.getElementById("streamOutput");
+  const out = document.getElementById("streamOutput");
   if(!prompt) return alert("Please enter a prompt!");
-  streamOutput.innerHTML = "⏳ Streaming response...";
+  out.innerHTML = "";
   try {
-    await puter.ai.stream(prompt, chunk => { streamOutput.innerHTML += chunk; }, { model });
+    const stream = await puter.ai.chat(prompt, { model, stream: true });
+    for await (const part of stream) {
+      out.innerHTML += (part?.output_text ?? part?.text ?? "");
+    }
   } catch(err) {
-    streamOutput.innerHTML = "❌ Error streaming response.";
+    out.innerHTML = "❌ Error streaming response: " + (err.message || err);
   }
-});
+}
 
-/* --- Initialize descriptions --- */
+/* --- Initialize --- */
 updateModelInfo();
 updateStreamInfo();
 </script>
