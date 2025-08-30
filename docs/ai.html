@@ -14,7 +14,8 @@ button:hover { background:#e60070; }
 .splash h1 { font-size:2em; margin-bottom:10px; }
 .splash ul, .splash ol { text-align:left; max-width:600px; }
 .box { background: rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin:15px 0; }
-select,input { margin-top:5px; }
+select,input { margin-top:5px; width:100%; padding:8px; border-radius:6px; border:none; }
+#generatedImages img { max-width:100%; margin:10px 0; border-radius:6px; }
 </style>
 </head>
 <body>
@@ -41,25 +42,35 @@ select,input { margin-top:5px; }
       <option value="grok-4">Grok 4</option>
       <option value="deep-seek">Deep Seek</option>
     </select>
-    <input id="chatInput" placeholder="Ask me anything..." style="width:100%;padding:10px;">
+    <input id="chatInput" placeholder="Ask me anything...">
     <button onclick="runChat()">Run</button>
     <div id="chatOutput" style="margin-top:10px;"></div>
   </div>
 
-  <!-- Image Generator -->
+  <!-- AI Image Generator -->
   <div class="box">
     <h2>🖼️ Image Generator</h2>
-    <input id="imgPrompt" placeholder="Describe an image..." style="width:100%;padding:10px;">
-    <button onclick="genImage()">Generate</button>
-    <div id="imgResult" style="margin-top:10px;"></div>
-  </div>
-
-  <!-- Image Analysis -->
-  <div class="box">
-    <h2>🔍 Image Analysis</h2>
-    <input type="file" id="imgFile" accept="image/*">
-    <button onclick="analyzeImage()">Analyze</button>
-    <div id="analysisResult" style="margin-top:10px;"></div>
+    <input id="imgPrompt" placeholder="Describe your image...">
+    <select id="imgModel">
+      <option value="puter">Puter AI</option>
+      <option value="stable-diffusion">Stable Diffusion</option>
+      <option value="flux">Flux</option>
+      <option value="dalle-mini">DALL-E Mini</option>
+    </select>
+    <div style="margin-top:5px;">
+      <label>Width:</label>
+      <input type="number" id="imgWidth" placeholder="512">
+      <label>Height:</label>
+      <input type="number" id="imgHeight" placeholder="512">
+    </div>
+    <div style="margin-top:5px;">
+      <label>Seed (optional):</label>
+      <input type="number" id="imgSeed" placeholder="Random">
+      <label><input type="checkbox" id="removeWatermark"> Remove Watermark</label>
+    </div>
+    <button onclick="genImage()">Generate Images</button>
+    <div id="generatedImages"></div>
+    <button onclick="clearImages()">Clear All</button>
   </div>
 
   <!-- AI Streaming -->
@@ -78,7 +89,7 @@ select,input { margin-top:5px; }
       <option value="grok-4">Grok 4</option>
       <option value="deep-seek">Deep Seek</option>
     </select>
-    <input id="streamInput" placeholder="Ask your AI..." style="width:100%;padding:10px;margin-top:5px;">
+    <input id="streamInput" placeholder="Ask your AI...">
     <button id="streamBtn">Start Streaming</button>
     <div id="streamOutput" style="margin-top:10px; min-height:100px; background:rgba(255,255,255,0.05); padding:10px; border-radius:6px;"></div>
   </div>
@@ -100,16 +111,6 @@ select,input { margin-top:5px; }
 <a href="https://github.com/prodpick4u/-linkbotlabs/blob/main/docs/ai-starter.html" target="_blank" style="color:#0af;">
 📥 Download AI Starter (GitHub)
 </a>
-</p>
-<p>
-👉 How to publish on <b>Puter.com</b>:
-<ol>
-<li>Download the AI Starter file.</li>
-<li>Create <code>index.html</code> in your Puter <code>docs</code> folder.</li>
-<li>Paste the AI Starter content inside.</li>
-<li>Click <b>Publish</b> → Get a live URL.</li>
-<li>Mirror this site & start your revenue stream!</li>
-</ol>
 </p>
 <p><b>Request your affiliate password via the front page after donation.</b></p>
 <button id="continueBtn">✅ Continue to Playground</button>
@@ -134,8 +135,6 @@ function checkDemo(){
 }
 setInterval(checkDemo,10000);
 checkDemo();
-
-window.addEventListener("beforeunload",()=>{ localStorage.removeItem("demoStart"); });
 
 document.getElementById("donateBtn").onclick = ()=>{
   window.open("https://wise.com/pay/me/davids14542","_blank");
@@ -166,21 +165,29 @@ async function runChat(){
 
 // --- Image Generator ---
 async function genImage(){
-  const prompt=document.getElementById("imgPrompt").value;
-  const out=document.getElementById("imgResult");
+  const prompt=document.getElementById("imgPrompt").value.trim();
+  const model=document.getElementById("imgModel").value;
+  const width=document.getElementById("imgWidth").value || 512;
+  const height=document.getElementById("imgHeight").value || 512;
+  const seed=document.getElementById("imgSeed").value || undefined;
+  const removeWM=document.getElementById("removeWatermark").checked;
+
+  const out=document.getElementById("generatedImages");
   out.innerHTML="⏳ Generating...";
-  const img=await puter.ai.image(prompt);
-  out.innerHTML=`<img src="${img}" style="max-width:100%;">`;
+  try{
+    const img=await puter.ai.txt2img(prompt,{model,width,height,seed,removeWatermark:removeWM});
+    const imgEl=document.createElement("img");
+    imgEl.src=img;
+    out.prepend(imgEl);
+  }catch(err){
+    out.innerHTML="❌ Error generating image.";
+    console.error(err);
+  }
 }
 
-// --- Image Analysis ---
-async function analyzeImage(){
-  const file=document.getElementById("imgFile").files[0];
-  if(!file) return alert("Upload an image first!");
-  const out=document.getElementById("analysisResult");
-  out.innerHTML="⏳ Analyzing...";
-  const result=await puter.ai.analyze(file);
-  out.innerHTML=JSON.stringify(result,null,2);
+// --- Clear Images ---
+function clearImages(){
+  document.getElementById("generatedImages").innerHTML="";
 }
 
 // --- AI Streaming ---
