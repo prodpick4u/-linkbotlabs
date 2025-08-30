@@ -130,10 +130,18 @@ button:hover { background:#e60070; }
 </div>
 
 <script>
-// Demo Lock - 10 minutes
-let demoStart = localStorage.getItem("imgDemoStart");
-if(!demoStart){ demoStart = Date.now(); localStorage.setItem("imgDemoStart", demoStart); }
-else demoStart = parseInt(demoStart,10);
+// Disable demo lock - always allow demo
+// Commenting out timer logic
+// let demoStart = localStorage.getItem("imgDemoStart");
+// if(!demoStart){ demoStart = Date.now(); localStorage.setItem("imgDemoStart", demoStart); }
+// else demoStart = parseInt(demoStart,10);
+
+// Hide the demo splash permanently
+const demoSplash = document.getElementById("demoSplash");
+if(demoSplash){
+  demoSplash.style.display = "none";
+}
+</script>
 
 function checkDemo(){
   if(Date.now() - demoStart >= 10*60*1000){
