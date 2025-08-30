@@ -66,19 +66,17 @@
 </head>
 <body>
 
-
-  <header>
+<header>
   <a href="index.html">
-    <img src="img_splash.jpg" alt="LinkBotLabs Logo"
-         style="max-width:220px; display:block; margin:0 auto 1rem;">
+    <img src="img_splash.jpg" alt="LinkBotLabs Logo" style="max-width:220px; display:block; margin:0 auto 1rem;">
   </a>
   <h1>🚀 Welcome to LinkBotLabs</h1>
   <p><strong>AI-powered shopping, reviews, and video automation tools</strong></p>
   <p>Test our AI Playground + Desktop Demo (no key required!)</p>
-    <a href="image.html" class="btn" style="background:linear-gradient(135deg,#ff007a,#e60070); font-size:1.2rem;">
-  🖼️ AI Image Generator (Demo)
 
-
+  <a href="image.html" class="btn" style="background:linear-gradient(135deg,#ff007a,#e60070); font-size:1.2rem;">
+    🖼️ AI Image Generator (Demo)
+  </a>
   <a href="for_dummies.html" class="btn" style="background:linear-gradient(135deg,#4CAF50,#2E7D32); font-size:1.2rem;">
     📘 For Dummies – Start Here
   </a>
@@ -90,7 +88,6 @@
   <a href="affiliate_starter.html" class="btn">🎁 Free Affiliate Starter Page</a>
   <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" class="btn">📝 Visit Blog</a>
 </header>
-
 
 <section>
   <h2>📖 About the Tool</h2>
@@ -130,16 +127,14 @@
   <p id="form-status" style="margin-top:10px; font-size:0.9rem; color:#ffe169;"></p>
 </section>
 
-<!-- EmailJS script -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
   (function(){
-    emailjs.init("uMBWBshmzlvZ8v52yJO"); // ✅ Public key
+    emailjs.init("uMBWBshmzlvZ8v52yJO"); // Public key
   })();
 
   document.getElementById("contact-form").addEventListener("submit", function(event) {
     event.preventDefault();
-
     emailjs.sendForm("service_pzzseh7", "bceEcXpLIRDpJxOHM", this)
       .then(function() {
         document.getElementById("form-status").innerText = "✅ Message sent successfully!";
@@ -150,7 +145,6 @@
       });
   });
 </script>
-</section>
 
 <footer>
   <p>© 2025 LinkBotLabs – Affiliate Shopping Automation</p>
