@@ -4,21 +4,112 @@
 <meta charset="UTF-8">
 <title>AI Playground - LinkBotLabs</title>
 <script src="https://js.puter.com/v2/"></script>
+<link rel="stylesheet" href="mobile.css">
 <style>
-body { font-family: 'Segoe UI', sans-serif; margin:0; padding:0; background:#0d0d1a; color:#fff; }
-header { padding:15px; background:#1a1a2e; text-align:center; }
-main { padding:20px; }
-button { background:#ff007a; border:none; color:#fff; padding:12px 20px; border-radius:6px; cursor:pointer; margin-top:10px; }
-button:hover { background:#e60070; }
-.splash { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px; z-index:1000; }
-.splash h1 { font-size:2em; margin-bottom:10px; }
-.splash ul, .splash ol { text-align:left; max-width:600px; }
-.box { background: rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin:15px 0; }
-select,input { margin-top:5px; width:100%; padding:8px; border-radius:6px; border:none; }
-#generatedImages img { max-width:100%; margin:10px 0; border-radius:6px; }
+/* --- Mobile-optimized styles --- */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin:0; padding:0;
+    background:#0d0d1a;
+    color:#fff;
+    font-size:16px;
+}
+
+header {
+    padding:15px;
+    background:#1a1a2e;
+    text-align:center;
+}
+
+main {
+    padding:15px;
+    max-width:480px;
+    margin:auto;
+}
+
+.box {
+    background: rgba(255,255,255,0.05);
+    padding:15px;
+    border-radius:8px;
+    margin:15px 0;
+}
+
+select, input[type="text"], input[type="number"] {
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border-radius:6px;
+    border:none;
+    background:#1a1a2e;
+    color:#fff;
+    box-sizing:border-box;
+}
+
+button {
+    background:#ff007a;
+    border:none;
+    color:#fff;
+    padding:12px 20px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-top:10px;
+    width:100%;
+}
+
+button:hover {
+    background:#e60070;
+}
+
+#chatOutput, #streamOutput, #generatedImages {
+    margin-top:10px;
+    min-height:100px;
+    background: rgba(255,255,255,0.05);
+    padding:10px;
+    border-radius:6px;
+    overflow-wrap:break-word;
+}
+
+#generatedImages img {
+    max-width:100%;
+    margin:10px 0;
+    border-radius:6px;
+}
+
+.splash {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.95);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    z-index:1000;
+}
+
+.splash h1 {
+    font-size:2em;
+    margin-bottom:10px;
+}
+
+.splash ul, .splash ol {
+    text-align:left;
+    max-width:90%;
+    margin:auto;
+}
+
+@media (max-width:400px) {
+    header h1 { font-size:1.5em; }
+    button { padding:10px; }
+    .box { padding:10px; }
+}
 </style>
-  <link rel="stylesheet" href="mobile.css">
 </head>
+
 <body>
 <header>
 <h1>🚀 AI Playground by LinkBotLabs</h1>
@@ -45,7 +136,7 @@ select,input { margin-top:5px; width:100%; padding:8px; border-radius:6px; borde
     </select>
     <input id="chatInput" placeholder="Ask me anything...">
     <button onclick="runChat()">Run</button>
-    <div id="chatOutput" style="margin-top:10px;"></div>
+    <div id="chatOutput"></div>
   </div>
 
   <!-- AI Image Generator -->
@@ -92,7 +183,7 @@ select,input { margin-top:5px; width:100%; padding:8px; border-radius:6px; borde
     </select>
     <input id="streamInput" placeholder="Ask your AI...">
     <button id="streamBtn">Start Streaming</button>
-    <div id="streamOutput" style="margin-top:10px; min-height:100px; background:rgba(255,255,255,0.05); padding:10px; border-radius:6px;"></div>
+    <div id="streamOutput"></div>
   </div>
 
 </main>
@@ -117,6 +208,7 @@ select,input { margin-top:5px; width:100%; padding:8px; border-radius:6px; borde
 <button id="continueBtn">✅ Continue to Playground</button>
 </div>
 
+<!-- Scripts (same as your original) -->
 <script>
 const DEMO_DURATION = 60*60*1000;
 let demoStart = localStorage.getItem("demoStart");
@@ -154,7 +246,6 @@ function showUnlockSplash(){
   document.getElementById("unlockSplash").style.display="flex";
 }
 
-// --- Chat AI ---
 async function runChat(){
   const input=document.getElementById("chatInput").value;
   const model=document.getElementById("chatModel").value;
@@ -164,7 +255,6 @@ async function runChat(){
   out.innerHTML=reply;
 }
 
-// --- Image Generator ---
 async function genImage(){
   const prompt=document.getElementById("imgPrompt").value.trim();
   const model=document.getElementById("imgModel").value;
@@ -186,12 +276,10 @@ async function genImage(){
   }
 }
 
-// --- Clear Images ---
 function clearImages(){
   document.getElementById("generatedImages").innerHTML="";
 }
 
-// --- AI Streaming ---
 const streamBtn=document.getElementById("streamBtn");
 const streamOutput=document.getElementById("streamOutput");
 
@@ -208,14 +296,13 @@ streamBtn.addEventListener("click",async()=>{
   }
 });
 
-// --- Auto show playground for donated users ---
 if(donated){
   document.getElementById("playground").style.display="block";
   document.getElementById("demoSplash").style.display="none";
   document.getElementById("unlockSplash").style.display="none";
 }
 </script>
-  <!-- Footer -->
+
 <footer style="padding:15px; background:#1a1a2e; text-align:center; color:#aaa; margin-top:20px;">
   <p>Powered by <a href="https://puter.com" target="_blank" style="color:#0af;">Puter.com</a> | 
   <a href="https://github.com/prodpick4u/-linkbotlabs" target="_blank" style="color:#0af;">GitHub Repo</a></p>
@@ -224,5 +311,3 @@ if(donated){
 
 </body>
 </html>
-
-
