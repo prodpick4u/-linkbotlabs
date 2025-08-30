@@ -67,14 +67,6 @@ select,input,textarea { margin-top:5px; width:100%; padding:8px; border-radius:6
     <p style="margin-top:10px;">🔗 <a href="https://puter.com/app/puter-image-generator" target="_blank">Open full Image Generator app</a></p>
   </div>
 
-  <!-- ZIP Download -->
-  <div class="box" style="text-align:center;">
-    <h2>📦 Download Playground ZIP</h2>
-    <p>Get a full copy of this AI Playground to host yourself:</p>
-    <a href="https://yourdomain.com/playground.zip" download>
-      <button>Download ZIP</button>
-    </a>
-  </div>
 </main>
 
 <!-- DEMO SPLASH -->
@@ -91,6 +83,14 @@ select,input,textarea { margin-top:5px; width:100%; padding:8px; border-radius:6
   <a href="https://wise.com/pay/me/davids14542" target="_blank">
     <button>Donate & Unlock</button>
   </a>
+
+  <!-- ZIP download -->
+  <div style="margin-top:20px; text-align:center;">
+    <h3>📦 Download Playground ZIP</h3>
+    <p>Get a full copy of this AI Playground to host yourself:</p>
+    <button id="downloadZip">Download ZIP</button>
+  </div>
+
   <div style="margin-top:20px; text-align:left; max-width:600px;">
     <h3>What you get:</h3>
     <ul>
@@ -110,11 +110,10 @@ select,input,textarea { margin-top:5px; width:100%; padding:8px; border-radius:6
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 // --- Current AI Model ---
-function getModel() {
-  return document.getElementById("modelSelect").value;
-}
+function getModel() { return document.getElementById("modelSelect").value; }
 
 // --- AI Chat ---
 let lastReply = "";
@@ -124,8 +123,6 @@ async function sendChat() {
   let out = document.getElementById("chatOutput");
   out.innerHTML += `<p><b>You:</b> ${input}</p>`;
   document.getElementById("chatInput").value = "";
-
-  // Streaming reply
   let reply = "";
   await puter.ai.chat(input, { model: getModel(), stream: true, onStream: (chunk) => {
     reply += chunk;
@@ -135,20 +132,18 @@ async function sendChat() {
   lastReply = reply;
 }
 
-// --- AI Speech (TTS) ---
+// --- AI Speech ---
 async function speakLast() {
   if (!lastReply) return;
   let audio = await puter.ai.speech(lastReply, { voice: "moirai:en_ie", model: getModel() });
-  let player = new Audio(audio);
-  player.play();
+  let player = new Audio(audio); player.play();
 }
 
-// --- AI Speech Recognition (STT) ---
+// --- AI Speech Recognition ---
 async function startMic() {
   if (!navigator.mediaDevices) { alert("Mic not supported"); return; }
   let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  let recorder = new MediaRecorder(stream);
-  let chunks = [];
+  let recorder = new MediaRecorder(stream); let chunks = [];
   recorder.ondataavailable = e => chunks.push(e.data);
   recorder.onstop = async () => {
     let blob = new Blob(chunks, { type: 'audio/webm' });
@@ -156,7 +151,7 @@ async function startMic() {
     document.getElementById("chatInput").value = text;
   };
   recorder.start();
-  setTimeout(() => recorder.stop(), 5000); // 5 sec record
+  setTimeout(() => recorder.stop(), 5000);
 }
 
 // --- AI Image ---
@@ -170,16 +165,10 @@ async function genImage() {
 }
 
 // --- Demo Splash ---
-function closeDemoSplash() {
-  document.getElementById("demoSplash").style.display = "none";
-  startDemoTimer();
-}
+function closeDemoSplash() { document.getElementById("demoSplash").style.display = "none"; startDemoTimer(); }
 
 // --- DEMO TIMER + FUN NOTIFICATIONS ---
-let demoMinutes = 60;
-let interval = 10;
-let elapsed = 0;
-let demoTimer;
+let demoMinutes = 60; let interval = 10; let elapsed = 0; let demoTimer;
 let funMessages = [
   "⚡ Zing! 10 minutes gone already. Your AI’s still wide awake!",
   "🎨 20 minutes in — maybe try an image or a chat combo?",
@@ -187,18 +176,13 @@ let funMessages = [
   "🕹️ 40 minutes — you’re officially an AI power user!",
   "🎯 50 minutes… time flies when you’re having fun in Playground!",
 ];
-
 function startDemoTimer() {
   demoTimer = setInterval(() => {
     elapsed += interval;
-
     if (elapsed < demoMinutes) {
       let msgIndex = (elapsed / interval) - 1;
       showNotification(funMessages[msgIndex] || `⏰ ${elapsed} minutes passed. Keep exploring!`);
-    } else {
-      clearInterval(demoTimer);
-      endDemo();
-    }
+    } else { clearInterval(demoTimer); endDemo(); }
   }, interval * 60000);
 }
 
@@ -211,26 +195,27 @@ function endDemo() {
 function showNotification(message) {
   let note = document.createElement("div");
   note.innerText = message;
-  note.style.position = "fixed";
-  note.style.bottom = "20px";
-  note.style.right = "20px";
-  note.style.padding = "12px 18px";
-  note.style.background = "rgba(0,0,0,0.85)";
-  note.style.color = "#fff";
-  note.style.border = "2px solid #ff007a";
-  note.style.borderRadius = "8px";
-  note.style.zIndex = "2000";
-  note.style.fontSize = "14px";
-  note.style.maxWidth = "260px";
-  note.style.boxShadow = "0 0 10px rgba(255,0,122,0.7)";
+  note.style.position = "fixed"; note.style.bottom = "20px"; note.style.right = "20px";
+  note.style.padding = "12px 18px"; note.style.background = "rgba(0,0,0,0.85)";
+  note.style.color = "#fff"; note.style.border = "2px solid #ff007a";
+  note.style.borderRadius = "8px"; note.style.zIndex = "2000"; note.style.fontSize = "14px";
+  note.style.maxWidth = "260px"; note.style.boxShadow = "0 0 10px rgba(255,0,122,0.7)";
   document.body.appendChild(note);
-
-  setTimeout(() => {
-    note.style.transition = "opacity 1s";
-    note.style.opacity = "0";
-    setTimeout(() => note.remove(), 1000);
-  }, 7000);
+  setTimeout(() => { note.style.transition = "opacity 1s"; note.style.opacity = "0"; setTimeout(() => note.remove(), 1000); }, 7000);
 }
+
+// --- ZIP Download from GitHub ---
+document.getElementById("downloadZip").addEventListener("click", async () => {
+  const zip = new JSZip();
+  const response = await fetch("https://raw.githubusercontent.com/prodpick4u/-linkbotlabs/refs/heads/main/docs/ai-starter.html");
+  const htmlContent = await response.text();
+  zip.file("index.html", htmlContent);
+  const content = await zip.generateAsync({ type: "blob" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(content);
+  link.download = "LinkBotLabs_Playground.zip";
+  link.click();
+});
 </script>
 
 <footer style="text-align:center; padding:15px; font-size:0.9em; color:#aaa; background:#1a1a2e;">
