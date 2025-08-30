@@ -5,35 +5,16 @@
 <title>AI Playground - LinkBotLabs</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0; padding: 0;
-  background: #0d0d1a; color: #fff;
-}
-header {
-  padding: 15px; background: #1a1a2e; text-align: center;
-}
-main { padding: 20px; }
-button {
-  background: #ff007a; border: none; color: #fff;
-  padding: 12px 20px; border-radius: 6px;
-  cursor: pointer; margin-top: 10px;
-}
-button:hover { background: #e60070; }
-.splash {
-  display: none;
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.95); color: #fff;
-  display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
-  text-align: center; padding: 20px; z-index: 1000;
-}
-.splash h1 { font-size: 2em; margin-bottom: 10px; }
+body { font-family: 'Segoe UI', sans-serif; margin:0; padding:0; background:#0d0d1a; color:#fff; }
+header { padding:15px; background:#1a1a2e; text-align:center; }
+main { padding:20px; }
+button { background:#ff007a; border:none; color:#fff; padding:12px 20px; border-radius:6px; cursor:pointer; margin-top:10px; }
+button:hover { background:#e60070; }
+.splash { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px; z-index:1000; }
+.splash h1 { font-size:2em; margin-bottom:10px; }
 .splash ul, .splash ol { text-align:left; max-width:600px; }
-.box {
-  background: rgba(255,255,255,0.05);
-  padding: 15px; border-radius: 8px; margin: 15px 0;
-}
+.box { background: rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin:15px 0; }
+select,input { margin-top:5px; }
 </style>
 </head>
 <body>
@@ -43,13 +24,29 @@ button:hover { background: #e60070; }
 </header>
 
 <main id="playground">
+
+  <!-- Chat AI -->
   <div class="box">
     <h2>💬 Chat AI</h2>
+    <select id="chatModel">
+      <option value="gpt-5-mini">GPT-5 Mini</option>
+      <option value="gpt-5">GPT-5</option>
+      <option value="gpt-4o-mini">GPT-4o Mini</option>
+      <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
+      <option value="claude-1">Claude 1</option>
+      <option value="claude-2">Claude 2</option>
+      <option value="gemini-1">Gemini 1</option>
+      <option value="gemini-1.5">Gemini 1.5</option>
+      <option value="grok-3.5">Grok 3.5</option>
+      <option value="grok-4">Grok 4</option>
+      <option value="deep-seek">Deep Seek</option>
+    </select>
     <input id="chatInput" placeholder="Ask me anything..." style="width:100%;padding:10px;">
     <button onclick="runChat()">Run</button>
     <div id="chatOutput" style="margin-top:10px;"></div>
   </div>
 
+  <!-- Image Generator -->
   <div class="box">
     <h2>🖼️ Image Generator</h2>
     <input id="imgPrompt" placeholder="Describe an image..." style="width:100%;padding:10px;">
@@ -57,6 +54,7 @@ button:hover { background: #e60070; }
     <div id="imgResult" style="margin-top:10px;"></div>
   </div>
 
+  <!-- Image Analysis -->
   <div class="box">
     <h2>🔍 Image Analysis</h2>
     <input type="file" id="imgFile" accept="image/*">
@@ -64,11 +62,27 @@ button:hover { background: #e60070; }
     <div id="analysisResult" style="margin-top:10px;"></div>
   </div>
 
+  <!-- AI Streaming -->
   <div class="box">
     <h2>📹 AI Streaming</h2>
-    <button onclick="streamAI()">Start Streaming Demo</button>
-    <div id="streamOutput" style="margin-top:10px;"></div>
+    <select id="streamModel">
+      <option value="gpt-5-mini">GPT-5 Mini</option>
+      <option value="gpt-5">GPT-5</option>
+      <option value="gpt-4o-mini">GPT-4o Mini</option>
+      <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
+      <option value="claude-1">Claude 1</option>
+      <option value="claude-2">Claude 2</option>
+      <option value="gemini-1">Gemini 1</option>
+      <option value="gemini-1.5">Gemini 1.5</option>
+      <option value="grok-3.5">Grok 3.5</option>
+      <option value="grok-4">Grok 4</option>
+      <option value="deep-seek">Deep Seek</option>
+    </select>
+    <input id="streamInput" placeholder="Ask your AI..." style="width:100%;padding:10px;margin-top:5px;">
+    <button id="streamBtn">Start Streaming</button>
+    <div id="streamOutput" style="margin-top:10px; min-height:100px; background:rgba(255,255,255,0.05); padding:10px; border-radius:6px;"></div>
   </div>
+
 </main>
 
 <!-- Demo Expired Splash -->
@@ -102,32 +116,27 @@ button:hover { background: #e60070; }
 </div>
 
 <script>
-const DEMO_DURATION = 60*60*1000; // 1 hour
+const DEMO_DURATION = 60*60*1000;
 let demoStart = localStorage.getItem("demoStart");
 const donated = localStorage.getItem("donated") === "true";
 
-if(!demoStart) { 
-  demoStart = Date.now(); 
-  localStorage.setItem("demoStart", demoStart); 
-} else demoStart = parseInt(demoStart,10);
+if(!demoStart){ demoStart=Date.now(); localStorage.setItem("demoStart",demoStart); } 
+else demoStart=parseInt(demoStart,10);
 
-// --- Check demo & unlock ---
-function checkDemo() {
-  if(donated) return; // full access
-  if(Date.now() - demoStart >= DEMO_DURATION){
+function checkDemo(){
+  if(donated) return;
+  if(Date.now()-demoStart>=DEMO_DURATION){
     document.getElementById("demoSplash").style.display="flex";
     document.getElementById("playground").style.display="none";
     return true;
   }
   return false;
 }
-setInterval(checkDemo, 10000);
+setInterval(checkDemo,10000);
 checkDemo();
 
-// --- Reset demo start on leaving ---
-window.addEventListener("beforeunload", ()=>{ localStorage.removeItem("demoStart"); });
+window.addEventListener("beforeunload",()=>{ localStorage.removeItem("demoStart"); });
 
-// --- Donation button ---
 document.getElementById("donateBtn").onclick = ()=>{
   window.open("https://wise.com/pay/me/davids14542","_blank");
   alert("After donating, click OK to unlock access!");
@@ -145,45 +154,57 @@ function showUnlockSplash(){
   document.getElementById("unlockSplash").style.display="flex";
 }
 
-// --- Puter AI ---
+// --- Chat AI ---
 async function runChat(){
-  const input = document.getElementById("chatInput").value;
-  const out = document.getElementById("chatOutput");
+  const input=document.getElementById("chatInput").value;
+  const model=document.getElementById("chatModel").value;
+  const out=document.getElementById("chatOutput");
   out.innerHTML="⏳ Thinking...";
-  const reply = await puter.ai.chat(input);
-  out.innerHTML = reply;
+  const reply=await puter.ai.chat(input,{model});
+  out.innerHTML=reply;
 }
 
+// --- Image Generator ---
 async function genImage(){
-  const prompt = document.getElementById("imgPrompt").value;
-  const out = document.getElementById("imgResult");
+  const prompt=document.getElementById("imgPrompt").value;
+  const out=document.getElementById("imgResult");
   out.innerHTML="⏳ Generating...";
-  const img = await puter.ai.image(prompt);
+  const img=await puter.ai.image(prompt);
   out.innerHTML=`<img src="${img}" style="max-width:100%;">`;
 }
 
+// --- Image Analysis ---
 async function analyzeImage(){
-  const file = document.getElementById("imgFile").files[0];
+  const file=document.getElementById("imgFile").files[0];
   if(!file) return alert("Upload an image first!");
-  const out = document.getElementById("analysisResult");
+  const out=document.getElementById("analysisResult");
   out.innerHTML="⏳ Analyzing...";
-  const result = await puter.ai.analyze(file);
+  const result=await puter.ai.analyze(file);
   out.innerHTML=JSON.stringify(result,null,2);
 }
 
-async function streamAI(){
-  const out = document.getElementById("streamOutput");
-  out.innerHTML="";
-  await puter.ai.stream("Tell me something inspiring.", chunk=>{
-    out.innerHTML+=chunk;
-  });
-}
+// --- AI Streaming ---
+const streamBtn=document.getElementById("streamBtn");
+const streamOutput=document.getElementById("streamOutput");
 
-// --- Show unlock splash immediately for already donated users ---
+streamBtn.addEventListener("click",async()=>{
+  const prompt=document.getElementById("streamInput").value.trim();
+  const model=document.getElementById("streamModel").value;
+  if(!prompt) return alert("Please enter a prompt!");
+  streamOutput.innerHTML="⏳ Streaming response...";
+  try{
+    await puter.ai.stream(prompt,chunk=>{ streamOutput.innerHTML+=chunk; },{model});
+  }catch(err){
+    streamOutput.innerHTML="❌ Error streaming response.";
+    console.error(err);
+  }
+});
+
+// --- Auto show playground for donated users ---
 if(donated){
   document.getElementById("playground").style.display="block";
   document.getElementById("demoSplash").style.display="none";
-  document.getElementById("unlockSplash").style.display="none"; // or remove if you want a thank-you message
+  document.getElementById("unlockSplash").style.display="none";
 }
 </script>
 </body>
