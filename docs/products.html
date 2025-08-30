@@ -1,392 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>LinkBotLabs Products</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      background: #0d0d1a;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-      color: turquoise;
-      margin-bottom: 20px;
-    }
-
-    .affiliate-banner {
-      background: #0077b6;
-      color: #fff;
-      padding: 12px;
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 20px;
-      border-radius: 6px;
-    }
-
-    .voice-controls, .model-select {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .voice-controls select, .voice-controls button, .model-select select {
-      padding: 5px 10px;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-
-    .category {
-      margin: 40px 0;
-    }
-
-    .category h2 {
-      color: #9d4edd;
-      border-bottom: 2px solid turquoise;
-      padding-bottom: 5px;
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 25px;
-    }
-
-    .product-card {
-      background: #1a1a2e;
-      border: 1px solid #3a3a5d;
-      border-radius: 12px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s;
-    }
-
-    .product-card:hover {
-      transform: translateY(-5px);
-      border-color: turquoise;
-    }
-
-    .product-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 10px 0;
-    }
-
-    .product-price {
-      color: turquoise;
-      font-weight: bold;
-      margin: 6px 0;
-    }
-
-    .product-desc {
-      font-size: 16px;
-      line-height: 1.5;
-      color: #ccc;
-      margin-bottom: 12px;
-    }
-
-    .product-btn {
-      margin-top: 10px;
-      padding: 12px;
-      background: linear-gradient(135deg, #0077b6, #00b4d8);
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .product-btn:hover {
-      background: linear-gradient(135deg, #00b4d8, #0077b6);
-    }
-
-    .chat-box-container {
-      margin-top: 12px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .chat-box {
-      min-height: 150px;
-      border-radius: 12px;
-      padding: 10px;
-      border: 1px solid #3a3a5d;
-      background: #111;
-      font-family: monospace;
-      color: #fff;
-      overflow-y: auto;
-      outline: none;
-      white-space: pre-wrap;
-      caret-color: turquoise;
-    }
-
-    .chat-box:empty::before {
-      content: attr(placeholder);
-      color: #666;
-      pointer-events: none;
-    }
-
-    .chat-box:focus::before {
-      content: '';
-    }
-
-    .chat-bubble {
-      display: block;
-      padding: 8px 12px;
-      border-radius: 12px;
-      margin-bottom: 6px;
-      max-width: 80%;
-      word-wrap: break-word;
-      background: #9d4edd;
-      color: #fff;
-    }
-
-    .user-bubble {
-      background: #0077b6;
-      align-self: flex-end;
-    }
-
-    .ai-bubble {
-      background: #9d4edd;
-      align-self: flex-start;
-    }
-
-    .typing-bubble::after {
-      content: '...';
-      display: inline-block;
-      margin-left: 5px;
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      0%, 50%, 100% { opacity: 1; }
-      25%, 75% { opacity: 0; }
-    }
-
-    .socials {
-      position: fixed;
-      top: 50%;
-      left: 10px;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .socials a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background: turquoise;
-      border-radius: 50%;
-      color: #0d0d1a;
-      font-weight: bold;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .socials a:hover {
-      background: #9d4edd;
-      color: #fff;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Affiliate Products with AI Chat</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0d0d1a;
+    color: #fff;
+    margin: 0;
+    padding: 20px;
+  }
+  .product-card {
+    background: #1c1c2b;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  .product-card h2 { margin-top: 0; }
+  button {
+    background: #0078ff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px 0;
+  }
+  .chat-container {
+    display: none;
+    flex-direction: column;
+    margin-top: 10px;
+    background: #111;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  .chat-box {
+    background: #000;
+    padding: 10px;
+    border-radius: 6px;
+    height: 200px;
+    overflow-y: auto;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .chat-box:empty::before {
+    content: attr(placeholder);
+    color: #666;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    pointer-events: none;
+  }
+  .chat-bubble {
+    padding: 6px 10px;
+    margin: 4px 0;
+    border-radius: 6px;
+    max-width: 90%;
+    word-wrap: break-word;
+  }
+  .user-bubble {
+    background: #0078ff;
+    color: white;
+    align-self: flex-end;
+  }
+  .ai-bubble {
+    background: #333;
+    color: #fff;
+    align-self: flex-start;
+  }
+  .controls {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  select, button {
+    font-size: 14px;
+  }
+</style>
 </head>
 <body>
-  <header style="text-align:center; padding: 15px; background:#111;">
-    <img src="img_splash.jpg" alt="LinkBotLabs Logo" style="max-width:180px; display:block; margin:0 auto;">
-    <h1>✨ LinkBotLabs Product Picks ✨</h1>
-  </header>
 
-  <div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
+<div id="products"></div>
 
-  <div class="voice-controls">
-    <label>Select Voice:</label>
-    <select id="voiceSelect"></select>
-    <button id="stopTTS">⏹ Stop</button>
-  </div>
+<script src="https://js.puter.com/v2/"></script>
+<script>
+const products = [
+  { name: "AI Assistant Pro", description: "Your smart AI assistant for daily tasks.", link: "https://affiliate.example.com/pro" },
+  { name: "Smart Home Hub", description: "Connect and control all your devices.", link: "https://affiliate.example.com/hub" }
+];
 
-  <div class="model-select">
-    <label>Select GPT Model:</label>
-    <select id="modelSelect">
-      <option value="gpt-5-mini">GPT-5 Mini</option>
-      <option value="gpt-5">GPT-5</option>
-      <option value="gpt-4o-mini">GPT-4o Mini</option>
-      <option value="gpt-4-1-mini">GPT-4.1 Mini</option>
-      <option value="gpt-5-nano">GPT-5 Nano</option>
-    </select>
-  </div>
-
-  <div id="content"></div>
-
-  <div class="socials">
-    <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">TT</a>
-    <a href="https://x.com/linkbotlabs" target="_blank">X</a>
-    <a href="https://youtube.com/@linkbotlabs" target="_blank">YT</a>
-    <a href="https://facebook.com/linkbotlabs" target="_blank">FB</a>
-  </div>
-
-  <!-- Final Script -->
-  <script src="https://js.puter.com/v2/"></script>
-  <script>
-    const content = document.getElementById("content");
-    const modelSelect = document.getElementById("modelSelect");
-
-    function getAffiliateId() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("aff_id") || null;
+// --- Normalize Puter AI Responses ---
+function normalizeNonStream(resp) {
+  if (typeof resp === 'string') return resp;
+  if (resp?.output_text) return resp.output_text;
+  if (resp?.text) return resp.text;
+  if (resp?.message?.content) {
+    if (Array.isArray(resp.message.content)) {
+      const first = resp.message.content[0];
+      return typeof first === 'string' ? first : (first?.text ?? JSON.stringify(resp.message.content));
     }
-    const affiliateId = getAffiliateId();
-    if (affiliateId) {
-      const banner = document.getElementById("affiliate-banner");
-      banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
-      banner.style.display = "block";
-    }
+    return typeof resp.message.content === 'string' ? resp.message.content : JSON.stringify(resp.message.content);
+  }
+  return JSON.stringify(resp ?? {});
+}
 
-    // TTS
-    let synth = window.speechSynthesis;
-    let utter;
-    function populateVoiceSelects() {
-      let voices = synth.getVoices();
-      if (!voices.length) { setTimeout(populateVoiceSelects, 100); return; }
-      const select = document.getElementById('voiceSelect');
-      select.innerHTML = '';
-      voices.forEach(v => {
-        const opt = document.createElement('option');
-        opt.value = v.name;
-        opt.textContent = v.name + ' (' + v.lang + ')';
-        select.appendChild(opt);
-      });
-    }
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = populateVoiceSelects;
-    } else populateVoiceSelects();
+// --- Build Product Cards ---
+const productsDiv = document.getElementById("products");
 
-    function playTTS(text) {
-      if (synth.speaking) synth.cancel();
-      utter = new SpeechSynthesisUtterance(text);
-      const selectedVoice = document.getElementById('voiceSelect').value;
-      utter.voice = synth.getVoices().find(v => v.name === selectedVoice) || synth.getVoices()[0];
-      synth.speak(utter);
-    }
-    document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
+products.forEach(p => {
+  const card = document.createElement("div");
+  card.className = "product-card";
+  card.innerHTML = `
+    <h2>${p.name}</h2>
+    <p>${p.description}</p>
+    <a href="${p.link}" target="_blank"><button>View Product</button></a>
+    <button class="askBtn">Ask AI</button>
+    <div class="chat-container">
+      <div class="chat-box" contenteditable="true" placeholder="Type your question here..."></div>
+      <div class="controls">
+        <button class="listenBtn">Listen</button>
+        <button id="stopTTS">Stop</button>
+        <select id="voiceSelect"></select>
+        <select class="modelSelect">
+          <option value="gpt-5-nano">GPT-5 Nano</option>
+          <option value="gpt-5-mini">GPT-5 Mini</option>
+          <option value="gpt-5">GPT-5</option>
+        </select>
+      </div>
+    </div>
+  `;
+  productsDiv.appendChild(card);
 
-    async function loadProducts() {
+  const askBtn = card.querySelector(".askBtn");
+  const chatContainer = card.querySelector(".chat-container");
+  const chatBox = card.querySelector(".chat-box");
+  const ttsBtn = card.querySelector(".listenBtn");
+  const modelSelect = card.querySelector(".modelSelect");
+
+  askBtn.onclick = () => {
+    const isHidden = chatContainer.style.display === "none";
+    chatContainer.style.display = isHidden ? "flex" : "none";
+    if (isHidden) {
+      chatBox.focus();
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  };
+
+  chatBox.addEventListener("keydown", async (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      const userText = chatBox.innerText.trim();
+      if (!userText) return;
+
+      const userBubble = document.createElement("div");
+      userBubble.className = "chat-bubble user-bubble";
+      userBubble.textContent = userText;
+      chatBox.appendChild(userBubble);
+
+      chatBox.innerHTML = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+
       try {
-        const res = await fetch("products.json?cachebust=" + Date.now());
-        const data = await res.json();
-        renderProducts(data);
+        const resp = await puter.ai.chat(userText, { model: modelSelect.value });
+        const aiText = normalizeNonStream(resp);
+        await typeAIResponse(chatBox, aiText);
       } catch (e) {
-        content.innerHTML = `<p style="color:red;text-align:center;">❌ Failed to load products.</p>`;
+        await typeAIResponse(chatBox, "⚠️ Error: " + (e?.message ?? e));
       }
     }
+  });
 
-    async function typeAIResponse(chatBox, text) {
-      const bubble = document.createElement("div");
-      bubble.className = "chat-bubble ai-bubble typing-bubble";
-      chatBox.appendChild(bubble);
-      chatBox.scrollTop = chatBox.scrollHeight;
-      for (let i = 0; i < text.length; i++) {
-        bubble.textContent = text.slice(0, i + 1);
-        chatBox.scrollTop = chatBox.scrollHeight;
-        await new Promise(r => setTimeout(r, 20));
-      }
-      bubble.classList.remove("typing-bubble");
-      playTTS(text);
-      chatBox.scrollTop = chatBox.scrollHeight;
+  ttsBtn.onclick = () => {
+    const aiBubbles = chatBox.querySelectorAll(".ai-bubble");
+    if (aiBubbles.length === 0) {
+      playTTS(p.description);
+      return;
     }
+    const lastAIBubble = aiBubbles[aiBubbles.length - 1];
+    playTTS(lastAIBubble.textContent);
+  };
+});
 
-    function renderProducts(data) {
-      content.innerHTML = "";
-      for (const [category, items] of Object.entries(data)) {
-        const section = document.createElement("div");
-        section.className = "category";
-        section.innerHTML = `<h2>${category}</h2><div class="products-grid"></div>`;
-        const grid = section.querySelector(".products-grid");
+// --- Typing Effect + Auto TTS ---
+async function typeAIResponse(chatBox, text) {
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble ai-bubble typing-bubble";
+  chatBox.appendChild(bubble);
+  chatBox.scrollTop = chatBox.scrollHeight;
 
-        items.forEach(p => {
-          const card = document.createElement("div");
-          card.className = "product-card";
+  for (let i = 0; i < text.length; i++) {
+    bubble.textContent = text.slice(0, i + 1);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    await new Promise(r => setTimeout(r, 20));
+  }
 
-          card.innerHTML = `
-            <h3 class="product-title">${p.title}</h3>
-            <p class="product-price">${p.price}</p>
-            <p class="product-desc">${p.description}</p>
-            <button class="product-btn view-btn">🛒 Click to View</button>
-            <button class="product-btn ask-btn">💬 Ask AI</button>
-            <div class="chat-box-container" style="display:none;">
-              <div class="chat-box" contenteditable="true" placeholder="Type your question here..."></div>
-            </div>
-            <button class="product-btn tts-btn">🔊 Listen</button>
-          `;
+  bubble.classList.remove("typing-bubble");
+  playTTS(text);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
-          const viewBtn = card.querySelector(".view-btn");
-          const askBtn = card.querySelector(".ask-btn");
-          const chatContainer = card.querySelector(".chat-box-container");
-          const chatBox = card.querySelector(".chat-box");
-          const ttsBtn = card.querySelector(".tts-btn");
+// --- TTS Setup ---
+let synth = window.speechSynthesis;
+let utter;
+let selectedVoiceName = null;
 
-          viewBtn.onclick = () => {
-            let link = p.url;
-            if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
-            window.open(link, "_blank");
-          };
+function populateVoiceSelects() {
+  const voices = synth.getVoices();
+  if (!voices.length) {
+    setTimeout(populateVoiceSelects, 250);
+    return;
+  }
+  const selects = document.querySelectorAll('#voiceSelect');
+  selects.forEach(select => {
+    select.innerHTML = '';
+    voices.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v.name;
+      opt.textContent = `${v.name} (${v.lang})`;
+      select.appendChild(opt);
+    });
+    let defaultVoice = voices.find(v => v.lang.startsWith("en-")) || voices[0];
+    selectedVoiceName = defaultVoice.name;
+    select.value = selectedVoiceName;
+  });
+}
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceSelects;
+} else {
+  populateVoiceSelects();
+}
+document.addEventListener("change", e => {
+  if (e.target.id === "voiceSelect") {
+    selectedVoiceName = e.target.value;
+  }
+});
 
-          askBtn.onclick = () => {
-            const isHidden = chatContainer.style.display === "none";
-            chatContainer.style.display = isHidden ? "flex" : "none";
-            if (isHidden) {
-              chatBox.focus();
-              chatBox.scrollTop = chatBox.scrollHeight;
-            }
-          };
+function playTTS(text) {
+  if (!text) return;
+  if (synth.speaking) synth.cancel();
 
-          chatBox.addEventListener("keydown", async (e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              const userText = chatBox.innerText.trim();
-              if (!userText) return;
+  utter = new SpeechSynthesisUtterance(text);
+  let voices = synth.getVoices();
+  let chosen = voices.find(v => v.name === selectedVoiceName);
+  if (!chosen) chosen = voices.find(v => v.lang.startsWith("en-")) || voices[0];
+  utter.voice = chosen;
 
-              const userBubble = document.createElement("div");
-              userBubble.className = "chat-bubble user-bubble";
-              userBubble.textContent = userText;
-              chatBox.appendChild(userBubble);
+  synth.speak(utter);
+}
+document.getElementById('stopTTS').onclick = () => {
+  if (synth.speaking) synth.cancel();
+};
+</script>
 
-              chatBox.innerHTML = "";
-              chatBox.scrollTop = chatBox.scrollHeight;
-
-              const model = modelSelect.value;
-              const response = await puter.ai.chat(userText, { model });
-              await typeAIResponse(chatBox, response);
-            }
-          });
-
-          ttsBtn.onclick = () => {
-            const aiBubbles = chatBox.querySelectorAll(".ai-bubble");
-            if (aiBubbles.length === 0) {
-              playTTS(p.description);
-              return;
-            }
-            const lastAIBubble = aiBubbles[aiBubbles.length - 1];
-            playTTS(lastAIBubble.textContent);
-          };
-
-          grid.appendChild(card);
-        });
-
-        content.appendChild(section);
-      }
-    }
-
-    loadProducts();
-  </script>
 </body>
 </html>
