@@ -13,6 +13,7 @@
   .box { background:#1a1a2e; padding:15px; margin:15px 0; border-radius:8px; }
   input, select, button { padding:10px; margin:5px 0; width:100%; max-width:100%; }
   .splash { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; z-index:9999; padding:20px; }
+  .output { margin-top:10px; padding:10px; border-radius:8px; background:rgba(255,255,255,0.05); white-space:pre-wrap; word-wrap:break-word; }
 </style>
 </head>
 <body>
@@ -20,9 +21,6 @@
 <header>
   <h1>🚀 AI Playground by LinkBotLabs</h1>
   <p>Powered by <a href="https://puter.com" target="_blank" style="color:#4fc3f7;">Puter.com</a></p>
-  <a href="https://prodpick4u.github.io/-linkbotlabs/docs/image.html" class="btn" style="background:linear-gradient(135deg,#ff007a,#e60070); font-size:1.2rem;">
-  🖼️ AI Image Generator (Demo)
-  </a>
 </header>
 
 <!-- DEMO SPLASH -->
@@ -39,15 +37,6 @@
   <a href="https://wise.com/pay/me/davids14542" target="_blank">
     <button>Donate & Unlock</button>
   </a>
-  <div style="margin-top:20px; text-align:left; max-width:600px;">
-    <h3>What you get:</h3>
-    <ul>
-      <li>Unlimited AI Playground access</li>
-      <li>Chat + Speech + Analysis tools</li>
-      <li>Cloud hosting + Virtual desktop + Apps</li>
-      <li>ZIP download of this Playground: <a href="https://raw.githubusercontent.com/prodpick4u/-linkbotlabs/refs/heads/main/docs/ai-starter.html" target="_blank">Download ZIP</a></li>
-    </ul>
-  </div>
 </div>
 
 <main id="playground">
@@ -71,7 +60,7 @@
     <p id="modelInfo" style="font-size:0.9em; color:#ccc; margin-top:5px;">Select a model to see details</p>
     <input id="chatInput" placeholder="Ask me anything...">
     <button onclick="runChat()">Run</button>
-    <div id="chatOutput"></div>
+    <div id="chatOutput" class="output"></div>
   </div>
 
   <!-- AI Streaming -->
@@ -93,7 +82,7 @@
     <p id="streamInfo" style="font-size:0.9em; color:#ccc; margin-top:5px;">Select a model to see details</p>
     <input id="streamInput" placeholder="Ask your AI...">
     <button id="streamBtn">Start Streaming</button>
-    <div id="streamOutput"></div>
+    <div id="streamOutput" class="output"></div>
   </div>
 
 </main>
@@ -104,15 +93,12 @@
 
 <script>
 /* --- Demo Timer & Splash --- */
-let demoTime = 60*60*1000; // 1 hour
+let demoTime = 60*60*1000;
 let demoStart = Date.now();
-
 function closeDemoSplash(){
   document.getElementById("demoSplash").style.display="none";
-  setInterval(checkDemo, 10000); // check every 10 seconds for demo end
+  setInterval(checkDemo, 10000);
 }
-
-/* --- Check Demo End --- */
 function checkDemo(){
   if(Date.now() - demoStart > demoTime){
     document.getElementById("donationSplash").style.display="flex";
@@ -142,7 +128,6 @@ function updateModelInfo() {
   document.getElementById("modelInfo").textContent = modelDescriptions[model] || "";
   document.getElementById("chatInput").placeholder = `Ask ${label} anything...`;
 }
-
 function updateStreamInfo() {
   const select = document.getElementById("streamModel");
   const model = select.value;
@@ -151,18 +136,28 @@ function updateStreamInfo() {
   document.getElementById("streamInput").placeholder = `Prompt ${label} for streaming...`;
 }
 
+/* --- Helpers --- */
+function putText(el, text) { el.innerHTML = text ?? ''; }
+function appendText(el, text) { el.innerHTML += text ?? ''; }
+function normalize(resp) {
+  if(typeof resp === 'string') return resp;
+  if(resp?.output_text) return resp.output_text;
+  if(resp?.text) return resp.text;
+  return JSON.stringify(resp ?? {});
+}
+
 /* --- Chat Function --- */
 async function runChat(){
   const input = document.getElementById("chatInput").value.trim();
   const model = document.getElementById("chatModel").value;
   const out = document.getElementById("chatOutput");
   if(!input) return alert("Please enter a question!");
-  out.innerHTML = "⏳ Thinking...";
+  putText(out, "⏳ Thinking...");
   try {
-    const reply = await puter.ai.chat(input, { model });
-    out.innerHTML = `<b>${model} says:</b><br>${reply}`;
-  } catch(err) {
-    out.innerHTML = "❌ Error: " + (err.message || err);
+    const resp = await puter.ai.chat(input, { model });
+    putText(out, `<b>${model} says:</b><br>` + normalize(resp));
+  } catch(err){
+    putText(out, "❌ Error: " + (err.message || err));
   }
 }
 
@@ -170,20 +165,21 @@ async function runChat(){
 document.getElementById("streamBtn").addEventListener("click", async () => {
   const prompt = document.getElementById("streamInput").value.trim();
   const model = document.getElementById("streamModel").value;
-  const streamOutput = document.getElementById("streamOutput");
+  const out = document.getElementById("streamOutput");
   if(!prompt) return alert("Please enter a prompt!");
-  streamOutput.innerHTML = "⏳ Streaming response...";
+  putText(out,"⏳ Streaming response...");
   try {
-    await puter.ai.stream(prompt, chunk => { streamOutput.innerHTML += chunk; }, { model });
-  } catch(err) {
-    streamOutput.innerHTML = "❌ Error streaming response.";
+    await puter.ai.stream(prompt, chunk => {
+      appendText(out, (chunk?.output_text ?? chunk?.text ?? '').replaceAll('\n','<br>'));
+    }, { model });
+  } catch(err){
+    putText(out, "❌ Error streaming response: " + (err.message||err));
   }
-});
+}
 
-/* --- Initialize descriptions --- */
+/* --- Init --- */
 updateModelInfo();
 updateStreamInfo();
 </script>
-
 </body>
 </html>
