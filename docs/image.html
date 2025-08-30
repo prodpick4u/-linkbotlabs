@@ -7,58 +7,41 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      text-align: center;
       background: #0d0d1a;
       color: #fff;
       margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-    header {
-      background: #1a1a2e;
-      padding: 15px;
+      padding: 50px 20px;
     }
     h1 {
-      margin: 0;
-      font-size: 1.8em;
+      font-size: 2em;
+      margin-bottom: 20px;
     }
-    .iframe-container {
-      width: 100%;
-      height: 90vh; /* fills most of screen */
-      border: none;
-      margin: 0;
-      padding: 0;
+    p {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      color: #ccc;
     }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-    footer {
-      background: #1a1a2e;
-      padding: 10px;
-      color: #aaa;
-      font-size: 0.9em;
-    }
-    footer a {
-      color: #0af;
+    .launch-btn {
+      display: inline-block;
+      padding: 15px 30px;
+      background: #ff007a;
+      color: white;
       text-decoration: none;
+      font-size: 18px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .launch-btn:hover {
+      background: #e60070;
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>🖼️ AI Image Generator</h1>
-    <p>Embedded from Puter.com</p>
-  </header>
-
-  <div class="iframe-container">
-    <iframe src="https://puter.com/app/puter-image-generator" title="Puter Image Generator"></iframe>
-  </div>
-
-  <footer>
-    <p>LinkBotLabs | Powered by <a href="https://puter.com" target="_blank">Puter.com</a></p>
-  </footer>
-
+  <h1>🚀 AI Image Generator</h1>
+  <p>Powered by <strong>Puter.com</strong> — click below to launch the app in a new tab:</p>
+  <a href="https://puter.com/app/puter-image-generator" target="_blank" class="launch-btn">
+    Launch Puter Image Generator
+  </a>
 </body>
 </html>
