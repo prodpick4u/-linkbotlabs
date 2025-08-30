@@ -120,7 +120,7 @@ function getAffiliateId() {
 const affiliateId = getAffiliateId();
 if (affiliateId) {
   const banner = document.getElementById("affiliate-banner");
-  banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
+  banner.textContent = `✅ Affiliate link active. Your purchases now support affiliate ID: ${affiliateId}`;
   banner.style.display = "block";
 }
 
@@ -139,9 +139,9 @@ function populateVoiceSelects() {
     opt.textContent = v.name + ' (' + v.lang + ')';
     select.appendChild(opt);
   });
-  // Auto-select Moirai English en_IE if available
-  const moirai = voices.find(v => v.name.toLowerCase().includes("moirai") && v.lang === "en-IE");
-  if (moirai) select.value = moirai.name;
+  // Auto-select Moira en-IE if available
+  const moira = voices.find(v => v.name.toLowerCase().includes("moira") && v.lang === "en-IE");
+  if (moira) select.value = moira.name;
   else select.selectedIndex = 0;
 }
 
