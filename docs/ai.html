@@ -2,153 +2,136 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LinkBotLabs AI Playground</title>
+<title>LinkBotLabs AI Playground - Supports Puter Developer</title>
 <style>
-  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#0d0d1a; color:#fff; margin:0; padding:20px; }
-  h1, h2 { text-align:center; }
-  h1 { color: turquoise; margin-bottom: 10px; }
-  .section { margin: 20px 0; }
-  .input-area { display:flex; gap:10px; margin-bottom:10px; }
-  textarea { flex:1; padding:10px; border-radius:8px; border:1px solid #3a3a5d; background:#111; color:#fff; resize:none; }
-  button { padding:10px 15px; border:none; border-radius:8px; background:linear-gradient(135deg, #0077b6, #00b4d8); color:white; font-weight:bold; cursor:pointer; }
-  button:hover { background:linear-gradient(135deg, #00b4d8, #0077b6); }
-  .chat-box { border:1px solid #3a3a5d; border-radius:12px; padding:10px; min-height:150px; background:#111; overflow-y:auto; white-space:pre-wrap; caret-color:turquoise; font-family:monospace; }
+  body { font-family:'Segoe UI',Tahoma, Geneva, Verdana, sans-serif; background:#0d0d1a; color:#fff; margin:0; padding:0; }
+  header { padding:20px; text-align:center; background:#111; border-bottom:2px solid #00b4d8; }
+  header h1 { color:turquoise; margin:0; }
+  header p { color:#00b4d8; margin:5px 0 0; font-weight:bold; }
+  
+  /* Tabs */
+  .tabs { display:flex; justify-content:center; background:#111; border-bottom:2px solid #00b4d8; }
+  .tab { padding:12px 20px; cursor:pointer; font-weight:bold; color:#fff; }
+  .tab.active { background:#00b4d8; color:#111; border-radius:8px 8px 0 0; }
+  
+  .tab-section { display:none; padding:20px; }
+  .tab-section.active { display:block; }
+
+  /* Common styles */
+  textarea { width:100%; padding:10px; border-radius:8px; border:1px solid #3a3a5d; background:#111; color:#fff; resize:none; margin-bottom:10px; }
+  button { padding:10px 15px; border:none; border-radius:8px; background:linear-gradient(135deg,#0077b6,#00b4d8); color:white; font-weight:bold; cursor:pointer; margin-right:5px; }
+  button:hover { background:linear-gradient(135deg,#00b4d8,#0077b6); }
+  .chat-box, .stream-box { border:1px solid #3a3a5d; border-radius:12px; padding:10px; min-height:150px; background:#111; overflow-y:auto; white-space:pre-wrap; caret-color:turquoise; font-family:monospace; margin-bottom:10px; }
   .chat-bubble { padding:8px 12px; border-radius:12px; margin-bottom:6px; max-width:80%; word-wrap:break-word; opacity:0; animation:fadeIn 0.3s forwards; }
   .user-bubble { background:#0077b6; align-self:flex-end; color:#fff; }
   .ai-bubble { background:#9d4edd; align-self:flex-start; color:#fff; }
   @keyframes fadeIn { to { opacity:1; } }
+
+  .image-result { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:15px; margin-top:10px; }
+  .image-result div { display:flex; flex-direction:column; align-items:center; background:#1a1a2e; padding:10px; border-radius:12px; transition:transform 0.2s, box-shadow 0.2s; }
+  .image-result div:hover { transform:translateY(-5px); box-shadow:0 8px 20px rgba(0,180,216,0.4); }
+  .image-result img { border-radius:12px; max-width:100%; cursor:pointer; transition:transform 0.2s; }
+  .image-result img:hover { transform:scale(1.05); }
+  .image-result button { margin-top:8px; padding:6px 12px; border:none; border-radius:8px; background:linear-gradient(135deg,#9d4edd,#f6a609); color:white; font-weight:bold; cursor:pointer; transition:background 0.3s, transform 0.2s; }
+  .image-result button:hover { background:linear-gradient(135deg,#f6a609,#9d4edd); transform:translateY(-2px); }
+
   .notification { position:fixed; bottom:20px; right:20px; background:#9d4edd; color:#fff; padding:12px 18px; border-radius:10px; display:none; font-weight:bold; z-index:9999; }
+
+  /* Splash Lock */
   #splash { position:fixed; top:0; left:0; width:100%; height:100%; background:#0d0d1a; color:white; display:none; flex-direction:column; justify-content:center; align-items:center; text-align:center; z-index:10000; }
   #splash button { margin-top:20px; background:linear-gradient(135deg,#f6a609,#ff5722); }
-  .image-result { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
-  .image-result img { border-radius:12px; }
-  .analysis-section textarea { width:100%; height:80px; margin-bottom:10px; }
 </style>
 </head>
 <body>
-  <header>
-    <h1>✨ LinkBotLabs AI Playground ✨</h1>
-  </header>
 
-  <!-- Chat Section -->
-  <div class="section" id="chat-section">
-    <h2>💬 Chat AI</h2>
-    <div class="chat-box" id="chat-box" contenteditable="true" placeholder="Type your question here..."></div>
-    <div class="input-area">
-      <button id="send-chat">Send</button>
-      <button id="tts-chat">🔊 Listen</button>
-      <select id="voiceSelect"></select>
-    </div>
+<header>
+  <h1>✨ LinkBotLabs AI Playground ✨</h1>
+  <p>Supports Puter Developer</p>
+</header>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active" data-tab="chat-tab">💬 Chat AI</div>
+  <div class="tab" data-tab="image-tab">🖼️ Image Generator</div>
+  <div class="tab" data-tab="analysis-tab">🔍 Image Analysis</div>
+  <div class="tab" data-tab="stream-tab">📹 Streaming AI</div>
+</div>
+
+<!-- Chat Tab -->
+<div class="tab-section active" id="chat-tab">
+  <div class="chat-box" id="chat-box" contenteditable="true" placeholder="Type your question here..."></div>
+  <div class="input-area">
+    <button id="send-chat">Send</button>
+    <button id="tts-chat">🔊 Listen</button>
+    <select id="voiceSelect"></select>
   </div>
+</div>
 
-  <!-- Image Generator Section -->
-  <div class="section" id="image-section">
-    <h2>🖼️ Image Generator</h2>
-    <textarea id="img-prompt" placeholder="Enter image description..."></textarea>
-    <div class="input-area">
-      <button id="gen-image">Generate Image</button>
-    </div>
-    <div class="image-result" id="images"></div>
-  </div>
+<!-- Image Tab -->
+<div class="tab-section" id="image-tab">
+  <textarea id="img-prompt" placeholder="Enter image description..."></textarea>
+  <button id="gen-image">Generate Image</button>
+  <div class="image-result" id="images"></div>
+</div>
 
-  <!-- Image Analysis Section -->
-  <div class="section" id="analysis-section">
-    <h2>🔍 Image Analysis</h2>
-    <textarea id="analysis-url" placeholder="Enter image URL to analyze..."></textarea>
-    <div class="input-area">
-      <button id="analyze-image">Analyze</button>
-    </div>
-    <div class="image-result" id="analysis-result"></div>
-  </div>
+<!-- Analysis Tab -->
+<div class="tab-section" id="analysis-tab">
+  <textarea id="analysis-url" placeholder="Enter image URL to analyze..."></textarea>
+  <button id="analyze-image">Analyze</button>
+  <div class="image-result" id="analysis-result"></div>
+</div>
 
-  <!-- Streaming Section -->
-  <div class="section" id="stream-section">
-    <h2>📹 AI Streaming</h2>
-    <textarea id="stream-prompt" placeholder="Enter prompt for streaming AI output..."></textarea>
-    <div class="input-area">
-      <button id="start-stream">Start Stream</button>
-      <button id="stop-stream">Stop Stream</button>
-    </div>
-    <div class="chat-box" id="stream-box" style="min-height:120px;"></div>
-  </div>
+<!-- Streaming Tab -->
+<div class="tab-section" id="stream-tab">
+  <textarea id="stream-prompt" placeholder="Enter prompt for streaming AI output..."></textarea>
+  <button id="start-stream">Start Stream</button>
+  <button id="stop-stream">Stop Stream</button>
+  <div class="stream-box" id="stream-box"></div>
+</div>
 
-  <!-- Notification -->
-  <div class="notification" id="notification"></div>
+<!-- Notification -->
+<div class="notification" id="notification"></div>
 
-  <!-- Splash Lock -->
-  <div id="splash">
-    <h1>🛑 Demo Expired</h1>
-    <p>Unlock the full AI Playground with your own virtual environment, cloud apps, and free hosting!</p>
-    <button id="donate">Donate & Unlock</button>
-  </div>
+<!-- Splash Lock -->
+<div id="splash">
+  <h1>🛑 Demo Expired</h1>
+  <p>Unlock the full AI Playground with your own virtual environment, cloud apps, and free hosting!</p>
+  <button id="donate">Donate & Unlock</button>
+</div>
 
 <script src="https://js.puter.com/v2/"></script>
 <script>
-  // Persistent 1-hour demo timer
-  const DEMO_DURATION = 60*60*1000; // 1 hour
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab');
+  const sections = document.querySelectorAll('.tab-section');
+  tabs.forEach(t => t.addEventListener('click',()=>{
+    tabs.forEach(tb=>tb.classList.remove('active'));
+    sections.forEach(s=>s.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+  }));
+
+  // Demo Timer
+  const DEMO_DURATION = 60*60*1000; // 1h
   let demoStart = localStorage.getItem("demoStart");
   if(!demoStart){ demoStart = Date.now(); localStorage.setItem("demoStart", demoStart); } else demoStart=parseInt(demoStart,10);
-
-  function checkDemo() {
-    if(Date.now() - demoStart >= DEMO_DURATION){
-      document.getElementById("splash").style.display="flex";
-      return true;
-    }
-    return false;
-  }
+  function checkDemo(){ if(Date.now()-demoStart>=DEMO_DURATION){ document.getElementById("splash").style.display="flex"; return true; } return false; }
   checkDemo();
-  setInterval(checkDemo, 10000); // check every 10s
+  setInterval(checkDemo,10000);
+  document.getElementById("donate").onclick=()=>{ window.location.href="https://wise.com/pay/me/davids14542"; };
 
-  document.getElementById("donate").onclick = ()=>{ window.location.href="https://wise.com/pay/me/davids14542"; };
-
-  // Quirky notifications
-  const notifications = [
-    "🤖 Did you know AI loves coffee breaks?",
-    "💡 Tip: Ask me anything about space!",
-    "🎵 I can hum tunes... virtually!",
-    "📚 Reading your thoughts...",
-    "🛠️ Debugging the universe...",
-    "🪐 Zooming through your data!",
-    "✨ Magic happening in the code...",
-    "🧩 Solving puzzles, one byte at a time...",
-    "🎯 Target acquired: your question!",
-    "☕ AI taking a short tea break..."
-  ];
+  // Notifications
+  const notifications=["🤖 Did you know AI loves coffee breaks?","💡 Tip: Ask me anything about space!","🎵 I can hum tunes... virtually!","📚 Reading your thoughts...","🛠️ Debugging the universe...","🪐 Zooming through your data!","✨ Magic happening in the code...","🧩 Solving puzzles, one byte at a time...","🎯 Target acquired: your question!","☕ AI taking a short tea break..."];
   const notifElem = document.getElementById("notification");
-  function showNotification(){
-    if(checkDemo()) return;
-    notifElem.textContent = notifications[Math.floor(Math.random()*notifications.length)];
-    notifElem.style.display="block";
-    setTimeout(()=>{notifElem.style.display="none";},5000);
-  }
+  function showNotification(){ if(checkDemo()) return; notifElem.textContent=notifications[Math.floor(Math.random()*notifications.length)]; notifElem.style.display="block"; setTimeout(()=>{notifElem.style.display="none";},5000); }
   setInterval(showNotification,120000);
 
-  // TTS setup
-  let synth=window.speechSynthesis;
-  let utter;
-  function populateVoiceSelects(){
-    let voices = synth.getVoices();
-    if(!voices.length){ setTimeout(populateVoiceSelects,100); return; }
-    const select = document.getElementById('voiceSelect');
-    select.innerHTML = '';
-    voices.forEach(v=>{
-      const opt=document.createElement('option');
-      opt.value=v.name;
-      opt.textContent=v.name+' ('+v.lang+')';
-      select.appendChild(opt);
-    });
-  }
-  if(speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged = populateVoiceSelects;
-  else populateVoiceSelects();
-
-  function playTTS(text){
-    if(synth.speaking) synth.cancel();
-    utter=new SpeechSynthesisUtterance(text);
-    const selectedVoice=document.getElementById('voiceSelect').value;
-    utter.voice=synth.getVoices().find(v=>v.name===selectedVoice)||synth.getVoices()[0];
-    synth.speak(utter);
-  }
-  document.getElementById("tts-chat").onclick = ()=>{ const text=document.getElementById("chat-box").innerText; if(text) playTTS(text); };
+  // TTS
+  let synth=window.speechSynthesis, utter;
+  function populateVoiceSelects(){ let voices=synth.getVoices(); if(!voices.length){ setTimeout(populateVoiceSelects,100); return; } const select=document.getElementById('voiceSelect'); select.innerHTML=''; voices.forEach(v=>{ let opt=document.createElement('option'); opt.value=v.name; opt.textContent=v.name+' ('+v.lang+')'; select.appendChild(opt); }); }
+  if(speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged=populateVoiceSelects; else populateVoiceSelects();
+  function playTTS(text){ if(synth.speaking) synth.cancel(); utter=new SpeechSynthesisUtterance(text); const selectedVoice=document.getElementById('voiceSelect').value; utter.voice=synth.getVoices().find(v=>v.name===selectedVoice)||synth.getVoices()[0]; synth.speak(utter); }
+  document.getElementById("tts-chat").onclick=()=>{ const text=document.getElementById("chat-box").innerText; if(text) playTTS(text); };
 
   // Chat AI
   const chatBox=document.getElementById("chat-box");
@@ -156,74 +139,46 @@
     if(checkDemo()) return;
     const userText=chatBox.innerText.trim();
     if(!userText) return;
-    const userBubble=document.createElement("div");
-    userBubble.className="chat-bubble user-bubble";
-    userBubble.textContent=userText;
-    chatBox.appendChild(userBubble);
-    chatBox.scrollTop=chatBox.scrollHeight;
-    chatBox.innerText="";
+    const userBubble=document.createElement("div"); userBubble.className="chat-bubble user-bubble"; userBubble.textContent=userText; chatBox.appendChild(userBubble);
+    chatBox.scrollTop=chatBox.scrollHeight; chatBox.innerText="";
     const model="gpt-5-mini";
     const response=await puter.ai.chat(userText,{model});
-    const aiBubble=document.createElement("div");
-    aiBubble.className="chat-bubble ai-bubble";
-    chatBox.appendChild(aiBubble);
-    let i=0;
-    while(i<response.length){
-      aiBubble.textContent=response.slice(0,i+1);
-      chatBox.scrollTop=chatBox.scrollHeight;
-      i++;
-      await new Promise(r=>setTimeout(r,20));
-    }
+    const aiBubble=document.createElement("div"); aiBubble.className="chat-bubble ai-bubble"; chatBox.appendChild(aiBubble);
+    let i=0; while(i<response.length){ aiBubble.textContent=response.slice(0,i+1); chatBox.scrollTop=chatBox.scrollHeight; i++; await new Promise(r=>setTimeout(r,20)); }
     playTTS(response);
   };
 
-  // Image generator
-  const imgPrompt=document.getElementById("img-prompt");
-  const imgContainer=document.getElementById("images");
+  // Image Generator
+  const imgPrompt=document.getElementById("img-prompt"), imgContainer=document.getElementById("images");
   document.getElementById("gen-image").onclick=async ()=>{
     if(checkDemo()) return;
-    const prompt=imgPrompt.value.trim();
-    if(!prompt) return;
+    const prompt=imgPrompt.value.trim(); if(!prompt) return;
     const imgUrl=await puter.ai.generateImage(prompt,{size:"256x256"});
-    const imgElem=document.createElement("img");
-    imgElem.src=imgUrl;
-    imgElem.width=256;
-    imgElem.height=256;
-    imgContainer.appendChild(imgElem);
+    const imgWrap=document.createElement("div"); const imgElem=document.createElement("img"); imgElem.src=imgUrl; imgWrap.appendChild(imgElem);
+    const btn=document.createElement("button"); btn.textContent="Copy URL"; btn.onclick=()=>navigator.clipboard.writeText(imgUrl); imgWrap.appendChild(btn);
+    imgContainer.appendChild(imgWrap);
   };
 
   // Image Analysis
-  const analysisUrl=document.getElementById("analysis-url");
-  const analysisResult=document.getElementById("analysis-result");
+  const analysisUrl=document.getElementById("analysis-url"), analysisResult=document.getElementById("analysis-result");
   document.getElementById("analyze-image").onclick=async ()=>{
     if(checkDemo()) return;
-    const url=analysisUrl.value.trim();
-    if(!url) return;
+    const url=analysisUrl.value.trim(); if(!url) return;
     const analysis=await puter.ai.analyzeImage(url);
-    analysisResult.innerHTML="";
-    const p=document.createElement("p");
-    p.textContent=JSON.stringify(analysis,null,2);
-    analysisResult.appendChild(p);
+    analysisResult.innerHTML=""; const p=document.createElement("pre"); p.textContent=JSON.stringify(analysis,null,2); analysisResult.appendChild(p);
   };
 
   // Streaming
-  const streamPrompt=document.getElementById("stream-prompt");
-  const streamBox=document.getElementById("stream-box");
-  let streamController;
+  const streamPrompt=document.getElementById("stream-prompt"), streamBox=document.getElementById("stream-box"); let streamController;
   document.getElementById("start-stream").onclick=async ()=>{
     if(checkDemo()) return;
-    const prompt=streamPrompt.value.trim();
-    if(!prompt) return;
+    const prompt=streamPrompt.value.trim(); if(!prompt) return;
     streamBox.innerText="";
     streamController=puter.ai.stream(prompt,{model:"gpt-5-mini"});
-    for await (const chunk of streamController){
-      streamBox.innerText+=chunk;
-      streamBox.scrollTop=streamBox.scrollHeight;
-    }
+    for await(const chunk of streamController){ streamBox.innerText+=chunk; streamBox.scrollTop=streamBox.scrollHeight; }
   };
-  document.getElementById("stop-stream").onclick=()=>{
-    if(streamController) streamController.cancel();
-  };
+  document.getElementById("stop-stream").onclick=()=>{ if(streamController) streamController.cancel(); };
 </script>
+
 </body>
 </html>
