@@ -77,7 +77,8 @@ button:hover{opacity:0.85;}
     <img src="img_splash.jpg" alt="LinkBotLabs Logo" 
          style="max-width:180px; display:block; margin:0 auto;">
     <h1>✨ LinkBotLabs Product Picks ✨</h1>
-  </header
+  </header>
+
 <h1>🚀 LinkBotLabs Affiliate Activation</h1>
 
 <!-- ===== Onboarding Flow ===== -->
@@ -133,37 +134,60 @@ button:hover{opacity:0.85;}
 
 <!-- ===== Access Code Login ===== -->
 <div class="glass">
-<h2>🔒 Access Code Login</h2>
-<p>Enter your access code to start your 7-day demo:</p>
-<input type="text" id="accessCode" placeholder="Enter your code">
-<button onclick="checkAccessCode()">Unlock Demo</button>
-<div id="accessOutput" class="output"></div>
+  <h2>🔒 Access Code Login</h2>
+  <p>Enter your access code to start your 7-day demo:</p>
+  <input type="text" id="accessCode" placeholder="Enter your code">
+  <button onclick="checkAccessCode()">Unlock Demo</button>
+  <div id="accessOutput" class="output"></div>
 </div>
 
 <!-- ===== Detailed Explanation Section ===== -->
-<div class="glass" id="activationInfo" style="background: rgba(0,0,0,0.6); padding:20px;">
+<div class="glass" id="activationInfo">
   <h2 style="color:#ffdd57; text-align:center; margin-bottom:10px;">📢 How You Can Access Our Affiliate Products</h2>
-  <p style="font-size:1rem; line-height:1.5;">We offer <strong>three ways</strong> to get started:</p>
+  <p style="font-size:1rem; line-height:1.5;">We offer <strong>three ways</strong> to join LinkBotLabs Affiliate Showcase:</p>
   <ol style="margin-left:20px; font-size:1rem; line-height:1.6;">
-    <li style="margin-bottom:8px;"><span style="color:#00ffea; font-weight:bold;">Join for 1 Week via Fiverr:</span> Test the tool for 7 days by requesting access through our Fiverr link on the front page.</li>
-    <li style="margin-bottom:8px;"><span style="color:#00ffea; font-weight:bold;">Purchase the Full Tool:</span> Get 1 week free with your full purchase.</li>
-    <li style="margin-bottom:8px;"><span style="color:#00ffea; font-weight:bold;">Special Launch Promotion:</span> If you already have an Amazon affiliate link and can support this project, you are welcome to use it <strong>for 1 month free</strong>.</li>
+    <li style="margin-bottom:12px;">
+      <span style="color:#00ffea; font-weight:bold;">1. Donate in AI Playground:</span>  
+      Support the project with a small donation inside the <strong>AI Playground</strong>.  
+      🎁 This unlocks your free affiliate password.  
+      🚀 Plus, you’ll gain access to the AI Playground’s creative tools — an amazing value on its own!
+    </li>
+    <li style="margin-bottom:12px;">
+      <span style="color:#00ffea; font-weight:bold;">2. Go Full Power – Download the API Tool:</span>  
+      Purchase via our Fiverr link and get the full automation package.  
+      🔑 Enter your <strong>Amazon or Temu affiliate ID</strong> and <strong>YouTube API key</strong>.  
+      📂 Inside the ZIP you’ll find instructions, a demo ReadMe, and scripts that auto-generate beautiful videos you can launch on YouTube with just <strong>one click</strong>.  
+      ✅ Purchase also unlocks your free affiliate showcase password — share the page as you wish.
+    </li>
+    <li style="margin-bottom:12px;">
+      <span style="color:#00ffea; font-weight:bold;">3. Buy Any Product from Our Showcase:</span>  
+      Make a purchase of <strong>any product</strong> at any price from the showcase.  
+      🛒 This gives you instant entry into the affiliate program and unlocks your showcase password to share with others.
+    </li>
   </ol>
-  <p style="font-size:1rem; line-height:1.5; margin-top:10px;">All products will dynamically link to your Amazon affiliate ID, giving you more commission at no cost. The tool is primarily for desktop and provides <strong>full automation</strong>. You can also test the live demo via the ZIP Flask app. Full automation requires keys, but you can explore the demo without keys.</p>
-  <p style="font-size:1rem; font-weight:bold; color:#ff6f91;">👉 All requests for access should be made via the Fiverr link on the front page.</p>
+
+  <p style="font-size:1rem; line-height:1.5; margin-top:10px;">
+    All products dynamically link to your <strong>Amazon or Temu affiliate ID</strong>, meaning <u>you earn more commission at no extra cost</u>.  
+    The tool is designed for desktop and provides <strong>full automation</strong>.  
+    🌐 You can also try the live demo via the ZIP Flask app — automation requires keys, but you can still explore without them.
+  </p>
+
+  <p style="font-size:1rem; font-weight:bold; color:#ff6f91; text-align:center; margin-top:15px;">
+    👉 All access requests should be made via the <strong>Fiverr link</strong> on the front page.
+  </p>
 </div>
 
 <!-- ===== Affiliate Tag Registration ===== -->
 <div id="affiliateFormSection" class="glass" style="display:none;">
-<h2>📝 Register Your Amazon Affiliate Tag</h2>
-<p>Once activated, product links on the main product page will use your tag, so you earn commissions.</p>
-<form id="affiliateForm">
-<input type="text" id="userAffiliate" placeholder="mytag-20" required>
-<button type="submit">Activate</button>
-</form>
-<div id="regOutput" class="output"></div>
-<div id="demoTimer" class="timer"></div>
-<p>Upgrade to the <strong>Full Version</strong> for full automation: product to video!</p>
+  <h2>📝 Register Your Amazon Affiliate Tag</h2>
+  <p>Once activated, product links on the main product page will use your tag, so you earn commissions.</p>
+  <form id="affiliateForm">
+    <input type="text" id="userAffiliate" placeholder="mytag-20" required>
+    <button type="submit">Activate</button>
+  </form>
+  <div id="regOutput" class="output"></div>
+  <div id="demoTimer" class="timer"></div>
+  <p>Upgrade to the <strong>Full Version</strong> for full automation: product to video!</p>
 </div>
 
 <script>
