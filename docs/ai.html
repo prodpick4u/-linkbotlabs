@@ -1,181 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AI Playground - LinkBotLabs</title>
-  <script src="https://js.puter.com/v2/"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0; padding: 0;
-      background: #0d0d1a; color: #fff;
-    }
-    header {
-      padding: 15px; background: #1a1a2e; text-align: center;
-    }
-    main { padding: 20px; }
-    button {
-      background: #ff007a; border: none; color: #fff;
-      padding: 12px 20px; border-radius: 6px;
-      cursor: pointer; margin-top: 10px;
-    }
-    button:hover { background: #e60070; }
-    .splash {
-      display: none;
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.95); color: #fff;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      text-align: center; padding: 20px; z-index: 1000;
-    }
-    .splash h1 { font-size: 2em; margin-bottom: 10px; }
-    .splash ul, .splash ol { text-align:left; max-width:600px; }
-    .box {
-      background: rgba(255,255,255,0.05);
-      padding: 15px; border-radius: 8px; margin: 15px 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>AI Playground - LinkBotLabs</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0; padding: 0;
+  background: #0d0d1a; color: #fff;
+}
+header {
+  padding: 15px; background: #1a1a2e; text-align: center;
+}
+main { padding: 20px; }
+button {
+  background: #ff007a; border: none; color: #fff;
+  padding: 12px 20px; border-radius: 6px;
+  cursor: pointer; margin-top: 10px;
+}
+button:hover { background: #e60070; }
+.splash {
+  display: none;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.95); color: #fff;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center; padding: 20px; z-index: 1000;
+}
+.splash h1 { font-size: 2em; margin-bottom: 10px; }
+.splash ul, .splash ol { text-align:left; max-width:600px; }
+.box {
+  background: rgba(255,255,255,0.05);
+  padding: 15px; border-radius: 8px; margin: 15px 0;
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1>🚀 AI Playground by LinkBotLabs</h1>
-    <p>Opportunities for everyone — powered by Puter.com</p>
-  </header>
+<header>
+<h1>🚀 AI Playground by LinkBotLabs</h1>
+<p>Opportunities for everyone — powered by Puter.com</p>
+</header>
 
-  <main id="playground">
-    <div class="box">
-      <h2>💬 Chat AI</h2>
-      <input id="chatInput" placeholder="Ask me anything..." style="width:100%;padding:10px;">
-      <button onclick="runChat()">Run</button>
-      <div id="chatOutput" style="margin-top:10px;"></div>
-    </div>
-
-    <div class="box">
-      <h2>🖼️ Image Generator</h2>
-      <input id="imgPrompt" placeholder="Describe an image..." style="width:100%;padding:10px;">
-      <button onclick="genImage()">Generate</button>
-      <div id="imgResult" style="margin-top:10px;"></div>
-    </div>
-
-    <div class="box">
-      <h2>🔍 Image Analysis</h2>
-      <input type="file" id="imgFile" accept="image/*">
-      <button onclick="analyzeImage()">Analyze</button>
-      <div id="analysisResult" style="margin-top:10px;"></div>
-    </div>
-
-    <div class="box">
-      <h2>📹 AI Streaming</h2>
-      <button onclick="streamAI()">Start Streaming Demo</button>
-      <div id="streamOutput" style="margin-top:10px;"></div>
-    </div>
-  </main>
-
-  <!-- First Splash: Demo Expired -->
-  <div id="demoSplash" class="splash">
-    <h1>🛑 Demo Expired</h1>
-    <p>Your 1-hour demo has ended! Unlock the full AI Playground and gain access to all features.</p>
-    <button id="donateBtn">💖 Donate & Unlock</button>
+<main id="playground">
+  <div class="box">
+    <h2>💬 Chat AI</h2>
+    <input id="chatInput" placeholder="Ask me anything..." style="width:100%;padding:10px;">
+    <button onclick="runChat()">Run</button>
+    <div id="chatOutput" style="margin-top:10px;"></div>
   </div>
 
-  <!-- Second Splash: After Donation -->
-  <div id="unlockSplash" class="splash">
-    <h1>🎉 Thank You for Donating!</h1>
-    <p>You now have full access. Download the starter app and publish your own AI site:</p>
-    <p>
-      <a href="https://github.com/prodpick4u/-linkbotlabs/blob/main/docs/ai-starter.html" target="_blank" style="color:#0af;">
-        📥 Download AI Starter (GitHub)
-      </a>
-    </p>
-    <p>
-      👉 How to publish on <b>Puter.com</b>:
-      <ol>
-        <li>Download the <b>AI Starter</b> file.</li>
-        <li>Create <code>index.html</code> in your Puter desktop <code>docs</code> folder.</li>
-        <li>Paste the AI Starter content inside.</li>
-        <li>Click <b>Publish</b> → You get a live website URL.</li>
-        <li>Mirror this site & start your own revenue stream!</li>
-      </ol>
-    </p>
-    <p><b>Request your affiliate password via contact form on the front page after donation.</b></p>
-    <button id="continueBtn">✅ Continue to Playground</button>
+  <div class="box">
+    <h2>🖼️ Image Generator</h2>
+    <input id="imgPrompt" placeholder="Describe an image..." style="width:100%;padding:10px;">
+    <button onclick="genImage()">Generate</button>
+    <div id="imgResult" style="margin-top:10px;"></div>
   </div>
 
-  <script>
-    // --- Demo Timer ---
-    const DEMO_DURATION = 60*60*1000; // 1 hour
-    let demoStart = localStorage.getItem("demoStart");
-    if(!demoStart){ demoStart = Date.now(); localStorage.setItem("demoStart", demoStart); }
-    else { demoStart = parseInt(demoStart,10); }
+  <div class="box">
+    <h2>🔍 Image Analysis</h2>
+    <input type="file" id="imgFile" accept="image/*">
+    <button onclick="analyzeImage()">Analyze</button>
+    <div id="analysisResult" style="margin-top:10px;"></div>
+  </div>
 
-    function checkDemo() {
-      // Already donated/unlocked?
-      if(localStorage.getItem("donated") === "true") return;
-      if(Date.now() - demoStart >= DEMO_DURATION){
-        document.getElementById("demoSplash").style.display="flex";
-        document.getElementById("playground").style.display="none";
-        return true;
-      }
-      return false;
-    }
-    setInterval(checkDemo, 10000);
-    checkDemo();
+  <div class="box">
+    <h2>📹 AI Streaming</h2>
+    <button onclick="streamAI()">Start Streaming Demo</button>
+    <div id="streamOutput" style="margin-top:10px;"></div>
+  </div>
+</main>
 
-    // Reset demo start if leaving
-    window.addEventListener("beforeunload", ()=>{ localStorage.removeItem("demoStart"); });
+<!-- Demo Expired Splash -->
+<div id="demoSplash" class="splash">
+<h1>🛑 Demo Expired</h1>
+<p>Your 1-hour demo has ended! Unlock the full AI Playground:</p>
+<button id="donateBtn">💖 Donate & Unlock</button>
+</div>
 
-    // --- Donation button ---
-    document.getElementById("donateBtn").onclick = ()=>{
-      window.open("https://wise.com/pay/me/davids14542","_blank");
-      // After donation, we simulate unlock for demo (replace with webhook in real scenario)
-      alert("After donating, click OK to unlock your access!");
-      localStorage.setItem("donated","true");
-      showUnlockSplash();
-    };
+<!-- Unlock Splash -->
+<div id="unlockSplash" class="splash">
+<h1>🎉 Thank You for Donating!</h1>
+<p>Full access is now unlocked. Download starter app & publish your AI site:</p>
+<p>
+<a href="https://github.com/prodpick4u/-linkbotlabs/blob/main/docs/ai-starter.html" target="_blank" style="color:#0af;">
+📥 Download AI Starter (GitHub)
+</a>
+</p>
+<p>
+👉 How to publish on <b>Puter.com</b>:
+<ol>
+<li>Download the AI Starter file.</li>
+<li>Create <code>index.html</code> in your Puter <code>docs</code> folder.</li>
+<li>Paste the AI Starter content inside.</li>
+<li>Click <b>Publish</b> → Get a live URL.</li>
+<li>Mirror this site & start your revenue stream!</li>
+</ol>
+</p>
+<p><b>Request your affiliate password via the front page after donation.</b></p>
+<button id="continueBtn">✅ Continue to Playground</button>
+</div>
 
-    document.getElementById("continueBtn").onclick = ()=>{
-      document.getElementById("unlockSplash").style.display="none";
-      document.getElementById("playground").style.display="block";
-    };
+<script>
+const DEMO_DURATION = 60*60*1000; // 1 hour
+let demoStart = localStorage.getItem("demoStart");
+const donated = localStorage.getItem("donated") === "true";
 
-    function showUnlockSplash(){
-      document.getElementById("demoSplash").style.display="none";
-      document.getElementById("unlockSplash").style.display="flex";
-    }
+if(!demoStart) { 
+  demoStart = Date.now(); 
+  localStorage.setItem("demoStart", demoStart); 
+} else demoStart = parseInt(demoStart,10);
 
-    // --- Puter API ---
-    async function runChat(){
-      const input=document.getElementById("chatInput").value;
-      const out=document.getElementById("chatOutput");
-      out.innerHTML="⏳ Thinking...";
-      const reply=await puter.ai.chat(input);
-      out.innerHTML=reply;
-    }
+// --- Check demo & unlock ---
+function checkDemo() {
+  if(donated) return; // full access
+  if(Date.now() - demoStart >= DEMO_DURATION){
+    document.getElementById("demoSplash").style.display="flex";
+    document.getElementById("playground").style.display="none";
+    return true;
+  }
+  return false;
+}
+setInterval(checkDemo, 10000);
+checkDemo();
 
-    async function genImage(){
-      const prompt=document.getElementById("imgPrompt").value;
-      const out=document.getElementById("imgResult");
-      out.innerHTML="⏳ Generating...";
-      const img=await puter.ai.image(prompt);
-      out.innerHTML=`<img src="${img}" style="max-width:100%;">`;
-    }
+// --- Reset demo start on leaving ---
+window.addEventListener("beforeunload", ()=>{ localStorage.removeItem("demoStart"); });
 
-    async function analyzeImage(){
-      const file=document.getElementById("imgFile").files[0];
-      if(!file) return alert("Upload an image first!");
-      const out=document.getElementById("analysisResult");
-      out.innerHTML="⏳ Analyzing...";
-      const result=await puter.ai.analyze(file);
-      out.innerHTML=JSON.stringify(result,null,2);
-    }
+// --- Donation button ---
+document.getElementById("donateBtn").onclick = ()=>{
+  window.open("https://wise.com/pay/me/davids14542","_blank");
+  alert("After donating, click OK to unlock access!");
+  localStorage.setItem("donated","true");
+  showUnlockSplash();
+};
 
-    async function streamAI(){
-      const out=document.getElementById("streamOutput");
-      out.innerHTML="";
-      await puter.ai.stream("Tell me something inspiring.", (chunk)=>{
-        out.innerHTML+=chunk;
-      });
-    }
-  </script>
+document.getElementById("continueBtn").onclick = ()=>{
+  document.getElementById("unlockSplash").style.display="none";
+  document.getElementById("playground").style.display="block";
+};
+
+function showUnlockSplash(){
+  document.getElementById("demoSplash").style.display="none";
+  document.getElementById("unlockSplash").style.display="flex";
+}
+
+// --- Puter AI ---
+async function runChat(){
+  const input = document.getElementById("chatInput").value;
+  const out = document.getElementById("chatOutput");
+  out.innerHTML="⏳ Thinking...";
+  const reply = await puter.ai.chat(input);
+  out.innerHTML = reply;
+}
+
+async function genImage(){
+  const prompt = document.getElementById("imgPrompt").value;
+  const out = document.getElementById("imgResult");
+  out.innerHTML="⏳ Generating...";
+  const img = await puter.ai.image(prompt);
+  out.innerHTML=`<img src="${img}" style="max-width:100%;">`;
+}
+
+async function analyzeImage(){
+  const file = document.getElementById("imgFile").files[0];
+  if(!file) return alert("Upload an image first!");
+  const out = document.getElementById("analysisResult");
+  out.innerHTML="⏳ Analyzing...";
+  const result = await puter.ai.analyze(file);
+  out.innerHTML=JSON.stringify(result,null,2);
+}
+
+async function streamAI(){
+  const out = document.getElementById("streamOutput");
+  out.innerHTML="";
+  await puter.ai.stream("Tell me something inspiring.", chunk=>{
+    out.innerHTML+=chunk;
+  });
+}
+
+// --- Show unlock splash immediately for already donated users ---
+if(donated){
+  document.getElementById("playground").style.display="block";
+  document.getElementById("demoSplash").style.display="none";
+  document.getElementById("unlockSplash").style.display="none"; // or remove if you want a thank-you message
+}
+</script>
 </body>
 </html>
