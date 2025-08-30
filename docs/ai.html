@@ -2,312 +2,226 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AI Playground - LinkBotLabs</title>
 <script src="https://js.puter.com/v2/"></script>
-<link rel="stylesheet" href="mobile.css">
 <style>
-/* --- Mobile-optimized styles --- */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    margin:0; padding:0;
-    background:#0d0d1a;
-    color:#fff;
-    font-size:16px;
-}
+body { font-family: 'Segoe UI', sans-serif; margin:0; padding:0; background:#0d0d1a; color:#fff; }
+header { padding:15px; background:#1a1a2e; text-align:center; }
+main { padding:20px; max-width:800px; margin:auto; }
+button { background:#ff007a; border:none; color:#fff; padding:12px 20px; border-radius:6px; cursor:pointer; margin-top:10px; }
+button:hover { background:#e60070; }
+.splash { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px; z-index:1000; }
+.splash h1 { font-size:2em; margin-bottom:10px; }
+.splash ul, .splash ol { text-align:left; max-width:600px; }
+.box { background: rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin:15px 0; }
+select,input,textarea { margin-top:5px; width:100%; padding:8px; border-radius:6px; border:none; }
+#generatedImages img { max-width:100%; margin:10px 0; border-radius:6px; }
 
-header {
-    padding:15px;
-    background:#1a1a2e;
-    text-align:center;
-}
-
-main {
-    padding:15px;
-    max-width:480px;
-    margin:auto;
-}
-
-.box {
-    background: rgba(255,255,255,0.05);
-    padding:15px;
-    border-radius:8px;
-    margin:15px 0;
-}
-
-select, input[type="text"], input[type="number"] {
-    width:100%;
-    padding:10px;
-    margin-top:5px;
-    border-radius:6px;
-    border:none;
-    background:#1a1a2e;
-    color:#fff;
-    box-sizing:border-box;
-}
-
-button {
-    background:#ff007a;
-    border:none;
-    color:#fff;
-    padding:12px 20px;
-    border-radius:6px;
-    cursor:pointer;
-    margin-top:10px;
-    width:100%;
-}
-
-button:hover {
-    background:#e60070;
-}
-
-#chatOutput, #streamOutput, #generatedImages {
-    margin-top:10px;
-    min-height:100px;
-    background: rgba(255,255,255,0.05);
-    padding:10px;
-    border-radius:6px;
-    overflow-wrap:break-word;
-}
-
-#generatedImages img {
-    max-width:100%;
-    margin:10px 0;
-    border-radius:6px;
-}
-
-.splash {
-    display:none;
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background: rgba(0,0,0,0.95);
-    color:#fff;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:20px;
-    z-index:1000;
-}
-
-.splash h1 {
-    font-size:2em;
-    margin-bottom:10px;
-}
-
-.splash ul, .splash ol {
-    text-align:left;
-    max-width:90%;
-    margin:auto;
-}
-
-@media (max-width:400px) {
-    header h1 { font-size:1.5em; }
-    button { padding:10px; }
-    .box { padding:10px; }
+/* Mobile responsive */
+@media (max-width:768px) {
+  body { font-size:16px; padding:10px; }
+  main { padding:10px; }
+  .box { margin:10px 0; }
+  button { width:100%; font-size:16px; }
 }
 </style>
 </head>
-
 <body>
+
 <header>
-<h1>🚀 AI Playground by LinkBotLabs</h1>
-<p>Opportunities for everyone — powered by Puter.com</p>
+  <h1>🤖 LinkBotLabs AI Playground</h1>
+  <p>1 Hour Demo — Unlock more with Playground Playtime 💖</p>
 </header>
 
-<main id="playground">
-
-  <!-- Chat AI -->
+<main>
+  <!-- AI Model Selector -->
   <div class="box">
-    <h2>💬 Chat AI</h2>
-    <select id="chatModel">
-      <option value="gpt-5-mini">GPT-5 Mini</option>
-      <option value="gpt-5">GPT-5</option>
-      <option value="gpt-4o-mini">GPT-4o Mini</option>
-      <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
-      <option value="claude-1">Claude 1</option>
-      <option value="claude-2">Claude 2</option>
-      <option value="gemini-1">Gemini 1</option>
-      <option value="gemini-1.5">Gemini 1.5</option>
-      <option value="grok-3.5">Grok 3.5</option>
-      <option value="grok-4">Grok 4</option>
-      <option value="deep-seek">Deep Seek</option>
+    <h2>Choose AI Model</h2>
+    <select id="modelSelect">
+      <option value="gpt-5-nano">GPT-5 Nano (fast, light)</option>
+      <option value="gpt-5-mini">GPT-5 Mini (balanced)</option>
+      <option value="gpt-5">GPT-5 Full (strongest)</option>
+      <option value="gpt-4-1-mini">GPT-4.1 Mini</option>
+      <option value="gpt-4-1">GPT-4.1</option>
     </select>
-    <input id="chatInput" placeholder="Ask me anything...">
-    <button onclick="runChat()">Run</button>
-    <div id="chatOutput"></div>
   </div>
 
-  <!-- AI Image Generator -->
+  <!-- Chat -->
   <div class="box">
-    <h2>🖼️ Image Generator</h2>
-    <input id="imgPrompt" placeholder="Describe your image...">
-    <select id="imgModel">
-      <option value="puter">Puter AI</option>
-      <option value="stable-diffusion">Stable Diffusion</option>
-      <option value="flux">Flux</option>
-      <option value="dalle-mini">DALL-E Mini</option>
-    </select>
-    <div style="margin-top:5px;">
-      <label>Width:</label>
-      <input type="number" id="imgWidth" placeholder="512">
-      <label>Height:</label>
-      <input type="number" id="imgHeight" placeholder="512">
-    </div>
-    <div style="margin-top:5px;">
-      <label>Seed (optional):</label>
-      <input type="number" id="imgSeed" placeholder="Random">
-      <label><input type="checkbox" id="removeWatermark"> Remove Watermark</label>
-    </div>
-    <button onclick="genImage()">Generate Images</button>
+    <h2>Chat with AI</h2>
+    <textarea id="chatInput" rows="3" placeholder="Say something..."></textarea>
+    <button onclick="sendChat()">Send</button>
+    <button onclick="speakLast()">🔊 Speak Last Reply</button>
+    <button onclick="startMic()">🎤 Speak to AI</button>
+    <div id="chatOutput" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- Image Generator -->
+  <div class="box">
+    <h2>Generate Image</h2>
+    <input type="text" id="imgPrompt" placeholder="Enter image idea...">
+    <button onclick="genImage()">Generate</button>
     <div id="generatedImages"></div>
-    <button onclick="clearImages()">Clear All</button>
+    <p style="margin-top:10px;">🔗 <a href="https://puter.com/app/puter-image-generator" target="_blank">Open full Image Generator app</a></p>
   </div>
-
-  <!-- AI Streaming -->
-  <div class="box">
-    <h2>📹 AI Streaming</h2>
-    <select id="streamModel">
-      <option value="gpt-5-mini">GPT-5 Mini</option>
-      <option value="gpt-5">GPT-5</option>
-      <option value="gpt-4o-mini">GPT-4o Mini</option>
-      <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
-      <option value="claude-1">Claude 1</option>
-      <option value="claude-2">Claude 2</option>
-      <option value="gemini-1">Gemini 1</option>
-      <option value="gemini-1.5">Gemini 1.5</option>
-      <option value="grok-3.5">Grok 3.5</option>
-      <option value="grok-4">Grok 4</option>
-      <option value="deep-seek">Deep Seek</option>
-    </select>
-    <input id="streamInput" placeholder="Ask your AI...">
-    <button id="streamBtn">Start Streaming</button>
-    <div id="streamOutput"></div>
-  </div>
-
 </main>
 
-<!-- Demo Expired Splash -->
-<div id="demoSplash" class="splash">
-<h1>🛑 Demo Expired</h1>
-<p>Your 1-hour demo has ended! Unlock the full AI Playground:</p>
-<button id="donateBtn">💖 Donate & Unlock</button>
+<!-- DEMO SPLASH -->
+<div id="demoSplash" class="splash" style="display:flex;">
+  <h1>🎉 Welcome to Playground Demo</h1>
+  <p>You have <b>60 minutes</b> of free AI playtime.</p>
+  <button onclick="closeDemoSplash()">Start Exploring 🚀</button>
 </div>
 
-<!-- Unlock Splash -->
-<div id="unlockSplash" class="splash">
-<h1>🎉 Thank You for Donating!</h1>
-<p>Full access is now unlocked. Download starter app & publish your AI site:</p>
-<p>
-<a href="https://github.com/prodpick4u/-linkbotlabs/blob/main/docs/ai-starter.html" target="_blank" style="color:#0af;">
-📥 Download AI Starter (GitHub)
-</a>
-</p>
-<p><b>Request your affiliate password via the front page after donation.</b></p>
-<button id="continueBtn">✅ Continue to Playground</button>
+<!-- DONATION SPLASH -->
+<div id="donationSplash" class="splash">
+  <h1>💖 Playground Playtime Unlocked</h1>
+  <p>Your demo has ended. To keep exploring, support us with a small donation.</p>
+  <a href="https://wise.com/pay/me/davids14542" target="_blank">
+    <button>Donate & Unlock</button>
+  </a>
+  <div style="margin-top:20px; text-align:left; max-width:600px;">
+    <h3>What you get:</h3>
+    <ul>
+      <li>Unlimited AI Playground access</li>
+      <li>Image + Chat + Speech + Analysis tools</li>
+      <li>Cloud hosting + Virtual desktop + Apps</li>
+      <li>ZIP download of this Playground</li>
+    </ul>
+    <h3>How to host your own site:</h3>
+    <ol>
+      <li>Download & unzip the Playground package.</li>
+      <li>Rename <code>index.html</code>.</li>
+      <li>Place it in a folder on <a href="https://puter.com" target="_blank">Puter.com</a> Virtual Desktop.</li>
+      <li>Right-click → <b>Publish to Website</b>.</li>
+      <li>Share your new mirror site URL to earn & grow 🚀</li>
+    </ol>
+  </div>
 </div>
 
-<!-- Scripts (same as your original) -->
 <script>
-const DEMO_DURATION = 60*60*1000;
-let demoStart = localStorage.getItem("demoStart");
-const donated = localStorage.getItem("donated") === "true";
-
-if(!demoStart){ demoStart=Date.now(); localStorage.setItem("demoStart",demoStart); } 
-else demoStart=parseInt(demoStart,10);
-
-function checkDemo(){
-  if(donated) return;
-  if(Date.now()-demoStart>=DEMO_DURATION){
-    document.getElementById("demoSplash").style.display="flex";
-    document.getElementById("playground").style.display="none";
-    return true;
-  }
-  return false;
-}
-setInterval(checkDemo,10000);
-checkDemo();
-
-document.getElementById("donateBtn").onclick = ()=>{
-  window.open("https://wise.com/pay/me/davids14542","_blank");
-  alert("After donating, click OK to unlock access!");
-  localStorage.setItem("donated","true");
-  showUnlockSplash();
-};
-
-document.getElementById("continueBtn").onclick = ()=>{
-  document.getElementById("unlockSplash").style.display="none";
-  document.getElementById("playground").style.display="block";
-};
-
-function showUnlockSplash(){
-  document.getElementById("demoSplash").style.display="none";
-  document.getElementById("unlockSplash").style.display="flex";
+// --- Current AI Model ---
+function getModel() {
+  return document.getElementById("modelSelect").value;
 }
 
-async function runChat(){
-  const input=document.getElementById("chatInput").value;
-  const model=document.getElementById("chatModel").value;
-  const out=document.getElementById("chatOutput");
-  out.innerHTML="⏳ Thinking...";
-  const reply=await puter.ai.chat(input,{model});
-  out.innerHTML=reply;
+// --- AI Chat ---
+let lastReply = "";
+async function sendChat() {
+  let input = document.getElementById("chatInput").value;
+  if (!input.trim()) return;
+  let out = document.getElementById("chatOutput");
+  out.innerHTML += `<p><b>You:</b> ${input}</p>`;
+  document.getElementById("chatInput").value = "";
+
+  // Streaming reply
+  let reply = "";
+  await puter.ai.chat(input, { model: getModel(), stream: true, onStream: (chunk) => {
+    reply += chunk;
+    out.innerHTML = out.innerHTML.replace(/<p style="color:#0af;"><b>AI:<\/b>.*<\/p>$/, "");
+    out.innerHTML += `<p style="color:#0af;"><b>AI:</b> ${reply}</p>`;
+  }});
+  lastReply = reply;
 }
 
-async function genImage(){
-  const prompt=document.getElementById("imgPrompt").value.trim();
-  const model=document.getElementById("imgModel").value;
-  const width=document.getElementById("imgWidth").value || 512;
-  const height=document.getElementById("imgHeight").value || 512;
-  const seed=document.getElementById("imgSeed").value || undefined;
-  const removeWM=document.getElementById("removeWatermark").checked;
-
-  const out=document.getElementById("generatedImages");
-  out.innerHTML="⏳ Generating...";
-  try{
-    const img=await puter.ai.txt2img(prompt,{model,width,height,seed,removeWatermark:removeWM});
-    const imgEl=document.createElement("img");
-    imgEl.src=img;
-    out.prepend(imgEl);
-  }catch(err){
-    out.innerHTML="❌ Error generating image.";
-    console.error(err);
-  }
+// --- AI Speech (TTS) ---
+async function speakLast() {
+  if (!lastReply) return;
+  let audio = await puter.ai.speech(lastReply, { voice: "moirai:en_ie", model: getModel() });
+  let player = new Audio(audio);
+  player.play();
 }
 
-function clearImages(){
-  document.getElementById("generatedImages").innerHTML="";
+// --- AI Speech Recognition (STT) ---
+async function startMic() {
+  if (!navigator.mediaDevices) { alert("Mic not supported"); return; }
+  let stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  let recorder = new MediaRecorder(stream);
+  let chunks = [];
+  recorder.ondataavailable = e => chunks.push(e.data);
+  recorder.onstop = async () => {
+    let blob = new Blob(chunks, { type: 'audio/webm' });
+    let text = await puter.ai.transcribe(blob, { model: getModel() });
+    document.getElementById("chatInput").value = text;
+  };
+  recorder.start();
+  setTimeout(() => recorder.stop(), 5000); // 5 sec record
 }
 
-const streamBtn=document.getElementById("streamBtn");
-const streamOutput=document.getElementById("streamOutput");
+// --- AI Image ---
+async function genImage() {
+  let prompt = document.getElementById("imgPrompt").value;
+  if (!prompt.trim()) return;
+  let out = document.getElementById("generatedImages");
+  out.innerHTML = "<p>⏳ Generating...</p>";
+  let img = await puter.ai.image(prompt, { model: "stable-diffusion" });
+  out.innerHTML = `<img src="${img}" alt="Generated Image">`;
+}
 
-streamBtn.addEventListener("click",async()=>{
-  const prompt=document.getElementById("streamInput").value.trim();
-  const model=document.getElementById("streamModel").value;
-  if(!prompt) return alert("Please enter a prompt!");
-  streamOutput.innerHTML="⏳ Streaming response...";
-  try{
-    await puter.ai.stream(prompt,chunk=>{ streamOutput.innerHTML+=chunk; },{model});
-  }catch(err){
-    streamOutput.innerHTML="❌ Error streaming response.";
-    console.error(err);
-  }
-});
+// --- Demo Splash ---
+function closeDemoSplash() {
+  document.getElementById("demoSplash").style.display = "none";
+  startDemoTimer();
+}
 
-if(donated){
-  document.getElementById("playground").style.display="block";
-  document.getElementById("demoSplash").style.display="none";
-  document.getElementById("unlockSplash").style.display="none";
+// --- DEMO TIMER + FUN NOTIFICATIONS ---
+let demoMinutes = 60;
+let interval = 10;
+let elapsed = 0;
+let demoTimer;
+let funMessages = [
+  "⚡ Zing! 10 minutes gone already. Your AI’s still wide awake!",
+  "🎨 20 minutes in — maybe try an image or a chat combo?",
+  "🤖 30 minutes — look at you go, AI whisperer!",
+  "🕹️ 40 minutes — you’re officially an AI power user!",
+  "🎯 50 minutes… time flies when you’re having fun in Playground!",
+];
+
+function startDemoTimer() {
+  demoTimer = setInterval(() => {
+    elapsed += interval;
+
+    if (elapsed < demoMinutes) {
+      let msgIndex = (elapsed / interval) - 1;
+      showNotification(funMessages[msgIndex] || `⏰ ${elapsed} minutes passed. Keep exploring!`);
+    } else {
+      clearInterval(demoTimer);
+      endDemo();
+    }
+  }, interval * 60000);
+}
+
+function endDemo() {
+  showNotification("🚪 Demo ended. Time to unlock full Playground Playtime 💖");
+  document.getElementById("donationSplash").style.display = "flex";
+}
+
+// --- Notification Box ---
+function showNotification(message) {
+  let note = document.createElement("div");
+  note.innerText = message;
+  note.style.position = "fixed";
+  note.style.bottom = "20px";
+  note.style.right = "20px";
+  note.style.padding = "12px 18px";
+  note.style.background = "rgba(0,0,0,0.85)";
+  note.style.color = "#fff";
+  note.style.border = "2px solid #ff007a";
+  note.style.borderRadius = "8px";
+  note.style.zIndex = "2000";
+  note.style.fontSize = "14px";
+  note.style.maxWidth = "260px";
+  note.style.boxShadow = "0 0 10px rgba(255,0,122,0.7)";
+  document.body.appendChild(note);
+
+  setTimeout(() => {
+    note.style.transition = "opacity 1s";
+    note.style.opacity = "0";
+    setTimeout(() => note.remove(), 1000);
+  }, 7000);
 }
 </script>
-
-<footer style="padding:15px; background:#1a1a2e; text-align:center; color:#aaa; margin-top:20px;">
-  <p>Powered by <a href="https://puter.com" target="_blank" style="color:#0af;">Puter.com</a> | 
-  <a href="https://github.com/prodpick4u/-linkbotlabs" target="_blank" style="color:#0af;">GitHub Repo</a></p>
-  <p>© 2025 LinkBotLabs. All rights reserved.</p>
-</footer>
 
 </body>
 </html>
