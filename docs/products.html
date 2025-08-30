@@ -124,31 +124,61 @@ if (affiliateId) {
   banner.style.display = "block";
 }
 
-// TTS setup
+<script>
 let synth = window.speechSynthesis;
 let utter;
 
+// Populate voice dropdown
 function populateVoiceSelects() {
-  let voices = synth.getVoices();
-  if (!voices.length) { setTimeout(populateVoiceSelects, 100); return; }
   const select = document.getElementById('voiceSelect');
+  if (!select) return;
+
+  let voices = synth.getVoices();
+  if (!voices.length) {
+    // Try again shortly until voices are available
+    setTimeout(populateVoiceSelects, 250);
+    return;
+  }
+
   select.innerHTML = '';
   voices.forEach(v => {
     const opt = document.createElement('option');
     opt.value = v.name;
-    opt.textContent = v.name + ' (' + v.lang + ')';
+    opt.textContent = `${v.name} (${v.lang})`;
     select.appendChild(opt);
   });
-  // Auto-select Moira en-IE if available
-  const moira = voices.find(v => v.name.toLowerCase().includes("moira") && v.lang === "en-IE");
-  if (moira) select.value = moira.name;
-  else select.selectedIndex = 0;
+
+  // Auto-select Moirai en-IE if found
+  const moirai = voices.find(v =>
+    v.name.toLowerCase().includes("moirai") && v.lang.toLowerCase() === "en-ie"
+  );
+  if (moirai) {
+    select.value = moirai.name;
+  } else {
+    select.selectedIndex = 0; // fallback first voice
+  }
 }
 
-if (speechSynthesis.onvoiceschanged !== undefined) {
+// Keep retrying until voices appear
+if (typeof speechSynthesis !== "undefined") {
   speechSynthesis.onvoiceschanged = populateVoiceSelects;
-} else {
   populateVoiceSelects();
+}
+
+// Speak text
+function playTTS(text) {
+  if (synth.speaking) synth.cancel();
+  utter = new SpeechSynthesisUtterance(text);
+  const selectedVoice = document.getElementById('voiceSelect').value;
+  const chosen = synth.getVoices().find(v => v.name === selectedVoice);
+  if (chosen) utter.voice = chosen;
+  synth.speak(utter);
+}
+
+document.getElementById('stopTTS').onclick = () => {
+  if (synth.speaking) synth.cancel();
+};
+</script>
 }
 
 function playTTS(text) {
