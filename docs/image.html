@@ -21,7 +21,7 @@
 <!-- DEMO SPLASH -->
 <div id="demoSplash" class="splash" style="display:flex;">
   <h1>🎉 Welcome to Playground Demo</h1>
-  <p>You have <b>60 minutes</b> of free AI playtime.</p>
+  <p>You have <b>10 minutes</b> of free AI playtime.</p>
   <button onclick="closeDemoSplash()">Start Generating 🚀</button>
 </div>
 
@@ -55,9 +55,12 @@
 </div>
 
 <script>
-// Demo Lock Timer (1 hour)
-let demoTime = 60*60*1000; // 1 hour in ms
-setTimeout(()=>{document.getElementById('demoSplash').style.display='flex'; alert("Demo ended! Please support the developer to continue.");}, demoTime);
+// Demo Lock Timer (10 minutes)
+let demoTime = 10 * 60 * 1000; // 10 minutes in milliseconds
+setTimeout(() => {
+  document.getElementById('demoSplash').style.display = 'flex';
+  alert("⏰ Demo ended! Please support the developer to continue generating images.");
+}, demoTime);
 
 function closeDemoSplash(){
   document.getElementById('demoSplash').style.display='none';
