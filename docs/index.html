@@ -3,66 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puter Image Generator on GitHub</title>
-<script src="https://js.puter.com/v2/"></script>
+<title>LinkBotLabs – Smart Shopping Assistant</title>
+
+<link rel="icon" type="image/png" href="/preview.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+
 <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin:0; padding:20px; background:#f4f4f4; }
-    h1 { color:#333; }
-    .box { background: rgba(0,0,0,0.05); padding:20px; border-radius:8px; margin:20px auto; max-width:500px; }
-    input, select { width:100%; padding:10px; margin:5px 0; border-radius:5px; border:none; box-sizing:border-box; }
-    button { padding:12px 20px; border:none; border-radius:5px; cursor:pointer; background:#007bff; color:#fff; margin-top:10px; width:100%; }
-    button:hover { background:#0056b3; }
-    #generatedImages img { max-width:100%; margin:10px 0; border-radius:6px; }
+  body {
+    font-family: 'Inter', sans-serif;
+    margin:0; padding:0;
+    background: linear-gradient(-45deg,#0a0033,#1b004d,#1a1a66,#3b007f);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
+    color:white;
+    line-height:1.5;
+  }
+  @keyframes gradientShift {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  header {
+    text-align:center;
+    padding:3rem 1rem;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+  }
+  header h1 { font-size:2.8rem; margin-bottom:1rem; }
+  header p { font-size:1.15rem; opacity:0.9; margin-bottom:0.7rem; }
+  .btn {
+    display:inline-block; margin:0.5rem; padding:1rem 1.5rem;
+    background: linear-gradient(135deg,#ff8a00,#e52e71);
+    color:white; text-decoration:none; border-radius:8px;
+    font-weight:700; transition:0.3s;
+    font-size:1.05rem;
+  }
+  .btn:hover { transform:scale(1.05); }
+  section { padding:2.5rem 1rem; text-align:center; max-width:1100px; margin:auto; }
+  h2 { font-size:2rem; margin-bottom:1.3rem; color:#ffe169; }
+  .categories { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem; }
+  .categories a {
+    flex:1 1 180px; max-width:220px; background: rgba(0,0,0,0.55);
+    padding:1rem; border-radius:10px; color:white; font-weight:600;
+    text-decoration:none; transition: transform 0.2s, background 0.3s;
+    font-size:1rem;
+  }
+  .categories a:hover { transform: scale(1.08); background: rgba(75,0,150,0.7); }
+  .video-container {
+    position: relative; width: 100%; padding-bottom: 56.25%; margin-bottom:1rem;
+  }
+  .video-container iframe {
+    position: absolute; top:0; left:0; width:100%; height:100%; border-radius:10px;
+  }
+  footer {
+    background: rgba(0,0,0,0.5); text-align:center; padding:2rem 1rem; font-size:0.9rem;
+  }
+  .contact-form input, .contact-form textarea {
+    padding:10px; width:250px; border-radius:6px; border:none; margin:5px 0;
+  }
+  .contact-form button { padding:10px 18px; border-radius:6px; border:none; cursor:pointer; background:#ffe169; color:#000; font-weight:700; }
 </style>
 </head>
 <body>
 
-<h1>Generate Images with Puter AI</h1>
+<header>
+  <a href="index.html">
+    <img src="img_splash.jpg" alt="LinkBotLabs Logo" style="max-width:220px; display:block; margin:0 auto 1rem;">
+  </a>
+  <h1>🚀 Welcome to LinkBotLabs</h1>
+  <p><strong>AI-powered shopping, reviews, and video automation tools</strong></p>
+  <p>Test our AI Playground + Desktop Demo (no key required!)</p>
 
-<div class="box">
-    <input id="imgPrompt" placeholder="Describe your image...">
-    <select id="imgModel">
-        <option value="puter">Puter AI</option>
-        <option value="stable-diffusion">Stable Diffusion</option>
-        <option value="flux">Flux</option>
-        <option value="dalle-mini">DALL-E Mini</option>
-    </select>
-    <input type="number" id="imgWidth" placeholder="Width (default 512)">
-    <input type="number" id="imgHeight" placeholder="Height (default 512)">
-    <input type="number" id="imgSeed" placeholder="Seed (optional)">
-    <label><input type="checkbox" id="removeWatermark"> Remove Watermark</label>
-    <button onclick="genImage()">Generate Image</button>
-    <button onclick="clearImages()">Clear All</button>
-</div>
+  <a href="image.html" class="btn" style="background:linear-gradient(135deg,#ff007a,#e60070); font-size:1.2rem;">
+    🖼️ AI Image Generator (Demo)
+  </a>
+  <a href="for_dummies.html" class="btn" style="background:linear-gradient(135deg,#4CAF50,#2E7D32); font-size:1.2rem;">
+    📘 For Dummies – Start Here
+  </a>
+  <a href="products.html" class="btn" style="background:linear-gradient(135deg,#9C27B0,#4A148C); font-size:1.2rem;">
+    🛒 Affiliate Product Page
+  </a>
+  <a href="ai.html" class="btn">🤖 Try AI Playground (Demo)</a>
+  <a href="https://drive.google.com/uc?export=download&id=1xwD_gDLZyPKLMmZY6UfAej6ZvMBjrzal" class="btn">📦 Download Desktop Demo (ZIP)</a>
+  <a href="affiliate_starter.html" class="btn">🎁 Free Affiliate Starter Page</a>
+  <a href="https://www.blogger.com/blog/posts/8639219398218448839" target="_blank" class="btn">📝 Visit Blog</a>
+</header>
 
-<div id="generatedImages"></div>
+<section>
+  <h2>📖 About the Tool</h2>
+  <p>LinkBotLabs gives you full **product search, description writing, review scripts, and video automation**.  
+     Download the desktop demo ZIP, extract & run – no key needed.  
+     Share our affiliate page to earn **commissions together** on every sale!</p>
+</section>
 
+<section>
+  <h2>📺 AI Playground + Automation</h2>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/GVtN9ZgYsQc?si=3IZ7-xQWjINVpw6i" allowfullscreen></iframe>
+  </div>
+  <p>See how the Playground & desktop app can turn a product into a script + video in minutes.</p>
+</section>
+
+<section>
+  <h2>📂 Shop Categories – Support Us</h2>
+  <div class="categories">
+    <a href="https://www.amazon.com/s?k=face+cream&tag=mychanneld-20">💆 Face Cream</a>
+    <a href="https://www.amazon.com/s?k=supplements&tag=mychanneld-20">💊 Supplements</a>
+    <a href="https://www.amazon.com/s?k=blender&tag=mychanneld-20">🥤 Blenders</a>
+    <a href="https://www.amazon.com/s?k=rice+cooker&tag=mychanneld-20">🍚 Rice Cookers</a>
+    <a href="https://www.amazon.com/s?k=headphones&tag=mychanneld-20">🎧 Headphones</a>
+    <a href="https://www.amazon.com/s?k=tech&tag=mychanneld-20">💻 Tech Gadgets</a>
+  </div>
+</section>
+
+<section>
+  <h2>📧 Contact Developer</h2>
+  <form id="contact-form" class="contact-form">
+    <input type="text" name="from_name" placeholder="Your name" required><br>
+    <input type="email" name="reply_to" placeholder="Your email" required><br>
+    <textarea name="message" placeholder="Your message" rows="4" required></textarea><br>
+    <button type="submit">Send Message</button>
+  </form>
+  <p id="form-status" style="margin-top:10px; font-size:0.9rem; color:#ffe169;"></p>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-async function genImage(){
-    const prompt = document.getElementById("imgPrompt").value.trim();
-    const model = document.getElementById("imgModel").value;
-    const width = document.getElementById("imgWidth").value || 512;
-    const height = document.getElementById("imgHeight").value || 512;
-    const seed = document.getElementById("imgSeed").value || undefined;
-    const removeWM = document.getElementById("removeWatermark").checked;
+  (function(){
+    emailjs.init("uMBWBshmzlvZ8v52yJO"); // Public key
+  })();
 
-    const out = document.getElementById("generatedImages");
-    out.innerHTML = "⏳ Generating...";
-    try {
-        const img = await puter.ai.txt2img(prompt, {model, width, height, seed, removeWatermark: removeWM});
-        const imgEl = document.createElement("img");
-        imgEl.src = img;
-        out.prepend(imgEl);
-    } catch(err){
-        out.innerHTML = "❌ Error generating image.";
-        console.error(err);
-    }
-}
-
-function clearImages(){
-    document.getElementById("generatedImages").innerHTML = "";
-}
+  document.getElementById("contact-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    emailjs.sendForm("service_pzzseh7", "bceEcXpLIRDpJxOHM", this)
+      .then(function() {
+        document.getElementById("form-status").innerText = "✅ Message sent successfully!";
+        document.getElementById("contact-form").reset();
+      }, function(error) {
+        document.getElementById("form-status").innerText = "❌ Failed to send. Please try again.";
+        console.error("EmailJS Error:", error);
+      });
+  });
 </script>
+
+<footer>
+  <p>© 2025 LinkBotLabs – Affiliate Shopping Automation</p>
+  <p>👉 Partner with us and earn commissions via the <a href="affiliate_starter.html" style="color:#ffe169;">Affiliate Page</a></p>
+  <p><a href="https://www.fiverr.com/s/jj18w9L?utm_source=CopyLink_Mobile" class="btn">💼 Work With Me on Fiverr</a></p>
+</footer>
 
 </body>
 </html>
