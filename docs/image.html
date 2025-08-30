@@ -2,112 +2,176 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puter Image Generator - Demo</title>
+<title>AI Image Generator - LinkBotLabs</title>
 <script src="https://js.puter.com/v2/"></script>
+<link rel="stylesheet" href="mobile.css">
 <style>
-  body { font-family: 'Segoe UI', sans-serif; margin:0; padding:20px; background:#0d0d1a; color:#fff; }
-  h1,h2 { text-align:center; }
-  .box { background: rgba(255,255,255,0.05); padding:15px; border-radius:8px; margin:15px 0; }
-  input, select { width:100%; padding:8px; margin-top:5px; border-radius:6px; border:none; }
-  button { background:#ff007a; border:none; color:#fff; padding:10px 16px; border-radius:6px; cursor:pointer; margin-top:10px; }
-  button:hover { background:#e60070; }
-  #generatedImages img { max-width:100%; margin:10px 0; border-radius:6px; display:block; }
-  .splash { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px; z-index:1000; }
+/* --- Mobile-optimized styles --- */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin:0; padding:0;
+    background:#0d0d1a;
+    color:#fff;
+    font-size:16px;
+}
+header {
+    padding:15px;
+    background:#1a1a2e;
+    text-align:center;
+}
+main {
+    padding:15px;
+    max-width:480px;
+    margin:auto;
+}
+.box {
+    background: rgba(255,255,255,0.05);
+    padding:15px;
+    border-radius:8px;
+    margin:15px 0;
+}
+input[type="text"], input[type="number"], select {
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border-radius:6px;
+    border:none;
+    background:#1a1a2e;
+    color:#fff;
+    box-sizing:border-box;
+}
+button {
+    background:#ff007a;
+    border:none;
+    color:#fff;
+    padding:12px 20px;
+    border-radius:6px;
+    cursor:pointer;
+    margin-top:10px;
+    width:100%;
+}
+button:hover { background:#e60070; }
+#generatedImages {
+    margin-top:10px;
+    min-height:100px;
+    background: rgba(255,255,255,0.05);
+    padding:10px;
+    border-radius:6px;
+    overflow-wrap:break-word;
+}
+#generatedImages img {
+    max-width:100%;
+    margin:10px 0;
+    border-radius:6px;
+}
+.splash {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.95);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+    z-index:1000;
+}
+.splash h1 { font-size:2em; margin-bottom:10px; }
+@media (max-width:400px) {
+    header h1 { font-size:1.5em; }
+    button { padding:10px; }
+    .box { padding:10px; }
+}
 </style>
 </head>
 <body>
 
-<!-- DEMO SPLASH -->
-<div id="demoSplash" class="splash" style="display:flex;">
-  <h1>🎉 Welcome to Playground Demo</h1>
-  <p>You have <b>10 minutes</b> of free AI playtime.</p>
-  <button onclick="closeDemoSplash()">Start Generating 🚀</button>
-</div>
+<header>
+<h1>🖼️ AI Image Generator</h1>
+<p>Powered by Puter.com — LinkBotLabs</p>
+</header>
 
-<div class="box">
-  <h2>🖼 Generate AI Images</h2>
-  <label>Prompt:</label>
-  <input id="imgPrompt" placeholder="Describe the image...">
-  
-  <label>Model:</label>
-  <select id="imgModel">
-    <option value="dall-e-3">DALL·E 3</option>
-    <option value="stable-diffusion-2">Stable Diffusion 2</option>
-    <option value="midjourney">MidJourney</option>
-  </select>
+<main id="generator">
 
-  <label>Width (px):</label>
-  <input id="imgWidth" type="number" placeholder="512">
+  <div class="box">
+    <h2>Generate Images</h2>
+    <input id="imgPrompt" placeholder="Describe your image...">
+    <select id="imgModel">
+      <option value="puter">Puter AI</option>
+      <option value="stable-diffusion">Stable Diffusion</option>
+      <option value="flux">Flux</option>
+      <option value="dalle-mini">DALL-E Mini</option>
+    </select>
+    <div style="margin-top:5px;">
+      <label>Width:</label>
+      <input type="number" id="imgWidth" placeholder="512">
+      <label>Height:</label>
+      <input type="number" id="imgHeight" placeholder="512">
+    </div>
+    <div style="margin-top:5px;">
+      <label>Seed (optional):</label>
+      <input type="number" id="imgSeed" placeholder="Random">
+      <label><input type="checkbox" id="removeWatermark"> Remove Watermark</label>
+    </div>
+    <button onclick="genImage()">Generate Images</button>
+    <div id="generatedImages"></div>
+    <button onclick="clearImages()">Clear All</button>
+  </div>
 
-  <label>Height (px):</label>
-  <input id="imgHeight" type="number" placeholder="512">
+</main>
 
-  <label>Seed (optional):</label>
-  <input id="imgSeed" placeholder="Random seed number">
-
-  <label><input type="checkbox" id="removeWatermark"> Remove Watermark</label>
-
-  <button onclick="genImage()">Generate Image</button>
-  <button onclick="clearImages()">Clear All</button>
-
-  <div id="generatedImages"></div>
+<div id="demoSplash" class="splash">
+<h1>⏰ Demo Ended</h1>
+<p>10-minute demo is over! Support the developer to continue generating images.</p>
+<button onclick="alert('Thank you! Please donate to unlock full access.')">💖 Donate</button>
 </div>
 
 <script>
-// Demo Lock Timer (10 minutes)
-let demoTime = 10 * 60 * 1000; // 10 minutes in milliseconds
-setTimeout(() => {
-  document.getElementById('demoSplash').style.display = 'flex';
-  alert("⏰ Demo ended! Please support the developer to continue generating images.");
-}, demoTime);
+// Demo Lock - 10 minutes
+let demoStart = localStorage.getItem("imgDemoStart");
+if(!demoStart){ demoStart = Date.now(); localStorage.setItem("imgDemoStart", demoStart); }
+else demoStart = parseInt(demoStart,10);
 
-function closeDemoSplash(){
-  document.getElementById('demoSplash').style.display='none';
+function checkDemo(){
+  if(Date.now() - demoStart >= 10*60*1000){
+    document.getElementById('demoSplash').style.display='flex';
+    document.getElementById('generator').style.display='none';
+  }
 }
+setInterval(checkDemo,5000);
+checkDemo();
 
-// Image generation
 async function genImage(){
   const prompt = document.getElementById("imgPrompt").value.trim();
   const model = document.getElementById("imgModel").value;
-  const width = parseInt(document.getElementById("imgWidth").value) || 512;
-  const height = parseInt(document.getElementById("imgHeight").value) || 512;
+  const width = document.getElementById("imgWidth").value || 512;
+  const height = document.getElementById("imgHeight").value || 512;
   const seed = document.getElementById("imgSeed").value || undefined;
   const removeWM = document.getElementById("removeWatermark").checked;
+
   const out = document.getElementById("generatedImages");
-
   out.innerHTML = "⏳ Generating...";
-  try {
-    const imgSrc = await puter.ai.txt2img(prompt, {model, width, height, seed, removeWatermark: removeWM});
-
+  try{
+    const img = await puter.ai.txt2img(prompt,{model,width,height,seed,removeWatermark:removeWM});
     const imgEl = document.createElement("img");
-    imgEl.src = imgSrc;
-
-    const dlBtn = document.createElement("button");
-    dlBtn.textContent = "💾 Download";
-    dlBtn.onclick = () => {
-      const a = document.createElement("a");
-      a.href = imgSrc;
-      a.download = "AI_Image.png";
-      a.click();
-    };
-
-    const container = document.createElement("div");
-    container.appendChild(imgEl);
-    container.appendChild(dlBtn);
-
-    out.prepend(container);
-    out.innerHTML = "";
-  } catch(err) {
+    imgEl.src = img;
+    out.prepend(imgEl);
+  }catch(err){
     out.innerHTML = "❌ Error generating image.";
     console.error(err);
   }
 }
 
-function clearImages(){
-  document.getElementById("generatedImages").innerHTML = "";
-}
+function clearImages(){ document.getElementById("generatedImages").innerHTML=""; }
 </script>
+
+<footer style="padding:15px; background:#1a1a2e; text-align:center; color:#aaa; margin-top:20px;">
+  <p>LinkBotLabs | Powered by <a href="https://puter.com" target="_blank" style="color:#0af;">Puter.com</a> | Special thanks</p>
+  <p>© 2025 LinkBotLabs. All rights reserved.</p>
+</footer>
 
 </body>
 </html>
