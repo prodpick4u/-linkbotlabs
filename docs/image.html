@@ -65,7 +65,7 @@ button:hover { background:#e60070; }
     border-radius:6px;
 }
 .splash {
-    display:none;
+    display:none; /* permanently hide demo splash */
     position:fixed;
     top:0; left:0;
     width:100%; height:100%;
@@ -95,7 +95,6 @@ button:hover { background:#e60070; }
 </header>
 
 <main id="generator">
-
   <div class="box">
     <h2>Generate Images</h2>
     <input id="imgPrompt" placeholder="Describe your image...">
@@ -120,38 +119,23 @@ button:hover { background:#e60070; }
     <div id="generatedImages"></div>
     <button onclick="clearImages()">Clear All</button>
   </div>
-
 </main>
 
+<!-- Demo splash is permanently hidden -->
 <div id="demoSplash" class="splash">
-<h1>⏰ Demo Ended</h1>
-<p>10-minute demo is over! Support the developer to continue generating images.</p>
-<button onclick="alert('Thank you! Please donate to unlock full access.')">💖 Donate</button>
+  <h1>⏰ Demo Ended</h1>
+  <p>10-minute demo is over! Support the developer to continue generating images.</p>
+  <button onclick="alert('Thank you! Please donate to unlock full access.')">💖 Donate</button>
 </div>
 
 <script>
-// Disable demo lock - always allow demo
-// Commenting out timer logic
-// let demoStart = localStorage.getItem("imgDemoStart");
-// if(!demoStart){ demoStart = Date.now(); localStorage.setItem("imgDemoStart", demoStart); }
-// else demoStart = parseInt(demoStart,10);
-
-// Hide the demo splash permanently
+// Hide demo splash permanently
 const demoSplash = document.getElementById("demoSplash");
 if(demoSplash){
   demoSplash.style.display = "none";
 }
-</script>
 
-function checkDemo(){
-  if(Date.now() - demoStart >= 10*60*1000){
-    document.getElementById('demoSplash').style.display='flex';
-    document.getElementById('generator').style.display='none';
-  }
-}
-setInterval(checkDemo,5000);
-checkDemo();
-
+// Image generation function
 async function genImage(){
   const prompt = document.getElementById("imgPrompt").value.trim();
   const model = document.getElementById("imgModel").value;
@@ -173,7 +157,10 @@ async function genImage(){
   }
 }
 
-function clearImages(){ document.getElementById("generatedImages").innerHTML=""; }
+// Clear all generated images
+function clearImages(){
+  document.getElementById("generatedImages").innerHTML="";
+}
 </script>
 
 <footer style="padding:15px; background:#1a1a2e; text-align:center; color:#aaa; margin-top:20px;">
