@@ -1,297 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>LinkBotLabs Products</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      background: #0d0d1a;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-      color: turquoise;
-      margin-bottom: 20px;
-    }
-
-    .affiliate-banner {
-      background: #0077b6;
-      color: #fff;
-      padding: 12px;
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 20px;
-      border-radius: 6px;
-    }
-
-    .voice-controls {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .voice-controls select, .voice-controls button {
-      padding: 5px 10px;
-      font-size: 16px;
-      margin-right: 10px;
-    }
-
-    .category {
-      margin: 40px 0;
-    }
-
-    .category h2 {
-      color: #9d4edd;
-      border-bottom: 2px solid turquoise;
-      padding-bottom: 5px;
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .product-card {
-      background: #1a1a2e;
-      border: 1px solid #3a3a5d;
-      border-radius: 10px;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s;
-    }
-
-    .product-card:hover {
-      transform: translateY(-5px);
-      border-color: turquoise;
-    }
-
-    .product-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 8px 0;
-    }
-
-    .product-price {
-      color: turquoise;
-      font-weight: bold;
-      margin: 4px 0;
-    }
-
-    .product-desc, .chat-box {
-      font-size: 16px;
-      font-family: 'Segoe UI', sans-serif;
-      line-height: 1.5;
-      color: #ccc;
-      margin-bottom: 8px;
-    }
-
-    .product-btn {
-      margin-top: 10px;
-      padding: 10px;
-      background: linear-gradient(135deg, #0077b6, #00b4d8);
-      border: none;
-      border-radius: 6px;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .product-btn:hover {
-      background: linear-gradient(135deg, #00b4d8, #0077b6);
-    }
-
-    .chat-box {
-      min-height: 100px;
-      border-radius: 6px;
-      padding: 8px;
-      border: 1px solid #3a3a5d;
-      background: #111;
-      color: #fff;
-      font-family: monospace;
-      resize: vertical;
-      display: none;
-    }
-
-    .socials {
-      position: fixed;
-      top: 50%;
-      left: 10px;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .socials a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      background: turquoise;
-      border-radius: 50%;
-      color: #0d0d1a;
-      font-weight: bold;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .socials a:hover {
-      background: #9d4edd;
-      color: #fff;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>LinkBotLabs Products</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background: #0d0d1a;
+    color: #fff;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 { text-align: center; color: turquoise; margin-bottom: 20px; }
+  .affiliate-banner {
+    background: #0077b6;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-radius: 6px;
+  }
+  .voice-controls { text-align: center; margin-bottom: 20px; }
+  .voice-controls select, .voice-controls button { padding: 5px 10px; font-size: 16px; margin-right: 10px; }
+  .category { margin: 40px 0; }
+  .category h2 { color: #9d4edd; border-bottom: 2px solid turquoise; padding-bottom: 5px; }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+  .product-card {
+    background: #1a1a2e;
+    border: 1px solid #3a3a5d;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+  }
+  .product-card:hover { transform: translateY(-5px); border-color: turquoise; }
+  .product-title { font-size: 18px; font-weight: 600; margin: 8px 0; }
+  .product-price { color: turquoise; font-weight: bold; margin: 4px 0; }
+  .product-desc, .chat-box { font-size: 16px; font-family: 'Segoe UI', sans-serif; line-height: 1.5; color: #ccc; margin-bottom: 8px; }
+  .product-btn {
+    margin-top: 10px;
+    padding: 10px;
+    background: linear-gradient(135deg, #0077b6, #00b4d8);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+  }
+  .product-btn:hover { background: linear-gradient(135deg, #00b4d8, #0077b6); }
+  .chat-box {
+    min-height: 100px;
+    border-radius: 6px;
+    padding: 8px;
+    border: 1px solid #3a3a5d;
+    background: #111;
+    color: #fff;
+    font-family: monospace;
+    resize: vertical;
+    display: none;
+  }
+  .socials {
+    position: fixed;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: turquoise;
+    border-radius: 50%;
+    color: #0d0d1a;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+  .socials a:hover { background: #9d4edd; color: #fff; }
+</style>
 </head>
 <body>
-  <div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
-  <h1>✨ LinkBotLabs Product Picks ✨</h1>
+<div id="affiliate-banner" class="affiliate-banner" style="display:none;"></div>
+<h1>✨ LinkBotLabs Product Picks ✨</h1>
 
-  <div class="voice-controls">
-    <label>Select Voice:</label>
-    <select id="voiceSelect"></select>
-    <button id="stopTTS">⏹ Stop</button>
-  </div>
+<div class="voice-controls">
+  <label>Select Voice:</label>
+  <select id="voiceSelect"></select>
+  <button id="stopTTS">⏹ Stop</button>
+</div>
 
-  <div id="content"></div>
+<div id="content"></div>
 
-  <!-- Social buttons -->
-  <div class="socials">
-    <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">TT</a>
-    <a href="https://x.com/linkbotlabs" target="_blank">X</a>
-    <a href="https://youtube.com/@linkbotlabs" target="_blank">YT</a>
-    <a href="https://facebook.com/linkbotlabs" target="_blank">FB</a>
-  </div>
+<div class="socials">
+  <a href="https://www.tiktok.com/@linkbotlabs" target="_blank">TT</a>
+  <a href="https://x.com/linkbotlabs" target="_blank">X</a>
+  <a href="https://youtube.com/@linkbotlabs" target="_blank">YT</a>
+  <a href="https://facebook.com/linkbotlabs" target="_blank">FB</a>
+</div>
 
-  <script src="https://js.puter.com/v2/"></script>
-  <script>
-    const content = document.getElementById("content");
+<script src="https://js.puter.com/v2/"></script>
+<script>
+const content = document.getElementById("content");
 
-    // Affiliate ID
-    function getAffiliateId() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("aff_id") || null;
-    }
-    const affiliateId = getAffiliateId();
-    if (affiliateId) {
-      const banner = document.getElementById("affiliate-banner");
-      banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
-      banner.style.display = "block";
-    }
+// Affiliate ID
+function getAffiliateId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("aff_id") || null;
+}
+const affiliateId = getAffiliateId();
+if (affiliateId) {
+  const banner = document.getElementById("affiliate-banner");
+  banner.textContent = `Welcome! Your affiliate ID: ${affiliateId}`;
+  banner.style.display = "block";
+}
 
-    // TTS setup
-    let synth = window.speechSynthesis;
-    let utter;
-    function populateVoiceSelects() {
-      let voices = synth.getVoices();
-      if (!voices.length) { setTimeout(populateVoiceSelects, 100); return; }
-      const select = document.getElementById('voiceSelect');
-      select.innerHTML = '';
-      voices.forEach(v => {
-        const opt = document.createElement('option');
-        opt.value = v.name;
-        opt.textContent = v.name + ' (' + v.lang + ')';
-        select.appendChild(opt);
-      });
-    }
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = populateVoiceSelects;
-    } else {
-      populateVoiceSelects();
-    }
+// TTS setup
+let synth = window.speechSynthesis;
+let utter;
 
-    function playTTS(text) {
-      if (synth.speaking) synth.cancel();
-      utter = new SpeechSynthesisUtterance(text);
-      const selectedVoice = document.getElementById('voiceSelect').value;
-      utter.voice = synth.getVoices().find(v => v.name === selectedVoice) || synth.getVoices()[0];
-      synth.speak(utter);
-    }
-    document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
+function populateVoiceSelects() {
+  let voices = synth.getVoices();
+  if (!voices.length) { setTimeout(populateVoiceSelects, 100); return; }
+  const select = document.getElementById('voiceSelect');
+  select.innerHTML = '';
+  voices.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v.name;
+    opt.textContent = v.name + ' (' + v.lang + ')';
+    select.appendChild(opt);
+  });
+  // Auto-select Moirai English en_IE if available
+  const moirai = voices.find(v => v.name.toLowerCase().includes("moirai") && v.lang === "en-IE");
+  if (moirai) select.value = moirai.name;
+  else select.selectedIndex = 0;
+}
 
-    // Load products
-    async function loadProducts() {
-      try {
-        const res = await fetch("products.json?cachebust=" + Date.now());
-        const data = await res.json();
-        renderProducts(data);
-      } catch (e) {
-        content.innerHTML = `<p style="color:red;text-align:center;">❌ Failed to load products.</p>`;
-      }
-    }
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceSelects;
+} else {
+  populateVoiceSelects();
+}
 
-    function renderProducts(data) {
-      content.innerHTML = "";
-      for (const [category, items] of Object.entries(data)) {
-        const section = document.createElement("div");
-        section.className = "category";
-        section.innerHTML = `<h2>${category}</h2><div class="products-grid"></div>`;
-        const grid = section.querySelector(".products-grid");
+function playTTS(text) {
+  if (synth.speaking) synth.cancel();
+  utter = new SpeechSynthesisUtterance(text);
+  const selectedVoice = document.getElementById('voiceSelect').value;
+  utter.voice = synth.getVoices().find(v => v.name === selectedVoice) || synth.getVoices()[0];
+  synth.speak(utter);
+}
+document.getElementById('stopTTS').onclick = () => { if(synth.speaking) synth.cancel(); };
 
-        items.forEach(p => {
-          const card = document.createElement("div");
-          card.className = "product-card";
+// Load products
+async function loadProducts() {
+  try {
+    const res = await fetch("products.json?cachebust=" + Date.now());
+    const data = await res.json();
+    renderProducts(data);
+  } catch (e) {
+    content.innerHTML = `<p style="color:red;text-align:center;">❌ Failed to load products.</p>`;
+  }
+}
 
-          card.innerHTML = `
-            <h3 class="product-title">${p.title}</h3>
-            <p class="product-price">${p.price}</p>
-            <p class="product-desc">${p.description}</p>
-            <button class="product-btn view-btn">🛒 Click to View</button>
-            <button class="product-btn ask-btn">💬 Ask GPT-4 Nano</button>
-            <textarea class="chat-box" placeholder="Type your question here..."></textarea>
-            <button class="product-btn tts-btn">🔊 Listen</button>
-          `;
+function renderProducts(data) {
+  content.innerHTML = "";
+  for (const [category, items] of Object.entries(data)) {
+    const section = document.createElement("div");
+    section.className = "category";
+    section.innerHTML = `<h2>${category}</h2><div class="products-grid"></div>`;
+    const grid = section.querySelector(".products-grid");
 
-          // Affiliate link
-          card.querySelector(".view-btn").onclick = () => {
-            let link = p.url;
-            if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
-            window.open(link, "_blank");
-          };
+    items.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card";
 
-          // Show/Hide chat box
-          const askBtn = card.querySelector(".ask-btn");
-          const chatBox = card.querySelector(".chat-box");
-          askBtn.onclick = () => {
-            chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
-          };
+      card.innerHTML = `
+        <h3 class="product-title">${p.title}</h3>
+        <p class="product-price">${p.price}</p>
+        <p class="product-desc">${p.description}</p>
+        <button class="product-btn view-btn">🛒 Click to View</button>
+        <button class="product-btn ask-btn">💬 Ask GPT-4 Nano</button>
+        <textarea class="chat-box" placeholder="Type your question here..."></textarea>
+        <button class="product-btn tts-btn">🔊 Listen</button>
+      `;
 
-          // GPT chat
-          chatBox.addEventListener("keydown", async (e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              const lines = chatBox.value.split("\n");
-              const userText = lines[lines.length-1];
-              if (!userText.trim()) return;
-              const response = await puter.ai.chat(userText);
-              chatBox.value += `\nGPT-4 Nano: ${response}`;
-              chatBox.scrollTop = chatBox.scrollHeight;
-              // Play TTS for AI response
-              playTTS(response);
-            }
-          });
+      // Affiliate link
+      card.querySelector(".view-btn").onclick = () => {
+        let link = p.url;
+        if (affiliateId) link += (p.url.includes("?") ? "&" : "?") + "tag=" + affiliateId;
+        window.open(link, "_blank");
+      };
 
-          // TTS button reads current AI chat text
-          card.querySelector(".tts-btn").onclick = () => {
-            const text = chatBox.value || p.description;
-            playTTS(text);
-          };
+      // Show/Hide chat box
+      const askBtn = card.querySelector(".ask-btn");
+      const chatBox = card.querySelector(".chat-box");
+      askBtn.onclick = () => {
+        chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
+      };
 
-          grid.appendChild(card);
-        });
+      // Run button for GPT chat
+      const runBtn = document.createElement("button");
+      runBtn.textContent = "▶ Run";
+      runBtn.className = "product-btn run-btn";
+      runBtn.style.marginTop = "5px";
+      card.appendChild(runBtn);
 
-        content.appendChild(section);
-      }
-    }
+      runBtn.onclick = async () => {
+        const userText = chatBox.value.trim();
+        if (!userText) return;
+        const response = await puter.ai.chat(userText);
+        chatBox.value += `\nGPT-4 Nano: ${response}`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+        playTTS(response);
+      };
 
-    loadProducts();
-  </script>
+      // TTS button reads current chat or description
+      card.querySelector(".tts-btn").onclick = () => {
+        const text = chatBox.value || p.description;
+        playTTS(text);
+      };
+
+      grid.appendChild(card);
+    });
+
+    content.appendChild(section);
+  }
+}
+
+loadProducts();
+</script>
 </body>
 </html>
