@@ -7,7 +7,7 @@
 <script src="https://js.puter.com/v2/"></script>
 <style>
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #111; color: #fff; padding: 20px; }
-textarea, input[type="text"], input[type="number"] { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: none; font-size: 16px; }
+textarea, input[type="text"], input[type="number"], select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: none; font-size: 16px; }
 button { padding: 10px 20px; font-size: 16px; border-radius: 8px; border: none; background: #0f62fe; color: #fff; cursor: pointer; margin-bottom: 20px; }
 button:hover { background: #0353e9; }
 img.gen { max-width: 100%; height: auto; border-radius: 10px; margin-top: 10px; }
@@ -53,89 +53,59 @@ div.out-section { margin-bottom: 30px; }
 <div id="vision-out"></div>
 </div>
 
-<!-- Streaming -->
-<div class="out-section">
-<h3>Streaming Chat</h3>
-<select id="stream-model">
-  <option value="gpt-4">GPT-4</option>
-  <option value="gpt-3.5">GPT-3.5</option>
-</select>
-<textarea id="stream-prompt" placeholder="Enter prompt for streaming..."></textarea>
-<button id="stream-run">Start Stream</button>
-<div id="stream-out"></div>
-</div>
-
 <script>
-/* ---------- Helpers ---------- */
-function putText(el, text) { el.innerHTML = (text ?? '').toString(); }
-function appendText(el, text) { el.innerHTML += (text ?? '').toString(); }
-function normalizeNonStream(resp) {
-  if (typeof resp === 'string') return resp;
-  if (resp?.output_text) return resp.output_text;
-  if (resp?.text) return resp.text;
-  if (resp?.message?.content) {
-    if (Array.isArray(resp.message.content)) {
-      const first = resp.message.content[0];
-      return typeof first === 'string' ? first : (first?.text ?? JSON.stringify(first));
-    }
-    return typeof resp.message.content === 'string' ? resp.message.content : JSON.stringify(resp.message.content);
-  }
-  return JSON.stringify(resp ?? {});
-}
+// ----- Helpers -----
+function putText(el, text) { el.innerHTML = text ?? ''; }
+function appendText(el, text) { el.innerHTML += text ?? ''; }
 
-/* ---------- CHAT ---------- */
+// ----- Chat -----
 document.getElementById('chat-run').addEventListener('click', async () => {
-  const model = document.getElementById('chat-model').value;
   const prompt = document.getElementById('chat-prompt').value.trim();
+  const model = document.getElementById('chat-model').value;
   const out = document.getElementById('chat-out');
   if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
   putText(out, 'Thinking…');
   try {
     const resp = await puter.ai.chat(prompt, { model });
-    putText(out, normalizeNonStream(resp));
-  } catch (e) { putText(out, 'Error: ' + (e?.message ?? e)); }
+    putText(out, resp.output_text || JSON.stringify(resp));
+  } catch(e) { putText(out, 'Error: ' + (e.message || e)); }
 });
 
-/* ---------- IMAGE GENERATION ---------- */
+// ----- Image Generation -----
 document.getElementById('imggen-run').addEventListener('click', async () => {
   const prompt = document.getElementById('imggen-prompt').value.trim();
   const out = document.getElementById('imggen-out');
-  const count = parseInt(document.getElementById('imggen-count')?.value, 10) || 1;
-  if (!prompt) { putText(out, 'Please enter an image prompt.'); return; }
+  const count = parseInt(document.getElementById('imggen-count').value) || 1;
+  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
 
   out.innerHTML = '';
   const models = ['dalle', 'stable-diffusion', 'openjourney', 'anything-v4'];
-  const placeholders = [];
 
-  models.forEach(model => {
+  for (const model of models) {
     const wrapper = document.createElement('div');
     const label = document.createElement('p');
     label.textContent = `Model: ${model}`;
     label.style.fontWeight = 'bold';
-    const loading = document.createElement('p');
-    loading.textContent = 'Loading…';
     wrapper.appendChild(label);
-    wrapper.appendChild(loading);
     out.appendChild(wrapper);
-    placeholders.push({ wrapper, loading, model });
-  });
 
-  await Promise.all(placeholders.map(async p => {
-    try {
-      for (let i = 0; i < count; i++) {
-        const imgEl = await puter.ai.txt2img(prompt, { model: p.model });
-        imgEl.classList.add('gen');
-        p.wrapper.appendChild(imgEl);
+    for (let i = 0; i < count; i++) {
+      try {
+        const imgUrl = await puter.ai.txt2img(prompt, { model });
+        const img = document.createElement('img');
+        img.src = imgUrl;
+        img.classList.add('gen');
+        wrapper.appendChild(img);
+      } catch(e) {
+        const err = document.createElement('p');
+        err.textContent = `Failed: ${e.message || e}`;
+        wrapper.appendChild(err);
       }
-      p.wrapper.removeChild(p.loading);
-    } catch (e) {
-      p.loading.textContent = `Failed: ${e?.message ?? 'Unknown error'}`;
-      console.warn(`Model ${p.model} failed:`, e);
     }
-  }));
+  }
 });
 
-/* ---------- IMAGE ANALYSIS ---------- */
+// ----- Image Analysis -----
 document.getElementById('vision-run').addEventListener('click', async () => {
   const model = document.getElementById('vision-model').value;
   const url = document.getElementById('vision-url').value.trim();
@@ -147,25 +117,8 @@ document.getElementById('vision-run').addEventListener('click', async () => {
   putText(out, 'Analyzing image…');
   try {
     const resp = await puter.ai.chat(prompt, url, { model });
-    putText(out, normalizeNonStream(resp));
-  } catch (e) { putText(out, 'Error: ' + (e?.message ?? e)); }
-});
-
-/* ---------- STREAMING ---------- */
-document.getElementById('stream-run').addEventListener('click', async () => {
-  const model = document.getElementById('stream-model').value;
-  const prompt = document.getElementById('stream-prompt').value.trim();
-  const out = document.getElementById('stream-out');
-  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
-
-  putText(out, '');
-  try {
-    const stream = await puter.ai.chat(prompt, { model, stream: true });
-    for await (const part of stream) {
-      if (part?.output_text) appendText(out, part.output_text.replaceAll('\n','<br>'));
-      else if (part?.text) appendText(out, part.text.replaceAll('\n','<br>'));
-    }
-  } catch (e) { putText(out, 'Error: ' + (e?.message ?? e)); }
+    putText(out, resp.output_text || JSON.stringify(resp));
+  } catch(e) { putText(out, 'Error: ' + (e.message || e)); }
 });
 </script>
 
