@@ -20,9 +20,9 @@
 <header>
   <h1>🚀 AI Playground by LinkBotLabs</h1>
   <p>Powered by <a href="https://puter.com" target="_blank" style="color:#4fc3f7;">Puter.com</a></p>
-  <a href="https://prodpick4u.github.io/-linkbotlabs/docs/image.html" class="btn" style="background:linear-gradient(135deg,#ff007a,#e60070); font-size:1.2rem;">
-  🖼️ AI Image Generator (Demo)
-</a>
+  <a href="image.html" class="btn" style="background:linear-gradient(135deg,#ff007a,#e60070); font-size:1.2rem;">
+    🖼️ AI Image Generator
+  </a>
 </header>
 
 <!-- DEMO SPLASH -->
@@ -39,23 +39,6 @@
   <a href="https://wise.com/pay/me/davids14542" target="_blank">
     <button>Donate & Unlock</button>
   </a>
-  <div style="margin-top:20px; text-align:left; max-width:600px;">
-    <h3>What you get:</h3>
-    <ul>
-      <li>Unlimited AI Playground access</li>
-      <li>Image + Chat + Speech + Analysis tools</li>
-      <li>Cloud hosting + Virtual desktop + Apps</li>
-      <li>ZIP download of this Playground: <a href="https://raw.githubusercontent.com/prodpick4u/-linkbotlabs/refs/heads/main/docs/ai-starter.html" target="_blank">Download ZIP</a></li>
-    </ul>
-    <h3>How to host your own site:</h3>
-    <ol>
-      <li>Download & unzip the Playground package.</li>
-      <li>Rename <code>index.html</code>.</li>
-      <li>Place it in a folder on <a href="https://puter.com" target="_blank">Puter.com</a> Virtual Desktop.</li>
-      <li>Right-click → <b>Publish to Website</b>.</li>
-      <li>Share your new mirror site URL to earn & grow 🚀</li>
-    </ol>
-  </div>
 </div>
 
 <main id="playground">
@@ -64,17 +47,17 @@
   <div class="box">
     <h2>💬 Chat AI</h2>
     <select id="chatModel" onchange="updateModelInfo()">
-      <option value="gpt-5-mini">GPT-5 Mini</option>
-      <option value="gpt-5">GPT-5</option>
-      <option value="gpt-4o-mini">GPT-4o Mini</option>
-      <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
-      <option value="claude-1">Claude 1</option>
-      <option value="claude-2">Claude 2</option>
-      <option value="gemini-1">Gemini 1</option>
-      <option value="gemini-1.5">Gemini 1.5</option>
-      <option value="grok-3.5">Grok 3.5</option>
-      <option value="grok-4">Grok 4</option>
-      <option value="deep-seek">Deep Seek</option>
+      <option value="gpt-5-mini">💨 GPT-5 Mini</option>
+      <option value="gpt-5">🚀 GPT-5</option>
+      <option value="gpt-4o-mini">⚡ GPT-4o Mini</option>
+      <option value="gpt-4.1-nano">🧩 GPT-4.1 Nano</option>
+      <option value="claude-1">🤖 Claude 1</option>
+      <option value="claude-2">🧠 Claude 2</option>
+      <option value="gemini-1">🌟 Gemini 1</option>
+      <option value="gemini-1.5">💡 Gemini 1.5</option>
+      <option value="grok-3.5">💬 Grok 3.5</option>
+      <option value="grok-4">📈 Grok 4</option>
+      <option value="deep-seek">🔍 Deep Seek</option>
     </select>
     <p id="modelInfo" style="font-size:0.9em; color:#ccc; margin-top:5px;">Select a model to see details</p>
     <input id="chatInput" placeholder="Ask me anything...">
@@ -86,30 +69,22 @@
   <div class="box">
     <h2>📹 AI Streaming</h2>
     <select id="streamModel" onchange="updateStreamInfo()">
-      <option value="gpt-5-mini">GPT-5 Mini</option>
-      <option value="gpt-5">GPT-5</option>
-      <option value="gpt-4o-mini">GPT-4o Mini</option>
-      <option value="gpt-4.1-nano">GPT-4.1 Nano</option>
-      <option value="claude-1">Claude 1</option>
-      <option value="claude-2">Claude 2</option>
-      <option value="gemini-1">Gemini 1</option>
-      <option value="gemini-1.5">Gemini 1.5</option>
-      <option value="grok-3.5">Grok 3.5</option>
-      <option value="grok-4">Grok 4</option>
-      <option value="deep-seek">Deep Seek</option>
+      <option value="gpt-5-mini">💨 GPT-5 Mini</option>
+      <option value="gpt-5">🚀 GPT-5</option>
+      <option value="gpt-4o-mini">⚡ GPT-4o Mini</option>
+      <option value="gpt-4.1-nano">🧩 GPT-4.1 Nano</option>
+      <option value="claude-1">🤖 Claude 1</option>
+      <option value="claude-2">🧠 Claude 2</option>
+      <option value="gemini-1">🌟 Gemini 1</option>
+      <option value="gemini-1.5">💡 Gemini 1.5</option>
+      <option value="grok-3.5">💬 Grok 3.5</option>
+      <option value="grok-4">📈 Grok 4</option>
+      <option value="deep-seek">🔍 Deep Seek</option>
     </select>
     <p id="streamInfo" style="font-size:0.9em; color:#ccc; margin-top:5px;">Select a model to see details</p>
     <input id="streamInput" placeholder="Ask your AI...">
     <button id="streamBtn">Start Streaming</button>
     <div id="streamOutput"></div>
-  </div>
-
-  <!-- Image Generator -->
-  <div class="box">
-    <h2>🖼️ Image Generator</h2>
-    <input id="imgPrompt" placeholder="Describe the image you want...">
-    <button onclick="generateImage()">Generate Image</button>
-    <div id="imgOutput"></div>
   </div>
 
 </main>
@@ -125,19 +100,13 @@ let demoStart = Date.now();
 
 function closeDemoSplash(){
   document.getElementById("demoSplash").style.display="none";
-  setInterval(checkDemo, 10000); // check every 10 seconds for demo end
-  setInterval(funNotification, 10*60*1000); // fun notifications every 10 minutes
+  setInterval(checkDemo, 10000); // check every 10 seconds
 }
 
 function checkDemo(){
   if(Date.now() - demoStart > demoTime){
     document.getElementById("donationSplash").style.display="flex";
   }
-}
-
-/* --- Fun Notification --- */
-function funNotification(){
-  alert("⏰ Keep exploring! Your Playground is active!");
 }
 
 /* --- Model Descriptions --- */
@@ -155,14 +124,20 @@ const modelDescriptions = {
   "deep-seek": "Deep Seek: Analytical AI for data and insights."
 };
 
-/* --- Update Info --- */
 function updateModelInfo() {
   const select = document.getElementById("chatModel");
-  document.getElementById("modelInfo").textContent = modelDescriptions[select.value] || "";
+  const model = select.value;
+  const label = select.options[select.selectedIndex].text;
+  document.getElementById("modelInfo").textContent = modelDescriptions[model] || "";
+  document.getElementById("chatInput").placeholder = `Ask ${label} anything...`;
 }
+
 function updateStreamInfo() {
   const select = document.getElementById("streamModel");
-  document.getElementById("streamInfo").textContent = modelDescriptions[select.value] || "";
+  const model = select.value;
+  const label = select.options[select.selectedIndex].text;
+  document.getElementById("streamInfo").textContent = modelDescriptions[model] || "";
+  document.getElementById("streamInput").placeholder = `Prompt ${label} for streaming...`;
 }
 
 /* --- Chat Function --- */
@@ -176,7 +151,7 @@ async function runChat(){
     const reply = await puter.ai.chat(input, { model });
     out.innerHTML = `<b>${model} says:</b><br>${reply}`;
   } catch(err) {
-    out.innerHTML = "❌ Error: " + err.message;
+    out.innerHTML = "❌ Error: " + (err.message || err);
   }
 }
 
@@ -193,21 +168,6 @@ document.getElementById("streamBtn").addEventListener("click", async () => {
     streamOutput.innerHTML = "❌ Error streaming response.";
   }
 });
-
-/* --- Image Generator --- */
-async function generateImage(){
-  const prompt = document.getElementById("imgPrompt").value.trim();
-  const output = document.getElementById("imgOutput");
-  if(!prompt) return alert("Enter image description!");
-  output.innerHTML="⏳ Generating image...";
-  try {
-    const img = await puter.ai.txt2img(prompt, true); // testMode true
-    output.innerHTML="";
-    output.appendChild(img);
-  } catch(err){
-    output.innerHTML="❌ Error generating image";
-  }
-}
 
 /* --- Initialize descriptions --- */
 updateModelInfo();
