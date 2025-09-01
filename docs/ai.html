@@ -1,312 +1,118 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AI Playground — Puter (glass UI)</title>
-
-<!-- Puter header (required) -->
-<script src="https://js.puter.com/v2/"></script>
-
-<style>
-  :root {
-    --bg1:#0b0a12;
-    --bg2:#24132f;
-    --glass: rgba(255,255,255,0.04);
-    --stroke: rgba(255,255,255,0.08);
-    --accent:#6c5ce7; /* purple */
-    --accent-2:#00a8f3; /* blue */
-    --user-green:#9be39b;
-    --bot-orange:#ffb86b;
-    --text:#eef2ff;
-  }
-
-  html,body { height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:
-    radial-gradient(800px 600px at 10% 0%, #06060b 0%, #0b0720 30%, #05020a 100%); color:var(--text); }
-
-  .wrap { padding:28px; max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 360px; gap:20px; align-items:start; }
-
-  header { grid-column: 1 / -1; margin-bottom:6px; display:flex; align-items:center; gap:14px; }
-  h1 { margin:0; font-size:20px; letter-spacing:0.2px; }
-  .sub { color:rgba(230,230,255,0.6); font-size:13px; }
-
-  .panel {
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border-radius:14px; padding:16px; border:1px solid var(--stroke); backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  }
-
-  /* left: chat area */
-  .chat {
-    height:80vh; display:flex; flex-direction:column; gap:10px;
-  }
-  .controls { display:flex; gap:10px; align-items:center; margin-bottom:6px; flex-wrap:wrap; }
-  select, textarea, input { background:var(--glass); color:var(--text); border-radius:10px; border:1px solid var(--stroke); padding:8px 10px; }
-  textarea { min-height:90px; resize:vertical; width:100%; }
-
-  .messages { flex:1; overflow:auto; padding:12px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00)); border:1px solid rgba(255,255,255,0.02); }
-  .msg-row { display:flex; margin:8px 0; }
-  .msg { padding:12px 14px; border-radius:14px; max-width:74%; box-shadow: 0 6px 18px rgba(2,2,12,0.6); line-height:1.4; }
-  .user { margin-left:auto; background:var(--user-green); color:#000; border:1px solid rgba(0,0,0,0.06); }
-  .bot  { margin-right:auto; background:var(--bot-orange); color:#000; border:1px solid rgba(0,0,0,0.06); }
-
-  .buttons { display:flex; gap:10px; }
-  button { background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#fff; border:0; padding:10px 12px; border-radius:10px; cursor:pointer; font-weight:600; }
-  button.secondary { background:transparent; border:1px solid var(--stroke); color:var(--text); }
-
-  /* right column: settings + debug */
-  .right { display:flex; flex-direction:column; gap:12px; height:80vh; }
-  #debug-console { background:#040405; color:#70ff7a; font-family:monospace; font-size:12px; padding:10px; border-radius:10px; overflow:auto; border:1px solid rgba(0,0,0,0.45); flex:1; }
-  .small { font-size:13px; color:rgba(230,230,255,0.7); }
-
-  .row { display:flex; gap:8px; align-items:center; }
-
-  /* mobile */
-  @media (max-width:940px) {
-    .wrap { grid-template-columns:1fr; padding:14px; }
-    .right { height:auto; order:2; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>AI Playground</title>
+  <script src="https://js.puter.com/v2/"></script>
+  <style>
+    body { font-family: sans-serif; background: #111; color: #eee; margin: 0; padding: 1rem; }
+    select, button, input { margin: 0.25rem; padding: 0.5rem; }
+    #messages { margin-top: 1rem; max-height: 70vh; overflow-y: auto; }
+    .msg { padding: 0.5rem; margin: 0.25rem 0; border-radius: 6px; }
+    .msg.user { background: #333; }
+    .msg.bot { background: #222; }
+    #debug-console { margin-top: 1rem; font-size: 0.85rem; color: #aaa; white-space: pre-wrap; }
+  </style>
 </head>
 <body>
+  <h2>AI Playground</h2>
 
-<div class="wrap">
-  <header>
-    <h1>AI Playground</h1>
-    <div class="sub">Puter.js — glass UI • green user / orange assistant • TTS fallback (Puter → Web Speech)</div>
-  </header>
+  <label for="model-select">Model:</label>
+  <select id="model-select"></select>
+  <span id="models-count"></span><br>
 
-  <!-- CHAT PANEL -->
-  <div class="panel chat">
-    <div class="controls">
-      <label class="small">Model:&nbsp;
-        <select id="model-select" title="Choose a Puter model"></select>
-      </label>
+  <input id="prompt" placeholder="Type your message..." size="50">
+  <button id="send-btn">Send</button>
+  <button id="clear-btn">Clear Chat</button>
+  <button id="speak-last">🔊 Speak Last</button>
 
-      <label class="small">Stream:
-        <input id="stream-checkbox" type="checkbox" title="Enable streaming responses" />
-      </label>
-
-      <div style="margin-left:auto; display:flex; gap:8px;">
-        <button id="clear-btn" class="secondary">Clear</button>
-        <button id="send-btn">Send</button>
-      </div>
-    </div>
-
-    <div class="messages panel" id="messages" aria-live="polite"></div>
-
-    <textarea id="prompt" placeholder="Type your prompt here..."></textarea>
-
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button id="speak-last">🔊 Speak last</button>
-      <div class="small">Auto TTS tries Puter.txt2speech then browser speech as fallback.</div>
-    </div>
-  </div>
-
-  <!-- RIGHT: settings / debug -->
-  <div class="right">
-    <div class="panel small">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div><strong>Models loaded</strong></div>
-        <div class="small" id="models-count"></div>
-      </div>
-      <div class="small" style="margin-top:8px">
-        The dropdown above is populated with the model list you provided (and a few common free alternatives). If a model fails, check the Debug Console below and pick another model.
-      </div>
-    </div>
-
-    <div class="panel">
-      <div style="display:flex;justify-content:space-between;align-items:center"><strong>Debug Console</strong>
-        <button id="dbg-clear" class="secondary" style="height:32px;">Clear</button>
-      </div>
-      <div id="debug-console"></div>
-    </div>
-  </div>
-</div>
+  <div id="messages"></div>
+  <div id="debug-console"></div>
 
 <script>
-/* ========== Utilities ========== */
-function now() { return new Date().toLocaleTimeString(); }
-function dbgLog(...parts) {
-  const el = document.getElementById('debug-console');
-  const msg = parts.map(p => {
-    try { return (typeof p === 'object' ? JSON.stringify(p, null, 2) : String(p)); }
-    catch (_) { return String(p); }
-  }).join(' ');
-  el.innerHTML += `[${now()}] ${msg}<br>`;
-  el.scrollTop = el.scrollHeight;
-  console.log(...parts);
+/* UI references */
+const modelSelect = document.getElementById("model-select");
+const messagesBox = document.getElementById("messages");
+const dbg = document.getElementById("debug-console");
+
+/* Debug helper */
+function dbgLog(...args) {
+  console.log(...args);
+  dbg.innerText += args.map(a => (typeof a === "object" ? JSON.stringify(a) : a)).join(" ") + "\n";
 }
-function safeStringifyError(e) {
-  try {
-    // e might be an Error or an object returned by Puter API
-    if (!e) return '';
-    if (e instanceof Error) return e.stack || e.message;
-    return JSON.stringify(e, Object.getOwnPropertyNames(e), 2);
-  } catch (err) {
-    return String(e);
-  }
-}
-
-/* ========== Model list (from your list + helpful freebies) ========== */
-const USER_MODELS = [
-  "gpt-5",
-  "gpt-5-mini",
-  "gpt-5-nano",
-  "gpt-5-chat-latest",
-  "gpt-4.1",
-  "gpt-4.1-mini",
-  "gpt-4.1-nano",
-  "gpt-4.5-preview",
-  "gpt-4o",
-  "gpt-4o-mini",
-  "o1",
-  "o1-mini",
-  "o1-pro",
-  "o3",
-  "o3-mini",
-  "o4-mini"
-];
-
-// add a few known free alternatives many Puter users expect
-const EXTRA_FREE = [
-  "x-ai/grok-3",
-  "x-ai/grok-3-mini",
-  "deepseek-chat",
-  "deepseek-reasoner",
-  "claude-sonnet-4",
-  "google/gemini-2.0-flash-001"
-];
-
-const MODEL_LIST = Array.from(new Set([...USER_MODELS, ...EXTRA_FREE]));
-
-/* populate dropdown */
-const modelSelect = document.getElementById('model-select');
-MODEL_LIST.forEach(m => {
-  const opt = document.createElement('option');
-  opt.value = m; opt.textContent = m;
-  modelSelect.appendChild(opt);
-});
-document.getElementById('models-count').textContent = MODEL_LIST.length + " models";
-
-/* ========== UI helpers ========== */
-const messagesBox = document.getElementById('messages');
-function addUserMessage(text) {
-  const row = document.createElement('div'); row.className = 'msg-row';
-  const b = document.createElement('div'); b.className = 'msg user'; b.innerText = text;
-  row.appendChild(b); messagesBox.appendChild(row); messagesBox.scrollTop = messagesBox.scrollHeight;
-}
-function addBotMessage(text, id = null) {
-  const row = document.createElement('div'); row.className = 'msg-row';
-  const b = document.createElement('div'); b.className = 'msg bot';
-  if (id) b.id = id;
-  // allow multi-line, but use textContent to avoid injection
-  b.innerHTML = text.replaceAll('\n','<br>');
-  row.appendChild(b); messagesBox.appendChild(row); messagesBox.scrollTop = messagesBox.scrollHeight;
-  return b;
+function addBotMessage(text, id) {
+  const div = document.createElement("div");
+  div.className = "msg bot";
+  if (id) div.id = id;
+  div.textContent = text;
+  messagesBox.appendChild(div);
+  return div;
 }
 function replaceBotMessageText(el, text) {
-  if (!el) return;
-  el.innerHTML = text.replaceAll('\n','<br>');
-  messagesBox.scrollTop = messagesBox.scrollHeight;
+  if (el) el.textContent = text;
+}
+function addUserMessage(text) {
+  const div = document.createElement("div");
+  div.className = "msg user";
+  div.textContent = text;
+  messagesBox.appendChild(div);
+}
+function safeStringifyError(err) {
+  try { return JSON.stringify(err); } catch { return String(err); }
 }
 
-/* ========== TTS (Puter first, fallback to browser) ========== */
-async function playPuterTTS(text) {
+/* --- Load models.json --- */
+async function loadModelsFromFile() {
   try {
-    // Puter examples return an HTMLAudioElement or object — handle common forms.
-    const res = await puter.ai.txt2speech(text, { language: 'en-US', engine: 'neural' });
-    dbgLog("Puter TTS result:", res);
-    if (!res) throw new Error("Puter.txt2speech returned empty result");
-    if (res instanceof HTMLAudioElement) { res.play(); return true; }
-    // if it's an object with 'audio' blob
-    if (res?.audio instanceof Blob) {
-      const url = URL.createObjectURL(res.audio);
-      const a = new Audio(url); a.play(); return true;
+    const res = await fetch("models.json"); // 👈 your file
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const models = await res.json();
+
+    if (Array.isArray(models)) {
+      modelSelect.innerHTML = ""; // clear old
+      models.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = m;
+        modelSelect.appendChild(opt);
+      });
+      document.getElementById("models-count").textContent = models.length + " models";
+      dbgLog("Loaded models from models.json:", models);
+
+      // Auto-select first model
+      if (models.length > 0) modelSelect.value = models[0];
+    } else {
+      dbgLog("models.json not an array:", models);
     }
-    // if it's a url string
-    if (typeof res === 'string') {
-      const a = new Audio(res); a.play(); return true;
-    }
-    // unknown shape -> try to convert to blob if possible
-    return false;
   } catch (err) {
-    dbgLog("❌ Puter TTS error:", safeStringifyError(err));
-    return false;
+    dbgLog("Error loading models.json:", err);
   }
-}
-function playWebSpeech(text) {
-  try {
-    if (!('speechSynthesis' in window)) {
-      dbgLog("❌ Browser TTS unsupported");
-      return false;
-    }
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'en-US';
-    // pick a default voice if available
-    const voices = speechSynthesis.getVoices();
-    if (voices.length) {
-      // prefer English-ish voice
-      u.voice = voices.find(v => /en/i.test(v.lang)) || voices[0];
-    }
-    speechSynthesis.cancel(); // stop prior
-    speechSynthesis.speak(u);
-    dbgLog("🔊 Using browser speechSynthesis");
-    return true;
-  } catch (err) {
-    dbgLog("❌ Web Speech error:", safeStringifyError(err));
-    return false;
-  }
-}
-async function speakText(text) {
-  if (!text) return;
-  dbgLog("🔊 TTS request (trying Puter then Web Speech) length:", text.length);
-  const ok = await playPuterTTS(text);
-  if (!ok) playWebSpeech(text);
 }
 
-/* ========== Send / Stream logic ========== */
+/* --- Send button handler --- */
 document.getElementById('send-btn').addEventListener('click', async () => {
   const prompt = document.getElementById('prompt').value.trim();
   if (!prompt) return;
-  const model = modelSelect.value;
-  const doStream = document.getElementById('stream-checkbox').checked;
-
-  // add user message
   addUserMessage(prompt);
-  document.getElementById('prompt').value = '';
 
-  // debug
-  dbgLog("→ Sending message:", { prompt, model, stream: doStream });
-
-  if (!window.puter) {
-    dbgLog("❌ puter.js not found. Confirm <script src=\"https://js.puter.com/v2/\"></script> is reachable.");
+  const model = modelSelect.value;
+  if (!window.puter || !puter.ai) {
     addBotMessage("Error: puter.js not loaded (check network / browser console).");
     return;
   }
 
   try {
-    if (doStream) {
-      // streaming: create a bot bubble and append partial chunks
-      const id = "bot-" + Date.now();
-      const botEl = addBotMessage("", id);
-      let full = "";
-      const stream = await puter.ai.chat(prompt, { model, stream: true });
-      dbgLog("Stream opened:", { model });
-      for await (const part of stream) {
-        // part may contain output_text or text
-        const chunk = (part?.output_text ?? part?.text ?? "");
-        full += chunk;
-        // update bubble progressively
-        replaceBotMessageText(botEl, full);
-      }
-      dbgLog("✅ Stream complete. full length:", full.length);
-    } else {
-      const resp = await puter.ai.chat(prompt, { model });
-      dbgLog("← Raw response:", resp);
-      const text = (typeof resp === 'string') ? resp : (resp?.output_text ?? resp?.text ?? (resp?.message?.content && JSON.stringify(resp.message.content)) ?? JSON.stringify(resp));
-      addBotMessage(text);
+    const id = "bot-" + Date.now();
+    const botEl = addBotMessage("", id);
+    let full = "";
+    const stream = await puter.ai.chat(prompt, { model, stream: true });
+    dbgLog("Stream opened:", { model });
+    for await (const part of stream) {
+      const chunk = (part?.output_text ?? part?.text ?? "");
+      full += chunk;
+      replaceBotMessageText(botEl, full);
     }
+    dbgLog("✅ Stream complete. full length:", full.length);
   } catch (err) {
     const errStr = safeStringifyError(err);
     dbgLog("💥 Chat error:", errStr);
@@ -314,59 +120,68 @@ document.getElementById('send-btn').addEventListener('click', async () => {
   }
 });
 
-/* speak last assistant message */
+/* --- Speak last assistant message --- */
 document.getElementById('speak-last').addEventListener('click', async () => {
-  // find last bot message
   const all = Array.from(document.querySelectorAll('.msg.bot'));
-  if (!all.length) { dbgLog("No assistant message to speak."); return; }
-  const last = all[all.length-1].innerText || all[all.length-1].textContent || '';
-  await speakText(last);
+  if (!all.length) {
+    dbgLog("No assistant message to speak.");
+    return;
+  }
+  const last = all[all.length - 1].innerText || '';
+  if (window.speechSynthesis) {
+    const utter = new SpeechSynthesisUtterance(last);
+    speechSynthesis.speak(utter);
+  } else {
+    dbgLog("Speech synthesis not supported in this browser.");
+  }
 });
 
-/* clear chat */
+/* --- Clear chat --- */
 document.getElementById('clear-btn').addEventListener('click', () => {
   messagesBox.innerHTML = '';
   dbgLog("Chat cleared by user.");
 });
 
-/* debug clear */
-document.getElementById('dbg-clear').addEventListener('click', () => {
-  document.getElementById('debug-console').innerHTML = "";
-});
-
-/* Try: attempt to detect if puter exposes a model list (best effort) */
-(async function tryFetchPuterModels() {
+/* --- Merge with Puter remote models (if available) --- */
+async function mergePuterModels() {
   try {
-    if (!window.puter) { dbgLog("puter.js loaded? ->", !!window.puter); return; }
-    // Some Puter installations might have a listing method; try best-effort non-fatal call
+    if (!window.puter) {
+      dbgLog("puter.js loaded? ->", !!window.puter);
+      return;
+    }
     if (puter?.ai?.models) {
-      dbgLog("puter.ai.models() available — attempting to fetch remote model list...");
+      dbgLog("puter.ai.models() available — fetching...");
       try {
-        const remote = await puter.ai.models(); // best-effort: may not exist
+        const remote = await puter.ai.models();
         dbgLog("Models from Puter:", remote);
-        // If remote is an array of names, merge them into the dropdown (non-destructive)
         if (Array.isArray(remote)) {
           remote.forEach(m => {
-            if (!MODEL_LIST.includes(m)) {
-              const opt = document.createElement('option');
-              opt.value = m; opt.textContent = m; modelSelect.appendChild(opt);
+            if (![...modelSelect.options].some(o => o.value === m)) {
+              const opt = document.createElement("option");
+              opt.value = m;
+              opt.textContent = m;
+              modelSelect.appendChild(opt);
             }
           });
-          document.getElementById('models-count').textContent = modelSelect.options.length + " models (merged)";
+          document.getElementById("models-count").textContent = modelSelect.options.length + " models (merged)";
         }
       } catch (err) {
-        dbgLog("Could not fetch remote Puter model list (this is fine):", safeStringifyError(err));
+        dbgLog("Could not fetch Puter models:", safeStringifyError(err));
       }
     } else {
-      dbgLog("puter.ai.models not present (skipping remote model fetch).");
+      dbgLog("puter.ai.models not present (skipping).");
     }
   } catch (err) {
-    dbgLog("Error while probing puter:", safeStringifyError(err));
+    dbgLog("Error probing Puter:", safeStringifyError(err));
   }
-})();
+}
 
-/* Log initial ready */
-dbgLog("UI ready. Models in dropdown:", MODEL_LIST.length, "— pick one and press Send.");
+/* --- Run on page load --- */
+(async () => {
+  await loadModelsFromFile();
+  await mergePuterModels();
+  dbgLog("UI ready. Models loaded into dropdown.");
+})();
 </script>
 </body>
 </html>
