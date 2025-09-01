@@ -1,185 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkBotLabs AI Chat</title>
-  <script src="https://js.puter.com/v2/"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #111;
-      color: #fff;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-    #chat {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px;
-    }
-    #input-area {
-      display: flex;
-      flex-wrap: wrap;
-      padding: 10px;
-      background: #222;
-    }
-    #input {
-      flex: 1;
-      padding: 8px;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-    button, select {
-      margin-left: 6px;
-      margin-top: 6px;
-      padding: 6px 10px;
-      border: none;
-      border-radius: 4px;
-      background: #444;
-      color: #fff;
-      font-size: 14px;
-    }
-    #debug-log {
-      background: #111;
-      color: #0f0;
-      font-size: 12px;
-      padding: 5px;
-      max-height: 150px;
-      overflow-y: auto;
-      border-top: 1px solid #333;
-      font-family: monospace;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Playground</title>
+<script src="https://js.puter.com/v2/"></script>
+<style>
+  :root { --glass: rgba(0,0,0,0.35); --stroke: rgba(255,255,255,0.12); --text:#fff; --muted:#cfcfcf; --accent:#ffe169; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; padding: 24px; color: var(--text);
+    background: radial-gradient(1200px 1200px at 10% -10%, #111 0%, #000 60%, #000 100%);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  }
+  h1 { margin: 0 0 18px 0; font-weight: 700; letter-spacing: .2px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 18px;
+  }
+  .card {
+    grid-column: span 12;
+    background: var(--glass);
+    border: 1px solid var(--stroke);
+    border-radius: 14px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+  @media (min-width: 900px) {
+    #card-chat, #card-stream { grid-column: span 6; }
+  }
+  label { display:block; font-size: 12px; color: var(--muted); margin: 8px 0 6px; }
+  textarea, input, select {
+    width: 100%; color: var(--text); background: rgba(255,255,255,0.06);
+    border: 1px solid var(--stroke); border-radius: 10px; padding: 10px 12px;
+    outline: none; caret-color: var(--text);
+  }
+  textarea { min-height: 120px; resize: vertical; }
+  button {
+    display:inline-flex; align-items:center; gap:8px;
+    background: var(--accent); color:#000; font-weight:700; border:0;
+    border-radius: 10px; padding: 10px 14px; cursor:pointer; margin-top: 10px;
+  }
+  .output {
+    margin-top: 12px; padding: 12px; border-radius: 10px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--stroke);
+    white-space: pre-wrap; word-wrap: break-word;
+    min-height: 150px; overflow-y: auto;
+  }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+</style>
 </head>
 <body>
-  <div id="chat"></div>
+  <h1>AI Playground</h1>
+  <div class="grid">
 
-  <div id="input-area">
-    <select id="model"><option>Loading models...</option></select>
-    <input id="input" placeholder="Type your message...">
-    <button onclick="sendMessage()">Send</button>
+    <!-- CHAT -->
+    <div class="card" id="card-chat">
+      <h2 style="margin:0 0 6px">Chat / Q&amp;A</h2>
+      <div class="hint">Ask anything. Choose a chat model.</div>
+      <label for="chat-model">Model</label>
+      <select id="chat-model">
+        <!-- existing -->
+        <option value="gpt-4.1-nano" selected>GPT-4.1-nano (fast & light)</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+        <option value="gpt-4.1-mini">GPT-4.1-mini</option>
+        <option value="gpt-4o">GPT-4o</option>
+        <option value="gpt-5">GPT-5</option>
+        <option value="gpt-5-mini">GPT-5-mini</option>
+        <option value="gpt-5-nano">GPT-5-nano</option>
+        <option value="o1">o1</option>
+        <option value="o1-mini">o1-mini</option>
+        <option value="o3-mini">o3-mini</option>
+        <option value="claude-sonnet-4">Claude Sonnet 4</option>
+        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+        <!-- added -->
+        <option value="x-ai/grok-3-mini">x-ai/grok-3-mini</option>
+        <option value="x-ai/grok-3-mini-beta">x-ai/grok-3-mini-beta</option>
+        <option value="x-ai/grok-4">x-ai/grok-4</option>
+        <option value="x-ai/grok-code-fast-1">x-ai/grok-code-fast-1</option>
+        <option value="x-ai/grok-vision-beta">x-ai/grok-vision-beta</option>
+        <option value="meta-llama/llama-4-maverick:free">llama-4-maverick:free</option>
+        <option value="meta-llama/llama-4-scout">llama-4-scout</option>
+        <option value="meta-llama/llama-4-scout:free">llama-4-scout:free</option>
+        <option value="meta-llama/llama-guard-2-8b">llama-guard-2-8b</option>
+        <option value="meta-llama/llama-guard-3-8b">llama-guard-3-8b</option>
+        <option value="meta-llama/llama-guard-4-12b">llama-guard-4-12b</option>
+        <option value="google/gemma-3-27b-it:free">gemma-3-27b-it:free</option>
+        <option value="google/gemma-3-4b-it">gemma-3-4b-it</option>
+        <option value="google/gemma-3-4b-it:free">gemma-3-4b-it:free</option>
+        <option value="google/gemma-3n-e2b-it:free">gemma-3n-e2b-it:free</option>
+        <option value="google/gemma-3n-e4b-it">gemma-3n-e4b-it</option>
+        <option value="google/gemma-3n-e4b-it:free">gemma-3n-e4b-it:free</option>
+        <option value="google/gemini-2.5-flash">gemini-2.5-flash</option>
+        <option value="google/gemini-2.5-flash-image-preview">gemini-2.5-flash-image-preview</option>
+        <option value="google/gemini-2.5-flash-image-preview:free">gemini-2.5-flash-image-preview:free</option>
+        <option value="perplexity/sonar-deep-research">sonar-deep-research</option>
+        <option value="perplexity/sonar-pro">sonar-pro</option>
+        <option value="perplexity/sonar-reasoning">sonar-reasoning</option>
+        <option value="perplexity/sonar-reasoning-pro">sonar-reasoning-pro</option>
+      </select>
 
-    <select id="speech-lang">
-      <option value="en-US">English (US)</option>
-      <option value="en-GB">English (UK)</option>
-      <option value="en-IE">English (Ireland)</option>
-    </select>
-    <select id="speech-voice">
-      <option value="default">Default</option>
-      <option value="female">Female</option>
-      <option value="male">Male</option>
-    </select>
+      <label for="chat-prompt">Prompt</label>
+      <textarea id="chat-prompt"></textarea>
+      <button id="chat-run">Run</button>
+      <button id="chat-speak">🔊 Speak</button>
+      <div class="output" id="chat-out"></div>
+    </div>
+
+    <!-- STREAM -->
+    <div class="card" id="card-stream">
+      <h2 style="margin:0 0 6px">Streaming (Long Responses)</h2>
+      <div class="hint">See responses arrive in real-time.</div>
+      <label for="stream-model">Model</label>
+      <select id="stream-model">
+        <!-- existing -->
+        <option value="gpt-4.1-nano" selected>GPT-4.1-nano</option>
+        <option value="gpt-4.1">GPT-4.1</option>
+        <option value="gpt-4o">GPT-4o</option>
+        <option value="gpt-5-nano">GPT-5-nano</option>
+        <option value="o3-mini">o3-mini</option>
+        <option value="claude-sonnet-4">Claude Sonnet 4</option>
+        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
+        <!-- added (same list as chat) -->
+        <option value="x-ai/grok-3-mini">x-ai/grok-3-mini</option>
+        <option value="x-ai/grok-3-mini-beta">x-ai/grok-3-mini-beta</option>
+        <option value="x-ai/grok-4">x-ai/grok-4</option>
+        <option value="x-ai/grok-code-fast-1">x-ai/grok-code-fast-1</option>
+        <option value="x-ai/grok-vision-beta">x-ai/grok-vision-beta</option>
+        <option value="meta-llama/llama-4-maverick:free">llama-4-maverick:free</option>
+        <option value="meta-llama/llama-4-scout">llama-4-scout</option>
+        <option value="meta-llama/llama-4-scout:free">llama-4-scout:free</option>
+        <option value="meta-llama/llama-guard-2-8b">llama-guard-2-8b</option>
+        <option value="meta-llama/llama-guard-3-8b">llama-guard-3-8b</option>
+        <option value="meta-llama/llama-guard-4-12b">llama-guard-4-12b</option>
+        <option value="google/gemma-3-27b-it:free">gemma-3-27b-it:free</option>
+        <option value="google/gemma-3-4b-it">gemma-3-4b-it</option>
+        <option value="google/gemma-3-4b-it:free">gemma-3-4b-it:free</option>
+        <option value="google/gemma-3n-e2b-it:free">gemma-3n-e2b-it:free</option>
+        <option value="google/gemma-3n-e4b-it">gemma-3n-e4b-it</option>
+        <option value="google/gemma-3n-e4b-it:free">gemma-3n-e4b-it:free</option>
+        <option value="google/gemini-2.5-flash">gemini-2.5-flash</option>
+        <option value="google/gemini-2.5-flash-image-preview">gemini-2.5-flash-image-preview</option>
+        <option value="google/gemini-2.5-flash-image-preview:free">gemini-2.5-flash-image-preview:free</option>
+        <option value="perplexity/sonar-deep-research">sonar-deep-research</option>
+        <option value="perplexity/sonar-pro">sonar-pro</option>
+        <option value="perplexity/sonar-reasoning">sonar-reasoning</option>
+        <option value="perplexity/sonar-reasoning-pro">sonar-reasoning-pro</option>
+      </select>
+
+      <label for="stream-prompt">Prompt</label>
+      <textarea id="stream-prompt">Explain the theory of relativity in detail.</textarea>
+      <button id="stream-run">Stream</button>
+      <button id="stream-speak">🔊 Speak</button>
+      <div class="output" id="stream-out"></div>
+    </div>
+
   </div>
 
-  <div id="debug-log"></div>
+<script>
+function putText(el, text) { el.innerHTML = (text ?? '').toString(); }
+function appendText(el, text) { el.innerHTML += (text ?? '').toString(); }
+function normalizeNonStream(resp) {
+  if (typeof resp === 'string') return resp;
+  if (resp?.output_text) return resp.output_text;
+  if (resp?.text) return resp.text;
+  return JSON.stringify(resp ?? {});
+}
 
-  <script>
-    function logDebug(...args) {
-      const logBox = document.getElementById("debug-log");
-      const msg = args.map(a =>
-        (typeof a === "object" ? JSON.stringify(a, null, 2) : a)
-      ).join(" ");
-      logBox.innerHTML += msg + "<br>";
-      logBox.scrollTop = logBox.scrollHeight;
-      console.log(...args);
+/* CHAT */
+document.getElementById('chat-run').addEventListener('click', async () => {
+  const model = document.getElementById('chat-model').value;
+  const prompt = document.getElementById('chat-prompt').value.trim();
+  const out = document.getElementById('chat-out');
+  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
+  putText(out, 'Thinking…');
+  try {
+    const resp = await puter.ai.chat(prompt, { model });
+    putText(out, normalizeNonStream(resp));
+  } catch (e) { putText(out, 'Error: ' + (e?.message ?? e)); }
+});
+
+/* STREAM */
+document.getElementById('stream-run').addEventListener('click', async () => {
+  const model = document.getElementById('stream-model').value;
+  const prompt = document.getElementById('stream-prompt').value.trim();
+  const out = document.getElementById('stream-out');
+  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
+  putText(out, '');
+  try {
+    const stream = await puter.ai.chat(prompt, { model, stream: true });
+    for await (const part of stream) {
+      if (part?.output_text) appendText(out, part.output_text.replaceAll('\n','<br>'));
+      else if (part?.text) appendText(out, part.text.replaceAll('\n','<br>'));
     }
+  } catch (e) { putText(out, 'Error: ' + (e?.message ?? e)); }
+});
 
-    async function loadModels() {
-      const select = document.getElementById("model");
-      try {
-        const res = await fetch("https://puter.com/puterai/chat/models");
-        const data = await res.json();
-        logDebug("📥 Loaded models:", data);
+/* TEXT TO SPEECH */
+async function speakText(text) {
+  if (!text) return;
+  try {
+    const audio = await puter.ai.txt2speech(text, { engine:"neural", language:"en-US" });
+    audio.play();
+  } catch (e) { console.error("TTS error:", e); }
+}
+<div id="debug-console" style="background:#111;color:#0f0;font-family:monospace;font-size:12px;padding:8px;max-height:200px;overflow-y:auto;border-top:1px solid #333;">
+  <strong>Debug Console:</strong><br>
+</div>
 
-        select.innerHTML = "";
-        if (data.models && data.models.length > 0) {
-          data.models.forEach(m => {
-            const opt = document.createElement("option");
-            opt.value = m.id;
-            opt.textContent = `${m.name || m.id} (${m.id})`;
-            select.appendChild(opt);
-          });
-        } else {
-          select.innerHTML = "<option>No models found</option>";
-        }
-      } catch (e) {
-        logDebug("💥 Failed to load models:", e);
-        select.innerHTML = "<option>Error loading models</option>";
-      }
+<script>
+function logDebug(...args) {
+  const logBox = document.getElementById("debug-console");
+  const msg = args.map(a =>
+    (typeof a === "object" ? JSON.stringify(a, null, 2) : a)
+  ).join(" ");
+  logBox.innerHTML += msg + "<br>";
+  logBox.scrollTop = logBox.scrollHeight;
+  console.log(...args);
+}
+
+async function runChat(prompt, model) {
+  logDebug("🚀 Sending message:", prompt, "with model:", model);
+  try {
+    const resp = await puter.ai.chat(prompt, { model });
+    logDebug("📥 Raw AI response:", resp);
+    return resp?.output_text || resp?.text || JSON.stringify(resp);
+  } catch (e) {
+    logDebug("💥 Chat error:", e);
+    return "[Chat error – see console]";
+  }
+}
+
+async function runStream(prompt, model, container) {
+  logDebug("🚀 Streaming message:", prompt, "with model:", model);
+  try {
+    const stream = await puter.ai.chat(prompt, { model, stream:true });
+    for await (const part of stream) {
+      const text = part?.output_text || part?.text || "";
+      container.innerHTML += text + "<br>";
     }
+    logDebug("✅ Streaming complete.");
+  } catch (e) {
+    logDebug("💥 Stream error:", e);
+    container.innerHTML += "[Stream error – see console]<br>";
+  }
+}
 
-    function putText(container, text, sender="ai") {
-      const p = document.createElement("p");
-      p.textContent = (sender === "user" ? "🧑: " : "🤖: ") + text;
-      container.appendChild(p);
-      container.scrollTop = container.scrollHeight;
+async function speakText(text, engine="neural", lang="en-US") {
+  logDebug("🔊 TTS request:", { text, engine, lang });
+  try {
+    const audio = await puter.ai.txt2speech(text, { engine, language: lang });
+    if (audio instanceof HTMLAudioElement) { audio.play(); }
+    else if (audio?.audio instanceof Blob) {
+      const url = URL.createObjectURL(audio.audio);
+      new Audio(url).play();
+    } else if (typeof audio === "string") {
+      new Audio(audio).play();
     }
-
-    function normalizeResponse(resp) {
-      if (!resp) return "";
-      if (typeof resp === "string") return resp;
-      if (resp.output_text) return resp.output_text;
-      if (resp.message?.content) return resp.message.content;
-      if (resp.message) return resp.message;
-      if (resp.text) return resp.text;
-      if (resp.choices && resp.choices[0]?.message?.content) return resp.choices[0].message.content;
-      return "[No text output found]";
-    }
-
-    async function sendMessage() {
-      const input = document.getElementById("input");
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = "";
-
-      const chatBox = document.getElementById("chat");
-      putText(chatBox, text, "user");
-
-      const model = document.getElementById("model").value;
-      logDebug("🚀 Sending message:", text, "with model:", model);
-
-      try {
-        const resp = await puter.ai.chat(text, { model });
-        logDebug("📥 Raw AI response:", resp);
-
-        const out = normalizeResponse(resp);
-        putText(chatBox, out, "ai");
-        speakText(out);
-      } catch (e) {
-        logDebug("💥 Chat error:", e);
-        putText(chatBox, "[Error: " + (e.message ?? e) + "]", "ai");
-      }
-    }
-
-    async function speakText(text) {
-      if (!text || !('speechSynthesis' in window)) return;
-
-      const lang = document.getElementById("speech-lang").value;
-      const voiceChoice = document.getElementById("speech-voice").value;
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang;
-
-      const voices = speechSynthesis.getVoices();
-      if (voiceChoice === "female") {
-        utterance.voice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
-      } else if (voiceChoice === "male") {
-        utterance.voice = voices.find(v => v.name.toLowerCase().includes("male")) || voices[0];
-      } else {
-        utterance.voice = voices[0];
-      }
-
-      speechSynthesis.speak(utterance);
-      logDebug("🔊 Speaking:", text);
-    }
-
-    // Initialize
-    loadModels();
-  </script>
+    logDebug("✅ TTS played successfully.");
+  } catch (e) {
+    logDebug("💥 TTS error:", e);
+  }
+}
+</script>
+document.getElementById('chat-speak').addEventListener('click', () => {
+  speakText(document.getElementById('chat-out').innerText);
+});
+document.getElementById('stream-speak').addEventListener('click', () => {
+  speakText(document.getElementById('stream-out').innerText);
+});
+</script>
 </body>
 </html>
