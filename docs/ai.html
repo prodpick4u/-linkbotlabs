@@ -1,169 +1,4 @@
-<<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Playground</title>
-  <script src="https://js.puter.com/v2/"></script>
-  <style>
-    :root {
-      --glass: rgba(0,0,0,0.35);
-      --stroke: rgba(255,255,255,0.12);
-      --text:#fff;
-      --muted:#cfcfcf;
-      --accent:#ffe169;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      padding: 24px;
-      color: var(--text);
-      background: radial-gradient(1200px 1200px at 10% -10%, #111 0%, #000 60%, #000 100%);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-    }
-    h1 { margin: 0 0 18px 0; font-weight: 700; letter-spacing: .2px; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
-    }
-    .card {
-      grid-column: span 12;
-      background: var(--glass);
-      border: 1px solid var(--stroke);
-      border-radius: 14px;
-      padding: 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    @media (min-width: 900px) {
-      .card { grid-column: span 6; }
-    }
-    label {
-      display:block;
-      font-size: 12px;
-      color: var(--muted);
-      margin: 8px 0 6px;
-    }
-    textarea, input, select {
-      width: 100%;
-      color: var(--text);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--stroke);
-      border-radius: 10px;
-      padding: 10px 12px;
-      outline: none;
-      caret-color: var(--text);
-    }
-    textarea { min-height: 84px; resize: vertical; }
-    button {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      background: var(--accent);
-      color:#000;
-      font-weight:700;
-      border:0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      cursor:pointer;
-      margin-top: 10px;
-    }
-    .output {
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--stroke);
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-    img.gen {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-    .hint {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 6px;
-    }
-  </style>
-</head>
-<body>
-  <h1>AI Playground</h1>
-  <div class="grid">
-
-    <!-- IMAGE GENERATION -->
-    <div class="card" id="card-imggen">
-      <h2 style="margin:0 0 6px">Image Generation</h2>
-      <div class="hint">Generate images from text (DALL·E via Puter.js).</div>
-
-      <label for="imggen-model">Model</label>
-      <select id="imggen-model">
-        <option value="dalle">DALL·E 3 (default)</option>
-      </select>
-
-      <label for="imggen-prompt">Image Prompt</label>
-      <textarea id="imggen-prompt" placeholder="e.g., A futuristic cityscape at night with neon rain"></textarea>
-
-      <label for="imggen-count">Number of Images</label>
-      <select id="imggen-count">
-        <option value="1">1</option>
-        <option value="2" selected>2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-
-      <button id="imggen-run">Generate</button>
-      <div class="output" id="imggen-out"></div>
-    </div>
-
-  </div>
-
-<script>
-/* ---------- Helpers ---------- */
-function putText(el, text) {
-  el.innerHTML = (text ?? '').toString();
-}
-function appendText(el, text) {
-  el.innerHTML += (text ?? '').toString();
-}
-
-/* ---------- IMAGE GENERATION (Multiple Images + Reset Fix) ---------- */
-document.getElementById('imggen-run').addEventListener('click', async () => {
-  const prompt = document.getElementById('imggen-prompt').value.trim();
-  const out = document.getElementById('imggen-out');
-  const count = parseInt(document.getElementById('imggen-count').value, 10) || 1;
-
-  if (!prompt) {
-    putText(out, 'Please enter an image prompt.');
-    return;
-  }
-
-  putText(out, 'Generating…');
-  out.innerHTML = '';
-
-  for (let i = 0; i < count; i++) {
-    try {
-      const imgEl = await puter.ai.txt2img(prompt);
-      imgEl.classList.add('gen');
-      out.appendChild(imgEl);
-    } catch (e) {
-      const errorMsg = document.createElement('div');
-      errorMsg.classList.add('hint');
-      errorMsg.textContent = `Image ${i + 1} failed: ${e?.message ?? 'Unknown error'}`;
-      out.appendChild(errorMsg);
-    }
-  }
-});
-</script>
-</body>
-</html>!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -195,8 +30,9 @@ document.getElementById('imggen-run').addEventListener('click', async () => {
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 10px 30px rgba(0,0,0,.35);
   }
+  /* Expand to half-width on big screens */
   @media (min-width: 900px) {
-    .card { grid-column: span 6; }
+    #card-chat, #card-stream { grid-column: span 6; }
   }
   label { display:block; font-size: 12px; color: var(--muted); margin: 8px 0 6px; }
   textarea, input, select {
@@ -204,7 +40,7 @@ document.getElementById('imggen-run').addEventListener('click', async () => {
     border: 1px solid var(--stroke); border-radius: 10px; padding: 10px 12px;
     outline: none; caret-color: var(--text);
   }
-  textarea { min-height: 84px; resize: vertical; }
+  textarea { min-height: 120px; resize: vertical; }
   button {
     display:inline-flex; align-items:center; gap:8px;
     background: var(--accent); color:#000; font-weight:700; border:0;
@@ -214,8 +50,9 @@ document.getElementById('imggen-run').addEventListener('click', async () => {
     margin-top: 12px; padding: 12px; border-radius: 10px;
     background: rgba(255,255,255,0.04); border: 1px solid var(--stroke);
     white-space: pre-wrap; word-wrap: break-word;
+    min-height: 150px; /* more room */
+    overflow-y: auto;
   }
-  img.gen { max-width: 100%; height: auto; display: block; border-radius: 10px; margin-top: 10px; }
   .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
 </style>
 </head>
@@ -233,75 +70,20 @@ document.getElementById('imggen-run').addEventListener('click', async () => {
         <option value="gpt-4.1">GPT-4.1</option>
         <option value="gpt-4.1-mini">GPT-4.1-mini</option>
         <option value="gpt-4o">GPT-4o</option>
-        <option value="gpt-4o-mini">GPT-4o-mini</option>
         <option value="gpt-5">GPT-5</option>
         <option value="gpt-5-mini">GPT-5-mini</option>
         <option value="gpt-5-nano">GPT-5-nano</option>
-        <option value="gpt-5-chat-latest">GPT-5 chat (latest)</option>
         <option value="o1">o1</option>
         <option value="o1-mini">o1-mini</option>
-        <option value="o1-pro">o1-pro</option>
-        <option value="o3">o3</option>
         <option value="o3-mini">o3-mini</option>
-        <option value="o4-mini">o4-mini</option>
         <option value="claude-sonnet-4">Claude Sonnet 4</option>
-        <option value="claude-opus-4">Claude Opus 4</option>
-        <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
-        <option value="claude-3-7-opus">Claude 3.7 Opus</option>
         <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
-        <option value="google/gemini-2.5-pro-exp-03-25:free">Gemini 2.5 Pro (exp)</option>
-        <option value="google/gemini-flash-1.5-8b">Gemini 1.5 Flash (8B)</option>
-        <option value="x-ai/grok-4">Grok 4</option>
-        <option value="x-ai/grok-3">Grok 3</option>
-        <option value="x-ai/grok-3-mini">Grok 3 Mini</option>
-        <option value="x-ai/grok-2-1212">Grok 2 (1212)</option>
       </select>
 
       <label for="chat-prompt">Prompt</label>
       <textarea id="chat-prompt" placeholder="e.g., Explain quantum computing in simple terms"></textarea>
       <button id="chat-run">Run</button>
       <div class="output" id="chat-out"></div>
-    </div>
-
-    <!-- IMAGE GENERATION -->
-    <div class="card" id="card-imggen">
-      <h2 style="margin:0 0 6px">Image Generation</h2>
-      <div class="hint">Generate an image from text (DALL·E via Puter.js).</div>
-      <label for="imggen-model">Model</label>
-      <select id="imggen-model">
-        <option value="dalle">DALL·E 3 (default)</option>
-      </select>
-
-      <label for="imggen-prompt">Image Prompt</label>
-      <textarea id="imggen-prompt" placeholder="e.g., A futuristic cityscape at night with neon rain"></textarea>
-      <button id="imggen-run">Generate</button>
-      <div class="output" id="imggen-out"></div>
-    </div>
-
-    <!-- IMAGE ANALYSIS -->
-    <div class="card" id="card-vision">
-      <h2 style="margin:0 0 6px">Image Analysis</h2>
-      <div class="hint">Paste an image URL and ask a question about it.</div>
-      <label for="vision-model">Model</label>
-      <select id="vision-model">
-        <option value="gpt-4o" selected>GPT-4o (vision)</option>
-        <option value="gpt-4.1">GPT-4.1</option>
-        <option value="gpt-4.1-nano">GPT-4.1-nano</option>
-        <option value="gpt-5-nano">GPT-5-nano</option>
-        <option value="claude-sonnet-4">Claude Sonnet 4</option>
-        <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
-        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
-        <option value="google/gemini-flash-1.5-8b">Gemini 1.5 Flash (8B)</option>
-        <option value="x-ai/grok-4">Grok 4</option>
-      </select>
-
-      <label for="vision-url">Image URL</label>
-      <input id="vision-url" placeholder="https://… (direct image link)" />
-
-      <label for="vision-prompt">Prompt</label>
-      <textarea id="vision-prompt">What do you see in this image?</textarea>
-      <button id="vision-run">Analyze</button>
-      <div class="output" id="vision-out"></div>
     </div>
 
     <!-- STREAMING LONG RESPONSES -->
@@ -315,11 +97,8 @@ document.getElementById('imggen-run').addEventListener('click', async () => {
         <option value="gpt-4o">GPT-4o</option>
         <option value="gpt-5-nano">GPT-5-nano</option>
         <option value="o3-mini">o3-mini</option>
-        <option value="o1-mini">o1-mini</option>
         <option value="claude-sonnet-4">Claude Sonnet 4</option>
-        <option value="claude-opus-4">Claude Opus 4</option>
         <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
-        <option value="x-ai/grok-4">Grok 4</option>
       </select>
 
       <label for="stream-prompt">Prompt</label>
@@ -332,27 +111,12 @@ document.getElementById('imggen-run').addEventListener('click', async () => {
 
 <script>
 /* ---------- Helpers ---------- */
-function putText(el, text) {
-  el.innerHTML = (text ?? '').toString();
-}
-function appendText(el, text) {
-  el.innerHTML += (text ?? '').toString();
-}
+function putText(el, text) { el.innerHTML = (text ?? '').toString(); }
+function appendText(el, text) { el.innerHTML += (text ?? '').toString(); }
 function normalizeNonStream(resp) {
   if (typeof resp === 'string') return resp;
-  if (resp?.output_text) return resp.output_text; // ✅ Fix for Puter.js
+  if (resp?.output_text) return resp.output_text;
   if (resp?.text) return resp.text;
-  if (resp?.message?.content) {
-    if (Array.isArray(resp.message.content)) {
-      const first = resp.message.content[0];
-      return typeof first === 'string'
-        ? first
-        : (first?.text ?? JSON.stringify(resp.message.content));
-    }
-    return typeof resp.message.content === 'string'
-      ? resp.message.content
-      : JSON.stringify(resp.message.content);
-  }
   return JSON.stringify(resp ?? {});
 }
 
@@ -365,39 +129,6 @@ document.getElementById('chat-run').addEventListener('click', async () => {
   putText(out, 'Thinking…');
   try {
     const resp = await puter.ai.chat(prompt, { model });
-    putText(out, normalizeNonStream(resp));
-  } catch (e) {
-    putText(out, 'Error: ' + (e?.message ?? e));
-  }
-});
-
-/* ---------- IMAGE GENERATION ---------- */
-document.getElementById('imggen-run').addEventListener('click', async () => {
-  const prompt = document.getElementById('imggen-prompt').value.trim();
-  const out = document.getElementById('imggen-out');
-  if (!prompt) { putText(out, 'Please enter an image prompt.'); return; }
-  putText(out, 'Generating…');
-  out.innerHTML = '';
-  try {
-    const imgEl = await puter.ai.txt2img(prompt);
-    imgEl.classList.add('gen');
-    out.appendChild(imgEl);
-  } catch (e) {
-    putText(out, 'Error: ' + (e?.message ?? e));
-  }
-});
-
-/* ---------- IMAGE ANALYSIS ---------- */
-document.getElementById('vision-run').addEventListener('click', async () => {
-  const model = document.getElementById('vision-model').value;
-  const url = document.getElementById('vision-url').value.trim();
-  const prompt = document.getElementById('vision-prompt').value.trim();
-  const out = document.getElementById('vision-out');
-  if (!url) { putText(out, 'Please paste a direct image URL.'); return; }
-  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
-  putText(out, 'Analyzing image…');
-  try {
-    const resp = await puter.ai.chat(prompt, url, { model });
     putText(out, normalizeNonStream(resp));
   } catch (e) {
     putText(out, 'Error: ' + (e?.message ?? e));
