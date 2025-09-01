@@ -230,14 +230,36 @@
       button.textContent = isLoading ? 'Processing…' : button.dataset.originalText;
     }
 
-    async function speakText(text) {
-      try {
-        const speechBlob = await puter.ai.txt2speech(normalizeNonStream(text));
-        const url = URL.createObjectURL(speechBlob);
-        const audio = new Audio(url);
-        audio.play();
-      } catch (e) {
-        console.error('Speech synthesis failed:', e);
+    <script>
+async function speakText(text) {
+  if (!text) return;
+
+  const lang = document.getElementById("speech-lang").value;
+  const voiceChoice = document.getElementById("speech-voice").value;
+
+  // Web Speech API fallback
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+
+    // Optional: choose voice
+    const voices = speechSynthesis.getVoices();
+    if (voiceChoice === "female") {
+      utterance.voice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
+    } else if (voiceChoice === "male") {
+      utterance.voice = voices.find(v => v.name.toLowerCase().includes("male")) || voices[0];
+    } else {
+      utterance.voice = voices[0];
+    }
+
+    speechSynthesis.speak(utterance);
+    console.log("🔊 Speaking:", text);
+  } else {
+    console.warn("❌ Speech synthesis not supported in this browser");
+    alert("Speech synthesis not supported in this browser");
+  }
+}
+</script>
       }
     }
 
