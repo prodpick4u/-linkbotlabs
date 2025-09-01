@@ -108,7 +108,7 @@
         data.models.forEach(m => {
           const opt = document.createElement("option");
           opt.value = m.id;
-          opt.textContent = `${m.name || m.id} (${m.id})`;
+          opt.textContent = `${m.name || m.id}`;
           select.appendChild(opt);
         });
       } catch (e) {
@@ -124,17 +124,16 @@
       container.scrollTop = container.scrollHeight;
     }
 
-    function normalizeNonStream(resp) {
+    function normalizeResp(resp) {
       if (!resp) return "";
       if (typeof resp === "string") return resp;
       if (resp.output_text) return resp.output_text;
       if (resp.message?.content) return resp.message.content;
-      if (resp.message) return resp.message;
       if (resp.text) return resp.text;
       if (resp.choices && resp.choices[0]?.message?.content) {
         return resp.choices[0].message.content;
       }
-      return "[No text output found]";
+      return JSON.stringify(resp);
     }
 
     async function sendMessage() {
@@ -153,7 +152,7 @@
         const resp = await puter.ai.chat(text, { model });
         logDebug("📥 Raw AI response:", resp);
 
-        const out = normalizeNonStream(resp);
+        const out = normalizeResp(resp);
         putText(chatBox, out, "ai");
         speakText(out);
       } catch (e) {
@@ -181,13 +180,11 @@
         logDebug("✅ TTS raw result:", result);
 
         if (result instanceof HTMLAudioElement) {
-          logDebug("🎵 Result is HTMLAudioElement");
           result.play();
           return;
         }
 
         if (result?.audio instanceof Blob) {
-          logDebug("🎵 Result contains Blob audio");
           const url = URL.createObjectURL(result.audio);
           const audio = new Audio(url);
           audio.play();
@@ -195,14 +192,13 @@
         }
 
         if (typeof result === "string") {
-          logDebug("🎵 Result is a string:", result);
           const audio = new Audio(result);
           audio.play();
           return;
         }
 
         logDebug("❌ Unsupported TTS return format:", result);
-        alert("Speech output not supported. See debug log below.");
+        alert("Speech output not supported. See debug log.");
       } catch (e) {
         logDebug("💥 TTS error:", e);
         alert("Speech failed: " + (e.message ?? e));
