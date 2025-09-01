@@ -3,155 +3,145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puter AI Chat - Free Models</title>
+<title>Puter AI Chat</title>
 <script src="https://js.puter.com/v2/"></script>
 <style>
-body {
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #1e1e2f, #4b0082, #1e3c72);
-}
-.chat-container {
-  width: 100%;
-  max-width: 500px;
-  height: 600px;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(15px);
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  color: #fff;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-select, input, button {
-  border-radius: 10px;
-  padding: 10px;
-  border: none;
-  outline: none;
-}
-select {
-  margin-bottom: 15px;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  font-weight: bold;
-}
-input {
-  flex: 1;
-  margin-right: 10px;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-}
-button {
-  background: #4b0082;
-  color: #fff;
-  cursor: pointer;
-  transition: 0.3s;
-}
-button:hover {
-  background: #6a0dad;
-}
-.messages {
-  flex: 1;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
-.message {
-  margin-bottom: 10px;
-  padding: 8px 12px;
-  border-radius: 10px;
-}
-.user {
-  background: rgba(0,128,255,0.6);
-  align-self: flex-end;
-}
-.assistant {
-  background: rgba(128,0,255,0.6);
-  align-self: flex-start;
-}
-.input-row {
-  display: flex;
-  gap: 5px;
-}
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #1e1e2f, #3b3b6b, #5e1e5e);
+        color: #fff;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .chat-container {
+        background: rgba(0,0,0,0.6);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 20px;
+        width: 90%;
+        max-width: 600px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    select, input, button {
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 1em;
+    }
+    select {
+        width: 100%;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+    }
+    input {
+        flex: 1;
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+    }
+    button {
+        background: #7b2ff7;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    button:hover {
+        background: #4e00b8;
+    }
+    .messages {
+        flex: 1;
+        overflow-y: auto;
+        max-height: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+    .message {
+        background: rgba(255,255,255,0.1);
+        padding: 10px;
+        border-radius: 12px;
+    }
+    .console {
+        font-size: 0.8em;
+        color: #ffcc00;
+        max-height: 100px;
+        overflow-y: auto;
+    }
 </style>
 </head>
 <body>
 <div class="chat-container">
-  <select id="modelSelect">
-    <!-- GPT Models -->
-    <option value="openai:gpt-5">GPT-5</option>
-    <option value="openai:gpt-5-mini">GPT-5-mini</option>
-    <option value="openai:gpt-5-nano">GPT-5-nano</option>
-    <option value="openai:gpt-5-chat-latest">GPT-5-chat-latest</option>
-    <option value="openai:gpt-4.1">GPT-4.1</option>
-    <option value="openai:gpt-4.1-mini">GPT-4.1-mini</option>
-    <option value="openai:gpt-4.1-nano">GPT-4.1-nano</option>
-    <option value="openai:gpt-4.5-preview">GPT-4.5-preview</option>
-    <option value="openai:gpt-4o">GPT-4o</option>
-    <option value="openai:gpt-4o-mini">GPT-4o-mini</option>
-    <option value="openai:o1">O1</option>
-    <option value="openai:o1-mini">O1-mini</option>
-    <option value="openai:o1-pro">O1-pro</option>
-    <option value="openai:o3">O3</option>
-    <option value="openai:o3-mini">O3-mini</option>
-    <option value="openai:o4-mini">O4-mini</option>
-    
-    <!-- Other free models -->
-    <option value="x-ai/grok-3">Grok 3</option>
-    <option value="x-ai/grok-4">Grok 4</option>
-    <option value="anthropic/claude-1">Claude 1</option>
-    <option value="anthropic/claude-2">Claude 2</option>
-    <option value="deepseek/free">Deep Seek</option>
-    <option value="gemini/free">Gemini</option>
-  </select>
-
-  <div class="messages" id="messages"></div>
-
-  <div class="input-row">
-    <input type="text" id="userInput" placeholder="Type a message..." />
-    <button id="sendBtn">Send</button>
-  </div>
+    <select id="modelSelect"></select>
+    <div class="messages" id="messages"></div>
+    <div style="display:flex; gap:5px;">
+        <input type="text" id="userInput" placeholder="Type your message here">
+        <button id="sendBtn">Send</button>
+    </div>
+    <div class="console" id="console"></div>
 </div>
 
 <script>
-const messagesDiv = document.getElementById('messages');
+const messagesEl = document.getElementById('messages');
+const consoleEl = document.getElementById('console');
+const inputEl = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
-const userInput = document.getElementById('userInput');
 const modelSelect = document.getElementById('modelSelect');
 
-async function addMessage(role, text) {
-  const msgDiv = document.createElement('div');
-  msgDiv.className = `message ${role}`;
-  msgDiv.textContent = text;
-  messagesDiv.appendChild(msgDiv);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+// Load models from JSON
+fetch('ai_models.json')
+.then(res => res.json())
+.then(data => {
+    data.models.forEach(model => {
+        const opt = document.createElement('option');
+        opt.value = model;
+        opt.textContent = model;
+        modelSelect.appendChild(opt);
+    });
+})
+.catch(err => consoleEl.textContent += 'Error loading models: '+err+'\n');
+
+sendBtn.addEventListener('click', () => sendMessage());
+
+function logConsole(msg) {
+    consoleEl.textContent += msg + '\n';
+    consoleEl.scrollTop = consoleEl.scrollHeight;
 }
 
-sendBtn.addEventListener('click', async () => {
-  const text = userInput.value.trim();
-  if (!text) return;
-
-  await addMessage('user', text);
-  userInput.value = '';
-
-  try {
+async function sendMessage() {
+    const message = inputEl.value.trim();
+    if(!message) return;
     const model = modelSelect.value;
-    const response = await puter.ai.chat(text, { model });
-    await addMessage('assistant', response.message.content);
-  } catch (err) {
-    console.error(err);
-    await addMessage('assistant', '💥 Error: ' + JSON.stringify(err));
-  }
-});
+    appendMessage('You: ' + message);
 
-// Enter key to send
-userInput.addEventListener('keypress', e => {
-  if(e.key === 'Enter') sendBtn.click();
-});
+    try {
+        const chat = await puter.chat.send({
+            model,
+            message
+        });
+        appendMessage('AI: ' + chat.response);
+        logConsole(`Message sent with model: ${model}`);
+    } catch(e) {
+        appendMessage('AI: [Error]');
+        logConsole('💥 Chat error: ' + JSON.stringify(e));
+    }
+
+    inputEl.value = '';
+}
+
+function appendMessage(text) {
+    const div = document.createElement('div');
+    div.className = 'message';
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+}
 </script>
 </body>
 </html>
