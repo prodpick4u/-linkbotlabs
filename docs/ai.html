@@ -13,52 +13,48 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      height: 100vh;
     }
-    .card {
-      background: #222;
-      margin: 10px;
+
+    #chat {
+      flex: 1;
+      overflow-y: auto;
       padding: 10px;
-      border-radius: 6px;
-      box-shadow: 0 0 4px #000;
       display: flex;
       flex-direction: column;
     }
-    .output {
-      flex: 1;
-      min-height: 150px;
-      max-height: 300px;
-      overflow-y: auto;
-      padding: 5px;
-      border: 1px solid #333;
-      border-radius: 4px;
-      background: #000;
-      font-size: 14px;
-    }
-    .input-area {
+
+    #input-area {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 8px;
+      padding: 10px;
+      background: #222;
     }
-    input, select, button {
-      padding: 6px 10px;
+
+    #input {
+      flex: 1;
+      padding: 8px;
       border: none;
       border-radius: 4px;
       font-size: 14px;
     }
-    input {
-      flex: 1;
-    }
-    button {
+
+    button, select {
+      margin-left: 6px;
+      margin-top: 6px;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
       background: #444;
       color: #fff;
+      font-size: 14px;
     }
-    #debug-panel {
+
+    #debug-log {
       background: #111;
       color: #0f0;
       font-size: 12px;
-      padding: 6px;
+      padding: 5px;
       max-height: 150px;
       overflow-y: auto;
       border-top: 1px solid #333;
@@ -67,64 +63,82 @@
   </style>
 </head>
 <body>
-  <h2 style="text-align:center;margin:10px 0;">🤖 LinkBotLabs AI Chat</h2>
 
-  <!-- Chat Card -->
-  <div class="card">
-    <div id="chat-out" class="output"></div>
-    <div class="input-area">
-      <select id="chat-model"><option>Loading models...</option></select>
-      <input id="chat-in" placeholder="Type your message...">
-      <button onclick="sendMessage()">Send</button>
-    </div>
+  <div id="chat"></div>
+
+  <div id="input-area">
+    <!-- Model dropdown -->
+    <select id="model">
+      <option>Loading models...</option>
+    </select>
+
+    <input id="input" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <!-- Speech options -->
+    <select id="speech-lang">
+      <option value="en">English</option>
+      <option value="en-ie">English (Ireland)</option>
+      <option value="en-us">English (US)</option>
+    </select>
+    <select id="speech-engine">
+      <option value="moirai">Moirai</option>
+      <option value="openai">OpenAI</option>
+    </select>
+    <select id="speech-voice">
+      <option value="default">Default</option>
+      <option value="female">Female</option>
+      <option value="male">Male</option>
+    </select>
   </div>
 
-  <!-- Streaming Card -->
-  <div class="card">
-    <div id="stream-out" class="output"></div>
-    <div class="input-area">
-      <select id="stream-model"><option>Loading models...</option></select>
-      <input id="stream-in" placeholder="Stream test...">
-      <button onclick="sendStream()">Stream</button>
-    </div>
-  </div>
-
-  <!-- Debug Panel -->
-  <div id="debug-panel"></div>
+  <div id="debug-log"></div>
 
   <script>
     function logDebug(...args) {
-      const panel = document.getElementById("debug-panel");
-      const msg = args.map(a => typeof a === "object" ? JSON.stringify(a) : a).join(" ");
-      panel.innerHTML += msg + "<br>";
-      panel.scrollTop = panel.scrollHeight;
+      const logBox = document.getElementById("debug-log");
+      const msg = args.map(a => (typeof a === "object" ? JSON.stringify(a, null, 2) : a)).join(" ");
+      logBox.innerHTML += msg + "<br>";
+      logBox.scrollTop = logBox.scrollHeight;
       console.log(...args);
     }
 
-    // Load available models from Puter
+    // Load models dynamically from Puter
     async function loadModels() {
+      const select = document.getElementById("model");
       try {
+        await waitForPuter();
         const models = await puter.ai.models.list();
         logDebug("📥 Loaded models:", models);
 
-        const chatSelect = document.getElementById("chat-model");
-        const streamSelect = document.getElementById("stream-model");
-
-        chatSelect.innerHTML = "";
-        streamSelect.innerHTML = "";
-
+        select.innerHTML = "";
         models.forEach(m => {
-          const opt1 = document.createElement("option");
-          opt1.value = m.id;
-          opt1.textContent = m.display_name ? `${m.display_name} (${m.id})` : m.id;
-          chatSelect.appendChild(opt1);
-
-          const opt2 = opt1.cloneNode(true);
-          streamSelect.appendChild(opt2);
+          const opt = document.createElement("option");
+          opt.value = m.id;
+          opt.textContent = `${m.name || m.id} (${m.id})`;
+          select.appendChild(opt);
         });
-      } catch (err) {
-        logDebug("💥 Failed to load models:", err);
+      } catch (e) {
+        logDebug("💥 Failed to load models:", e);
+        select.innerHTML = "<option>Error loading models</option>";
       }
+    }
+
+    // Wait until Puter SDK is ready
+    function waitForPuter() {
+      return new Promise((resolve, reject) => {
+        const maxWait = 5000;
+        let waited = 0;
+        const interval = setInterval(() => {
+          if (window.puter?.ai?.models?.list) {
+            clearInterval(interval);
+            resolve();
+          } else if ((waited += 100) > maxWait) {
+            clearInterval(interval);
+            reject("Puter SDK not loaded");
+          }
+        }, 100);
+      });
     }
 
     function putText(container, text, sender = "ai") {
@@ -134,57 +148,87 @@
       container.scrollTop = container.scrollHeight;
     }
 
+    function normalizeNonStream(resp) {
+      if (!resp) return "";
+      if (typeof resp === "string") return resp;
+      if (resp.output_text) return resp.output_text;
+      if (resp.message?.content) return resp.message.content;
+      if (resp.message) return resp.message;
+      if (resp.text) return resp.text;
+      if (resp.choices && resp.choices[0]?.message?.content) return resp.choices[0].message.content;
+      return "[No text output found]";
+    }
+
     async function sendMessage() {
-      const input = document.getElementById("chat-in");
+      const input = document.getElementById("input");
       const text = input.value.trim();
       if (!text) return;
       input.value = "";
 
-      const chatBox = document.getElementById("chat-out");
+      const chatBox = document.getElementById("chat");
       putText(chatBox, text, "user");
 
-      const model = document.getElementById("chat-model").value;
-      logDebug("🚀 Sending:", text, "with model:", model);
+      const model = document.getElementById("model").value;
+      logDebug("🚀 Sending message:", text, "with model:", model);
 
       try {
         const resp = await puter.ai.chat(text, { model });
-        logDebug("📥 Raw response:", resp);
+        logDebug("📥 Raw AI response:", resp);
 
-        const out = resp.output_text || resp.message?.content || "[No text]";
+        const out = normalizeNonStream(resp);
         putText(chatBox, out, "ai");
+        speakText(out);
       } catch (e) {
         logDebug("💥 Chat error:", e);
         putText(chatBox, "[Error: " + (e.message ?? e) + "]", "ai");
       }
     }
 
-    async function sendStream() {
-      const input = document.getElementById("stream-in");
-      const text = input.value.trim();
+    async function speakText(text) {
       if (!text) return;
-      input.value = "";
 
-      const streamBox = document.getElementById("stream-out");
-      putText(streamBox, text, "user");
+      const lang = document.getElementById("speech-lang").value;
+      const engine = document.getElementById("speech-engine").value;
+      const voice = document.getElementById("speech-voice").value;
 
-      const model = document.getElementById("stream-model").value;
-      logDebug("🚀 Streaming:", text, "with model:", model);
+      logDebug("🔊 Requesting speech:", { text, lang, engine, voice });
 
       try {
-        const stream = await puter.ai.chat.stream(text, { model });
-        for await (const chunk of stream) {
-          logDebug("📥 Stream chunk:", chunk);
-          if (chunk?.output_text) {
-            putText(streamBox, chunk.output_text, "ai");
-          }
+        const result = await puter.ai.txt2speech(text, {
+          language: lang,
+          engine: engine,
+          voice: voice
+        });
+
+        logDebug("✅ TTS raw result:", result);
+
+        if (result instanceof HTMLAudioElement) {
+          result.play();
+          return;
         }
+
+        if (result?.audio instanceof Blob) {
+          const url = URL.createObjectURL(result.audio);
+          const audio = new Audio(url);
+          audio.play();
+          return;
+        }
+
+        if (typeof result === "string") {
+          const audio = new Audio(result);
+          audio.play();
+          return;
+        }
+
+        logDebug("❌ Unsupported TTS return format:", result);
+        alert("Speech output not supported. See debug log below.");
       } catch (e) {
-        logDebug("💥 Stream error:", e);
-        putText(streamBox, "[Stream error: " + (e.message ?? e) + "]", "ai");
+        logDebug("💥 TTS error:", e);
+        alert("Speech failed: " + (e.message ?? e));
       }
     }
 
-    // Load models on startup
+    // Initialize models on page load
     loadModels();
   </script>
 </body>
