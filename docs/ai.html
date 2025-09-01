@@ -52,6 +52,10 @@
     min-height: 150px; overflow-y: auto;
   }
   .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  #debug-console {
+    background:#111;color:#0f0;font-family:monospace;font-size:12px;
+    padding:8px;max-height:200px;overflow-y:auto;border-top:1px solid #333;margin-top:18px;
+  }
 </style>
 </head>
 <body>
@@ -64,7 +68,6 @@
       <div class="hint">Ask anything. Choose a chat model.</div>
       <label for="chat-model">Model</label>
       <select id="chat-model">
-        <!-- existing -->
         <option value="gpt-4.1-nano" selected>GPT-4.1-nano (fast & light)</option>
         <option value="gpt-4.1">GPT-4.1</option>
         <option value="gpt-4.1-mini">GPT-4.1-mini</option>
@@ -77,7 +80,6 @@
         <option value="o3-mini">o3-mini</option>
         <option value="claude-sonnet-4">Claude Sonnet 4</option>
         <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
-        <!-- added -->
         <option value="x-ai/grok-3-mini">x-ai/grok-3-mini</option>
         <option value="x-ai/grok-3-mini-beta">x-ai/grok-3-mini-beta</option>
         <option value="x-ai/grok-4">x-ai/grok-4</option>
@@ -117,7 +119,7 @@
       <div class="hint">See responses arrive in real-time.</div>
       <label for="stream-model">Model</label>
       <select id="stream-model">
-        <!-- existing -->
+        <!-- same models as chat -->
         <option value="gpt-4.1-nano" selected>GPT-4.1-nano</option>
         <option value="gpt-4.1">GPT-4.1</option>
         <option value="gpt-4o">GPT-4o</option>
@@ -125,7 +127,6 @@
         <option value="o3-mini">o3-mini</option>
         <option value="claude-sonnet-4">Claude Sonnet 4</option>
         <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
-        <!-- added (same list as chat) -->
         <option value="x-ai/grok-3-mini">x-ai/grok-3-mini</option>
         <option value="x-ai/grok-3-mini-beta">x-ai/grok-3-mini-beta</option>
         <option value="x-ai/grok-4">x-ai/grok-4</option>
@@ -161,6 +162,9 @@
 
   </div>
 
+  <!-- DEBUG CONSOLE -->
+  <div id="debug-console"><strong>Debug Console:</strong><br></div>
+
 <script>
 function putText(el, text) { el.innerHTML = (text ?? '').toString(); }
 function appendText(el, text) { el.innerHTML += (text ?? '').toString(); }
@@ -169,6 +173,12 @@ function normalizeNonStream(resp) {
   if (resp?.output_text) return resp.output_text;
   if (resp?.text) return resp.text;
   return JSON.stringify(resp ?? {});
+}
+function logDebug(msg) {
+  const dbg = document.getElementById('debug-console');
+  const time = new Date().toLocaleTimeString();
+  dbg.innerHTML += `[${time}] ${msg}<br>`;
+  dbg.scrollTop = dbg.scrollHeight;
 }
 
 /* CHAT */
@@ -181,7 +191,11 @@ document.getElementById('chat-run').addEventListener('click', async () => {
   try {
     const resp = await puter.ai.chat(prompt, { model });
     putText(out, normalizeNonStream(resp));
-  } catch (e) { putText(out, 'Error: ' + (e?.message ?? e)); }
+    logDebug(`Chat response received for model ${model}`);
+  } catch (e) { 
+    putText(out, 'Error: ' + (e?.message ?? e)); 
+    logDebug(`Chat error: ${e?.message ?? e}`);
+  }
 });
 
 /* STREAM */
@@ -197,7 +211,11 @@ document.getElementById('stream-run').addEventListener('click', async () => {
       if (part?.output_text) appendText(out, part.output_text.replaceAll('\n','<br>'));
       else if (part?.text) appendText(out, part.text.replaceAll('\n','<br>'));
     }
-  } catch (e) { putText(out, 'Error: ' + (e?.message ?? e)); }
+    logDebug(`Stream finished for model ${model}`);
+  } catch (e) { 
+    putText(out, 'Error: ' + (e?.message ?? e)); 
+    logDebug(`Stream error: ${e?.message ?? e}`);
+  }
 });
 
 /* TEXT TO SPEECH */
@@ -206,67 +224,12 @@ async function speakText(text) {
   try {
     const audio = await puter.ai.txt2speech(text, { engine:"neural", language:"en-US" });
     audio.play();
-  } catch (e) { console.error("TTS error:", e); }
-}
-<div id="debug-console" style="background:#111;color:#0f0;font-family:monospace;font-size:12px;padding:8px;max-height:200px;overflow-y:auto;border-top:1px solid #333;">
-  <strong>Debug Console:</strong><br>
-</div>
-
-<script>
-function logDebug(...args) {
-  const logBox = document.getElementById("debug-console");
-  const msg = args.map(a =>
-    (typeof a === "object" ? JSON.stringify(a, null, 2) : a)
-  ).join(" ");
-  logBox.innerHTML += msg + "<br>";
-  logBox.scrollTop = logBox.scrollHeight;
-  console.log(...args);
-}
-
-async function runChat(prompt, model) {
-  logDebug("🚀 Sending message:", prompt, "with model:", model);
-  try {
-    const resp = await puter.ai.chat(prompt, { model });
-    logDebug("📥 Raw AI response:", resp);
-    return resp?.output_text || resp?.text || JSON.stringify(resp);
-  } catch (e) {
-    logDebug("💥 Chat error:", e);
-    return "[Chat error – see console]";
+    logDebug('TTS played successfully.');
+  } catch (e) { 
+    console.error("TTS error:", e); 
+    logDebug(`TTS error: ${e?.message ?? e}`);
   }
 }
-
-async function runStream(prompt, model, container) {
-  logDebug("🚀 Streaming message:", prompt, "with model:", model);
-  try {
-    const stream = await puter.ai.chat(prompt, { model, stream:true });
-    for await (const part of stream) {
-      const text = part?.output_text || part?.text || "";
-      container.innerHTML += text + "<br>";
-    }
-    logDebug("✅ Streaming complete.");
-  } catch (e) {
-    logDebug("💥 Stream error:", e);
-    container.innerHTML += "[Stream error – see console]<br>";
-  }
-}
-
-async function speakText(text, engine="neural", lang="en-US") {
-  logDebug("🔊 TTS request:", { text, engine, lang });
-  try {
-    const audio = await puter.ai.txt2speech(text, { engine, language: lang });
-    if (audio instanceof HTMLAudioElement) { audio.play(); }
-    else if (audio?.audio instanceof Blob) {
-      const url = URL.createObjectURL(audio.audio);
-      new Audio(url).play();
-    } else if (typeof audio === "string") {
-      new Audio(audio).play();
-    }
-    logDebug("✅ TTS played successfully.");
-  } catch (e) {
-    logDebug("💥 TTS error:", e);
-  }
-}
-</script>
 document.getElementById('chat-speak').addEventListener('click', () => {
   speakText(document.getElementById('chat-out').innerText);
 });
