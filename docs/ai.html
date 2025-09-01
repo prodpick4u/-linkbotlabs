@@ -1,426 +1,385 @@
-<<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Playground</title>
-  <script src="https://js.puter.com/v2/"></script>
-  <style>
-    :root {
-      --glass: rgba(0,0,0,0.35);
-      --stroke: rgba(255,255,255,0.12);
-      --text:#fff;
-      --muted:#cfcfcf;
-      --accent:#ffe169;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      padding: 24px;
-      color: var(--text);
-      background: radial-gradient(1200px 1200px at 10% -10%, #111 0%, #000 60%, #000 100%);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-    }
-    h1 { margin: 0 0 18px 0; font-weight: 700; letter-spacing: .2px; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 18px;
-    }
-    .card {
-      grid-column: span 12;
-      background: var(--glass);
-      border: 1px solid var(--stroke);
-      border-radius: 14px;
-      padding: 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    @media (min-width: 900px) {
-      .card { grid-column: span 6; }
-    }
-    label {
-      display:block;
-      font-size: 12px;
-      color: var(--muted);
-      margin: 8px 0 6px;
-    }
-    textarea, input, select {
-      width: 100%;
-      color: var(--text);
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--stroke);
-      border-radius: 10px;
-      padding: 10px 12px;
-      outline: none;
-      caret-color: var(--text);
-    }
-    textarea { min-height: 84px; resize: vertical; }
-    button {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      background: var(--accent);
-      color:#000;
-      font-weight:700;
-      border:0;
-      border-radius: 10px;
-      padding: 10px 14px;
-      cursor:pointer;
-      margin-top: 10px;
-    }
-    .output {
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--stroke);
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-    img.gen {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
-    .hint {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 6px;
-    }
-  </style>
-</head>
-<body>
-  <h1>AI Playground</h1>
-  <div class="grid">
-
-    <!-- IMAGE GENERATION -->
-    <div class="card" id="card-imggen">
-      <h2 style="margin:0 0 6px">Image Generation</h2>
-      <div class="hint">Generate images from text (DALL·E via Puter.js).</div>
-
-      <label for="imggen-model">Model</label>
-      <select id="imggen-model">
-        <option value="dalle">DALL·E 3 (default)</option>
-      </select>
-
-      <label for="imggen-prompt">Image Prompt</label>
-      <textarea id="imggen-prompt" placeholder="e.g., A futuristic cityscape at night with neon rain"></textarea>
-
-      <label for="imggen-count">Number of Images</label>
-      <select id="imggen-count">
-        <option value="1">1</option>
-        <option value="2" selected>2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-
-      <button id="imggen-run">Generate</button>
-      <div class="output" id="imggen-out"></div>
-    </div>
-
-  </div>
-
-<script>
-/* ---------- Helpers ---------- */
-function putText(el, text) {
-  el.innerHTML = (text ?? '').toString();
-}
-function appendText(el, text) {
-  el.innerHTML += (text ?? '').toString();
-}
-
-/* ---------- IMAGE GENERATION (Multiple Images + Reset Fix) ---------- */
-document.getElementById('imggen-run').addEventListener('click', async () => {
-  const prompt = document.getElementById('imggen-prompt').value.trim();
-  const out = document.getElementById('imggen-out');
-  const count = parseInt(document.getElementById('imggen-count').value, 10) || 1;
-
-  if (!prompt) {
-    putText(out, 'Please enter an image prompt.');
-    return;
-  }
-
-  putText(out, 'Generating…');
-  out.innerHTML = '';
-
-  for (let i = 0; i < count; i++) {
-    try {
-      const imgEl = await puter.ai.txt2img(prompt);
-      imgEl.classList.add('gen');
-      out.appendChild(imgEl);
-    } catch (e) {
-      const errorMsg = document.createElement('div');
-      errorMsg.classList.add('hint');
-      errorMsg.textContent = `Image ${i + 1} failed: ${e?.message ?? 'Unknown error'}`;
-      out.appendChild(errorMsg);
-    }
-  }
-});
-</script>
-</body>
-</html>!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AI Playground</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Simple AI — Puter Chat</title>
+
+<!-- Puter.js (required) -->
 <script src="https://js.puter.com/v2/"></script>
+
 <style>
-  :root { --glass: rgba(0,0,0,0.35); --stroke: rgba(255,255,255,0.12); --text:#fff; --muted:#cfcfcf; --accent:#ffe169; }
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
-  body {
-    margin: 0; padding: 24px; color: var(--text);
-    background: radial-gradient(1200px 1200px at 10% -10%, #111 0%, #000 60%, #000 100%);
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  :root{
+    --bg1:#07060a;
+    --glass: rgba(255,255,255,0.03);
+    --stroke: rgba(255,255,255,0.08);
+    --muted: #cfcfcf;
+    --accent1: #7b61ff; /* purple */
+    --accent2: #00a6ff; /* blue */
+    --user-bubble: #8ef08e; /* green */
+    --ai-bubble: #ffb04d; /* orange */
   }
-  h1 { margin: 0 0 18px 0; font-weight: 700; letter-spacing: .2px; }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 18px;
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:
+    radial-gradient(900px 600px at 10% -10%, #0b0c10 0%, #050506 40%, #000 100%);
+    color:#fff;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;padding:20px;}
+
+  .wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:18px}
+  header{display:flex;align-items:center;gap:12px}
+  header h1{margin:0;font-size:18px}
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid var(--stroke);
+    border-radius:14px;padding:14px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
   }
-  .card {
-    grid-column: span 12;
-    background: var(--glass);
-    border: 1px solid var(--stroke);
-    border-radius: 14px;
-    padding: 16px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+
+  .controls{display:flex;gap:10px;flex-wrap:wrap}
+  select,input,textarea,button{
+    border-radius:10px;border:1px solid var(--stroke);
+    background:var(--glass); color:#fff;padding:10px 12px;outline:none;
   }
-  @media (min-width: 900px) {
-    .card { grid-column: span 6; }
+  textarea{min-height:72px;resize:vertical}
+
+  .chat-area{display:flex;flex-direction:column;gap:10px;height:420px;overflow:hidden}
+  .messages{flex:1;overflow:auto;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.06));}
+  .msg{margin:8px 0;max-width:78%;padding:10px 12px;border-radius:14px;line-height:1.35}
+  .msg.user{margin-left:auto;background:linear-gradient(90deg,var(--user-bubble),#7fd87f);color:#001}
+  .msg.ai{margin-right:auto;background:linear-gradient(90deg,#ffdfb3,var(--ai-bubble));color:#331a00}
+  .meta{font-size:11px;color:var(--muted);margin-bottom:6px}
+  .row{display:flex;gap:10px;align-items:center;margin-top:8px}
+
+  .left-col{display:flex;flex-direction:column;gap:10px;min-width:260px}
+  .right-col{flex:1;display:flex;flex-direction:column;gap:10px}
+
+  .btn-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#000;font-weight:700;border:0}
+  .btn-ghost{background:transparent;border:1px solid var(--stroke);color:var(--muted)}
+  .small{padding:8px 10px;font-size:13px;border-radius:8px}
+
+  #debug-console{
+    background:#050504;color:#7cffb2;font-family:monospace;padding:10px;border-radius:8px;
+    max-height:180px;overflow:auto;border:1px solid rgba(0,0,0,0.5);
   }
-  label { display:block; font-size: 12px; color: var(--muted); margin: 8px 0 6px; }
-  textarea, input, select {
-    width: 100%; color: var(--text); background: rgba(255,255,255,0.06);
-    border: 1px solid var(--stroke); border-radius: 10px; padding: 10px 12px;
-    outline: none; caret-color: var(--text);
+
+  footer{display:flex;gap:8px;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px}
+  @media (min-width:1000px){
+    .wrap{grid-template-columns: 360px 1fr}
+    .card.full{grid-column:span 2}
+    .chat-area{height:70vh}
   }
-  textarea { min-height: 84px; resize: vertical; }
-  button {
-    display:inline-flex; align-items:center; gap:8px;
-    background: var(--accent); color:#000; font-weight:700; border:0;
-    border-radius: 10px; padding: 10px 14px; cursor:pointer; margin-top: 10px;
-  }
-  .output {
-    margin-top: 12px; padding: 12px; border-radius: 10px;
-    background: rgba(255,255,255,0.04); border: 1px solid var(--stroke);
-    white-space: pre-wrap; word-wrap: break-word;
-  }
-  img.gen { max-width: 100%; height: auto; display: block; border-radius: 10px; margin-top: 10px; }
-  .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
 </style>
 </head>
 <body>
-  <h1>AI Playground</h1>
-  <div class="grid">
+  <div class="wrap">
+    <div class="card left-col">
+      <header>
+        <div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;color:#000">AI</div>
+        <div>
+          <h1 style="font-size:16px;margin:0">Simple Puter Chat</h1>
+          <div style="font-size:12px;color:var(--muted)">Purple / Blue glass UI — green/orange bubbles</div>
+        </div>
+      </header>
 
-    <!-- CHAT / Q&A -->
-    <div class="card" id="card-chat">
-      <h2 style="margin:0 0 6px">Chat / Q&amp;A</h2>
-      <div class="hint">Ask anything. Choose a chat model (includes <strong>GPT-4.1-nano</strong>).</div>
-      <label for="chat-model">Model</label>
-      <select id="chat-model">
-        <option value="gpt-4.1-nano" selected>GPT-4.1-nano (fast & light)</option>
-        <option value="gpt-4.1">GPT-4.1</option>
-        <option value="gpt-4.1-mini">GPT-4.1-mini</option>
-        <option value="gpt-4o">GPT-4o</option>
-        <option value="gpt-4o-mini">GPT-4o-mini</option>
-        <option value="gpt-5">GPT-5</option>
-        <option value="gpt-5-mini">GPT-5-mini</option>
-        <option value="gpt-5-nano">GPT-5-nano</option>
-        <option value="gpt-5-chat-latest">GPT-5 chat (latest)</option>
-        <option value="o1">o1</option>
-        <option value="o1-mini">o1-mini</option>
-        <option value="o1-pro">o1-pro</option>
-        <option value="o3">o3</option>
-        <option value="o3-mini">o3-mini</option>
-        <option value="o4-mini">o4-mini</option>
-        <option value="claude-sonnet-4">Claude Sonnet 4</option>
-        <option value="claude-opus-4">Claude Opus 4</option>
-        <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
-        <option value="claude-3-7-opus">Claude 3.7 Opus</option>
-        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
-        <option value="google/gemini-2.5-pro-exp-03-25:free">Gemini 2.5 Pro (exp)</option>
-        <option value="google/gemini-flash-1.5-8b">Gemini 1.5 Flash (8B)</option>
-        <option value="x-ai/grok-4">Grok 4</option>
-        <option value="x-ai/grok-3">Grok 3</option>
-        <option value="x-ai/grok-3-mini">Grok 3 Mini</option>
-        <option value="x-ai/grok-2-1212">Grok 2 (1212)</option>
-      </select>
+      <label style="font-size:12px;color:var(--muted);margin-top:10px">Choose model (tries live Puter list first)</label>
+      <select id="model-select"></select>
 
-      <label for="chat-prompt">Prompt</label>
-      <textarea id="chat-prompt" placeholder="e.g., Explain quantum computing in simple terms"></textarea>
-      <button id="chat-run">Run</button>
-      <div class="output" id="chat-out"></div>
+      <label style="font-size:12px;color:var(--muted);margin-top:10px">Chat prompt</label>
+      <textarea id="prompt" placeholder="Type your message..."></textarea>
+
+      <div class="row">
+        <button id="send" class="btn-primary">Send</button>
+        <button id="speak" class="btn-ghost">🔊 Speak</button>
+        <button id="clear" class="btn-ghost">Clear</button>
+      </div>
+
+      <div style="margin-top:12px">
+        <label style="font-size:12px;color:var(--muted)">TTS language</label>
+        <select id="tts-lang">
+          <option value="en-US" selected>English (US)</option>
+          <option value="en-GB">English (UK)</option>
+          <option value="en-IE">English (Ireland)</option>
+          <option value="fr-FR">Français</option>
+        </select>
+      </div>
+
+      <div style="margin-top:12px">
+        <label style="font-size:12px;color:var(--muted)">Voice engine</label>
+        <select id="tts-engine">
+          <option value="neural" selected>neural</option>
+          <option value="standard">standard</option>
+          <option value="generative">generative</option>
+        </select>
+      </div>
+
+      <div style="margin-top:12px">
+        <label style="font-size:12px;color:var(--muted)">Debug console</label>
+        <div id="debug-console"><strong>Debug Console:</strong><br></div>
+      </div>
     </div>
 
-    <!-- IMAGE GENERATION -->
-    <div class="card" id="card-imggen">
-      <h2 style="margin:0 0 6px">Image Generation</h2>
-      <div class="hint">Generate an image from text (DALL·E via Puter.js).</div>
-      <label for="imggen-model">Model</label>
-      <select id="imggen-model">
-        <option value="dalle">DALL·E 3 (default)</option>
-      </select>
+    <div class="card right-col">
+      <div class="chat-area">
+        <div class="messages" id="messages" aria-live="polite"></div>
 
-      <label for="imggen-prompt">Image Prompt</label>
-      <textarea id="imggen-prompt" placeholder="e.g., A futuristic cityscape at night with neon rain"></textarea>
-      <button id="imggen-run">Generate</button>
-      <div class="output" id="imggen-out"></div>
+        <div style="display:flex;gap:12px;align-items:center;justify-content:space-between">
+          <div style="font-size:13px;color:var(--muted)">Model output bubbles: orange = assistant</div>
+          <div style="display:flex;gap:8px">
+            <button id="stream-toggle" class="small btn-ghost">Stream: off</button>
+            <button id="download" class="small btn-ghost">Download</button>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div id="status">Ready</div>
+        <div style="display:flex;gap:8px">
+          <button id="save-log" class="small btn-ghost">Save log</button>
+          <button id="clear-log" class="small btn-ghost">Clear log</button>
+        </div>
+      </footer>
     </div>
-
-    <!-- IMAGE ANALYSIS -->
-    <div class="card" id="card-vision">
-      <h2 style="margin:0 0 6px">Image Analysis</h2>
-      <div class="hint">Paste an image URL and ask a question about it.</div>
-      <label for="vision-model">Model</label>
-      <select id="vision-model">
-        <option value="gpt-4o" selected>GPT-4o (vision)</option>
-        <option value="gpt-4.1">GPT-4.1</option>
-        <option value="gpt-4.1-nano">GPT-4.1-nano</option>
-        <option value="gpt-5-nano">GPT-5-nano</option>
-        <option value="claude-sonnet-4">Claude Sonnet 4</option>
-        <option value="claude-3-7-sonnet">Claude 3.7 Sonnet</option>
-        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
-        <option value="google/gemini-flash-1.5-8b">Gemini 1.5 Flash (8B)</option>
-        <option value="x-ai/grok-4">Grok 4</option>
-      </select>
-
-      <label for="vision-url">Image URL</label>
-      <input id="vision-url" placeholder="https://… (direct image link)" />
-
-      <label for="vision-prompt">Prompt</label>
-      <textarea id="vision-prompt">What do you see in this image?</textarea>
-      <button id="vision-run">Analyze</button>
-      <div class="output" id="vision-out"></div>
-    </div>
-
-    <!-- STREAMING LONG RESPONSES -->
-    <div class="card" id="card-stream">
-      <h2 style="margin:0 0 6px">Streaming (Long Responses)</h2>
-      <div class="hint">See responses arrive in real-time.</div>
-      <label for="stream-model">Model</label>
-      <select id="stream-model">
-        <option value="gpt-4.1-nano" selected>GPT-4.1-nano</option>
-        <option value="gpt-4.1">GPT-4.1</option>
-        <option value="gpt-4o">GPT-4o</option>
-        <option value="gpt-5-nano">GPT-5-nano</option>
-        <option value="o3-mini">o3-mini</option>
-        <option value="o1-mini">o1-mini</option>
-        <option value="claude-sonnet-4">Claude Sonnet 4</option>
-        <option value="claude-opus-4">Claude Opus 4</option>
-        <option value="google/gemini-2.0-flash-001">Gemini 2.0 Flash</option>
-        <option value="x-ai/grok-4">Grok 4</option>
-      </select>
-
-      <label for="stream-prompt">Prompt</label>
-      <textarea id="stream-prompt">Explain the theory of relativity in detail.</textarea>
-      <button id="stream-run">Stream</button>
-      <div class="output" id="stream-out"></div>
-    </div>
-
   </div>
 
 <script>
-/* ---------- Helpers ---------- */
-function putText(el, text) {
-  el.innerHTML = (text ?? '').toString();
-}
-function appendText(el, text) {
-  el.innerHTML += (text ?? '').toString();
-}
-function normalizeNonStream(resp) {
-  if (typeof resp === 'string') return resp;
-  if (resp?.output_text) return resp.output_text; // ✅ Fix for Puter.js
-  if (resp?.text) return resp.text;
-  if (resp?.message?.content) {
-    if (Array.isArray(resp.message.content)) {
-      const first = resp.message.content[0];
-      return typeof first === 'string'
-        ? first
-        : (first?.text ?? JSON.stringify(resp.message.content));
+/* -------------------------
+   Utility & UI helpers
+   ------------------------- */
+const $ = id => document.getElementById(id);
+const messagesEl = $('messages');
+const debugEl = $('debug-console');
+const modelSelect = $('model-select');
+const promptEl = $('prompt');
+const sendBtn = $('send');
+const speakBtn = $('speak');
+const clearBtn = $('clear');
+const streamToggle = $('stream-toggle');
+const statusEl = $('status');
+
+let useStream = false;
+let conversationHistory = []; // local history (simple)
+
+function logDebug(...args){
+  const ts = new Date().toLocaleTimeString();
+  const text = args.map(a => {
+    if (a instanceof Error) return a.message;
+    try {
+      return (typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a));
+    } catch (e) {
+      return String(a);
     }
-    return typeof resp.message.content === 'string'
-      ? resp.message.content
-      : JSON.stringify(resp.message.content);
-  }
-  return JSON.stringify(resp ?? {});
+  }).join(' ');
+  debugEl.innerHTML += `[${ts}] ${text}<br>`;
+  debugEl.scrollTop = debugEl.scrollHeight;
+  console.log(...args);
 }
 
-/* ---------- CHAT ---------- */
-document.getElementById('chat-run').addEventListener('click', async () => {
-  const model = document.getElementById('chat-model').value;
-  const prompt = document.getElementById('chat-prompt').value.trim();
-  const out = document.getElementById('chat-out');
-  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
-  putText(out, 'Thinking…');
-  try {
-    const resp = await puter.ai.chat(prompt, { model });
-    putText(out, normalizeNonStream(resp));
-  } catch (e) {
-    putText(out, 'Error: ' + (e?.message ?? e));
-  }
-});
+function addMessage(text, who='ai'){
+  const div = document.createElement('div');
+  div.className = 'msg ' + (who === 'user' ? 'user' : 'ai');
+  // small meta for user/ai with timestamp
+  const meta = document.createElement('div');
+  meta.className = 'meta';
+  meta.textContent = (who === 'user' ? 'You' : 'Assistant') + ' · ' + new Date().toLocaleTimeString();
+  div.appendChild(meta);
+  const body = document.createElement('div');
+  body.innerHTML = text.replaceAll('\n','<br>');
+  div.appendChild(body);
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
 
-/* ---------- IMAGE GENERATION ---------- */
-document.getElementById('imggen-run').addEventListener('click', async () => {
-  const prompt = document.getElementById('imggen-prompt').value.trim();
-  const out = document.getElementById('imggen-out');
-  if (!prompt) { putText(out, 'Please enter an image prompt.'); return; }
-  putText(out, 'Generating…');
-  out.innerHTML = '';
-  try {
-    const imgEl = await puter.ai.txt2img(prompt);
-    imgEl.classList.add('gen');
-    out.appendChild(imgEl);
-  } catch (e) {
-    putText(out, 'Error: ' + (e?.message ?? e));
-  }
-});
+/* -------------------------
+   Populate model dropdown
+   - try to fetch from Puter endpoint
+   - fallback to curated list (free / common models)
+   ------------------------- */
+const fallbackModels = [
+  // curated / commonly free models you requested (user asked for free models)
+  {id:'gpt-4.1-nano', name:'gpt-4.1-nano (fast & light)'},
+  {id:'gpt-4.1', name:'gpt-4.1'},
+  {id:'gpt-4o-mini', name:'gpt-4o-mini'},
+  {id:'gpt-4o', name:'gpt-4o'},
+  {id:'gpt-5-nano', name:'gpt-5-nano'},
+  {id:'gpt-5-mini', name:'gpt-5-mini'},
+  {id:'gpt-5', name:'gpt-5'},
+  {id:'x-ai/grok-3', name:'x-ai/grok-3'},
+  {id:'x-ai/grok-4', name:'x-ai/grok-4'},
+  {id:'deepseek-chat', name:'deepseek-chat'},
+  {id:'deepseek-reasoner', name:'deepseek-reasoner'},
+  {id:'claude-sonnet-4', name:'claude-sonnet-4'},
+  {id:'google/gemini-2.0-flash-001', name:'google/gemini-2.0-flash-001'}
+];
 
-/* ---------- IMAGE ANALYSIS ---------- */
-document.getElementById('vision-run').addEventListener('click', async () => {
-  const model = document.getElementById('vision-model').value;
-  const url = document.getElementById('vision-url').value.trim();
-  const prompt = document.getElementById('vision-prompt').value.trim();
-  const out = document.getElementById('vision-out');
-  if (!url) { putText(out, 'Please paste a direct image URL.'); return; }
-  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
-  putText(out, 'Analyzing image…');
+async function loadModels(){
+  modelSelect.innerHTML = '<option>Loading models...</option>';
   try {
-    const resp = await puter.ai.chat(prompt, url, { model });
-    putText(out, normalizeNonStream(resp));
-  } catch (e) {
-    putText(out, 'Error: ' + (e?.message ?? e));
-  }
-});
-
-/* ---------- STREAMING ---------- */
-document.getElementById('stream-run').addEventListener('click', async () => {
-  const model = document.getElementById('stream-model').value;
-  const prompt = document.getElementById('stream-prompt').value.trim();
-  const out = document.getElementById('stream-out');
-  if (!prompt) { putText(out, 'Please enter a prompt.'); return; }
-  putText(out, '');
-  try {
-    const stream = await puter.ai.chat(prompt, { model, stream: true });
-    for await (const part of stream) {
-      if (part?.output_text) appendText(out, part.output_text.replaceAll('\n','<br>'));
-      else if (part?.text) appendText(out, part.text.replaceAll('\n','<br>'));
+    const res = await fetch('https://puter.com/puterai/chat/models');
+    if (!res.ok) throw new Error('Failed fetching puter models: '+res.status);
+    const data = await res.json();
+    // data expected: { models: [ { id, name, ...}, ... ] } (docs vary)
+    modelSelect.innerHTML = '';
+    if (data?.models && Array.isArray(data.models) && data.models.length){
+      data.models.forEach(m=>{
+        const opt = document.createElement('option');
+        opt.value = m.id ?? m.name ?? m;
+        opt.textContent = (m.name ? m.name + ' ' : '') + '(' + (m.id ?? m.name ?? m) + ')';
+        modelSelect.appendChild(opt);
+      });
+      logDebug('Loaded models from Puter API, count:', data.models.length);
+      return;
     }
-  } catch (e) {
-    putText(out, 'Error: ' + (e?.message ?? e));
+    throw new Error('Model list missing or empty');
+  } catch (err) {
+    logDebug('Failed to load models from Puter — falling back to curated list.', err);
+    modelSelect.innerHTML = '';
+    fallbackModels.forEach(m=>{
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = m.name;
+      modelSelect.appendChild(opt);
+    });
   }
+}
+
+/* -------------------------
+   Chat flow
+   ------------------------- */
+async function sendMessage(){
+  const prompt = promptEl.value.trim();
+  if (!prompt) return;
+  const model = modelSelect.value;
+  // append user message
+  addMessage(prompt, 'user');
+  promptEl.value = '';
+  statusEl.textContent = `Sending → ${model}`;
+  logDebug('Sending message:', { prompt, model, stream: useStream });
+
+  try {
+    if (useStream){
+      // streaming (async iterator)
+      const stream = await puter.ai.chat(prompt, { model, stream: true });
+      let partial = '';
+      // show incremental AI bubble (empty at first)
+      const aiBubble = document.createElement('div');
+      aiBubble.className = 'msg ai';
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.textContent = 'Assistant · ' + new Date().toLocaleTimeString();
+      aiBubble.appendChild(meta);
+      const body = document.createElement('div');
+      body.innerHTML = '';
+      aiBubble.appendChild(body);
+      messagesEl.appendChild(aiBubble);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+
+      for await (const part of stream){
+        // the part typically contains .text or .output_text depending on provider
+        const chunk = part?.output_text ?? part?.text ?? '';
+        partial += chunk;
+        body.innerHTML = partial.replaceAll('\n','<br>');
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+      logDebug('Stream complete for model:', model);
+      conversationHistory.push({ role:'assistant', content: partial });
+    } else {
+      const resp = await puter.ai.chat(prompt, { model });
+      logDebug('Raw response:', resp);
+      const text = (typeof resp === 'string') ? resp : (resp?.output_text ?? resp?.text ?? resp?.message?.content ?? JSON.stringify(resp));
+      addMessage(text, 'ai');
+      conversationHistory.push({ role:'assistant', content: text });
+    }
+    statusEl.textContent = 'Ready';
+  } catch (err) {
+    // print full object useful for debugging (not just toString)
+    logDebug('Chat error:', err);
+    // Friendly visible message
+    addMessage('[ERROR — see debug console]', 'ai');
+    statusEl.textContent = 'Error';
+  }
+}
+
+/* -------------------------
+   Text to speech
+   - try puter.ai.txt2speech first
+   - fallback to Web Speech API if needed
+   ------------------------- */
+async function speakLatest(){
+  // get last assistant message
+  const nodes = messagesEl.querySelectorAll('.msg.ai div:last-child');
+  if (!nodes?.length) return;
+  const text = nodes[nodes.length-1].textContent || nodes[nodes.length-1].innerText;
+  if (!text) return;
+  logDebug('TTS request length:', text.length);
+  try {
+    // puter txt2speech preferred usage
+    const engine = $('tts-engine').value || 'neural';
+    const lang = $('tts-lang').value || 'en-US';
+
+    const tts = await puter.ai.txt2speech(text, { engine, language: lang });
+    logDebug('TTS raw result:', tts);
+
+    // result might be HTMLAudioElement, { audio: Blob }, URL string, etc.
+    if (tts instanceof HTMLAudioElement) {
+      tts.play();
+    } else if (tts?.audio instanceof Blob) {
+      const url = URL.createObjectURL(tts.audio);
+      new Audio(url).play();
+    } else if (typeof tts === 'string') {
+      new Audio(tts).play();
+    } else {
+      // fallback to Web Speech API
+      logDebug('Puter TTS returned unexpected type — falling back to Web Speech API');
+      throw new Error('unexpected tts return');
+    }
+    logDebug('TTS played (puter).');
+  } catch (e) {
+    // fallback: Web Speech API
+    logDebug('Puter TTS failed, fallback to Web Speech API:', e);
+    if ('speechSynthesis' in window){
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = $('tts-lang').value || 'en-US';
+      // pick a default voice after voices loaded
+      const voices = speechSynthesis.getVoices();
+      if (voices.length) utter.voice = voices[0];
+      speechSynthesis.speak(utter);
+      logDebug('TTS played (web speech).');
+    } else {
+      logDebug('No TTS fallback available in this browser.');
+      alert('Speech is not available in this browser.');
+    }
+  }
+}
+
+/* -------------------------
+   UI events
+   ------------------------- */
+sendBtn.addEventListener('click', sendMessage);
+promptEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendMessage(); });
+speakBtn.addEventListener('click', speakLatest);
+clearBtn.addEventListener('click', () => { messagesEl.innerHTML=''; conversationHistory=[]; logDebug('Messages cleared by user'); });
+streamToggle.addEventListener('click', () => {
+  useStream = !useStream;
+  streamToggle.textContent = useStream ? 'Stream: on' : 'Stream: off';
+  logDebug('Stream toggled', useStream);
 });
+
+/* -------------------------
+   Init
+   ------------------------- */
+(async function init(){
+  logDebug('Initializing Puter chat UI...');
+  await loadModels();
+  // pre-select a friendly default if present
+  const prefer = ['gpt-4.1-nano','gpt-4.1','x-ai/grok-3','x-ai/grok-4','deepseek-chat'];
+  for (const p of prefer){
+    const opt = Array.from(modelSelect.options).find(o => o.value === p);
+    if (opt) { modelSelect.value = p; break; }
+  }
+  logDebug('Ready. Try sending a message.');
+})();
+
 </script>
 </body>
 </html>
