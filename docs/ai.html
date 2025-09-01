@@ -22,6 +22,7 @@
     }
     #input-area {
       display: flex;
+      flex-wrap: wrap;
       padding: 10px;
       background: #222;
     }
@@ -34,6 +35,7 @@
     }
     button, select {
       margin-left: 6px;
+      margin-top: 6px;
       padding: 6px 10px;
       border: none;
       border-radius: 4px;
@@ -57,13 +59,14 @@
   <div id="chat"></div>
 
   <div id="input-area">
+    <!-- ✅ Auto-loaded model list -->
     <select id="model">
-      <option value="openai:gpt-4o-mini">GPT-4o Mini</option>
-      <option value="openai:gpt-4o">GPT-4o</option>
-      <option value="openrouter:meta-llama/llama-4-scout">Llama 4 Scout</option>
+      <option>Loading models...</option>
     </select>
+
     <input id="input" placeholder="Type your message...">
     <button onclick="sendMessage()">Send</button>
+
     <select id="speech-lang">
       <option value="en">English</option>
       <option value="en-ie">English (Ireland)</option>
@@ -91,6 +94,27 @@
       logBox.innerHTML += msg + "<br>";
       logBox.scrollTop = logBox.scrollHeight;
       console.log(...args);
+    }
+
+    // ✅ Load models dynamically from Puter API
+    async function loadModels() {
+      const select = document.getElementById("model");
+      try {
+        const res = await fetch("https://puter.com/puterai/chat/models");
+        const data = await res.json();
+        logDebug("📥 Loaded models:", data);
+
+        select.innerHTML = "";
+        data.models.forEach(m => {
+          const opt = document.createElement("option");
+          opt.value = m.id;
+          opt.textContent = `${m.name || m.id} (${m.id})`;
+          select.appendChild(opt);
+        });
+      } catch (e) {
+        logDebug("💥 Failed to load models:", e);
+        select.innerHTML = "<option>Error loading models</option>";
+      }
     }
 
     function putText(container, text, sender = "ai") {
@@ -184,6 +208,9 @@
         alert("Speech failed: " + (e.message ?? e));
       }
     }
+
+    // Load models on page start
+    loadModels();
   </script>
 </body>
 </html>
